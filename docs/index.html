@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshita Dayma Goel | International Manifestation Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cosmic-dark: #080b1e;
+            --cosmic-blue: #0f1435;
+            --cosmic-purple: #1a0d3d;
+            --cosmic-deep: #06091a;
+            --gold-primary: #c9a84c;
+            --gold-light: #e8d5a3;
+            --gold-dark: #a07c30;
+            --gold-glow: rgba(201, 168, 76, 0.15);
+            --text-light: #ede9f8;
+            --text-muted: #9b94b8;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cosmic-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        /* ===== COSMIC BACKGROUND ===== */
+        .cosmic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(ellipse at 20% 50%, rgba(26, 13, 61, 0.8) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 20%, rgba(15, 20, 53, 0.6) 0%, transparent 50%),
+                        linear-gradient(160deg, var(--cosmic-dark) 0%, var(--cosmic-blue) 50%, var(--cosmic-purple) 100%);
+        }
+
+        .stars-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.1rem 5%;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 5%;
+            background: rgba(8, 11, 30, 0.92);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--gold-light); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-cta {
+            padding: 0.55rem 1.4rem;
+            border: 1px solid var(--gold-primary);
+            border-radius: 2px;
+            color: var(--gold-primary) !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-primary) !important;
+            color: var(--cosmic-dark) !important;
+        }
+
+        .nav-cta::after { display: none !important; }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .mobile-toggle span {
+            width: 22px;
+            height: 2px;
+            background: var(--gold-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        /* ===== HERO ===== */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7rem 5% 5rem;
+            position: relative;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+        }
+
+        .hero-content {
+            max-width: 1300px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .hero-text { animation: heroReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-eyebrow::before, .hero-eyebrow::after {
+            content: '';
+            height: 1px;
+            width: 28px;
+            background: var(--gold-primary);
+            opacity: 0.5;
+        }
+
+        .hero-text h1 {
+            font-size: 3.4rem;
+            line-height: 1.12;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .hero-text h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .hero-text .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            line-height: 1.8;
+            max-width: 480px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: 2px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gold-primary);
+            color: var(--cosmic-dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(201, 168, 76, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: heroReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .portrait-frame {
+            position: relative;
+            width: 360px;
+            height: 420px;
+        }
+
+        .portrait-frame .frame-border {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--gold-primary);
+            border-radius: 2px;
+            opacity: 0.4;
+        }
+
+        .portrait-frame .frame-inner {
+            position: absolute;
+            inset: 12px;
+            background: linear-gradient(160deg, var(--cosmic-blue), var(--cosmic-purple));
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+
+        .portrait-frame .frame-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(201, 168, 76, 0.1) 0%, transparent 60%);
+        }
+
+        .portrait-frame .corner {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: var(--gold-primary);
+            border-style: solid;
+            opacity: 0.8;
+        }
+
+        .portrait-frame .corner.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+        .portrait-frame .corner.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+        .portrait-frame .corner.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+        .portrait-frame .corner.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+        .portrait-frame .stats-badge {
+            position: absolute;
+            background: rgba(8, 11, 30, 0.9);
+            border: 1px solid var(--gold-primary);
+            border-radius: 2px;
+            padding: 0.7rem 1rem;
+            text-align: center;
+            backdrop-filter: blur(12px);
+        }
+
+        .portrait-frame .stats-badge.left {
+            left: -50px;
+            bottom: 80px;
+        }
+
+        .portrait-frame .stats-badge.right {
+            right: -50px;
+            top: 80px;
+        }
+
+        .stats-badge .num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--gold-primary);
+            display: block;
+            line-height: 1;
+        }
+
+        .stats-badge .lbl {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        @keyframes heroReveal {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            text-align: center;
+            color: #fff;
+            font-weight: 400;
+            margin-bottom: 0.6rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            font-weight: 300;
+            line-height: 1.7;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container { max-width: 1300px; margin: 0 auto; }
+
+        /* Divider */
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--gold-primary);
+            margin: 1rem auto 3rem;
+            opacity: 0.5;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 0.55fr 1.45fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-visual {
+            position: relative;
+            max-width: 240px;
+        }
+
+        .about-image-box {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(160deg, var(--cosmic-blue), var(--cosmic-purple));
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(201, 168, 76, 0.08) 0%, transparent 60%);
+        }
+
+        .about-accent-line {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 2px;
+            opacity: 0.2;
+        }
+
+        .about-text .eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .about-text h3 {
+            font-size: 1.9rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            line-height: 1.25;
+        }
+
+        .about-text p {
+            font-size: 0.92rem;
+            line-height: 1.85;
+            margin-bottom: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .about-text p em {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-item .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--gold-primary);
+            line-height: 1;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-item .label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ===== AWARDS ===== */
+        #awards {
+            background: linear-gradient(160deg, rgba(201, 168, 76, 0.03) 0%, transparent 60%);
+        }
+
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .award-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .award-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .award-card:hover {
+            border-color: rgba(201, 168, 76, 0.3);
+            transform: translateY(-4px);
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        .award-card:hover::before { opacity: 1; }
+
+        .award-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .award-card h3 {
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .award-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .media-mention {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+        }
+
+        .media-mention p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ===== METHODOLOGY ===== */
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .method-card {
+            padding: 2rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            background: var(--glass-bg);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .method-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-primary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .method-card:hover { border-color: rgba(201, 168, 76, 0.25); transform: translateY(-3px); }
+        .method-card:hover::after { transform: scaleX(1); }
+
+        .method-icon {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .method-card h3 {
+            font-size: 1.05rem;
+            color: var(--gold-light);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .method-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            font-weight: 300;
+        }
+
+        .quote-block {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(201, 168, 76, 0.03));
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 2px;
+            text-align: center;
+        }
+
+        .quote-block blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--gold-light);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .quote-block cite {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* ===== PROGRAMS ===== */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .program-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gold-dark), var(--gold-primary));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .program-card:hover { border-color: rgba(201, 168, 76, 0.25); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .program-card:hover::before { opacity: 1; }
+
+        .program-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+
+        .program-card h3 {
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .program-card .desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .program-benefits {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .program-benefits li {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            padding: 0.35rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .program-benefits li:last-child { border-bottom: none; }
+
+        .program-benefits li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--gold-primary);
+            font-size: 0.75rem;
+        }
+
+        .program-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            font-weight: 500;
+        }
+
+        /* ===== BOOKING ===== */
+        #booking { background: rgba(201, 168, 76, 0.02); }
+
+        .booking-wrapper {
+            max-width: 920px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2rem;
+        }
+
+        .booking-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .booking-left {}
+        .booking-right {}
+
+        .session-types {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .session-card {
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .session-card:hover, .session-card.selected {
+            border-color: var(--gold-primary);
+            background: rgba(201, 168, 76, 0.06);
+        }
+
+        .session-card h4 {
+            font-size: 0.88rem;
+            color: var(--gold-light);
+            font-weight: 500;
+        }
+
+        .session-card .duration {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .session-card .session-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--gold-primary);
+        }
+
+        .booking-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .calendar-day-name {
+            text-align: center;
+            font-size: 0.6rem;
+            color: var(--gold-primary);
+            letter-spacing: 0.06em;
+            padding-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.72rem;
+        }
+
+        .calendar-day:hover:not(.disabled) {
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+        }
+
+        .calendar-day.selected {
+            background: var(--gold-primary);
+            color: var(--cosmic-dark);
+            border-color: var(--gold-primary);
+            font-weight: 500;
+        }
+
+        .calendar-day.disabled { opacity: 0.2; cursor: not-allowed; }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .time-slot {
+            padding: 0.55rem 0.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .time-slot:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-light);
+        }
+
+        .time-slot.selected {
+            background: var(--gold-primary);
+            color: var(--cosmic-dark);
+            border-color: var(--gold-primary);
+            font-weight: 500;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials-slider { overflow: hidden; }
+
+        .testimonials-track {
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .testimonial-card {
+            min-width: 420px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.8rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            color: var(--gold-primary);
+            opacity: 0.15;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 0.88rem;
+            line-height: 1.85;
+            color: var(--text-muted);
+            margin-bottom: 1.8rem;
+            font-weight: 300;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-purple));
+            border: 1px solid var(--gold-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--gold-primary);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-size: 0.88rem;
+            color: var(--gold-light);
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+
+        .author-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .slider-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--gold-primary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-btn:hover {
+            background: rgba(201, 168, 76, 0.1);
+            border-color: var(--gold-primary);
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+        }
+
+        .contact-form-wrapper {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2.5rem;
+        }
+
+        .form-group { margin-bottom: 1.2rem; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 2px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.02);
+            color: var(--text-light);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            background: rgba(201, 168, 76, 0.03);
+        }
+
+        .contact-cards { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        .contact-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            padding: 2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-card:hover { border-color: rgba(201, 168, 76, 0.25); }
+
+        .contact-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(201, 168, 76, 0.1);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1rem;
+            color: var(--gold-light);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .contact-card p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.65;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.4rem;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 2px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background: #20BA5A;
+            transform: translateY(-2px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--cosmic-deep);
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+            background: rgba(201, 168, 76, 0.08);
+        }
+
+        /* SVG icons inline */
+        .social-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .footer-col h4 {
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .footer-links a {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover { color: var(--gold-light); }
+
+        .footer-bottom {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== MODALS ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: linear-gradient(160deg, var(--cosmic-blue), var(--cosmic-dark));
+            border: 1px solid var(--gold-primary);
+            border-radius: 2px;
+            padding: 3rem;
+            max-width: 460px;
+            width: 100%;
+            position: relative;
+            animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            line-height: 1;
+        }
+
+        .modal-close:hover { color: var(--gold-primary); }
+
+        .modal-content h3 {
+            font-size: 1.6rem;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .modal-content p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            margin-bottom: 0.8rem;
+        }
+
+        .success-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+            display: block;
+            animation: bounceIn 0.5s ease-out 0.2s both;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+            .hero-visual { order: -1; }
+            .hero-text .subtitle { margin-left: auto; margin-right: auto; }
+            .cta-buttons { justify-content: center; }
+            .portrait-frame .stats-badge { display: none; }
+            .portrait-frame { width: 280px; height: 320px; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-visual { max-width: 200px; margin: 0 auto; }
+            .awards-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .booking-inner { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .hero-text h1 { font-size: 2.4rem; }
+            .section-title { font-size: 1.9rem; }
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 60px);
+                background: rgba(8, 11, 30, 0.98);
+                backdrop-filter: blur(24px);
+                flex-direction: column;
+                padding: 2.5rem;
+                transition: left 0.3s ease;
+                border-top: 1px solid var(--glass-border);
+                gap: 1.5rem;
+            }
+            .nav-links.active { left: 0; }
+            .mobile-toggle { display: flex; }
+            .method-grid { grid-template-columns: 1fr; }
+            .programs-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .testimonial-card { min-width: 100%; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+            .booking-inner { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cosmic-bg"></div>
+    <canvas class="stars-canvas" id="starsCanvas"></canvas>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Akshita Dayma Goel</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#awards">Awards</a></li>
+                <li><a href="#methodology">Methodology</a></li>
+                <li><a href="#products">Programs</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#booking" class="nav-cta">Book Session</a></li>
+            </ul>
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-eyebrow">International Manifestation Coach</div>
+                <h1>Transform Your Inner World.<em> Manifest Real Breakthroughs.</em></h1>
+                <p class="subtitle">Bridging neuroscience and spirituality to help 100,000+ clients worldwide create tangible results in love, career, finances, and well-being.</p>
+                <div class="cta-buttons">
+                    <a href="#booking" class="btn btn-primary">Book a Session</a>
+                    <a href="#products" class="btn btn-secondary">Explore Programs</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="portrait-frame">
+                    <div class="frame-border"></div>
+                    <div class="frame-inner">✨</div>
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                    <div class="stats-badge left">
+                        <span class="num">100K+</span>
+                        <span class="lbl">Clients</span>
+                    </div>
+                    <div class="stats-badge right">
+                        <span class="num">70+</span>
+                        <span class="lbl">Countries</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="container">
+            <p class="section-label reveal">About</p>
+            <h2 class="section-title reveal reveal-delay-1">Meet Akshita Dayma Goel</h2>
+            <div class="section-divider reveal reveal-delay-2"></div>
+
+            <div class="about-grid">
+                <div class="about-visual reveal">
+                    <div class="about-image-box">🌙</div>
+                    <div class="about-accent-line"></div>
+                </div>
+                <div class="about-text">
+                    <span class="eyebrow reveal">Internationally Recognised Coach & Bestselling Author</span>
+                    <h3 class="reveal reveal-delay-1">A Decade of Transforming Lives Globally</h3>
+                    <p class="reveal reveal-delay-1">Akshita Dayma Goel is an internationally recognised Manifestation Coach, bestselling author, and spiritual guide, known for helping individuals transform their inner world and manifest tangible breakthroughs in love, career, relationships, finances, and emotional well-being.</p>
+                    <p class="reveal reveal-delay-2">Her work bridges the gap between science and spirituality — combining subconscious reprogramming, neuroscience, and energetic alignment to create manifestation that is not just inspirational, but deeply practical and results-driven.</p>
+                    <p class="reveal reveal-delay-3">With a powerful global presence, Akshita has guided over 100,000+ clients worldwide, helping them step into clarity, confidence, and a life aligned with their highest potential. <em>You don't attract what you want — you attract what you believe you deserve.</em></p>
+
+                    <div class="stats-row">
+                        <div class="stat-item reveal reveal-delay-1">
+                            <span class="number">11+</span>
+                            <span class="label">Years Expertise</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-2">
+                            <span class="number">100K+</span>
+                            <span class="label">Clients</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-3">
+                            <span class="number">70+</span>
+                            <span class="label">Countries</span>
+                        </div>
+                        <div class="stat-item reveal reveal-delay-4">
+                            <span class="number">92%</span>
+                            <span class="label">Success Rate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AWARDS -->
+    <section id="awards">
+        <div class="container">
+            <p class="section-label reveal">Recognition</p>
+            <h2 class="section-title reveal reveal-delay-1">Awards & Accolades</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Celebrated globally for transformational impact</p>
+
+            <div class="awards-grid">
+                <div class="award-card reveal reveal-delay-1">
+                    <span class="award-icon">🏆</span>
+                    <h3>Life Coach of the Year 2025</h3>
+                    <p>Awarded by Ameesha Patel</p>
+                </div>
+                <div class="award-card reveal reveal-delay-2">
+                    <span class="award-icon">🏆</span>
+                    <h3>Most Celebrated Global Manifestation Coach</h3>
+                    <p>Awarded by Amrita Rao</p>
+                </div>
+                <div class="award-card reveal reveal-delay-3">
+                    <span class="award-icon">🏆</span>
+                    <h3>Nari Shakti Award</h3>
+                    <p>Women Empowerment Recognition</p>
+                </div>
+                <div class="award-card reveal reveal-delay-4">
+                    <span class="award-icon">🏆</span>
+                    <h3>International Brilliance Award</h3>
+                    <p>Global Impact Recognition</p>
+                </div>
+                <div class="award-card reveal reveal-delay-1">
+                    <span class="award-icon">🏆</span>
+                    <h3>Icons of Bharat Award</h3>
+                    <p>National Honour</p>
+                </div>
+                <div class="award-card reveal reveal-delay-2">
+                    <span class="award-icon">🏆</span>
+                    <h3>Global Impact Coach Recognition</h3>
+                    <p>20+ National & International Honours</p>
+                </div>
+                <div class="award-card reveal reveal-delay-3">
+                    <span class="award-icon">🏆</span>
+                    <h3>Top 50 Powerful Personalities</h3>
+                    <p>Leadership Recognition</p>
+                </div>
+                <div class="award-card reveal reveal-delay-4">
+                    <span class="award-icon">🏆</span>
+                    <h3>Mentors of Impact</h3>
+                    <p>India's Top Coach 2026</p>
+                </div>
+            </div>
+
+            <div class="media-mention reveal" style="margin-top: 2rem;">
+                <p>Featured across: Republic &nbsp;•&nbsp; DailyHunt &nbsp;•&nbsp; The Indian Bulletin &nbsp;•&nbsp; RD Times &nbsp;•&nbsp; Indian Sentinel &nbsp;•&nbsp; Abhyuday Times &nbsp;•&nbsp; Success India Magazine &nbsp;•&nbsp; CEO India Magazine &nbsp;•&nbsp; Ahmedabad Mirror</p>
+                <p style="margin-top: 0.75rem;">Also invited as a speaker and panelist at global forums, spiritual summits, and mindset conferences.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section id="methodology">
+        <div class="container">
+            <p class="section-label reveal">The Approach</p>
+            <h2 class="section-title reveal reveal-delay-1">Science-Backed Methodology</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Bridging neuroscience, psychology, and energetic alignment for real results</p>
+
+            <div class="method-grid">
+                <div class="method-card reveal reveal-delay-1">
+                    <span class="method-icon">🧠</span>
+                    <h3>Subconscious Programming</h3>
+                    <p>Rewire limiting belief systems at the deepest level. Transform neural pathways that silently shape your outcomes and opportunities.</p>
+                </div>
+                <div class="method-card reveal reveal-delay-2">
+                    <span class="method-icon">🔬</span>
+                    <h3>Neuroplasticity & Neuroscience</h3>
+                    <p>Leverage cutting-edge brain science to create lasting transformation. Build new neural networks that support your desired reality.</p>
+                </div>
+                <div class="method-card reveal reveal-delay-3">
+                    <span class="method-icon">⚡</span>
+                    <h3>Quantum Energy Principles</h3>
+                    <p>Align your energetic frequency with your desires. Master the vibrational principles that govern manifestation and attraction.</p>
+                </div>
+                <div class="method-card reveal reveal-delay-1">
+                    <span class="method-icon">🎯</span>
+                    <h3>Aligned Action Frameworks</h3>
+                    <p>Combine inner alignment with strategic action. Create a practical roadmap that transforms intentions into tangible results.</p>
+                </div>
+                <div class="method-card reveal reveal-delay-2">
+                    <span class="method-icon">🧘</span>
+                    <h3>Meditation & Embodiment</h3>
+                    <p>Ground transformation in your physical and energetic body. Embody your highest identity through conscious practice.</p>
+                </div>
+                <div class="method-card reveal reveal-delay-3">
+                    <span class="method-icon">💫</span>
+                    <h3>Manifestation Psychology</h3>
+                    <p>Understand the psychological mechanics of manifestation. Master the mental patterns that either limit or expand your potential.</p>
+                </div>
+            </div>
+
+            <div class="quote-block reveal">
+                <blockquote>"You don't attract what you want — you attract what you believe you deserve."</blockquote>
+                <cite>— Akshita Dayma Goel</cite>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 2rem; text-align: left;">
+                    <div style="font-size: 0.82rem; color: var(--text-muted); padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✦ Rewire your subconscious mind</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted); padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✦ Align your energy with your desires</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted); padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✦ Step into your highest identity</div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted); padding: 0.5rem 0; border-top: 1px solid var(--glass-border);">✦ Consciously create love, abundance & purpose</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section id="products">
+        <div class="container">
+            <p class="section-label reveal">Offerings</p>
+            <h2 class="section-title reveal reveal-delay-1">Programs & Expertise</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Science-backed methodology for real, measurable transformation</p>
+
+            <div class="programs-grid">
+                <div class="program-card reveal reveal-delay-1">
+                    <span class="program-icon">🧠</span>
+                    <h3>Subconscious Reprogramming Mastery</h3>
+                    <p class="desc">A comprehensive deep-dive into rewiring the neural patterns that silently govern your results.</p>
+                    <ul class="program-benefits">
+                        <li>Rewire limiting belief systems at the root</li>
+                        <li>Neural pathway transformation techniques</li>
+                        <li>Practical reprogramming exercises</li>
+                        <li>Science-backed methodologies</li>
+                    </ul>
+                    <div class="program-footer">
+                        <span class="price">$97</span>
+                        <button class="btn btn-primary" onclick="openBuyModal('Subconscious Reprogramming Mastery', 97)">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="program-card reveal reveal-delay-2">
+                    <span class="program-icon">⚡</span>
+                    <h3>Energetic Alignment & Manifestation</h3>
+                    <p class="desc">Master the quantum principles of energy and frequency to align with your highest outcomes.</p>
+                    <ul class="program-benefits">
+                        <li>Quantum energy principles</li>
+                        <li>Vibrational frequency mastery</li>
+                        <li>Aligned action frameworks</li>
+                        <li>Manifestation psychology deep-dive</li>
+                    </ul>
+                    <div class="program-footer">
+                        <span class="price">$197</span>
+                        <button class="btn btn-primary" onclick="openBuyModal('Energetic Alignment & Manifestation', 197)">Enroll Now</button>
+                    </div>
+                </div>
+
+                <div class="program-card reveal reveal-delay-3">
+                    <span class="program-icon">💎</span>
+                    <h3>Bestselling eBook Collection</h3>
+                    <p class="desc">25,000+ copies sold globally — step-by-step transformation guides for love, career and finances.</p>
+                    <ul class="program-benefits">
+                        <li>Love, career & financial mastery</li>
+                        <li>Step-by-step transformation guides</li>
+                        <li>Instant digital access</li>
+                        <li>Practical workbook exercises</li>
+                    </ul>
+                    <div class="program-footer">
+                        <span class="price">$47</span>
+                        <button class="btn btn-primary" onclick="openBuyModal('Bestselling eBook Collection', 47)">Get Access</button>
+                    </div>
+                </div>
+
+                <div class="program-card reveal reveal-delay-4">
+                    <span class="program-icon">🎯</span>
+                    <h3>VIP 1:1 Coaching Program</h3>
+                    <p class="desc">The most direct path to transformation — personalised mentorship with Akshita herself.</p>
+                    <ul class="program-benefits">
+                        <li>Personalised transformation roadmap</li>
+                        <li>Direct mentorship with Akshita</li>
+                        <li>Breakthrough session intensives</li>
+                        <li>92% reported success rate</li>
+                    </ul>
+                    <div class="program-footer">
+                        <span class="price">$997</span>
+                        <button class="btn btn-primary" onclick="openBuyModal('VIP 1:1 Coaching Program', 997)">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking">
+        <div class="container">
+            <p class="section-label reveal">Schedule</p>
+            <h2 class="section-title reveal reveal-delay-1">Book Your Session</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Choose your session type and secure your transformation</p>
+
+            <div class="booking-wrapper reveal">
+                <div class="booking-inner">
+                    <div class="booking-left">
+                        <span class="booking-label">Choose Session</span>
+                        <div class="session-types">
+                            <div class="session-card" onclick="selectSession(this, '30 min Discovery Call', 97)">
+                                <div><h4>Discovery Call</h4><p class="duration">30 minutes</p></div>
+                                <div class="session-price">$97</div>
+                            </div>
+                            <div class="session-card selected" onclick="selectSession(this, '60 min Deep Dive', 197)">
+                                <div><h4>Deep Dive</h4><p class="duration">60 minutes</p></div>
+                                <div class="session-price">$197</div>
+                            </div>
+                            <div class="session-card" onclick="selectSession(this, '90 min Premium Coaching', 297)">
+                                <div><h4>Premium Coaching</h4><p class="duration">90 minutes</p></div>
+                                <div class="session-price">$297</div>
+                            </div>
+                        </div>
+
+                        <span class="booking-label">Select Time</span>
+                        <div class="time-slots" id="timeSlots"></div>
+
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" onclick="confirmBooking()">Confirm Booking</button>
+                    </div>
+                    <div class="booking-right">
+                        <span class="booking-label">Select Date</span>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="container">
+            <p class="section-label reveal">Client Stories</p>
+            <h2 class="section-title reveal reveal-delay-1">Transformations</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Real results from clients who manifested their dreams</p>
+
+            <div class="testimonials-slider reveal">
+                <div class="testimonials-track" id="testimonialsTrack">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">Akshita's methodology is unlike anything I've experienced. The subconscious reprogramming techniques helped me break through a 10-year pattern of self-sabotage. Within 2 months, I manifested my dream partnership and tripled my business revenue.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">P</div>
+                            <div class="author-info">
+                                <h4>Priya Sharma</h4>
+                                <p>Entrepreneur, Mumbai</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">I was stuck in limiting beliefs about money and relationships for years. Akshita's science-backed approach helped me rewire my subconscious mind completely. I'm now in a loving relationship and my income has increased by 400%.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">R</div>
+                            <div class="author-info">
+                                <h4>Rahul Mehta</h4>
+                                <p>Software Engineer, Bangalore</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">Working with Akshita showed me that manifestation isn't just spiritual—it's deeply practical. Her energetic alignment framework helped me land my dream job in the US, something I thought was impossible.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">A</div>
+                            <div class="author-info">
+                                <h4>Ananya Gupta</h4>
+                                <p>Marketing Manager, Dubai</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">The breakthroughs I experienced in just 8 weeks were profound. Akshita helped me shift my identity and step into my highest potential. I manifested a 6-figure client contract and healed a 5-year relationship pattern.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">V</div>
+                            <div class="author-info">
+                                <h4>Vikram Singh</h4>
+                                <p>Consultant, Singapore</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-btn" onclick="slideTestimonials(-1)">‹</button>
+                    <button class="slider-btn" onclick="slideTestimonials(1)">›</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="container">
+            <p class="section-label reveal">Get in Touch</p>
+            <h2 class="section-title reveal reveal-delay-1">Let's Connect</h2>
+            <p class="section-subtitle reveal reveal-delay-2">Ready to begin your transformation journey?</p>
+
+            <div class="contact-grid">
+                <div class="contact-form-wrapper reveal">
+                    <form onsubmit="submitContact(event)">
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            <input type="text" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea placeholder="Tell me about your goals..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="contact-cards">
+                    <div class="contact-card reveal reveal-delay-1">
+                        <div class="contact-icon">💬</div>
+                        <h3>WhatsApp</h3>
+                        <p>Get instant answers via WhatsApp for quick queries.</p>
+                        <a href="https://wa.me/1234567890" class="whatsapp-btn" target="_blank">
+                            Chat on WhatsApp
+                        </a>
+                    </div>
+                    <div class="contact-card reveal reveal-delay-2">
+                        <div class="contact-icon">✉️</div>
+                        <h3>Email</h3>
+                        <p>We typically respond within 24 hours.</p>
+                        <a href="/cdn-cgi/l/email-protection#3e5d51504a5f5d4a7e5f554d56574a5f5a5f47535f59515b52105d5153" style="color: var(--gold-primary); text-decoration: none; font-size: 0.85rem;"><span class="__cf_email__" data-cfemail="6c0f0302180d0f182c0d071f0405180d080d15010d0b030900420f0301">[email&#160;protected]</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <span class="footer-brand-name">Akshita Dayma Goel</span>
+                    <p class="footer-desc">Internationally recognised Manifestation Coach helping 100,000+ clients across 70+ countries bridge science and spirituality to create tangible breakthroughs in love, career, finances, and well-being. 20+ national & international honours. ~92% reported breakthrough success rate.</p>
+                <div class="social-links">
+                    <!-- Instagram -->
+                    <a href="https://instagram.com/akshitadaymagoel" class="social-link" target="_blank" title="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <!-- X / Twitter -->
+                    <a href="https://x.com/akshitadaymagoel" class="social-link" target="_blank" title="X (Twitter)">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="https://linkedin.com/in/akshitadaymagoel" class="social-link" target="_blank" title="LinkedIn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://facebook.com/akshitadaymagoel" class="social-link" target="_blank" title="Facebook">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <ul class="footer-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#awards">Awards</a></li>
+                    <li><a href="#methodology">Methodology</a></li>
+                    <li><a href="#products">Programs</a></li>
+                    <li><a href="#booking">Book Session</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Programs</h4>
+                <ul class="footer-links">
+                    <li><a href="#products">Subconscious Mastery</a></li>
+                    <li><a href="#products">Energetic Alignment</a></li>
+                    <li><a href="#products">eBook Collection</a></li>
+                    <li><a href="#products">VIP 1:1 Coaching</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Refund Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Akshita Dayma Goel. All rights reserved.</p>
+            <p style="color: var(--gold-primary);">✦ International Manifestation Coach</p>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <div class="modal" id="buyModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('buyModal')">&times;</button>
+            <span class="success-icon">🎉</span>
+            <h3 id="modalProductName">Product Name</h3>
+            <p>Thank you for your purchase! You'll receive an email with access details shortly.</p>
+            <p><strong>Amount:</strong> $<span id="modalPrice">0</span></p>
+            <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;" onclick="closeModal('buyModal')">Continue</button>
+        </div>
+    </div>
+
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('bookingModal')">&times;</button>
+            <span class="success-icon">✨</span>
+            <h3>Booking Confirmed</h3>
+            <p>Your session has been successfully booked. A confirmation email with all details is on its way.</p>
+            <p id="bookingDetails" style="margin-top:1rem; padding: 1rem; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 2px;"></p>
+            <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;" onclick="closeModal('bookingModal')">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('contactModal')">&times;</button>
+            <span class="success-icon">💌</span>
+            <h3>Message Sent</h3>
+            <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+            <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;" onclick="closeModal('contactModal')">Close</button>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // ===== STARS CANVAS =====
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 120; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 1.2 + 0.2,
+                    a: Math.random(),
+                    speed: Math.random() * 0.003 + 0.001,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function animateStars(t) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                const opacity = 0.3 + 0.5 * Math.sin(t * s.speed + s.phase);
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+        resizeCanvas();
+        initStars();
+        requestAnimationFrame(animateStars);
+
+        // ===== NAV =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const t = document.querySelector(a.getAttribute('href'));
+                if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                document.getElementById('navLinks').classList.remove('active');
+                document.getElementById('mobileToggle').classList.remove('active');
+            });
+        });
+
+        // ===== REVEAL ANIMATIONS =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ===== CALENDAR =====
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+            grid.innerHTML = '';
+
+            days.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'calendar-day-name';
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+
+            for (let i = 0; i < firstDay; i++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day disabled';
+                grid.appendChild(el);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day';
+                el.textContent = day;
+                const date = new Date(today.getFullYear(), today.getMonth(), day);
+                if (date < new Date(today.toDateString())) {
+                    el.classList.add('disabled');
+                } else {
+                    el.onclick = function() {
+                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                        this.classList.add('selected');
+                        generateTimeSlots();
+                    };
+                }
+                grid.appendChild(el);
+            }
+        }
+
+        function generateTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            const times = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
+            container.innerHTML = '';
+            times.forEach(t => {
+                const el = document.createElement('div');
+                el.className = 'time-slot';
+                el.textContent = t;
+                el.onclick = function() {
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                };
+                container.appendChild(el);
+            });
+        }
+
+        let selectedSessionName = '60 min Deep Dive';
+        let selectedSessionPrice = 197;
+
+        function selectSession(el, name, price) {
+            document.querySelectorAll('.session-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSessionName = name;
+            selectedSessionPrice = price;
+        }
+
+        function confirmBooking() {
+            const date = document.querySelector('.calendar-day.selected:not(.disabled)');
+            const time = document.querySelector('.time-slot.selected');
+            if (!date) { alert('Please select a date'); return; }
+            if (!time) { alert('Please select a time slot'); return; }
+            document.getElementById('bookingDetails').innerHTML =
+                `<strong>Session:</strong> ${selectedSessionName}<br><strong>Date:</strong> ${date.textContent}<br><strong>Time:</strong> ${time.textContent}<br><strong>Investment:</strong> $${selectedSessionPrice}`;
+            openModal('bookingModal');
+        }
+
+        // ===== TESTIMONIALS =====
+        let currentSlide = 0;
+        const testimonials = document.querySelectorAll('.testimonial-card');
+
+        function slideTestimonials(dir) {
+            currentSlide = (currentSlide + dir + testimonials.length) % testimonials.length;
+            const cardWidth = testimonials[0].offsetWidth + 24;
+            document.getElementById('testimonialsTrack').style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+        }
+
+        setInterval(() => slideTestimonials(1), 6000);
+
+        // ===== MODALS =====
+        function openBuyModal(name, price) {
+            document.getElementById('modalProductName').textContent = name;
+            document.getElementById('modalPrice').textContent = price;
+            openModal('buyModal');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.modal').forEach(m => {
+            m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+        });
+
+  
+        function submitContact(e) {
+            e.preventDefault();
+            openModal('contactModal');
+            e.target.reset();
+        }
+
+        // ===== CALENDAR =====
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+            const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+            grid.innerHTML = '';
+
+            days.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'calendar-day-name';
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+
+            for (let i = 0; i < firstDay; i++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day disabled';
+                grid.appendChild(el);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day';
+                el.textContent = day;
+                const date = new Date(today.getFullYear(), today.getMonth(), day);
+                if (date < new Date(today.toDateString())) {
+                    el.classList.add('disabled');
+                } else {
+                    el.onclick = function() {
+                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                        this.classList.add('selected');
+                    };
+                }
+                grid.appendChild(el);
+            }
+        }
+
+        // ===== TIME SLOTS =====
+        function generateTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            const times = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '2:00 PM', '3:00 PM', '5:00 PM', '6:00 PM'];
+            container.innerHTML = '';
+            times.forEach(t => {
+                const el = document.createElement('div');
+                el.className = 'time-slot';
+                el.textContent = t;
+                el.onclick = function() {
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                };
+                container.appendChild(el);
+            });
+        }
+
+        // ===== INIT =====
+        generateCalendar();
+        generateTimeSlots();
+
+    </script>
+</body>
+</html>
