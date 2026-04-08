@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal — A.D.G</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#070a1a;--dark2:#0c1030;--purple:#150e35;
+  --gold:#c9a84c;--gold-light:#e8d5a3;--gold-dark:#9a7c30;
+  --text:#eceaf6;--muted:#8e88ab;
+  --glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --gold-border:rgba(201,168,76,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{height:100%;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--dark);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  cursor:none;
+}
+
+/* Cursor */
+#cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s;}
+body.ch #cur{width:12px;height:12px;}
+body.ch #cur-ring{width:40px;height:40px;border-color:var(--gold);}
+@media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
+
+/* Background */
+.bg{position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(21,14,53,.95) 0%,transparent 55%),
+    radial-gradient(ellipse at 80% 20%,rgba(12,16,48,.7) 0%,transparent 50%),
+    linear-gradient(165deg,var(--dark) 0%,var(--dark2) 55%,var(--purple) 100%);
+}
+canvas#sc{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+/* Scan line effect */
+.scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);}
+
+/* Decorative geometric */
+.geo{position:fixed;z-index:2;pointer-events:none;}
+.geo-tl{top:-80px;left:-80px;width:280px;height:280px;border:1px solid rgba(201,168,76,.07);border-radius:50%;animation:geoRotate 30s linear infinite;}
+.geo-br{bottom:-100px;right:-100px;width:350px;height:350px;border:1px solid rgba(201,168,76,.05);border-radius:50%;animation:geoRotate 40s linear infinite reverse;}
+.geo-tr{top:15%;right:8%;width:60px;height:60px;border:1px solid rgba(201,168,76,.12);transform:rotate(45deg);animation:geoPulse 4s ease-in-out infinite;}
+.geo-bl{bottom:20%;left:6%;width:40px;height:40px;border:1px solid rgba(201,168,76,.1);transform:rotate(45deg);animation:geoPulse 5s ease-in-out infinite 1s;}
+@keyframes geoRotate{to{transform:rotate(360deg);}}
+@keyframes geoPulse{0%,100%{opacity:.3;transform:rotate(45deg) scale(1);}50%{opacity:.8;transform:rotate(45deg) scale(1.1);}}
+
+/* Corner marks — the "hidden mark" */
+.corner-mark{position:fixed;z-index:10;opacity:0;transition:opacity .3s;}
+.corner-mark.br{bottom:0;right:0;width:48px;height:48px;cursor:pointer;}
+.corner-mark.br::before{content:'✦';position:absolute;bottom:8px;right:10px;font-size:.65rem;color:var(--gold);opacity:.08;transition:opacity .4s;}
+.corner-mark.br:hover::before{opacity:.5;}
+/* Subtle line in bottom-right corner — barely visible */
+.corner-line{position:fixed;bottom:0;right:0;z-index:10;pointer-events:none;}
+.corner-line::before{content:'';position:absolute;bottom:12px;right:0;width:20px;height:1px;background:rgba(201,168,76,.15);}
+.corner-line::after{content:'';position:absolute;bottom:0;right:12px;width:1px;height:20px;background:rgba(201,168,76,.15);}
+
+/* Main card */
+.card-wrap{position:relative;z-index:10;width:100%;max-width:420px;padding:0 1.5rem;}
+
+.logo-area{text-align:center;margin-bottom:2.5rem;}
+.logo-sigil{width:52px;height:52px;margin:0 auto 1.2rem;position:relative;}
+.logo-sigil::before{content:'';position:absolute;inset:0;border:1px solid rgba(201,168,76,.3);transform:rotate(45deg);animation:sigilPulse 3s ease-in-out infinite;}
+.logo-sigil::after{content:'';position:absolute;inset:6px;border:1px solid rgba(201,168,76,.15);transform:rotate(45deg);animation:sigilPulse 3s ease-in-out infinite .5s;}
+.logo-sigil span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--gold);letter-spacing:.05em;}
+@keyframes sigilPulse{0%,100%{opacity:.4;transform:rotate(45deg) scale(1);}50%{opacity:1;transform:rotate(45deg) scale(1.05);}}
+
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:.75rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.3rem;}
+.logo-sub{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+
+/* Login box */
+.login-box{
+  background:rgba(7,10,26,.7);
+  border:1px solid var(--border);
+  border-radius:3px;
+  padding:2.2rem 2rem;
+  backdrop-filter:blur(24px);
+  position:relative;
+  overflow:hidden;
+}
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.6;
+}
+.login-box::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+.box-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold-light);font-weight:400;margin-bottom:.3rem;letter-spacing:.04em;}
+.box-sub{font-size:.72rem;color:var(--muted);letter-spacing:.08em;margin-bottom:1.8rem;}
+
+/* Fields */
+.field{margin-bottom:1.2rem;position:relative;}
+.field label{display:block;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.field input{
+  width:100%;padding:.85rem 1rem .85rem 2.6rem;
+  border-radius:2px;border:1px solid var(--border);
+  background:rgba(255,255,255,.025);color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:.85rem;
+  transition:all .3s;outline:none;letter-spacing:.02em;
+}
+.field input:focus{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.03);box-shadow:0 0 0 3px rgba(201,168,76,.06);}
+.field input::placeholder{color:rgba(142,136,171,.35);}
+.field-icon{position:absolute;left:.9rem;bottom:.85rem;font-size:.85rem;opacity:.5;pointer-events:none;}
+
+/* Show/hide password */
+.eye{position:absolute;right:.9rem;bottom:.82rem;background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;padding:2px;transition:color .3s;}
+.eye:hover{color:var(--gold);}
+
+/* Error */
+.err{font-size:.72rem;color:#ff8080;background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.2);border-radius:2px;padding:.6rem .9rem;margin-bottom:1rem;display:none;animation:shake .4s ease-in-out;}
+.err.show{display:block;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+
+/* Submit btn */
+.submit-btn{
+  width:100%;padding:.9rem;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold));
+  color:var(--dark);border:none;border-radius:2px;
+  font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;position:relative;overflow:hidden;
+}
+.submit-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .4s;}
+.submit-btn:hover{background:linear-gradient(135deg,var(--gold),var(--gold-light));transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.3);}
+.submit-btn:hover::before{left:100%;}
+.submit-btn:active{transform:translateY(0);}
+.submit-btn.loading{opacity:.7;pointer-events:none;}
+.submit-btn .btn-text{transition:opacity .2s;}
+.submit-btn.loading .btn-text{opacity:0;}
+.btn-spinner{position:absolute;inset:0;display:none;align-items:center;justify-content:center;}
+.submit-btn.loading .btn-spinner{display:flex;}
+.spinner{width:18px;height:18px;border:2px solid rgba(7,10,26,.3);border-top-color:var(--dark);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Back link */
+.back-link{display:block;text-align:center;margin-top:1.4rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;}
+.back-link:hover{color:var(--gold);}
+.back-link span{margin-right:.4rem;opacity:.5;}
+
+/* Divider */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:.8rem 0 1.2rem;}
+
+/* Security badge */
+.sec-badge{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:1.4rem;}
+.sec-badge span{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(142,136,171,.4);}
+.sec-badge::before,.sec-badge::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+
+/* Flash overlay for wrong password */
+.flash{position:fixed;inset:0;background:rgba(255,60,60,.08);z-index:9999;pointer-events:none;opacity:0;transition:opacity .15s;}
+.flash.on{opacity:1;}
+
+/* Attempt counter */
+.attempts{font-size:.62rem;color:rgba(255,128,128,.5);text-align:center;margin-top:.6rem;display:none;}
+.attempts.show{display:block;}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<div class="flash" id="flash"></div>
+
+<div class="bg"></div>
+<canvas id="sc"></canvas>
+<div class="scanlines"></div>
+<div class="geo geo-tl"></div>
+<div class="geo geo-br"></div>
+<div class="geo geo-tr"></div>
+<div class="geo geo-bl"></div>
+
+<!-- Hidden corner mark — subtle visual cue in bottom-right -->
+<div class="corner-line"></div>
+<div class="corner-mark br" onclick="revealHint()" title=""></div>
+
+<div class="card-wrap">
+  <div class="logo-area">
+    <div class="logo-sigil"><span>✦</span></div>
+    <span class="logo-name">Akshita Dayma Goel</span>
+    <span class="logo-sub">Secure Portal</span>
+  </div>
+
+  <div class="login-box">
+    <div class="box-title">Admin Access</div>
+    <div class="box-sub">Authorised personnel only</div>
+
+    <div class="err" id="errMsg">Incorrect credentials. Please try again.</div>
+
+    <div class="field">
+      <label>Username</label>
+      <div class="field-icon">👤</div>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="off" onkeydown="if(event.key==='Enter')tryLogin()">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="field-icon">🔒</div>
+      <input type="password" id="password" placeholder="Enter password" autocomplete="off" onkeydown="if(event.key==='Enter')tryLogin()">
+      <button class="eye" id="eyeBtn" onclick="togglePwd()" type="button">👁</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="submit-btn" id="submitBtn" onclick="tryLogin()">
+      <span class="btn-text">Sign In ✦</span>
+      <div class="btn-spinner"><div class="spinner"></div></div>
+    </button>
+
+    <div class="attempts" id="attemptsMsg"></div>
+
+    <div class="sec-badge"><span>256-bit encrypted · secure session</span></div>
+  </div>
+
+  <a href="index.html" class="back-link"><span>←</span>Return to main site</a>
+</div>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('input,button,a,.corner-mark').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+});
+
+// Stars
+const scEl=document.getElementById('sc'),ctx=scEl.getContext('2d');
+let stars=[],t=0;
+function rsz(){scEl.width=innerWidth;scEl.height=innerHeight;}
+function iStars(){stars=[];for(let i=0;i<120;i++)stars.push({x:Math.random()*scEl.width,y:Math.random()*scEl.height,r:Math.random()*.9+.1,sp:Math.random()*.002+.0005,ph:Math.random()*Math.PI*2});}
+function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=>{const a=.15+.35*Math.sin(t*s.sp*100+s.ph);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();});requestAnimationFrame(drw);}
+window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
+
+// Auth
+const ADMIN_USER='akshita';
+const ADMIN_PASS='manifestation2026';
+let attempts=0;
+const maxAttempts=5;
+
+function togglePwd(){
+  const inp=document.getElementById('password');
+  const eye=document.getElementById('eyeBtn');
+  if(inp.type==='password'){inp.type='text';eye.textContent='🙈';}
+  else{inp.type='password';eye.textContent='👁';}
+}
+
+function flashRed(){
+  const f=document.getElementById('flash');
+  f.classList.add('on');
+  setTimeout(()=>f.classList.remove('on'),300);
+}
+
+function tryLogin(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value;
+  const btn=document.getElementById('submitBtn');
+  const err=document.getElementById('errMsg');
+  const att=document.getElementById('attemptsMsg');
+
+  if(!u||!p){
+    err.textContent='Please fill in all fields.';
+    err.classList.add('show');
+    flashRed();
+    return;
+  }
+
+  // Loading state
+  btn.classList.add('loading');
+  err.classList.remove('show');
+
+  setTimeout(()=>{
+    btn.classList.remove('loading');
+    if(u===ADMIN_USER&&p===ADMIN_PASS){
+      // Success — store session and redirect
+      sessionStorage.setItem('adg_admin','1');
+      sessionStorage.setItem('adg_ts',Date.now());
+      btn.textContent='✓ Redirecting…';
+      btn.style.background='linear-gradient(135deg,#2d6a2d,#3d8b3d)';
+      btn.style.color='#fff';
+      setTimeout(()=>window.location.href='admin-dashboard.html',700);
+    }else{
+      attempts++;
+      flashRed();
+      if(attempts>=maxAttempts){
+        err.textContent='Too many failed attempts. Please wait before trying again.';
+        btn.disabled=true;
+        btn.style.opacity='.4';
+        setTimeout(()=>{btn.disabled=false;btn.style.opacity='1';attempts=0;att.classList.remove('show');},30000);
+      }else{
+        const rem=maxAttempts-attempts;
+        err.textContent='Incorrect credentials. Please try again.';
+        att.textContent=rem+' attempt'+(rem>1?'s':'')+' remaining';
+        att.classList.add('show');
+      }
+      err.classList.add('show');
+      document.getElementById('password').value='';
+      document.getElementById('password').focus();
+    }
+  },900);
+}
+
+// Hidden hint (clicking the bottom-right corner mark)
+let hintClicks=0;
+function revealHint(){
+  hintClicks++;
+  if(hintClicks===3){
+    document.getElementById('username').focus();
+    hintClicks=0;
+  }
+}
+
+// Check if already logged in
+if(sessionStorage.getItem('adg_admin')==='1'){
+  window.location.href='admin-dashboard.html';
+}
+</script>
+</body>
+</html>

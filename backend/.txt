@@ -1,0 +1,3 @@
+cloud_name: "drqk3j5cj",
+  api_key: "199557378192441",
+  api_secret: "onK7OzmxAF3Jns6pWIDrpUL_7rg"

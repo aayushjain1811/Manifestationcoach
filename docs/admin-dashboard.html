@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Akshita Dayma Goel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#070a1a;--dark2:#0c1030;--purple:#150e35;
+  --gold:#c9a84c;--gold-light:#e8d5a3;--gold-dark:#9a7c30;
+  --muted:#8e88ab;--text:#eceaf6;
+  --glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --gold-border:rgba(201,168,76,0.25);
+  --sidebar:188px;
+  --red:#ff6464;--green:#5dcc7a;--blue:#7ec8e3;--lavender:#c9b0e0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;overflow:hidden;cursor:none;}
+#cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s;}
+body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;border-color:var(--gold);}
+@media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
+
+.sidebar{width:var(--sidebar);flex-shrink:0;background:rgba(7,10,26,.97);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:hidden;z-index:100;}
+.sb-top{padding:1.5rem 1rem 1rem;border-bottom:1px solid var(--border);}
+.sb-logo{font-family:'Cormorant Garamond',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);display:block;margin-bottom:.2rem;}
+.sb-version{font-size:.58rem;color:rgba(142,136,171,.4);letter-spacing:.1em;}
+.sb-sigil{display:inline-block;width:28px;height:28px;position:relative;margin-bottom:.6rem;}
+.sb-sigil::before{content:'✦';font-size:.75rem;color:var(--gold);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.sb-nav{flex:1;overflow-y:auto;padding:.8rem 0;scrollbar-width:none;}
+.sb-nav::-webkit-scrollbar{display:none;}
+.sb-section{padding:.2rem .8rem;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(142,136,171,.4);margin-bottom:.3rem;margin-top:.8rem;}
+.sb-item{display:flex;align-items:center;gap:.6rem;padding:.6rem .9rem;border-radius:2px;text-decoration:none;color:var(--muted);font-size:.75rem;transition:all .25s;cursor:pointer;position:relative;border:none;background:none;width:100%;text-align:left;}
+.sb-item:hover{background:rgba(201,168,76,.06);color:var(--gold-light);}
+.sb-item.active{background:rgba(201,168,76,.1);color:var(--gold-light);}
+.sb-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:2px;background:var(--gold);border-radius:0 1px 1px 0;}
+.sb-item .icon{font-size:.9rem;width:18px;text-align:center;}
+.sb-item .label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-badge{margin-left:auto;font-size:.55rem;padding:.15rem .45rem;border-radius:10px;background:rgba(201,168,76,.15);color:var(--gold);font-weight:500;}
+.sb-bottom{padding:.9rem;border-top:1px solid var(--border);}
+.sb-user{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--dark);font-weight:600;flex-shrink:0;}
+.sb-username{font-size:.7rem;color:var(--text);}
+.sb-role{font-size:.58rem;color:var(--muted);}
+.sb-logout{width:100%;padding:.5rem;border:1px solid var(--border);border-radius:2px;background:none;color:var(--muted);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.sb-logout:hover{border-color:var(--red);color:var(--red);}
+
+.main{flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column;background:linear-gradient(160deg,var(--dark) 0%,var(--dark2) 100%);}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(7,10,26,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--text);font-weight:400;}
+.breadcrumb{font-size:.68rem;color:var(--muted);letter-spacing:.05em;}
+.breadcrumb span{color:var(--gold);}
+.topbar-right{display:flex;align-items:center;gap:.8rem;}
+.tb-btn{padding:.45rem 1rem;border:1px solid var(--border);border-radius:2px;background:var(--glass);color:var(--muted);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.tb-btn:hover{border-color:var(--gold);color:var(--gold);}
+.tb-time{font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+.content{flex:1;padding:2rem;}
+.panel{display:none;animation:panelIn .35s cubic-bezier(.16,1,.3,1);}
+.panel.active{display:block;}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem;}
+.stat-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.4rem 1.2rem;position:relative;overflow:hidden;transition:all .3s;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold));opacity:0;transition:opacity .3s;}
+.stat-card:hover{border-color:var(--gold-border);}
+.stat-card:hover::before{opacity:1;}
+.stat-icon{font-size:1.4rem;display:block;margin-bottom:.6rem;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);display:block;line-height:1;margin-bottom:.25rem;}
+.stat-label{font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.stat-delta{font-size:.65rem;margin-top:.4rem;}
+.stat-delta.up{color:var(--green);}
+
+.two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.5rem;}
+.card-title{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;}
+.activity-item{display:flex;align-items:flex-start;gap:.8rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.activity-item:last-child{border-bottom:none;}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.act-dot.gold{background:var(--gold);}.act-dot.green{background:var(--green);}.act-dot.blue{background:var(--blue);}.act-dot.purple{background:var(--lavender);}.act-dot.rose{background:#ff8fab;}
+.act-text{font-size:.77rem;color:var(--muted);line-height:1.5;flex:1;}
+.act-text strong{color:var(--text);}
+.act-time{font-size:.63rem;color:rgba(142,136,171,.5);white-space:nowrap;margin-top:2px;}
+.mini-stat{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.mini-stat:last-child{border-bottom:none;}
+.ms-label{font-size:.75rem;color:var(--muted);}
+.ms-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text);}
+
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold-light);font-weight:400;margin-bottom:1.5rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+
+.adm-form{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.8rem;margin-bottom:1.8rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.field-grp{margin-bottom:1rem;}
+.field-grp label{display:block;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;}
+.field-grp input,.field-grp select,.field-grp textarea{width:100%;padding:.75rem 1rem;border-radius:2px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:all .3s;}
+.field-grp input:focus,.field-grp textarea:focus{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.03);}
+.field-grp select{cursor:pointer;color:var(--text);}
+.field-grp select option{background:var(--dark2);}
+.field-grp textarea{resize:vertical;min-height:90px;line-height:1.6;}
+.field-grp input::placeholder,.field-grp textarea::placeholder{color:rgba(142,136,171,.3);}
+
+.upload-area{border:1px dashed rgba(201,168,76,.2);border-radius:2px;padding:1.4rem;text-align:center;cursor:pointer;transition:all .3s;position:relative;}
+.upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,.04);}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-area .u-icon{font-size:1.3rem;display:block;margin-bottom:.4rem;}
+.upload-area p{font-size:.74rem;color:var(--muted);}
+.upload-area small{font-size:.65rem;color:rgba(142,136,171,.4);display:block;margin-top:.2rem;}
+.preview-img{width:100%;max-height:180px;object-fit:contain;border-radius:2px;margin-top:.8rem;display:none;border:1px solid var(--border);}
+.upload-area.pdf-area{border-color:rgba(126,200,227,.2);}
+.upload-area.pdf-area:hover{border-color:var(--blue);background:rgba(126,200,227,.04);}
+.pdf-status{display:none;align-items:center;gap:.7rem;margin-top:.8rem;padding:.65rem .9rem;border-radius:2px;background:rgba(126,200,227,.07);border:1px solid rgba(126,200,227,.18);}
+.pdf-status.show{display:flex;}
+.ps-name{font-size:.75rem;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ps-size{font-size:.62rem;color:var(--muted);margin-top:.1rem;}
+.ps-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:.2rem .4rem;border-radius:2px;transition:all .2s;margin-left:auto;}
+.ps-remove:hover{color:var(--red);}
+.up-prog{display:none;margin-top:.7rem;}
+.up-prog.show{display:block;}
+.up-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+.up-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold));border-radius:2px;width:0%;transition:width .3s;}
+.up-lbl{font-size:.62rem;color:var(--muted);margin-top:.35rem;}
+.form-divider{border:none;border-top:1px solid var(--border);margin:1.2rem 0;}
+.fsec{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+
+.btn-group{display:flex;gap:.8rem;margin-top:.5rem;flex-wrap:wrap;}
+.adm-btn{padding:.65rem 1.5rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;border:none;}
+.adm-btn.gold{background:var(--gold);color:var(--dark);}
+.adm-btn.gold:hover{background:var(--gold-light);transform:translateY(-1px);}
+.adm-btn.outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.adm-btn.outline:hover{border-color:var(--gold);color:var(--gold);}
+.adm-btn.danger{background:rgba(255,100,100,.1);border:1px solid rgba(255,100,100,.3);color:var(--red);}
+.adm-btn.danger:hover{background:rgba(255,100,100,.2);}
+.adm-btn.blue-btn{background:rgba(126,200,227,.1);border:1px solid rgba(126,200,227,.25);color:var(--blue);}
+.adm-btn.blue-btn:hover{background:rgba(126,200,227,.2);}
+.adm-btn.sm{padding:.4rem .9rem;font-size:.65rem;}
+
+/* TESTIMONIALS */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.test-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all .3s;}
+.test-card:hover{border-color:var(--gold-border);}
+.test-thumb{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;}
+.test-thumb-empty{width:100%;aspect-ratio:9/16;background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;font-size:.6rem;color:rgba(201,168,76,.25);text-align:center;padding:.5rem;}
+.test-footer{padding:.6rem .7rem;display:flex;align-items:center;justify-content:space-between;gap:.4rem;}
+.tcat{font-size:.58rem;padding:.15rem .45rem;border-radius:1px;text-transform:uppercase;letter-spacing:.08em;}
+.tcat.sp{background:rgba(255,100,150,.12);color:#ff6496;}
+.tcat.career{background:rgba(201,168,76,.12);color:var(--gold);}
+.tcat.manifestation{background:rgba(126,200,227,.12);color:var(--blue);}
+.tcat.program{background:rgba(224,201,240,.12);color:var(--lavender);}
+.test-actions{display:flex;gap:.3rem;}
+.icon-btn{background:none;border:none;cursor:pointer;padding:.3rem;border-radius:2px;font-size:.78rem;transition:all .2s;color:var(--muted);}
+.icon-btn.del:hover{color:var(--red);background:rgba(255,100,100,.1);}
+.icon-btn.edit:hover{color:var(--gold);background:rgba(201,168,76,.1);}
+.test-label{padding:0 .7rem .5rem;font-size:.62rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mini-sel{font-size:.6rem;padding:.18rem .35rem;background:var(--glass);border:1px solid var(--border);color:var(--muted);border-radius:2px;cursor:pointer;outline:none;}
+
+/* EBOOKS */
+.ebook-list{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1.5rem;}
+.ebook-row{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.1rem 1.3rem;display:grid;grid-template-columns:64px 1fr auto;gap:1rem;align-items:center;transition:all .3s;}
+.ebook-row:hover{border-color:var(--gold-border);}
+.ebook-thumb{width:64px;height:64px;border-radius:2px;border:1px solid var(--border);background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;}
+.ebook-thumb img{width:64px;height:64px;object-fit:cover;border-radius:2px;display:block;}
+.ebook-info h4{font-size:.88rem;color:var(--gold-light);font-weight:500;margin-bottom:.2rem;}
+.ebook-info p{font-size:.72rem;color:var(--muted);}
+.ebook-info .badges{display:flex;gap:.4rem;margin-top:.3rem;flex-wrap:wrap;align-items:center;}
+.tag-pill{font-size:.58rem;padding:.15rem .5rem;border-radius:10px;background:rgba(201,168,76,.1);color:var(--gold);}
+.pdf-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.58rem;padding:.15rem .55rem;border-radius:10px;background:rgba(126,200,227,.1);color:var(--blue);cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.pdf-badge:hover{background:rgba(126,200,227,.2);}
+.pdf-badge.no-pdf{background:rgba(255,255,255,.04);color:rgba(142,136,171,.4);cursor:default;}
+.ebook-actions{display:flex;gap:.5rem;flex-direction:column;align-items:flex-end;}
+
+/* ACHIEVEMENTS */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:1.5rem;}
+.ach-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all .3s;position:relative;}
+.ach-card:hover{border-color:var(--gold-border);}
+.ach-card:hover::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold));}
+.ach-img-wrap{width:100%;aspect-ratio:4/3;background:linear-gradient(160deg,var(--dark2),var(--purple));overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.ach-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.ach-body{padding:.9rem 1rem;}
+.ach-title{font-size:.83rem;color:var(--gold-light);font-weight:500;margin-bottom:.25rem;}
+.ach-meta{font-size:.68rem;color:var(--muted);margin-bottom:.4rem;}
+.ach-desc{font-size:.72rem;color:rgba(142,136,171,.7);line-height:1.55;}
+.ach-footer{padding:.6rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ach-type{font-size:.58rem;padding:.15rem .5rem;border-radius:10px;text-transform:uppercase;letter-spacing:.08em;}
+.ach-type.award{background:rgba(201,168,76,.12);color:var(--gold);}
+.ach-type.milestone{background:rgba(93,204,122,.12);color:var(--green);}
+.ach-type.feature{background:rgba(126,200,227,.12);color:var(--blue);}
+.ach-type.certification{background:rgba(201,176,224,.12);color:var(--lavender);}
+
+/* JOURNALS */
+.journal-list{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;}
+.journal-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.3rem 1.5rem;transition:all .3s;position:relative;}
+.journal-card:hover{border-color:rgba(201,176,224,.25);}
+.journal-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--lavender),rgba(201,176,224,.2));border-radius:2px 0 0 2px;opacity:0;transition:opacity .3s;}
+.journal-card:hover::before{opacity:1;}
+.jc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;gap:1rem;}
+.jc-title{font-size:.9rem;color:var(--gold-light);font-weight:500;}
+.jc-meta{font-size:.65rem;color:var(--muted);margin-top:.2rem;}
+.jc-date{font-size:.65rem;color:rgba(142,136,171,.5);white-space:nowrap;}
+.jc-body{font-size:.78rem;color:rgba(142,136,171,.75);line-height:1.7;margin-bottom:.8rem;}
+.jc-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.jc-tags{display:flex;gap:.4rem;flex-wrap:wrap;}
+.jc-tag{font-size:.58rem;padding:.15rem .5rem;border-radius:10px;background:rgba(201,176,224,.1);color:var(--lavender);}
+.jc-actions{display:flex;gap:.4rem;}
+
+/* BOOKINGS */
+.cal-setup{background:rgba(126,200,227,.04);border:1px solid rgba(126,200,227,.15);border-radius:2px;padding:1.5rem;margin-bottom:1.5rem;}
+.cal-setup h3{font-size:.75rem;color:var(--blue);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;}
+.cal-setup p{font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
+.cal-api-row{display:flex;gap:.8rem;align-items:flex-end;flex-wrap:wrap;}
+.cal-api-row .field-grp{flex:1;min-width:160px;margin-bottom:0;}
+.bk-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.2rem;}
+.bs-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:.9rem 1rem;}
+.bs-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--blue);display:block;line-height:1;}
+.bs-label{font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+.bk-toolbar{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+.bk-filter{padding:.45rem .9rem;border:1px solid var(--border);border-radius:2px;background:var(--glass);color:var(--muted);font-size:.68rem;cursor:pointer;transition:all .3s;}
+.bk-filter.active,.bk-filter:hover{border-color:var(--blue);color:var(--blue);background:rgba(126,200,227,.06);}
+.bk-table{width:100%;border-collapse:collapse;}
+.bk-table th{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:.65rem 1rem;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+.bk-table td{font-size:.78rem;color:var(--text);padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.bk-table tr:last-child td{border-bottom:none;}
+.bk-table tr:hover td{background:rgba(255,255,255,.02);}
+.bk-status{font-size:.6rem;padding:.2rem .55rem;border-radius:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:500;display:inline-block;}
+.bk-status.confirmed,.bk-status.accepted,.bk-status.completed{background:rgba(93,204,122,.12);color:var(--green);}
+.bk-status.pending{background:rgba(201,168,76,.12);color:var(--gold);}
+.bk-status.cancelled{background:rgba(255,100,100,.1);color:var(--red);}
+.bk-status.upcoming{background:rgba(126,200,227,.1);color:var(--blue);}
+.cal-empty{text-align:center;padding:3rem;color:var(--muted);}
+.cal-empty .ce-icon{font-size:2rem;display:block;margin-bottom:.8rem;opacity:.4;}
+.cal-loading{text-align:center;padding:2.5rem;color:var(--muted);}
+.spin{display:inline-block;width:20px;height:20px;border:2px solid rgba(126,200,227,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:.6rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.cal-error{background:rgba(255,100,100,.06);border:1px solid rgba(255,100,100,.2);border-radius:2px;padding:1rem 1.2rem;font-size:.78rem;color:var(--red);margin-bottom:1rem;line-height:1.6;}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.setting-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.5rem;}
+.setting-card h3{font-size:.78rem;color:var(--gold-light);font-weight:500;letter-spacing:.08em;margin-bottom:1.2rem;text-transform:uppercase;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label{font-size:.78rem;color:var(--muted);}
+.toggle{position:relative;width:34px;height:18px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:9px;cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:rgba(201,168,76,.4);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(16px);background:var(--gold);}
+
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:rgba(7,10,26,.95);border:1px solid var(--gold);border-radius:2px;padding:.7rem 1.2rem;font-size:.78rem;color:var(--gold-light);z-index:9999;transform:translateY(14px);opacity:0;transition:all .3s;pointer-events:none;max-width:340px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+.toast.info{border-color:var(--blue);color:var(--blue);}
+
+.empty-state{text-align:center;padding:3.5rem 2rem;color:var(--muted);}
+.empty-state .ei{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.4;}
+.empty-state p{font-size:.82rem;}
+
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);z-index:8000;display:none;align-items:center;justify-content:center;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:var(--dark2);border:1px solid var(--border);border-radius:3px;padding:2rem;max-width:360px;width:90%;text-align:center;}
+.confirm-box h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text);font-weight:400;margin-bottom:.6rem;}
+.confirm-box p{font-size:.8rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.65;}
+.confirm-btns{display:flex;gap:.8rem;justify-content:center;}
+
+/* CLOUD IMAGES GRID */
+.cloud-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.6rem;margin-top:1rem;}
+.cloud-img-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:2px;border:1px solid var(--border);}
+
+.main::-webkit-scrollbar,.sb-nav::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-thumb{background:rgba(201,168,76,.15);border-radius:2px;}
+
+@media(max-width:900px){
+  .sidebar{width:52px;}
+  .sb-logo,.sb-version,.sb-role,.sb-username,.label,.sb-section,.sb-badge{display:none;}
+  .sb-item{padding:.7rem;justify-content:center;}
+  .sb-user{justify-content:center;}
+  .stats-grid,.bk-summary{grid-template-columns:repeat(2,1fr);}
+  .two-col,.settings-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .stats-grid,.bk-summary{grid-template-columns:1fr;}
+  .form-row,.form-row.three{grid-template-columns:1fr;}
+  .content{padding:1.2rem;}
+  .ach-grid{grid-template-columns:1fr 1fr;}
+  .ebook-row{grid-template-columns:48px 1fr;}
+  .ebook-actions{flex-direction:row;grid-column:1/-1;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMsg">This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="adm-btn outline" onclick="confirmNo()">Cancel</button>
+      <button class="adm-btn danger" id="confirmYesBtn">Delete</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="sb-sigil"></div>
+    <span class="sb-logo">ADG Admin</span>
+    <span class="sb-version">v3.0 · 2026</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <button class="sb-item active" onclick="showPanel('dashboard',this)"><span class="icon">📊</span><span class="label">Dashboard</span></button>
+    <div class="sb-section">Content</div>
+    <button class="sb-item" onclick="showPanel('testimonials',this)"><span class="icon">📸</span><span class="label">Testimonials</span><span class="sb-badge" id="testBadge">0</span></button>
+    <button class="sb-item" onclick="showPanel('ebooks',this)"><span class="icon">📚</span><span class="label">eBooks</span><span class="sb-badge" id="ebBadge">0</span></button>
+    <button class="sb-item" onclick="showPanel('achievements',this)"><span class="icon">🏆</span><span class="label">Achievements</span><span class="sb-badge" id="achBadge">0</span></button>
+    <button class="sb-item" onclick="showPanel('journals',this)"><span class="icon">📓</span><span class="label">Journals</span><span class="sb-badge" id="jrnBadge">0</span></button>
+    <div class="sb-section">Bookings</div>
+    <button class="sb-item" onclick="showPanel('bookings',this)"><span class="icon">📅</span><span class="label">Cal.com Bookings</span></button>
+    <div class="sb-section">System</div>
+    <button class="sb-item" onclick="showPanel('settings',this)"><span class="icon">⚙️</span><span class="label">Settings</span></button>
+    <a class="sb-item" href="index.html" target="_blank"><span class="icon">🌐</span><span class="label">View Site</span></a>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">A</div>
+      <div><div class="sb-username">akshita</div><div class="sb-role">Super Admin</div></div>
+    </div>
+    <button class="sb-logout" onclick="doLogout()">Sign Out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="topTitle">Dashboard</div>
+      <div class="breadcrumb">Admin / <span id="topSub">Overview</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-time" id="liveClock"></div>
+      <button class="tb-btn" onclick="window.open('index.html','_blank')">View Site ↗</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-icon">📸</span><span class="stat-val" id="ds-tests">0</span><span class="stat-label">Testimonials</span><div class="stat-delta up">↑ Live on site</div></div>
+        <div class="stat-card"><span class="stat-icon">📚</span><span class="stat-val" id="ds-ebooks">0</span><span class="stat-label">eBooks</span><div class="stat-delta up">↑ Published</div></div>
+        <div class="stat-card"><span class="stat-icon">🏆</span><span class="stat-val" id="ds-ach">0</span><span class="stat-label">Achievements</span><div class="stat-delta up">↑ Showcased</div></div>
+        <div class="stat-card"><span class="stat-icon">📓</span><span class="stat-val" id="ds-jrn">0</span><span class="stat-label">Journal Posts</span><div class="stat-delta up">↑ Published</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card"><div class="card-title">Recent Activity</div><div id="activityFeed"></div></div>
+        <div class="card"><div class="card-title">Quick Stats</div>
+          <div>
+            <div class="mini-stat"><span class="ms-label">SP Testimonials</span><span class="ms-val" id="qs-sp">0</span></div>
+            <div class="mini-stat"><span class="ms-label">eBooks with PDF</span><span class="ms-val" id="qs-ebwpdf">0</span></div>
+            <div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-awards">0</span></div>
+            <div class="mini-stat"><span class="ms-label">Certifications</span><span class="ms-val" id="qs-certs">0</span></div>
+            <div class="mini-stat"><span class="ms-label">Journal entries</span><span class="ms-val" id="qs-jrns">0</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Cloud Images Section on Dashboard -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title">
+          Cloudinary Images
+          <button class="adm-btn blue-btn sm" onclick="loadCloudImages()">↻ Refresh</button>
+        </div>
+        <div id="cloudImages"><div style="font-size:.75rem;color:var(--muted);">Loading cloud images…</div></div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="panel" id="panel-testimonials">
+      <div class="section-title">Manage Testimonials <button class="adm-btn gold sm" onclick="scrollToAdd('testAdd')">+ Add New</button></div>
+      <div class="adm-form" id="testAdd">
+        <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;">Add Screenshot</div>
+        <div class="form-row">
+          <div class="field-grp"><label>Category</label>
+            <select id="newTestCat"><option value="sp">💞 Specific Person</option><option value="career">💼 Career</option><option value="manifestation">✨ Manifestation</option><option value="program">🗓️ 21-Day Program</option></select>
+          </div>
+          <div class="field-grp"><label>Label (optional)</label><input type="text" id="newTestLabel" placeholder="e.g. Got him back in 3 days!"></div>
+        </div>
+        <div class="field-grp"><label>Upload Screenshot</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="handleTestImg(event)"><span class="u-icon">📷</span><p>Click or drag to upload</p><small>JPG, PNG, WEBP · max 5MB</small></div>
+          <img id="testImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="newTestUrl" placeholder="https://..." oninput="previewTestUrl(this.value)"></div>
+        <div class="btn-group"><button class="adm-btn gold" onclick="addTestimonial()">Save Screenshot</button><button class="adm-btn outline" onclick="clearTestForm()">Clear</button></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;">All Screenshots — <span id="testCount">0</span> total</div>
+      <div class="test-grid" id="admTestGrid"></div>
+    </div>
+
+    <!-- EBOOKS -->
+    <div class="panel" id="panel-ebooks">
+      <div class="section-title">Manage eBooks <button class="adm-btn gold sm" onclick="clearEbookForm();scrollToAdd('ebAdd')">+ Add New</button></div>
+      <div class="adm-form" id="ebAdd">
+        <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;" id="ebFormTitle">Add eBook</div>
+        <input type="hidden" id="editEbookIdx" value="-1">
+        <div class="form-row">
+          <div class="field-grp"><label>Title</label><input type="text" id="ebTitle" placeholder="eBook title"></div>
+          <div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div>
+        </div>
+        <div class="form-row three">
+          <div class="field-grp"><label>Sale Price</label><input type="text" id="ebPrice" placeholder="$47"></div>
+          <div class="field-grp"><label>Original Price</label><input type="text" id="ebOrig" placeholder="$67"></div>
+          <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
+        </div>
+        <div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div>
+        <div class="field-grp"><label>Features (one per line)</label><textarea id="ebFeatures" placeholder="Feature 1&#10;Feature 2" style="min-height:80px;"></textarea></div>
+        <div class="field-grp"><label>Cover Image</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="handleEbImg(event)"><span class="u-icon">📚</span><p>Click or drag cover</p><small>JPG, PNG, WEBP</small></div>
+          <img id="ebImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp"><label>Or paste cover URL</label><input type="url" id="ebImgUrl" placeholder="https://..." oninput="previewEbUrl(this.value)"></div>
+        <hr class="form-divider">
+        <div class="fsec">📄 eBook PDF File</div>
+        <div class="field-grp"><label>Upload PDF</label>
+          <div class="upload-area pdf-area"><input type="file" accept="application/pdf,.pdf" id="pdfFileInput" onchange="handleEbPdf(event)"><span class="u-icon">📄</span><p>Click or drag PDF here</p><small>PDF only · max 50MB</small></div>
+          <div class="pdf-status" id="pdfStatus"><span>📄</span><div style="flex:1;min-width:0;"><div class="ps-name" id="pdfStatusName">—</div><div class="ps-size" id="pdfStatusSize">—</div></div><button class="ps-remove" onclick="removePdf()">✕</button></div>
+          <div class="up-prog" id="pdfUploadProgress"><div class="up-bar"><div class="up-fill" id="pdfBarFill"></div></div><div class="up-lbl" id="pdfUploadLabel">Uploading…</div></div>
+        </div>
+        <div class="field-grp"><label>Or paste PDF URL</label><input type="url" id="ebPdfUrl" placeholder="https://example.com/ebook.pdf" oninput="setPdfFromUrl(this.value)"></div>
+        <div class="btn-group"><button class="adm-btn gold" onclick="saveEbook()">Save eBook</button><button class="adm-btn outline" onclick="clearEbookForm()">Clear</button></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;">All eBooks — <span id="ebookCount">0</span> total</div>
+      <div class="ebook-list" id="admEbookList"></div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="panel" id="panel-achievements">
+      <div class="section-title">Achievements &amp; Awards <button class="adm-btn gold sm" onclick="clearAchForm();scrollToAdd('achAdd')">+ Add New</button></div>
+      <div class="adm-form" id="achAdd">
+        <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;" id="achFormTitle">Add Achievement</div>
+        <input type="hidden" id="editAchIdx" value="-1">
+        <div class="form-row">
+          <div class="field-grp"><label>Title</label><input type="text" id="achTitle" placeholder="e.g. Top Coach Award 2025"></div>
+          <div class="field-grp"><label>Type</label>
+            <select id="achType"><option value="award">🏆 Award</option><option value="milestone">🎯 Milestone</option><option value="feature">📰 Media Feature</option><option value="certification">📜 Certification</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field-grp"><label>Organisation / Source</label><input type="text" id="achOrg" placeholder="e.g. Forbes India, ICF"></div>
+          <div class="field-grp"><label>Date / Year</label><input type="text" id="achDate" placeholder="e.g. March 2025"></div>
+        </div>
+        <div class="field-grp"><label>Description</label><textarea id="achDesc" placeholder="What is this achievement about?"></textarea></div>
+        <div class="field-grp"><label>Image / Certificate / Photo</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="handleAchImg(event)"><span class="u-icon">🏆</span><p>Click or drag image</p><small>JPG, PNG, WEBP</small></div>
+          <img id="achImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="achImgUrl" placeholder="https://..." oninput="previewAchUrl(this.value)"></div>
+        <div class="field-grp"><label>Link (optional)</label><input type="url" id="achLink" placeholder="https://article-or-proof-link.com"></div>
+        <div class="btn-group"><button class="adm-btn gold" onclick="saveAchievement()">Save Achievement</button><button class="adm-btn outline" onclick="clearAchForm()">Clear</button></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;">All Achievements — <span id="achCount">0</span> total</div>
+      <div class="ach-grid" id="admAchGrid"></div>
+    </div>
+
+    <!-- JOURNALS -->
+    <div class="panel" id="panel-journals">
+      <div class="section-title">Journal &amp; Blog Posts <button class="adm-btn gold sm" onclick="clearJrnForm();scrollToAdd('jrnAdd')">+ Add New</button></div>
+      <div class="adm-form" id="jrnAdd">
+        <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;" id="jrnFormTitle">Add Journal Entry</div>
+        <input type="hidden" id="editJrnIdx" value="-1">
+        <div class="form-row">
+          <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
+          <div class="field-grp"><label>Category</label>
+            <select id="jrnCat"><option value="mindset">🧠 Mindset</option><option value="love">💞 Love & Relationships</option><option value="manifestation">✨ Manifestation</option><option value="career">💼 Career</option><option value="personal">🌸 Personal</option><option value="spiritual">🕊️ Spiritual</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
+          <div class="field-grp"><label>Mood / Vibe</label>
+            <select id="jrnMood"><option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option><option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option><option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option><option value="🌙">🌙 Calm</option></select>
+          </div>
+        </div>
+        <div class="field-grp"><label>Short Excerpt (preview teaser)</label><textarea id="jrnExcerpt" placeholder="A short teaser or summary…" style="min-height:70px;"></textarea></div>
+        <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full journal entry here…" style="min-height:160px;"></textarea></div>
+        <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
+        <div class="field-grp"><label>Cover Image (optional)</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="handleJrnImg(event)"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP</small></div>
+          <img id="jrnImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
+        <div class="btn-group"><button class="adm-btn gold" onclick="saveJournal()">Save Entry</button><button class="adm-btn outline" onclick="clearJrnForm()">Clear</button></div>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:.8rem;">All Entries — <span id="jrnCount">0</span> total</div>
+      <div class="journal-list" id="admJrnList"></div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="panel" id="panel-bookings">
+      <div class="section-title">Cal.com Bookings</div>
+      <div class="cal-setup" id="calSetup">
+        <h3>🔗 Connect Your Cal.com Account</h3>
+        <p>Enter your Cal.com API key to pull bookings directly into this dashboard. Find it at <strong>Cal.com → Settings → Developer → API Keys</strong>. Your key is saved only in this browser's localStorage.</p>
+        <div class="cal-api-row">
+          <div class="field-grp"><label>Cal.com API Key</label><input type="password" id="calApiKey" placeholder="cal_live_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"></div>
+          <div class="field-grp" style="max-width:200px;"><label>Your Cal.com Username</label><input type="text" id="calUsername" placeholder="akshita-dayma"></div>
+          <button class="adm-btn gold" style="flex-shrink:0;align-self:flex-end;margin-bottom:1rem;" onclick="connectCal()">Connect →</button>
+        </div>
+        <div style="font-size:.66rem;color:rgba(142,136,171,.4);margin-top:.3rem;">🔒 Key is stored locally in your browser and only sent to Cal.com's API.</div>
+      </div>
+      <div class="bk-summary" id="bkSummary" style="display:none;">
+        <div class="bs-card"><span class="bs-val" id="bsTotal">0</span><div class="bs-label">Total Bookings</div></div>
+        <div class="bs-card"><span class="bs-val" id="bsUpcoming" style="color:var(--blue);">0</span><div class="bs-label">Upcoming</div></div>
+        <div class="bs-card"><span class="bs-val" id="bsToday" style="color:var(--green);">0</span><div class="bs-label">Today</div></div>
+        <div class="bs-card"><span class="bs-val" id="bsCancelled" style="color:var(--red);">0</span><div class="bs-label">Cancelled</div></div>
+      </div>
+      <div class="bk-toolbar" id="bkToolbar" style="display:none;">
+        <button class="bk-filter active" onclick="filterBk('all',this)">All</button>
+        <button class="bk-filter" onclick="filterBk('upcoming',this)">Upcoming</button>
+        <button class="bk-filter" onclick="filterBk('past',this)">Past</button>
+        <button class="bk-filter" onclick="filterBk('cancelled',this)">Cancelled</button>
+        <button class="adm-btn blue-btn sm" style="margin-left:auto;" onclick="fetchBookings()">↻ Refresh</button>
+        <button class="adm-btn outline sm" onclick="disconnectCal()">Disconnect</button>
+      </div>
+      <div id="calError" style="display:none;" class="cal-error"></div>
+      <div id="calLoading" class="cal-loading" style="display:none;"><div class="spin"></div><div style="font-size:.75rem;margin-top:.3rem;">Fetching bookings from Cal.com…</div></div>
+      <div id="bkWrap"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel" id="panel-settings">
+      <div class="section-title">Settings</div>
+      <div class="settings-grid">
+        <div class="setting-card">
+          <h3>Site Visibility</h3>
+          <div class="toggle-row"><span class="toggle-label">Testimonials</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">eBooks</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">Achievements</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">Journal / Blog</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">Booking Section</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="setting-card">
+          <h3>Notifications</h3>
+          <div class="toggle-row"><span class="toggle-label">Admin login alerts</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">New booking notify</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">Contact form emails</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+        </div>
+        <div class="setting-card">
+          <h3>Change Admin Password</h3>
+          <div class="field-grp" style="margin-top:.5rem;"><label>Current Password</label><input type="password" placeholder="••••••••" id="curPwd"></div>
+          <div class="field-grp"><label>New Password</label><input type="password" placeholder="New password" id="newPwd"></div>
+          <div class="field-grp"><label>Confirm New</label><input type="password" placeholder="Confirm" id="confPwd"></div>
+          <button class="adm-btn gold" onclick="changePwd()">Update Password</button>
+        </div>
+        <div class="setting-card">
+          <h3>Data Management</h3>
+          <p style="font-size:.75rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.65;">Export or reset stored content. <strong style="color:var(--gold-light);">Reset cannot be undone.</strong></p>
+          <div class="btn-group" style="flex-direction:column;gap:.6rem;">
+            <button class="adm-btn outline" style="text-align:left;" onclick="exportData()">📤 Export All Data (JSON)</button>
+            <button class="adm-btn danger" onclick="confirmReset()">⚠️ Reset All Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.addEventListener('mouseover',e=>{if(e.target.matches('a,button,input,select,textarea,.ach-card,.journal-card,.ebook-row,.stat-card'))document.body.classList.add('ch');});
+document.addEventListener('mouseout',()=>document.body.classList.remove('ch'));
+
+// AUTH
+if(sessionStorage.getItem('adg_admin')!=='1'){/* window.location.href='admin-login.html'; */}
+function doLogout(){sessionStorage.removeItem('adg_admin');window.location.href='admin-login.html';}
+
+// CLOCK
+setInterval(()=>{document.getElementById('liveClock').textContent=new Date().toLocaleTimeString('en-IN',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
+
+// TOAST
+function toast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3200);
+}
+
+// PANELS
+const PM={dashboard:{t:'Dashboard',s:'Overview'},testimonials:{t:'Testimonials',s:'Manage Screenshots'},ebooks:{t:'eBooks',s:'Manage eBooks'},achievements:{t:'Achievements',s:'Awards & Milestones'},journals:{t:'Journals',s:'Blog & Journal Posts'},bookings:{t:'Cal.com Bookings',s:'Booking Management'},settings:{t:'Settings',s:'System Settings'}};
+function showPanel(n,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+n).classList.add('active');
+  if(btn)btn.classList.add('active');
+  const m=PM[n]||{t:n,s:n};
+  document.getElementById('topTitle').textContent=m.t;
+  document.getElementById('topSub').textContent=m.s;
+  if(n==='dashboard')updateDash();
+  if(n==='bookings')initBookings();
+}
+function scrollToAdd(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+
+// DATA
+function ld(k,d){try{return JSON.parse(localStorage.getItem(k))||d;}catch{return d;}}
+function sd(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{toast('Storage full — export data first','error');}}
+
+// ─── CLOUDINARY HELPERS ───────────────────────────────────────────────────────
+// Delete a file from Cloudinary by public_id
+async function deleteFromCloudinary(public_id, resource_type='image'){
+  if(!public_id) return; // skip if no public_id (e.g. URL-pasted items)
+  try{
+    await fetch('http://localhost:5000/delete-file',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({public_id, resource_type})
+    });
+  }catch(e){
+    console.warn('Cloudinary delete failed:',e);
+  }
+}
+
+// Load and display all images from Cloudinary in the dashboard
+async function loadCloudImages(){
+  const el=document.getElementById('cloudImages');
+  if(!el) return;
+  el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">Loading…</div>';
+  try{
+    const res=await fetch('http://localhost:5000/get-images');
+    const data=await res.json();
+    if(!data.length){el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">No images found in Cloudinary.</div>';return;}
+    el.innerHTML=`<div class="cloud-grid">${data.map(img=>`<img src="${img.secure_url}" class="cloud-img-thumb" alt="" title="${img.public_id}">`).join('')}</div>
+    <div style="font-size:.62rem;color:var(--muted);margin-top:.5rem;">${data.length} image${data.length!==1?'s':''} in <code>admin_uploads/images</code></div>`;
+  }catch(e){
+    el.innerHTML='<div style="font-size:.75rem;color:var(--red);">Could not load — is the server running on port 5000?</div>';
+  }
+}
+
+const DEF_EBOOKS=[
+  {id:1,title:'The Subconscious Shift Formula',tag:'Manifestation',price:'$47',orig:'$67',desc:'The complete blueprint for rewiring your subconscious mind.',features:['Subconscious reprogramming','Belief transformation','Daily rituals','Instant download'],badge:'Bestseller',icon:'📖',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''},
+  {id:2,title:'Manifest Your Soulmate',tag:'Love & Relationships',price:'$37',orig:'$57',desc:'Heal relationship patterns and align with deep love.',features:['Heal past trauma','Energetic alignment','Attract love','Instant download'],badge:'Popular',icon:'💫',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''},
+  {id:3,title:'Money Mindset Mastery',tag:'Wealth & Abundance',price:'$47',orig:'$67',desc:'Break money blocks and rewire for financial abundance.',features:['Dissolve money blocks','Abundance frequency','Manifestation + action','Instant download'],badge:'',icon:'💰',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''},
+  {id:4,title:'Aligned Career Manifestation',tag:'Career & Purpose',price:'$37',orig:'$57',desc:'Align your purpose with your profession.',features:["Soul's purpose clarity","Energetic alignment",'Beat imposter syndrome','Instant download'],badge:'',icon:'🎯',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''},
+  {id:5,title:'Neuroplasticity Manifestation Guide',tag:'Mindset & Reprogramming',price:'$57',orig:'$77',desc:'Science meets spirituality — reprogram permanently.',features:['Brain science simplified','Neural rewiring exercises','30-day plan','Instant download'],badge:'New',icon:'🧠',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''},
+  {id:6,title:'Full eBook Bundle — All 5 Guides',tag:'Complete Collection',price:'$97',orig:'$225',desc:'All 5 guides at a massive discount.',features:['All 5 eBooks','Save 50%+','Bonus meditation audio','Lifetime updates'],badge:'Best Value',icon:'🎁',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''}
+];
+
+let testimonials=ld('adg_testimonials',[
+  {id:1,cat:'sp',label:'Got him back!',img:'',public_id:''},
+  {id:2,cat:'career',label:'Dream job in 2 weeks',img:'',public_id:''},
+  {id:3,cat:'manifestation',label:'Manifested ₹5L',img:'',public_id:''},
+  {id:4,cat:'program',label:'21-day miracle',img:'',public_id:''}
+]);
+let ebooks=ld('adg_ebooks',DEF_EBOOKS);
+let achievements=ld('adg_achievements',[
+  {id:1,title:'100K+ Lives Transformed',type:'milestone',org:'Self',date:'2025',desc:'Over one hundred thousand lives transformed globally through coaching.',img:'',imgPublicId:'',link:''},
+  {id:2,title:'Featured in Times of India',type:'feature',org:'Times of India',date:'Feb 2025',desc:'Recognised as a top manifestation coach in India.',img:'',imgPublicId:'',link:''},
+  {id:3,title:'ICF Certified Coach',type:'certification',org:'International Coaching Federation',date:'2023',desc:'Internationally certified life and manifestation coach.',img:'',imgPublicId:'',link:''}
+]);
+let journals=ld('adg_journals',[
+  {id:1,title:'Why Manifestation Actually Works',cat:'manifestation',date:'2025-03-10',mood:'💫',excerpt:'Most people think manifestation is about vision boards. It is so much deeper than that…',content:'',tags:['manifestation','mindset'],img:'',imgPublicId:''},
+  {id:2,title:'The Healing Power of Self-Love',cat:'personal',date:'2025-02-20',mood:'🌸',excerpt:'Before you can attract anyone, you need to fall in love with yourself first.',content:'',tags:['self-love','healing'],img:'',imgPublicId:''}
+]);
+
+// DASHBOARD
+function updateDash(){
+  document.getElementById('ds-tests').textContent=testimonials.length;
+  document.getElementById('ds-ebooks').textContent=ebooks.length;
+  document.getElementById('ds-ach').textContent=achievements.length;
+  document.getElementById('ds-jrn').textContent=journals.length;
+  document.getElementById('testBadge').textContent=testimonials.length;
+  document.getElementById('ebBadge').textContent=ebooks.length;
+  document.getElementById('achBadge').textContent=achievements.length;
+  document.getElementById('jrnBadge').textContent=journals.length;
+  document.getElementById('qs-sp').textContent=testimonials.filter(t=>t.cat==='sp').length;
+  document.getElementById('qs-ebwpdf').textContent=ebooks.filter(e=>e.pdfUrl).length;
+  document.getElementById('qs-awards').textContent=achievements.filter(a=>a.type==='award').length;
+  document.getElementById('qs-certs').textContent=achievements.filter(a=>a.type==='certification').length;
+  document.getElementById('qs-jrns').textContent=journals.length;
+  document.getElementById('activityFeed').innerHTML=[
+    {c:'gold',t:`<strong>${testimonials.length}</strong> testimonials active`,d:'Live'},
+    {c:'blue',t:`<strong>${ebooks.length}</strong> eBooks · <strong>${ebooks.filter(e=>e.pdfUrl).length}</strong> with PDF`,d:'Live'},
+    {c:'gold',t:`<strong>${achievements.length}</strong> achievements showcased`,d:'Live'},
+    {c:'purple',t:`<strong>${journals.length}</strong> journal entries published`,d:'Live'},
+    {c:'green',t:'Admin session active',d:'Now'},
+  ].map(a=>`<div class="activity-item"><div class="act-dot ${a.c}"></div><div class="act-text">${a.t}</div><div class="act-time">${a.d}</div></div>`).join('');
+  // Load cloud images when dashboard is shown
+  loadCloudImages();
+}
+
+// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
+let tImg='', tImgId='';
+
+async function handleTestImg(e){
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const fd=new FormData();fd.append('file',f);
+    const r=await fetch('http://localhost:5000/upload-image',{method:'POST',body:fd});
+    const data=await r.json();
+    tImg=data.url;
+    tImgId=data.public_id; // ✅ store public_id
+  }catch{
+    tImg=URL.createObjectURL(f);
+    tImgId='';
+  }
+  showPrev('testImgPreview',tImg);
+}
+function previewTestUrl(u){if(u){tImg=u;tImgId='';showPrev('testImgPreview',u);}}
+function clearTestForm(){tImg='';tImgId='';['newTestLabel','newTestUrl'].forEach(id=>document.getElementById(id).value='');hidePrev('testImgPreview');}
+function addTestimonial(){
+  testimonials.push({
+    id:Date.now(),
+    cat:document.getElementById('newTestCat').value,
+    label:document.getElementById('newTestLabel').value||'Client result',
+    img:tImg||document.getElementById('newTestUrl').value||'',
+    public_id:tImgId  // ✅ save public_id
+  });
+  sd('adg_testimonials',testimonials);clearTestForm();renderTests();updateDash();toast('✓ Screenshot added!','success');
+}
+function updateTestCat(id,cat){testimonials=testimonials.map(t=>t.id===id?{...t,cat}:t);sd('adg_testimonials',testimonials);}
+
+async function delTest(id){
+  confirm2('Delete Screenshot','Remove this screenshot permanently?', async ()=>{
+    const item=testimonials.find(t=>t.id===id);
+    // ✅ Delete from Cloudinary if we have a public_id
+    if(item && item.public_id){
+      await deleteFromCloudinary(item.public_id,'image');
+    }
+    testimonials=testimonials.filter(t=>t.id!==id);
+    sd('adg_testimonials',testimonials);renderTests();updateDash();toast('Removed','success');
+  });
+}
+
+const catMap={sp:'SP',career:'Career',manifestation:'Manifest',program:'21-Day'};
+function renderTests(){
+  document.getElementById('testCount').textContent=testimonials.length;
+  document.getElementById('testBadge').textContent=testimonials.length;
+  const g=document.getElementById('admTestGrid');
+  if(!testimonials.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">📸</span><p>No testimonials yet.</p></div>`;return;}
+  g.innerHTML=testimonials.map(t=>`<div class="test-card">
+    ${t.img?`<img src="${t.img}" class="test-thumb" alt="">`:`<div class="test-thumb-empty"><span>📱</span><span>No image</span></div>`}
+    <div class="test-footer"><span class="tcat ${t.cat}">${catMap[t.cat]}</span><div class="test-actions"><button class="icon-btn del" onclick="delTest(${t.id})">🗑</button></div></div>
+    <div class="test-label">${t.label||''}</div>
+    <div style="padding:0 .7rem .6rem;"><select class="mini-sel" onchange="updateTestCat(${t.id},this.value)">
+      <option value="sp" ${t.cat==='sp'?'selected':''}>💞 SP</option>
+      <option value="career" ${t.cat==='career'?'selected':''}>💼 Career</option>
+      <option value="manifestation" ${t.cat==='manifestation'?'selected':''}>✨ Manifest</option>
+      <option value="program" ${t.cat==='program'?'selected':''}>🗓️ 21-Day</option>
+    </select></div></div>`).join('');
+}
+
+// ─── EBOOKS ───────────────────────────────────────────────────────────────────
+let eImg='', eImgId='', ePdf='', ePdfId='', ePdfName='', ePdfSize=0;
+
+async function handleEbImg(e){
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const fd=new FormData();fd.append('file',f);
+    const r=await fetch('http://localhost:5000/upload-image',{method:'POST',body:fd});
+    const data=await r.json();
+    eImg=data.url;
+    eImgId=data.public_id; // ✅ store public_id
+  }catch{
+    eImg=URL.createObjectURL(f);
+    eImgId='';
+  }
+  showPrev('ebImgPreview',eImg);
+}
+function previewEbUrl(u){if(u){eImg=u;eImgId='';showPrev('ebImgPreview',u);}}
+
+async function handleEbPdf(e){
+  const f=e.target.files[0];if(!f)return;
+  if(!f.name.endsWith('.pdf')&&f.type!=='application/pdf'){toast('Please select a PDF file','error');return;}
+  if(f.size>50*1024*1024){toast('PDF too large — max 50MB','error');return;}
+  ePdfName=f.name;ePdfSize=f.size;
+  const prog=document.getElementById('pdfUploadProgress'),fill=document.getElementById('pdfBarFill'),lbl=document.getElementById('pdfUploadLabel');
+  prog.classList.add('show');fill.style.width='0%';lbl.textContent='Uploading PDF…';
+  let fp=0;const tk=setInterval(()=>{fp=Math.min(fp+Math.random()*8,85);fill.style.width=fp+'%';},200);
+  try{
+    const fd=new FormData();fd.append('file',f);
+    const r=await fetch('http://localhost:5000/upload-pdf',{method:'POST',body:fd});
+    const data=await r.json();
+    ePdf=data.url;
+    ePdfId=data.public_id; // ✅ store public_id
+  }catch{
+    ePdf=URL.createObjectURL(f);
+    ePdfId='';
+  }
+  clearInterval(tk);fill.style.width='100%';lbl.textContent='Done ✓';setTimeout(()=>prog.classList.remove('show'),1500);
+  showPdfSt(ePdfName,ePdfSize);
+}
+function setPdfFromUrl(u){if(u){ePdf=u;ePdfId='';ePdfName=u.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}else removePdf();}
+function showPdfSt(n,s){const st=document.getElementById('pdfStatus');document.getElementById('pdfStatusName').textContent=n;document.getElementById('pdfStatusSize').textContent=s>0?fmtBytes(s):'Linked';st.classList.add('show');}
+function removePdf(){ePdf='';ePdfId='';ePdfName='';ePdfSize=0;document.getElementById('pdfStatus').classList.remove('show');document.getElementById('ebPdfUrl').value='';document.getElementById('pdfFileInput').value='';}
+function fmtBytes(b){if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
+
+function clearEbookForm(){
+  document.getElementById('editEbookIdx').value=-1;document.getElementById('ebFormTitle').textContent='Add eBook';
+  ['ebTitle','ebTag','ebPrice','ebOrig','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
+  hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();
+}
+function saveEbook(){
+  const idx=parseInt(document.getElementById('editEbookIdx').value);
+  const eb={
+    id:idx>=0?ebooks[idx].id:Date.now(),
+    title:v('ebTitle')||'eBook',
+    tag:v('ebTag')||'Manifestation',
+    price:v('ebPrice')||'$47',
+    orig:v('ebOrig')||'$67',
+    desc:v('ebDesc'),
+    features:v('ebFeatures').split('\n').filter(Boolean),
+    badge:v('ebBadge'),
+    icon:'📖',
+    img:eImg||v('ebImgUrl'),
+    imgPublicId:eImgId,       // ✅ save image public_id
+    pdfUrl:ePdf||v('ebPdfUrl'),
+    pdfPublicId:ePdfId        // ✅ save pdf public_id
+  };
+  if(idx>=0){ebooks[idx]=eb;toast('✓ eBook updated!','success');}else{ebooks.push(eb);toast('✓ eBook added!','success');}
+  sd('adg_ebooks',ebooks);clearEbookForm();renderEbooks();updateDash();
+}
+function editEbook(i){
+  const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
+  sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',eb.price);sv('ebOrig',eb.orig);sv('ebDesc',eb.desc);sv('ebFeatures',eb.features.join('\n'));sv('ebBadge',eb.badge);sv('ebImgUrl',eb.img||'');
+  if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}
+  if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';sv('ebPdfUrl',eb.pdfUrl);ePdfName=eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}
+  scrollToAdd('ebAdd');
+}
+
+async function delEbook(i){
+  confirm2('Delete eBook',`Delete "${ebooks[i].title}"?`, async ()=>{
+    const eb=ebooks[i];
+    // ✅ Delete cover image from Cloudinary
+    if(eb.imgPublicId) await deleteFromCloudinary(eb.imgPublicId,'image');
+    // ✅ Delete PDF from Cloudinary
+    if(eb.pdfPublicId) await deleteFromCloudinary(eb.pdfPublicId,'raw');
+    ebooks.splice(i,1);sd('adg_ebooks',ebooks);renderEbooks();updateDash();toast('eBook deleted','success');
+  });
+}
+
+function renderEbooks(){
+  document.getElementById('ebookCount').textContent=ebooks.length;document.getElementById('ebBadge').textContent=ebooks.length;
+  const l=document.getElementById('admEbookList');
+  if(!ebooks.length){l.innerHTML=`<div class="empty-state"><span class="ei">📚</span><p>No eBooks yet.</p></div>`;return;}
+  l.innerHTML=ebooks.map((eb,i)=>`<div class="ebook-row">
+    <div class="ebook-thumb">${eb.img?`<img src="${eb.img}" alt="">`:(eb.icon||'📖')}</div>
+    <div class="ebook-info"><h4>${eb.title}</h4><p>${eb.tag} · <strong style="color:var(--gold);">${eb.price}</strong> <span style="text-decoration:line-through;opacity:.4;">${eb.orig}</span></p>
+    <div class="badges">${eb.badge?`<span class="tag-pill">${eb.badge}</span>`:''}<span class="tag-pill" style="background:rgba(126,200,227,.08);color:var(--blue);">${eb.features.length} features</span>${eb.pdfUrl?`<a href="${eb.pdfUrl}" target="_blank" class="pdf-badge">📄 PDF</a>`:`<span class="pdf-badge no-pdf">📄 No PDF</span>`}</div></div>
+    <div class="ebook-actions"><button class="adm-btn outline sm" onclick="editEbook(${i})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delEbook(${i})">🗑 Delete</button></div>
+  </div>`).join('');
+}
+
+// ─── ACHIEVEMENTS ─────────────────────────────────────────────────────────────
+let aImg='', aImgId='';
+
+async function handleAchImg(e){
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const fd=new FormData();fd.append('file',f);
+    const r=await fetch('http://localhost:5000/upload-image',{method:'POST',body:fd});
+    const data=await r.json();
+    aImg=data.url;
+    aImgId=data.public_id; // ✅ store public_id
+  }catch{
+    aImg=URL.createObjectURL(f);
+    aImgId='';
+  }
+  showPrev('achImgPreview',aImg);
+}
+function previewAchUrl(u){if(u){aImg=u;aImgId='';showPrev('achImgPreview',u);}}
+function clearAchForm(){
+  document.getElementById('editAchIdx').value=-1;document.getElementById('achFormTitle').textContent='Add Achievement';
+  ['achTitle','achOrg','achDate','achDesc','achImgUrl','achLink'].forEach(id=>document.getElementById(id).value='');
+  hidePrev('achImgPreview');aImg='';aImgId='';
+}
+function saveAchievement(){
+  const idx=parseInt(v('editAchIdx'));
+  const ac={
+    id:idx>=0?achievements[idx].id:Date.now(),
+    title:v('achTitle')||'Achievement',
+    type:v('achType'),
+    org:v('achOrg'),
+    date:v('achDate'),
+    desc:v('achDesc'),
+    img:aImg||v('achImgUrl'),
+    imgPublicId:aImgId,   // ✅ save public_id
+    link:v('achLink')
+  };
+  if(idx>=0){achievements[idx]=ac;toast('✓ Achievement updated!','success');}else{achievements.push(ac);toast('✓ Achievement added!','success');}
+  sd('adg_achievements',achievements);clearAchForm();renderAch();updateDash();
+}
+function editAch(i){
+  const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';
+  sv('achTitle',ac.title);sv('achType',ac.type);sv('achOrg',ac.org);sv('achDate',ac.date);sv('achDesc',ac.desc);sv('achImgUrl',ac.img||'');sv('achLink',ac.link||'');
+  if(ac.img){aImg=ac.img;aImgId=ac.imgPublicId||'';showPrev('achImgPreview',ac.img);}
+  scrollToAdd('achAdd');
+}
+
+async function delAch(i){
+  confirm2('Delete Achievement',`Remove "${achievements[i].title}"?`, async ()=>{
+    const ac=achievements[i];
+    // ✅ Delete image from Cloudinary
+    if(ac.imgPublicId) await deleteFromCloudinary(ac.imgPublicId,'image');
+    achievements.splice(i,1);sd('adg_achievements',achievements);renderAch();updateDash();toast('Achievement deleted','success');
+  });
+}
+
+const achTypeLabel={award:'Award',milestone:'Milestone',feature:'Media Feature',certification:'Certification'};
+function renderAch(){
+  document.getElementById('achCount').textContent=achievements.length;document.getElementById('achBadge').textContent=achievements.length;
+  const g=document.getElementById('admAchGrid');
+  if(!achievements.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🏆</span><p>No achievements yet. Add your first one above.</p></div>`;return;}
+  g.innerHTML=achievements.map((ac,i)=>`<div class="ach-card">
+    <div class="ach-img-wrap">${ac.img?`<img src="${ac.img}" alt="">`:'🏆'}</div>
+    <div class="ach-body"><div class="ach-title">${ac.title}</div><div class="ach-meta">${ac.org}${ac.date?' · '+ac.date:''}</div><div class="ach-desc">${ac.desc}</div></div>
+    <div class="ach-footer"><span class="ach-type ${ac.type}">${achTypeLabel[ac.type]||ac.type}</span>
+    <div style="display:flex;gap:.3rem;">${ac.link?`<a href="${ac.link}" target="_blank" class="icon-btn">🔗</a>`:''}<button class="icon-btn edit" onclick="editAch(${i})">✏️</button><button class="icon-btn del" onclick="delAch(${i})">🗑</button></div></div>
+  </div>`).join('');
+}
+
+// ─── JOURNALS ─────────────────────────────────────────────────────────────────
+let jImg='', jImgId='';
+
+async function handleJrnImg(e){
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const fd=new FormData();fd.append('file',f);
+    const r=await fetch('http://localhost:5000/upload-image',{method:'POST',body:fd});
+    const data=await r.json();
+    jImg=data.url;
+    jImgId=data.public_id; // ✅ store public_id
+  }catch{
+    jImg=URL.createObjectURL(f);
+    jImgId='';
+  }
+  showPrev('jrnImgPreview',jImg);
+}
+function previewJrnUrl(u){if(u){jImg=u;jImgId='';showPrev('jrnImgPreview',u);}}
+function clearJrnForm(){
+  document.getElementById('editJrnIdx').value=-1;document.getElementById('jrnFormTitle').textContent='Add Journal Entry';
+  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
+  hidePrev('jrnImgPreview');jImg='';jImgId='';
+}
+function saveJournal(){
+  const idx=parseInt(v('editJrnIdx'));
+  const jr={
+    id:idx>=0?journals[idx].id:Date.now(),
+    title:v('jrnTitle')||'Journal Entry',
+    cat:v('jrnCat'),
+    date:v('jrnDate')||new Date().toISOString().split('T')[0],
+    mood:v('jrnMood'),
+    excerpt:v('jrnExcerpt'),
+    content:v('jrnContent'),
+    tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
+    img:jImg||v('jrnImgUrl'),
+    imgPublicId:jImgId   // ✅ save public_id
+  };
+  if(idx>=0){journals[idx]=jr;toast('✓ Entry updated!','success');}else{journals.push(jr);toast('✓ Entry added!','success');}
+  sd('adg_journals',journals);clearJrnForm();renderJrn();updateDash();
+}
+function editJrn(i){
+  const jr=journals[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';
+  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);sv('jrnMood',jr.mood);sv('jrnExcerpt',jr.excerpt);sv('jrnContent',jr.content);sv('jrnTags',(jr.tags||[]).join(', '));sv('jrnImgUrl',jr.img||'');
+  if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}
+  scrollToAdd('jrnAdd');
+}
+
+async function delJrn(i){
+  confirm2('Delete Entry',`Remove "${journals[i].title}"?`, async ()=>{
+    const jr=journals[i];
+    // ✅ Delete image from Cloudinary
+    if(jr.imgPublicId) await deleteFromCloudinary(jr.imgPublicId,'image');
+    journals.splice(i,1);sd('adg_journals',journals);renderJrn();updateDash();toast('Entry deleted','success');
+  });
+}
+
+const jCatLabel={mindset:'🧠 Mindset',love:'💞 Love',manifestation:'✨ Manifestation',career:'💼 Career',personal:'🌸 Personal',spiritual:'🕊️ Spiritual'};
+function renderJrn(){
+  document.getElementById('jrnCount').textContent=journals.length;document.getElementById('jrnBadge').textContent=journals.length;
+  const l=document.getElementById('admJrnList');
+  if(!journals.length){l.innerHTML=`<div class="empty-state"><span class="ei">📓</span><p>No journal entries yet. Write your first one above.</p></div>`;return;}
+  const sorted=[...journals].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  l.innerHTML=sorted.map(jr=>{
+    const oi=journals.findIndex(j=>j.id===jr.id);
+    return `<div class="journal-card">
+    <div class="jc-header"><div><div class="jc-title">${jr.mood} ${jr.title}</div><div class="jc-meta">${jCatLabel[jr.cat]||jr.cat}</div></div><div class="jc-date">${new Date(jr.date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div></div>
+    <div class="jc-body">${jr.excerpt||jr.content.slice(0,200)||(jr.content?jr.content.slice(0,200):'No content yet.')}</div>
+    <div class="jc-footer"><div class="jc-tags">${(jr.tags||[]).map(t=>`<span class="jc-tag">${t}</span>`).join('')}</div>
+    <div class="jc-actions"><button class="adm-btn outline sm" onclick="editJrn(${oi})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delJrn(${oi})">🗑</button></div></div>
+  </div>`;
+  }).join('');
+}
+
+// ─── CAL.COM BOOKINGS ─────────────────────────────────────────────────────────
+let allBk=[],bkFilter='all';
+function initBookings(){
+  const key=localStorage.getItem('cal_key');
+  if(key){document.getElementById('calApiKey').value=key;document.getElementById('calUsername').value=localStorage.getItem('cal_user')||'';connectCal(true);}
+}
+async function connectCal(silent=false){
+  const key=document.getElementById('calApiKey').value.trim();
+  if(!key){toast('Please enter your Cal.com API key','error');return;}
+  localStorage.setItem('cal_key',key);
+  localStorage.setItem('cal_user',document.getElementById('calUsername').value.trim());
+  if(!silent)toast('Connecting to Cal.com…','info');
+  await fetchBookings();
+}
+function disconnectCal(){
+  confirm2('Disconnect Cal.com','This will remove your API key from this browser.',()=>{
+    localStorage.removeItem('cal_key');localStorage.removeItem('cal_user');
+    allBk=[];document.getElementById('calApiKey').value='';document.getElementById('calUsername').value='';
+    document.getElementById('calSetup').style.display='block';
+    document.getElementById('bkSummary').style.display='none';
+    document.getElementById('bkToolbar').style.display='none';
+    document.getElementById('bkWrap').innerHTML='';
+    toast('Disconnected from Cal.com','success');
+  });
+}
+async function fetchBookings(){
+  const key=localStorage.getItem('cal_key');if(!key)return;
+  document.getElementById('calError').style.display='none';
+  document.getElementById('calLoading').style.display='block';
+  document.getElementById('bkWrap').innerHTML='';
+  try{
+    const res=await fetch(`https://api.cal.com/v1/bookings?apiKey=${encodeURIComponent(key)}&take=100`,{headers:{'Content-Type':'application/json'}});
+    if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.message||`Error ${res.status}`);}
+    const data=await res.json();
+    allBk=data.bookings||data||[];
+    document.getElementById('calSetup').style.display='none';
+    document.getElementById('bkSummary').style.display='grid';
+    document.getElementById('bkToolbar').style.display='flex';
+    updateBkSummary();renderBk(bkFilter);
+    toast(`✓ Loaded ${allBk.length} bookings`,'success');
+  }catch(e){
+    document.getElementById('calError').style.display='block';
+    document.getElementById('calError').innerHTML=`<strong>⚠ Connection failed:</strong> ${e.message}<br><small>Check your API key and make sure it has <em>bookings:read</em> permission. Then try refreshing.</small>`;
+    toast('Cal.com connection failed','error');
+  }finally{document.getElementById('calLoading').style.display='none';}
+}
+function updateBkSummary(){
+  const now=new Date(),today=now.toDateString();
+  document.getElementById('bsTotal').textContent=allBk.length;
+  document.getElementById('bsUpcoming').textContent=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED').length;
+  document.getElementById('bsToday').textContent=allBk.filter(b=>new Date(b.startTime).toDateString()===today).length;
+  document.getElementById('bsCancelled').textContent=allBk.filter(b=>b.status==='CANCELLED').length;
+}
+function filterBk(f,btn){
+  bkFilter=f;
+  document.querySelectorAll('.bk-filter').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBk(f);
+}
+function renderBk(filter){
+  const now=new Date();
+  let list=allBk;
+  if(filter==='upcoming')list=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED');
+  else if(filter==='past')list=allBk.filter(b=>new Date(b.startTime)<=now&&b.status!=='CANCELLED');
+  else if(filter==='cancelled')list=allBk.filter(b=>b.status==='CANCELLED');
+  const w=document.getElementById('bkWrap');
+  if(!list.length){w.innerHTML=`<div class="cal-empty"><span class="ce-icon">📅</span><p>No bookings found${filter!=='all'?' for this filter':''}.</p></div>`;return;}
+  const sorted=[...list].sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
+  w.innerHTML=`<div style="overflow-x:auto;"><table class="bk-table"><thead><tr><th>Client</th><th>Event</th><th>Date &amp; Time</th><th>Duration</th><th>Status</th><th>Email</th></tr></thead><tbody>${sorted.map(b=>{
+    const dt=new Date(b.startTime),end=b.endTime?new Date(b.endTime):null,dur=end?Math.round((end-dt)/60000):null,isPast=dt<now;
+    const sr=(b.status||'').toLowerCase();
+    const label=sr==='cancelled'?'Cancelled':sr==='accepted'||sr==='confirmed'?isPast?'Completed':'Confirmed':isPast?'Completed':'Upcoming';
+    const cls=sr==='cancelled'?'cancelled':isPast?'confirmed':sr==='accepted'||sr==='confirmed'?'upcoming':'pending';
+    const att=b.attendees?.[0];
+    return `<tr><td><strong>${esc(att?.name||b.title||'—')}</strong></td><td style="color:var(--muted);">${esc(b.eventType?.title||b.title||'Session')}</td><td>${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})} <span style="color:var(--muted);">${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</span></td><td style="color:var(--muted);">${dur?dur+' min':'—'}</td><td><span class="bk-status ${cls}">${label}</span></td><td style="color:var(--muted);font-size:.72rem;">${esc(att?.email||'—')}</td></tr>`;
+  }).join('')}</tbody></table></div>`;
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
+function changePwd(){
+  const c=v('curPwd'),n=v('newPwd'),cf=v('confPwd');
+  if(c!=='manifestation2026'){toast('Current password incorrect','error');return;}
+  if(n.length<8){toast('Min 8 characters','error');return;}
+  if(n!==cf){toast('Passwords do not match','error');return;}
+  toast('✓ Password updated','success');
+  ['curPwd','newPwd','confPwd'].forEach(id=>sv(id,''));
+}
+function exportData(){
+  const d={testimonials,ebooks,achievements,journals,exportedAt:new Date().toISOString()};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='adg-export.json';a.click();
+  toast('✓ Data exported','success');
+}
+function confirmReset(){
+  confirm2('Reset All Data','This will delete ALL testimonials, achievements, journals and reset eBooks to defaults.',()=>{
+    sd('adg_testimonials',[]);sd('adg_ebooks',DEF_EBOOKS);sd('adg_achievements',[]);sd('adg_journals',[]);
+    testimonials=[];ebooks=[...DEF_EBOOKS];achievements=[];journals=[];
+    renderTests();renderEbooks();renderAch();renderJrn();updateDash();
+    toast('Data reset','success');
+  });
+}
+
+// ─── CONFIRM ──────────────────────────────────────────────────────────────────
+let _cb=null;
+function confirm2(title,msg,cb){_cb=cb;document.getElementById('confirmTitle').textContent=title;document.getElementById('confirmMsg').textContent=msg;document.getElementById('confirmOverlay').classList.add('open');}
+function confirmYes(){if(_cb)_cb();document.getElementById('confirmOverlay').classList.remove('open');_cb=null;}
+function confirmNo(){document.getElementById('confirmOverlay').classList.remove('open');_cb=null;}
+document.getElementById('confirmYesBtn').onclick=confirmYes;
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function v(id){return document.getElementById(id)?.value||'';}
+function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function showPrev(id,src){const el=document.getElementById(id);if(el){el.src=src;el.style.display='block';}}
+function hidePrev(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
+updateDash();renderTests();renderEbooks();renderAch();renderJrn();
+</script>
+</body>
+</html>
