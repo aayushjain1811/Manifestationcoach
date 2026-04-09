@@ -22,6 +22,7 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;font-size:15px;line-height:1.6;cursor:none;}
 
+/* CURSOR — hidden on touch devices */
 #cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
 #cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
 body.ch #cur{width:14px;height:14px;background:var(--gold-light);}
@@ -29,50 +30,15 @@ body.ch #cur-ring{width:44px;height:44px;border-color:var(--gold);}
 body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 @media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
 
-/* ─── HIDDEN ADMIN CORNER MARK ─── */
-/* A barely-visible ✦ in the bottom-right corner — only the site owner knows */
-.admin-corner{
-  position:fixed;bottom:0;right:0;
-  width:44px;height:44px;
-  z-index:8999;
-  cursor:pointer;
-  display:flex;align-items:flex-end;justify-content:flex-end;
-  padding:10px;
-  /* Invisible clickable area */
-}
-.admin-corner::before{
-  /* Subtle L-shaped corner lines */
-  content:'';
-  position:absolute;bottom:10px;right:0;
-  width:16px;height:1px;
-  background:rgba(201,168,76,.12);
-  transition:background .4s;
-}
-.admin-corner::after{
-  content:'';
-  position:absolute;bottom:0;right:10px;
-  width:1px;height:16px;
-  background:rgba(201,168,76,.12);
-  transition:background .4s;
-}
-.admin-corner:hover::before,
-.admin-corner:hover::after{
-  background:rgba(201,168,76,.35);
-}
-/* The ✦ mark — extremely faint, only visible on close inspection */
-.admin-corner .adm-sigil{
-  font-size:.52rem;
-  color:rgba(201,168,76,.1);
-  line-height:1;
-  transition:color .4s,transform .4s;
-  pointer-events:none;
-  user-select:none;
-}
-.admin-corner:hover .adm-sigil{
-  color:rgba(201,168,76,.4);
-  transform:scale(1.2);
-}
+/* ADMIN CORNER */
+.admin-corner{position:fixed;bottom:0;right:0;width:44px;height:44px;z-index:8999;cursor:pointer;display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;}
+.admin-corner::before{content:'';position:absolute;bottom:10px;right:0;width:16px;height:1px;background:rgba(201,168,76,.12);transition:background .4s;}
+.admin-corner::after{content:'';position:absolute;bottom:0;right:10px;width:1px;height:16px;background:rgba(201,168,76,.12);transition:background .4s;}
+.admin-corner:hover::before,.admin-corner:hover::after{background:rgba(201,168,76,.35);}
+.admin-corner .adm-sigil{font-size:.52rem;color:rgba(201,168,76,.1);line-height:1;transition:color .4s,transform .4s;pointer-events:none;user-select:none;}
+.admin-corner:hover .adm-sigil{color:rgba(201,168,76,.4);transform:scale(1.2);}
 
+/* LOADER */
 #loader{position:fixed;inset:0;background:var(--dark);z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease;}
 #loader.hide{opacity:0;visibility:hidden;}
 .ld-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);margin-bottom:1.8rem;animation:ldPulse 1.5s ease-in-out infinite;}
@@ -84,9 +50,11 @@ body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 @keyframes ldFill{to{width:100%;}}@keyframes ldPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
 @keyframes ldDot{0%,100%{opacity:.3;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
 
+/* BG */
 .bg-grad{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 55%,rgba(21,14,53,.9) 0%,transparent 55%),radial-gradient(ellipse at 85% 20%,rgba(12,16,48,.7) 0%,transparent 50%),linear-gradient(165deg,var(--dark) 0%,var(--dark2) 55%,var(--purple) 100%);}
 #sc{position:fixed;inset:0;z-index:-1;pointer-events:none;}
 
+/* NAV */
 nav{position:fixed;top:0;width:100%;z-index:800;padding:1.1rem 5%;transition:all .4s cubic-bezier(.16,1,.3,1);}
 nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
 .nw{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
@@ -97,19 +65,20 @@ nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(
 .nl a:hover{color:var(--gold-light);}.nl a:hover::after{width:100%;}
 .ncta{padding:.5rem 1.3rem!important;border:1px solid var(--gold)!important;color:var(--gold)!important;}
 .ncta:hover{background:var(--gold)!important;color:var(--dark)!important;}.ncta::after{display:none!important;}
-.hbg{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px;background:none;border:none;}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:900;}
 .hbg span{display:block;width:22px;height:2px;background:var(--gold);border-radius:2px;transition:all .35s cubic-bezier(.16,1,.3,1);}
 .hbg.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
 .hbg.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .hbg.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
-.mnav{display:none;position:fixed;inset:0;background:rgba(7,10,26,.98);backdrop-filter:blur(30px);z-index:700;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateX(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);}
+.mnav{display:none;position:fixed;inset:0;background:rgba(7,10,26,.98);backdrop-filter:blur(30px);z-index:700;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transform:translateX(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);overflow-y:auto;padding:2rem;}
 .mnav.open{transform:translateX(0);}
-@media(max-width:768px){.mnav{display:flex;}.hbg{display:flex;}.nl{display:none;}}
-.mnav a{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--text);text-decoration:none;transition:color .3s;}
+@media(max-width:900px){.mnav{display:flex;}.hbg{display:flex;}.nl{display:none;}}
+.mnav a{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--text);text-decoration:none;transition:color .3s;}
 .mnav a:hover{color:var(--gold);}
-.mnav .mncta{font-size:1rem!important;font-family:'DM Sans',sans-serif!important;padding:.8rem 2.5rem;border:1px solid var(--gold);color:var(--gold)!important;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;}
+.mnav .mncta{font-size:.9rem!important;font-family:'DM Sans',sans-serif!important;padding:.7rem 2rem;border:1px solid var(--gold);color:var(--gold)!important;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem;}
 .mnav .mncta:hover{background:var(--gold);color:var(--dark)!important;}
 
+/* SECTIONS */
 section{padding:5.5rem 5%;position:relative;}
 .container{max-width:1280px;margin:0 auto;}
 .sl{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:.6rem;}
@@ -117,7 +86,7 @@ section{padding:5.5rem 5%;position:relative;}
 .ss{text-align:center;font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.75;max-width:500px;margin:0 auto 3.5rem;}
 .dv{width:36px;height:1px;background:var(--gold);opacity:.45;margin:.8rem auto 2.8rem;}
 h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.02em;}
-.btn{display:inline-block;padding:.82rem 1.9rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;border:none;cursor:none;transition:all .3s cubic-bezier(.16,1,.3,1);}
+.btn{display:inline-block;padding:.82rem 1.9rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);}
 .btn-p{background:var(--gold);color:var(--dark);}
 .btn-p:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 12px 28px rgba(201,168,76,.3);}
 .btn-o{background:transparent;color:var(--text);border:1px solid var(--border);}
@@ -172,7 +141,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .about-ring-spin::after{content:'';position:absolute;inset:3px;background:var(--dark);border-radius:3px;}
 .about-photo-card{position:absolute;inset:0;border-radius:3px;overflow:hidden;border:1px solid rgba(201,168,76,.35);box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 30px rgba(201,168,76,.04);z-index:2;}
 .about-photo-card img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;}
-.about-photo-placeholder{width:100%;height:100%;background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;position:relative;}
+.about-photo-placeholder{width:100%;height:100%;background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;}
 .about-badge{position:absolute;right:-20px;bottom:30px;z-index:4;background:rgba(7,10,26,.93);border:1px solid rgba(201,168,76,.5);border-radius:3px;padding:.5rem .75rem;text-align:center;backdrop-filter:blur(16px);animation:badgeFloat 5s ease-in-out infinite;animation-delay:1s;}
 .about-badge .bn{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--gold);display:block;line-height:1;}
 .about-badge .bl2{font-size:.58rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:3px;display:block;}
@@ -247,24 +216,23 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .sline.done{background:var(--gold);}
 .spanel{display:none;}.spanel.active{display:block;animation:panIn .4s cubic-bezier(.16,1,.3,1);}
 @keyframes panIn{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:1.8rem;}
-.cat-card{border:1px solid var(--border);border-radius:3px;padding:1.6rem 1.2rem;text-align:center;cursor:none;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:1.8rem;}
+.cat-card{border:1px solid var(--border);border-radius:3px;padding:1.6rem 1.2rem;text-align:center;cursor:pointer;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
 .cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold));transform:scaleX(0);transition:transform .35s;transform-origin:left;}
 .cat-card:hover,.cat-card.sel{border-color:var(--gold);background:rgba(201,168,76,.06);}
 .cat-card:hover::before,.cat-card.sel::before{transform:scaleX(1);}
 .cat-icon{font-size:1.8rem;display:block;margin-bottom:.7rem;}
 .cat-card h4{font-size:.95rem;color:var(--gold-light);font-weight:500;margin-bottom:.25rem;}
 .cat-card p{font-size:.74rem;color:var(--muted);font-weight:300;line-height:1.55;}
-.stype-tabs{display:flex;gap:.8rem;justify-content:center;margin-bottom:1.8rem;flex-wrap:wrap;}
-.stype-tab{padding:.55rem 1.6rem;border:1px solid var(--border);border-radius:2px;background:var(--glass);color:var(--muted);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;cursor:none;transition:all .3s;}
-.stype-tab:hover,.stype-tab.sel{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,.1);}
 .tier-intro{font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;text-align:center;}
 .tier-intro strong{color:var(--gold-light);}
 .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-bottom:.8rem;}
-.tier-card{border:1px solid var(--border);border-radius:3px;padding:1.8rem 1.4rem;cursor:none;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
+.tier-card{border:1px solid var(--border);border-radius:3px;padding:1.8rem 1.4rem;cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
 .tier-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .4s;transform-origin:center;}
 .tier-card:hover,.tier-card.sel{transform:translateY(-5px);}
 .tier-card:hover::before,.tier-card.sel::before{transform:scaleX(1);}
+.tier-card.sel::after{content:'';position:absolute;inset:-1px;border-radius:3px;border:2px solid var(--gold);animation:selRing .35s ease-out forwards;}
+@keyframes selRing{0%{opacity:0;transform:scale(1.04);}100%{opacity:1;transform:scale(1);}}
 .tier-card.gold-tier{background:linear-gradient(160deg,rgba(201,168,76,.07),transparent);}
 .tier-card.gold-tier::before{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));}
 .tier-card.gold-tier:hover,.tier-card.gold-tier.sel{border-color:var(--gold);box-shadow:0 20px 50px rgba(201,168,76,.18);}
@@ -306,48 +274,115 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .tier-card.gold-tier .tier-popular{background:rgba(201,168,76,.15);color:var(--gold);}
 .tier-card.diamond-tier .tier-popular{background:rgba(126,200,227,.12);color:var(--diamond-light);}
 .tier-card.platinum-tier .tier-popular{background:rgba(224,201,240,.12);color:var(--platinum-light);}
+.tier-select-hint{margin-top:1.1rem;padding:.6rem;text-align:center;border:1px dashed rgba(255,255,255,.1);border-radius:2px;font-size:.68rem;color:var(--muted);letter-spacing:.07em;transition:all .35s;}
+.tier-card:hover .tier-select-hint{border-color:rgba(201,168,76,.35);color:var(--gold-light);}
 .bk-warning{margin-top:1.2rem;padding:1rem 1.4rem;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.2);border-radius:2px;font-size:.78rem;color:var(--muted);line-height:1.75;text-align:center;}
 .bk-warning strong{color:var(--gold-light);}
-.prog-card{background:var(--glass);border:1px solid var(--gold-border);border-radius:3px;padding:2rem;position:relative;overflow:hidden;transition:all .4s;}
-.prog-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));}
-.prog-badge{position:absolute;top:14px;right:14px;background:rgba(201,168,76,.15);color:var(--gold);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .7rem;border-radius:1px;border:1px solid rgba(201,168,76,.3);}
-.prog-icon{font-size:2rem;display:block;margin-bottom:.8rem;}
-.prog-card h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold-light);font-weight:500;margin-bottom:.3rem;}
-.prog-sub{font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;display:block;}
-.prog-price-row{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1rem;}
-.prog-inr{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);}
-.prog-usd{font-size:.82rem;color:var(--muted);}
-.prog-includes{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;display:block;border-top:1px solid var(--border);padding-top:.8rem;}
-.prog-body{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-.prog-col h4{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
-.prog-list{list-style:none;}
-.prog-list li{font-size:.77rem;color:var(--muted);padding:.3rem 0 .3rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,.04);font-weight:300;}
-.prog-list li:last-child{border-bottom:none;}
-.prog-list li::before{content:'✨';position:absolute;left:0;font-size:.6rem;top:5px;}
-.prog-result{margin-top:1.2rem;padding:1rem;background:rgba(201,168,76,.05);border-radius:2px;border:1px solid rgba(201,168,76,.1);font-size:.78rem;color:var(--muted);line-height:1.8;}
-.prog-result strong{color:var(--gold-light);display:block;margin-bottom:.4rem;}
 .cal-wrap{border:1px solid var(--border);border-radius:2px;overflow:hidden;background:var(--glass);position:relative;min-height:650px;}
 .cal-wrap iframe{width:100%;min-height:650px;border:none;display:block;background:transparent;}
 .cal-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:var(--glass);}
 .cal-loading p{font-size:.85rem;color:var(--muted);}
-.bknav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
-.bkback{background:none;border:1px solid var(--border);color:var(--muted);padding:.7rem 1.5rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:none;transition:all .3s;}
+.bknav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:1rem;flex-wrap:wrap;}
+.bkback{background:none;border:1px solid var(--border);color:var(--muted);padding:.7rem 1.5rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
 .bkback:hover{border-color:var(--gold);color:var(--gold);}
 .bk-breadcrumb{display:flex;align-items:center;gap:.5rem;margin-bottom:1.4rem;flex-wrap:wrap;}
 .bk-chip{font-size:.72rem;padding:.3rem .8rem;border:1px solid var(--gold-border);border-radius:2px;color:var(--gold-light);background:rgba(201,168,76,.06);display:flex;align-items:center;gap:.35rem;}
 .bk-chip span{color:var(--muted);font-size:.65rem;}
 .bk-arrow{color:var(--muted);font-size:.7rem;}
 
+/* ═══════════════════════════
+   21-DAY PROGRAM
+   ═══════════════════════════ */
+#program21{background:linear-gradient(170deg,rgba(7,10,26,1) 0%,rgba(21,14,53,.6) 50%,rgba(7,10,26,1) 100%);overflow:hidden;position:relative;}
+#program21::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.18) 0%,transparent 65%),radial-gradient(ellipse at 10% 80%,rgba(224,201,240,.08) 0%,transparent 45%),radial-gradient(ellipse at 90% 80%,rgba(126,200,227,.08) 0%,transparent 45%);animation:progBgBreath 6s ease-in-out infinite;pointer-events:none;z-index:0;}
+@keyframes progBgBreath{0%,100%{opacity:.6;}50%{opacity:1;}}
+.prog-particles{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.prog-particle{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:0;animation:floatUp var(--dur,8s) var(--delay,0s) infinite ease-in;}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.5);}10%{opacity:.8;}80%{opacity:.3;}100%{opacity:0;transform:translateY(-120vh) scale(1.5);}}
+#program21 .container{position:relative;z-index:1;}
+
+.prog21-advert-banner{text-align:center;margin-bottom:3rem;position:relative;}
+.prog21-advert-ticker{display:inline-flex;align-items:center;gap:1.2rem;background:linear-gradient(90deg,rgba(201,168,76,.15),rgba(201,168,76,.08),rgba(201,168,76,.15));border:1px solid rgba(201,168,76,.35);border-radius:2px;padding:.55rem 1.5rem;margin-bottom:1.8rem;overflow:hidden;position:relative;flex-wrap:wrap;justify-content:center;}
+.prog21-advert-ticker::before{content:'';position:absolute;top:0;left:-100%;width:80%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:tickerShine 2.5s linear infinite;}
+@keyframes tickerShine{to{left:200%;}}
+.prog21-advert-ticker span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);font-weight:500;}
+.prog21-advert-ticker .tick-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:tickPulse 1s ease-in-out infinite;flex-shrink:0;}
+@keyframes tickPulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.5);opacity:1;}}
+.prog21-headline{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:400;color:#fff;line-height:1.1;margin-bottom:.6rem;}
+.prog21-headline em{font-style:italic;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:goldShimmer 3s linear infinite;background-size:200%;}
+@keyframes goldShimmer{0%{background-position:0%;}100%{background-position:200%;}}
+.prog21-subline{font-size:.92rem;color:var(--muted);font-weight:300;margin-bottom:3rem;}
+.prog21-pills{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem;}
+.prog21-pill{display:flex;align-items:center;gap:.45rem;padding:.5rem 1.1rem;border:1px solid rgba(201,168,76,.3);border-radius:20px;background:rgba(201,168,76,.06);font-size:.73rem;color:var(--gold-light);letter-spacing:.06em;opacity:0;transition:opacity .4s,transform .4s;}
+.prog21-pill.vis{opacity:1;transform:none;animation:pillPop .6s cubic-bezier(.16,1,.3,1) both;}
+@keyframes pillPop{0%{opacity:0;transform:scale(.85) translateY(10px);}100%{opacity:1;transform:scale(1) translateY(0);}}
+.prog21-pill .pill-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.prog21-features{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-bottom:3.5rem;border:1px solid rgba(201,168,76,.2);border-radius:2px;overflow:hidden;}
+.prog21-card{padding:2rem 1.8rem;background:rgba(201,168,76,.03);transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;border-right:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1);}
+.prog21-card:nth-child(even){border-right:none;}
+.prog21-card:nth-child(3),.prog21-card:nth-child(4){border-bottom:none;}
+.prog21-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 0% 50%,rgba(201,168,76,.12) 0%,transparent 60%);opacity:0;transition:opacity .4s;}
+.prog21-card:hover{background:rgba(201,168,76,.07);}
+.prog21-card:hover::before{opacity:1;}
+.prog21-card-num{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(201,168,76,.12);line-height:1;position:absolute;top:1rem;right:1.2rem;transition:color .4s;letter-spacing:-.02em;}
+.prog21-card:hover .prog21-card-num{color:rgba(201,168,76,.22);}
+.prog21-card h3{font-size:1.05rem;color:var(--gold-light);font-weight:500;margin-bottom:.6rem;}
+.prog21-card p{font-size:.83rem;color:var(--muted);line-height:1.8;font-weight:300;}
+.prog21-urgency{display:flex;align-items:center;justify-content:center;gap:1.2rem;padding:1.2rem 1.5rem;margin-bottom:3rem;background:linear-gradient(90deg,transparent,rgba(201,168,76,.08),transparent);border-top:1px solid rgba(201,168,76,.2);border-bottom:1px solid rgba(201,168,76,.2);flex-wrap:wrap;}
+.prog21-urgency-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--muted);}
+.prog21-urgency-item strong{color:var(--gold-light);}
+.prog21-urgency-item .urgency-icon{width:22px;height:22px;border-radius:50%;background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;}
+.prog21-urgency-sep{width:1px;height:18px;background:rgba(255,255,255,.1);}
+.prog21-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+
+/* ═══ 21-Day Cal Embed (same style as booking section) ═══ */
+.prog21-cal-wrap{
+  margin-top:1.2rem;
+  border:1px solid var(--border);
+  border-radius:2px;
+  overflow:hidden;
+  background:var(--glass);
+  display:none;
+  animation:panIn .4s cubic-bezier(.16,1,.3,1);
+}
+.prog21-cal-wrap.open{display:block;}
+.prog21-cal-header{
+  padding:.65rem 1rem;
+  background:rgba(201,168,76,.08);
+  border-bottom:1px solid rgba(201,168,76,.15);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.5rem;
+}
+.prog21-cal-header span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);}
+.prog21-cal-close{
+  background:none;border:1px solid rgba(201,168,76,.3);color:var(--muted);
+  font-size:.85rem;cursor:pointer;transition:all .3s;padding:.25rem .55rem;border-radius:2px;
+  line-height:1;flex-shrink:0;
+}
+.prog21-cal-close:hover{color:var(--gold);border-color:var(--gold);}
+.prog21-cal-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:2.5rem 1rem;min-height:200px;}
+.prog21-cal-loading p{font-size:.8rem;color:var(--muted);}
+.prog21-cal-iframe{width:100%;min-height:600px;border:none;display:none;}
+.prog21-cal-iframe.loaded{display:block;}
+.prog21-tap-hint{margin-top:1.2rem;padding:.65rem;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:2px;font-size:.7rem;color:var(--muted);letter-spacing:.08em;transition:all .3s;position:relative;overflow:hidden;}
+.prog21-tap-hint::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:tapHintShine 3s linear infinite;}
+@keyframes tapHintShine{to{left:200%;}}
+.tier-card:hover .prog21-tap-hint{border-color:rgba(201,168,76,.4);color:var(--gold-light);}
+.tier-card.diamond-tier:hover .prog21-tap-hint{border-color:rgba(126,200,227,.5);color:var(--diamond-light);}
+.tier-card.platinum-tier:hover .prog21-tap-hint{border-color:rgba(224,201,240,.5);color:var(--platinum-light);}
+
 /* TESTIMONIALS */
 .test-cats{display:flex;gap:.7rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;}
-.test-cat-btn{padding:.5rem 1.4rem;border:1px solid var(--border);border-radius:20px;background:var(--glass);color:var(--muted);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;cursor:none;transition:all .3s;}
+.test-cat-btn{padding:.5rem 1.4rem;border:1px solid var(--border);border-radius:20px;background:var(--glass);color:var(--muted);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
 .test-cat-btn:hover,.test-cat-btn.active{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,.08);}
 .test-scroll-wrap{position:relative;}
-.test-scroll-track{display:flex;gap:1.2rem;overflow-x:auto;padding:0.5rem 0 1.5rem;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent;scroll-behavior:smooth;}
+.test-scroll-track{display:flex;gap:1.2rem;overflow-x:auto;padding:.5rem 0 1.5rem;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent;scroll-behavior:smooth;}
 .test-scroll-track::-webkit-scrollbar{height:4px;}
 .test-scroll-track::-webkit-scrollbar-track{background:transparent;}
 .test-scroll-track::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px;}
-.test-card{flex:0 0 220px;background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
+.test-card{flex:0 0 200px;background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
 .test-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 30px rgba(201,168,76,.15);}
 .test-cat-tag{position:absolute;top:8px;left:8px;z-index:2;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:1px;font-weight:500;}
 .test-cat-tag.sp{background:rgba(255,100,150,.15);color:#ff6496;}
@@ -366,9 +401,9 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 /* LIGHTBOX */
 .lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);z-index:3000;align-items:center;justify-content:center;padding:1.5rem;}
 .lb.open{display:flex;}
-.lb-inner{position:relative;max-width:400px;width:100%;animation:lbIn .35s cubic-bezier(.16,1,.3,1);}
+.lb-inner{position:relative;max-width:360px;width:100%;animation:lbIn .35s cubic-bezier(.16,1,.3,1);}
 @keyframes lbIn{from{opacity:0;transform:scale(.88);}to{opacity:1;transform:scale(1);}}
-.lb-phone{background:#111827;border-radius:32px;border:1px solid rgba(201,168,76,.35);overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7);}
+.lb-phone{background:#111827;border-radius:28px;border:1px solid rgba(201,168,76,.35);overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7);}
 .lb-notch{background:#111827;height:28px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.05);}
 .lb-notch-pill{width:55px;height:7px;background:#1f2937;border-radius:4px;}
 .lb-status{background:#1a1a2e;padding:.35rem .9rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);}
@@ -384,7 +419,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .lb-close{position:absolute;top:-42px;right:0;background:rgba(7,10,26,.9);border:1px solid var(--gold);color:var(--gold);width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
 .lb-close:hover{background:var(--gold);color:var(--dark);}
 .lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(7,10,26,.9);border:1px solid var(--border);color:var(--gold);width:36px;height:36px;border-radius:50%;cursor:pointer;transition:all .3s;font-size:1rem;display:flex;align-items:center;justify-content:center;}
-.lb-prev{left:-50px;}.lb-next{right:-50px;}
+.lb-prev{left:-46px;}.lb-next{right:-46px;}
 .lb-prev:hover,.lb-next:hover{border-color:var(--gold);}
 .lb-counter{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-size:.7rem;color:var(--muted);letter-spacing:.1em;white-space:nowrap;}
 
@@ -405,9 +440,10 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .coc p{font-size:.8rem;color:var(--muted);margin-bottom:.9rem;line-height:1.65;}
 .wab{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;background:#25D366;color:#fff;text-decoration:none;border-radius:2px;font-size:.75rem;font-weight:500;transition:all .3s;}
 .wab:hover{background:#20BA5A;transform:translateY(-2px);}
-.ml{color:var(--gold);text-decoration:none;font-size:.82rem;transition:color .3s;}
+.ml{color:var(--gold);text-decoration:none;font-size:.82rem;transition:color .3s;word-break:break-all;}
 .ml:hover{color:var(--gold-light);}
 
+/* FOOTER */
 footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 5% 1.8rem;}
 .fg2{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3.5rem;margin-bottom:2.5rem;}
 .fbrand{font-family:'Cormorant Garamond',serif;font-size:1rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);display:block;margin-bottom:.9rem;}
@@ -420,12 +456,12 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 .fll{list-style:none;display:flex;flex-direction:column;gap:.55rem;}
 .fll a{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .3s;}
 .fll a:hover{color:var(--gold-light);}
-.fbot{max-width:1280px;margin:0 auto;padding-top:1.8rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.fbot{max-width:1280px;margin:0 auto;padding-top:1.8rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
 .fbot p{font-size:.73rem;color:var(--muted);}
 .fbot span{font-size:.73rem;color:var(--gold);}
 
 /* MODALS */
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);z-index:2000;align-items:center;justify-content:center;padding:2rem;}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);z-index:2000;align-items:center;justify-content:center;padding:1.5rem;}
 .modal.active{display:flex;}
 .mbox{background:linear-gradient(160deg,var(--dark2),var(--dark));border:1px solid var(--gold);border-radius:2px;padding:2.5rem;max-width:440px;width:100%;position:relative;animation:mIn .4s cubic-bezier(.16,1,.3,1);}
 @keyframes mIn{from{opacity:0;transform:scale(.94) translateY(-18px);}to{opacity:1;transform:scale(1) translateY(0);}}
@@ -436,11 +472,12 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 .micon{font-size:2.2rem;display:block;margin-bottom:1rem;animation:bIn .5s ease-out .2s both;}
 @keyframes bIn{0%{transform:scale(0);opacity:0;}60%{transform:scale(1.12);}100%{transform:scale(1);opacity:1;}}
 
-/* Toast */
-.toast{position:fixed;bottom:2rem;right:2rem;background:rgba(7,10,26,.95);border:1px solid var(--gold);border-radius:2px;padding:.8rem 1.4rem;font-size:.8rem;color:var(--gold-light);z-index:20000;transform:translateY(20px);opacity:0;transition:all .35s;pointer-events:none;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:rgba(7,10,26,.95);border:1px solid var(--gold);border-radius:2px;padding:.8rem 1.4rem;font-size:.8rem;color:var(--gold-light);z-index:20000;transform:translateY(20px);opacity:0;transition:all .35s;pointer-events:none;max-width:calc(100vw - 3rem);}
 .toast.show{transform:translateY(0);opacity:1;}
 
-/* Responsive */
+/* ══════════════════════════════
+   RESPONSIVE — MOBILE FIRST
+   ══════════════════════════════ */
 @media(max-width:1100px){
   .hg{grid-template-columns:1fr;gap:3rem;text-align:center;}
   .hv{order:-1;}.ht p{margin:0 auto 2.2rem;}.hbtns{justify-content:center;}
@@ -453,42 +490,82 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .cog{grid-template-columns:1fr;}
   .fg2{grid-template-columns:1fr 1fr;gap:2rem;}
   .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .prog21-features{grid-template-columns:1fr;}
+  .prog21-tiers{grid-template-columns:1fr;}
+  .prog21-headline{font-size:2.6rem;}
+  .about-badge{right:-10px;}
 }
 @media(max-width:768px){
-  body{font-size:14px;}section{padding:4rem 4%;}
-  .ht h1{font-size:2.35rem;}.st{font-size:1.85rem;}
-  nav{padding:1rem 4%;}
-  .mg{grid-template-columns:1fr;}.ebg{grid-template-columns:1fr;}
-  .cat-grid{grid-template-columns:1fr;}.tier-grid{grid-template-columns:1fr;}
+  body{font-size:14px;}
+  section{padding:4rem 4%;}
+  nav{padding:.9rem 4%;}
+  .ht h1{font-size:2.1rem;}
+  .st{font-size:1.7rem;}
+  .ss{font-size:.82rem;}
+  .hbtns{gap:.7rem;}
+  .btn{padding:.75rem 1.5rem;font-size:.75rem;}
+  .mg{grid-template-columns:1fr;}
+  .ebg{grid-template-columns:1fr;}
+  .cat-grid{grid-template-columns:1fr;}
+  .tier-grid{grid-template-columns:1fr;}
   .sr{grid-template-columns:repeat(2,1fr);}
   .fg2{grid-template-columns:1fr;gap:1.8rem;}
-  .fbot{flex-direction:column;gap:.5rem;text-align:center;}
+  .fbot{flex-direction:column;text-align:center;}
   .fr{grid-template-columns:1fr;}
-  .bknav{flex-direction:column;gap:.8rem;}
+  .bknav{flex-direction:column;align-items:stretch;}
+  .bknav .btn-o{text-align:center;}
+  .bkback{text-align:center;}
   .steps .slabel{display:none;}
   .hero-frame-wrap{width:220px;height:280px;}
-  .about-frame-wrap{max-width:160px;}
+  .about-frame-wrap{max-width:150px;}
   .lb-prev{left:-38px;}.lb-next{right:-38px;}
-  .prog-body{grid-template-columns:1fr;}
+  .prog21-tiers{grid-template-columns:1fr;}
+  .prog21-headline{font-size:1.9rem;}
+  .prog21-features{grid-template-columns:1fr;}
+  .prog21-card:nth-child(even){border-right:none;}
+  .prog21-card:nth-child(3){border-bottom:1px solid rgba(201,168,76,.1);}
+  .prog21-card:nth-child(4){border-bottom:none;}
+  .prog21-urgency{gap:.8rem;}
+  .prog21-urgency-sep{display:none;}
+  .prog21-advert-ticker{gap:.7rem;}
+  .awg{grid-template-columns:repeat(2,1fr);}
+  .qb{padding:1.8rem 1.2rem;}
+  .qb blockquote{font-size:1.2rem;}
+  .cfb{padding:1.5rem;}
+  .tier-card{padding:1.4rem 1.1rem;}
+  .cal-wrap{min-height:550px;}
+  .cal-wrap iframe{min-height:550px;}
+  .prog21-cal-iframe{min-height:500px;}
+  .prog21-subline{font-size:.82rem;}
+  .prog21-pills{gap:.5rem;}
+  .prog21-pill{font-size:.68rem;padding:.4rem .85rem;}
+  .heb{font-size:.65rem;}
+  .logo{font-size:.9rem;letter-spacing:.15em;}
 }
 @media(max-width:480px){
-  .ht h1{font-size:2rem;}.awg{grid-template-columns:1fr;}
-  .hero-frame-wrap{width:200px;height:255px;}
+  section{padding:3.5rem 4%;}
+  .ht h1{font-size:1.8rem;}
+  .awg{grid-template-columns:1fr;}
+  .hero-frame-wrap{width:185px;height:235px;}
   .lb-prev,.lb-next{display:none;}
+  .lb-inner{max-width:290px;}
+  .efr{flex-direction:column;align-items:flex-start;gap:.7rem;}
+  .efr .btn{width:100%;text-align:center;}
+  .mnav a{font-size:1.5rem;}
+  .prog21-headline{font-size:1.65rem;}
+  .tier-price-inr{font-size:1.4rem;}
+  .sr{grid-template-columns:repeat(2,1fr);gap:.8rem;}
+  .sn{font-size:1.5rem;}
+  .steps{gap:.15rem;}
+  .sline{width:18px;}
+  .sc{width:26px;height:26px;font-size:.65rem;}
 }
 </style>
 </head>
 <body>
 <div id="cur"></div><div id="cur-ring"></div>
 
-<!-- ─── HIDDEN ADMIN CORNER MARK ───
-     A barely-visible ✦ glyph sits in the bottom-right corner.
-     Only the site owner knows to click it.
-     Triple-click activates redirect to admin-login.html (anti-accident protection).
--->
-<div class="admin-corner" id="adminCorner" title="">
-  <span class="adm-sigil">✦</span>
-</div>
+<div class="admin-corner" id="adminCorner"><span class="adm-sigil">✦</span></div>
 
 <div id="loader">
   <div class="ld-name">Akshita Dayma Goel</div>
@@ -504,16 +581,18 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       <li><a href="#hero">Home</a></li><li><a href="#about">About</a></li>
       <li><a href="#awards">Awards</a></li><li><a href="#methodology">Methodology</a></li>
       <li><a href="#ebooks">eBooks</a></li><li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#program21">21-Day</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="#booking" class="ncta">Book Session</a></li>
     </ul>
-    <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+    <button class="hbg" id="hbg" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 <div class="mnav" id="mnav">
   <a href="#hero">Home</a><a href="#about">About</a><a href="#awards">Awards</a>
   <a href="#methodology">Methodology</a><a href="#ebooks">eBooks</a>
-  <a href="#testimonials">Testimonials</a><a href="#contact">Contact</a>
+  <a href="#testimonials">Testimonials</a><a href="#program21">21-Day Program</a>
+  <a href="#contact">Contact</a>
   <a href="#booking" class="mncta">Book Session</a>
 </div>
 
@@ -556,7 +635,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <div class="about-ring-spin"></div>
         <div class="about-photo-card">
           <img src="" alt="Akshita" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="about-photo-placeholder" style="display:none;width:100%;height:100%;background:linear-gradient(160deg,var(--dark2),var(--purple));align-items:center;justify-content:center;flex-direction:column;gap:.5rem;"><span style="font-size:3.5rem;">🌙</span><span style="font-size:.62rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;">Your Photo</span></div>
+          <div class="about-photo-placeholder" style="display:none;width:100%;height:100%;"><span style="font-size:3.5rem;">🌙</span><span style="font-size:.62rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;">Your Photo</span></div>
         </div>
         <div class="about-badge"><span class="bn">11+</span><span class="bl2">Yrs Exp.</span></div>
       </div>
@@ -566,7 +645,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <p class="rv d1">Akshita Dayma Goel is an internationally recognised Manifestation Coach, bestselling author, and spiritual guide, known for helping individuals transform their inner world and manifest tangible breakthroughs in love, career, relationships, finances, and emotional well-being.</p>
         <p class="rv d2">Her work bridges the gap between science and spirituality — combining subconscious reprogramming, neuroscience, and energetic alignment to create manifestation that is not just inspirational, but deeply practical and results-driven. With a powerful global presence, Akshita has guided over 100,000+ clients worldwide.</p>
         <span class="jt rv">My Journey</span>
-        <p class="rv d1">My journey with manifestation began over a decade ago from a place of deep curiosity. I often asked: Why do some people naturally attract success, abundance, and fulfilling relationships… while others remain stuck in repetitive patterns? That question changed everything. It led me to explore the deeper mechanics of reality — how the subconscious mind silently shapes outcomes, how belief systems influence opportunities, and how neural pathways either limit or expand our potential.</p>
+        <p class="rv d1">My journey with manifestation began over a decade ago from a place of deep curiosity. I often asked: Why do some people naturally attract success, abundance, and fulfilling relationships… while others remain stuck in repetitive patterns? That question changed everything.</p>
         <p class="ji rv d1">Subconscious programming & rewiring</p>
         <p class="ji rv d2">Manifestation psychology</p>
         <p class="ji rv d3">Neuroplasticity & neuroscience</p>
@@ -649,19 +728,13 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
           <div class="cat-card" onclick="pickCat(this,'Specific Person','specific-person')"><span class="cat-icon">💞</span><h4>Specific Person</h4><p>Attract or reconnect with someone special.</p></div>
           <div class="cat-card" onclick="pickCat(this,'Career','career')"><span class="cat-icon">💼</span><h4>Career</h4><p>Dream job, promotion, abundance, richest timeline.</p></div>
           <div class="cat-card" onclick="pickCat(this,'Manifestation Mastery','manifestation')"><span class="cat-icon">✨</span><h4>Manifestation Mastery</h4><p>Health, money, confidence, peace, life goals.</p></div>
-          <div class="cat-card" onclick="pickCat(this,'21-Day Program','program-21day')"><span class="cat-icon">🗓️</span><h4>21-Day Program</h4><p>Complete 21-day reality shift with daily guidance.</p></div>
         </div>
-        <div class="bknav"><div></div><button class="btn btn-p" id="btnS2" onclick="goStep(2)" disabled style="opacity:.45;">Choose Session →</button></div>
       </div>
       <div class="spanel" id="sp2">
         <div class="bk-breadcrumb" id="breadcrumb2"></div>
-        <p class="tier-intro">Category: <strong id="catLabel">—</strong></p>
+        <p class="tier-intro">Category: <strong id="catLabel">—</strong> · <span style="color:var(--gold);font-size:.78rem;">Tap a session to schedule instantly →</span></p>
         <div id="tierSection"></div>
-        <div id="progSection" style="display:none;"></div>
-        <div class="bknav">
-          <button class="bkback" onclick="goStep(1)">← Back</button>
-          <button class="btn btn-p" id="btnS3" onclick="goStep(3)" disabled style="opacity:.45;">Schedule on Cal.com →</button>
-        </div>
+        <div class="bknav"><button class="bkback" onclick="goStep(1)">← Back</button></div>
       </div>
       <div class="spanel" id="sp3">
         <div class="bk-breadcrumb" id="breadcrumb3"></div>
@@ -671,13 +744,176 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
             <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
             <p>Loading scheduler…</p>
           </div>
-          <iframe id="calFrame" src="" width="100%" style="min-height:650px;border:none;display:none;" onload="document.getElementById('calLoading').style.display='none';this.style.display='block';"></iframe>
+          <iframe id="calFrame" src="" width="100%" style="min-height:650px;border:none;display:none;" title="Book session"></iframe>
         </div>
-        <div class="bknav" style="margin-top:1.2rem;">
+        <div class="bknav">
           <button class="bkback" onclick="goStep(2)">← Back</button>
-          <a id="calOpenLink" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn btn-p" style="text-decoration:none;">Open Cal.com ↗</a>
+          <a id="calOpenLink" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn btn-o" style="text-decoration:none;font-size:.72rem;">Open in new tab ↗</a>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- 21-DAY PROGRAM -->
+<section id="program21">
+  <div class="prog-particles" id="progParticles"></div>
+  <div class="container">
+    <div class="prog21-advert-banner rv">
+      <div style="display:flex;justify-content:center;margin-bottom:1.2rem;">
+        <div class="prog21-advert-ticker">
+          <div class="tick-dot"></div>
+          <span>Limited Spots — 21-Day Intensive Program</span>
+          <div class="tick-dot"></div>
+          <span>3 Sessions · Daily Guidance · Real Results</span>
+          <div class="tick-dot"></div>
+        </div>
+      </div>
+      <p class="sl" style="margin-bottom:.8rem;">Signature Program</p>
+      <h2 class="prog21-headline">21-Day <em>Transformation</em> Program</h2>
+      <p class="prog21-subline">A complete reality shift — 3 Platinum sessions at the price of 2, with daily guidance throughout</p>
+      <div class="prog21-pills" id="prog21Pills">
+        <div class="prog21-pill"><div class="pill-dot"></div>VIP Priority Access</div>
+        <div class="prog21-pill"><div class="pill-dot"></div>3 Sessions, Pay for 2</div>
+        <div class="prog21-pill"><div class="pill-dot"></div>Daily Check-ins</div>
+        <div class="prog21-pill"><div class="pill-dot"></div>Priority Slot Booking</div>
+        <div class="prog21-pill"><div class="pill-dot"></div>100K+ Success Stories</div>
+        <div class="prog21-pill"><div class="pill-dot"></div>Results in 21 Days</div>
+      </div>
+    </div>
+
+    <div class="prog21-features">
+      <div class="prog21-card rv d1"><span class="prog21-card-num">01</span><span class="mi">✨</span><h3>VIP Access Experience</h3><p>Get exclusive, priority-level support throughout your journey — you're not just a client, you're a priority.</p></div>
+      <div class="prog21-card rv d2"><span class="prog21-card-num">02</span><span class="mi">✨</span><h3>Regular Check-ins & Guidance</h3><p>Stay aligned with consistent check-ins to track your progress, clear doubts, and keep your energy right.</p></div>
+      <div class="prog21-card rv d3"><span class="prog21-card-num">03</span><span class="mi">✨</span><h3>Priority Slot Availability</h3><p>Skip the waiting. Get faster access to sessions with priority booking reserved only for program clients.</p></div>
+      <div class="prog21-card rv d4"><span class="prog21-card-num">04</span><span class="mi">✨</span><h3>3 Platinum Sessions at the Price of 2</h3><p>Deep-dive transformation with 3 high-impact sessions while paying for just 2 — designed to accelerate results.</p></div>
+    </div>
+
+    <div class="prog21-urgency rv">
+      <div class="prog21-urgency-item"><div class="urgency-icon">🔥</div><span>Only <strong>3 spots left</strong> this month</span></div>
+      <div class="prog21-urgency-sep"></div>
+      <div class="prog21-urgency-item"><div class="urgency-icon">⚡</div><span><strong>Instant</strong> confirmation</span></div>
+      <div class="prog21-urgency-sep"></div>
+      <div class="prog21-urgency-item"><div class="urgency-icon">🌏</div><span><strong>70+ countries</strong></span></div>
+      <div class="prog21-urgency-sep"></div>
+      <div class="prog21-urgency-item"><div class="urgency-icon">💬</div><span><strong>English & Hindi</strong></span></div>
+    </div>
+
+    <div class="prog21-tiers">
+      <!-- SP 21-Day -->
+      <div class="tier-card gold-tier rv d1" id="p21card-sp" onclick="toggle21Cal('sp-21day','cal-sp21','p21card-sp')" style="cursor:pointer;">
+        <div class="tier-popular">Specific Person</div>
+        <span class="tier-gem">💞</span>
+        <div class="tier-header">
+          <span class="tier-name">SP 21-Day Experience</span>
+          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
+          <span class="tier-focus">Attract & Secure Your Person</span>
+        </div>
+        <span class="tier-includes">This Is For You If…</span>
+        <ul class="tier-features">
+          <li>SP gone distant or cold</li><li>Stuck in no contact</li>
+          <li>Feel anxious or drained</li><li>Tired of overthinking</li>
+          <li>Want commitment, not just them back</li><li>Ready to stop chasing</li>
+        </ul>
+        <div class="tier-perfect">
+          <span class="tier-perfect-title">The Result</span>
+          <ul>
+            <li>They start thinking about you more</li><li>They start reaching out</li>
+            <li>They start showing effort</li><li>Feel drawn towards you again</li>
+          </ul>
+        </div>
+        <div class="prog21-tap-hint" id="hint-cal-sp21">✦ Tap to schedule your 21-day program</div>
+        <div class="prog21-cal-wrap" id="cal-sp21">
+          <div class="prog21-cal-header">
+            <span>📅 Pick Your Session Time</span>
+            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-sp21','hint-cal-sp21')">✕ Close</button>
+          </div>
+          <div class="prog21-cal-loading" id="cal-sp21-loading">
+            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+            <p>Loading your calendar…</p>
+          </div>
+          <iframe class="prog21-cal-iframe" id="cal-sp21-frame" src="" title="SP 21-Day booking"></iframe>
+        </div>
+      </div>
+
+      <!-- Career 21-Day -->
+      <div class="tier-card diamond-tier rv d2" id="p21card-career" onclick="toggle21Cal('career-21day','cal-career21','p21card-career')" style="cursor:pointer;">
+        <div class="tier-popular" style="background:rgba(126,200,227,.12);color:var(--diamond-light);">Career</div>
+        <span class="tier-gem">💼</span>
+        <div class="tier-header">
+          <span class="tier-name" style="color:var(--diamond-light);">Career 21-Day Experience</span>
+          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
+          <span class="tier-focus" style="color:var(--diamond);">Richest Career Timeline</span>
+        </div>
+        <span class="tier-includes">This Is For You If…</span>
+        <ul class="tier-features">
+          <li>Stuck in current career path</li><li>Not getting opportunities</li>
+          <li>Feel underpaid or overlooked</li><li>Want better job or promotion</li>
+          <li>Tired of rejections</li><li>Ready to step into your best version</li>
+        </ul>
+        <div class="tier-perfect">
+          <span class="tier-perfect-title">The Result</span>
+          <ul>
+            <li>Opportunities increase</li><li>Attract better roles & salaries</li>
+            <li>Get recognised & valued</li><li>Step into aligned career path</li>
+          </ul>
+        </div>
+        <div class="prog21-tap-hint" id="hint-cal-career21">✦ Tap to schedule your 21-day program</div>
+        <div class="prog21-cal-wrap" id="cal-career21">
+          <div class="prog21-cal-header">
+            <span>📅 Pick Your Session Time</span>
+            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-career21','hint-cal-career21')">✕ Close</button>
+          </div>
+          <div class="prog21-cal-loading" id="cal-career21-loading">
+            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+            <p>Loading your calendar…</p>
+          </div>
+          <iframe class="prog21-cal-iframe" id="cal-career21-frame" src="" title="Career 21-Day booking"></iframe>
+        </div>
+      </div>
+
+      <!-- Manifestation 21-Day -->
+      <div class="tier-card platinum-tier rv d3" id="p21card-manif" onclick="toggle21Cal('manifestation-21day','cal-manif21','p21card-manif')" style="cursor:pointer;">
+        <div class="tier-popular" style="background:rgba(224,201,240,.12);color:var(--platinum-light);">Manifestation</div>
+        <span class="tier-gem">✨</span>
+        <div class="tier-header">
+          <span class="tier-name" style="color:var(--platinum-light);">Manifestation 21-Day Experience</span>
+          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
+          <span class="tier-focus" style="color:var(--platinum);">Complete Life Transformation</span>
+        </div>
+        <span class="tier-includes">This Is For You If…</span>
+        <ul class="tier-features">
+          <li>Stuck in multiple areas</li><li>Tired of overthinking & delays</li>
+          <li>Want clarity, confidence, control</li><li>Ready to stop chasing</li>
+          <li>Want transformation, not just change</li><li>Serious about becoming highest self</li>
+        </ul>
+        <div class="tier-perfect">
+          <span class="tier-perfect-title">The Result</span>
+          <ul>
+            <li>Opportunities start aligning</li><li>Things work in your favour</li>
+            <li>Feel more confident</li><li>Attract everything effortlessly</li>
+          </ul>
+        </div>
+        <div class="prog21-tap-hint" id="hint-cal-manif21">✦ Tap to schedule your 21-day program</div>
+        <div class="prog21-cal-wrap" id="cal-manif21">
+          <div class="prog21-cal-header">
+            <span>📅 Pick Your Session Time</span>
+            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-manif21','hint-cal-manif21')">✕ Close</button>
+          </div>
+          <div class="prog21-cal-loading" id="cal-manif21-loading">
+            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+            <p>Loading your calendar…</p>
+          </div>
+          <iframe class="prog21-cal-iframe" id="cal-manif21-frame" src="" title="Manifestation 21-Day booking"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="bk-warning rv" style="margin-top:2rem;">
+      <strong>🚨 Important:</strong> This program is for people who are serious about results — ready to commit fully for 21 days. I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em>
     </div>
   </div>
 </section>
@@ -743,7 +979,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       </div>
       <div class="cos rv-r">
         <div class="coc"><div class="coi">💬</div><h3>WhatsApp</h3><p>Get instant answers via WhatsApp.</p><a href="https://wa.me/1234567890" class="wab" target="_blank">Chat on WhatsApp</a></div>
-        <div class="coc"><div class="coi">✉️</div><h3>Email</h3><p>Typically respond within 24 hours.</p><a href="/cdn-cgi/l/email-protection#b6ded3dadad9f6d7ddc5dedfc2d7d2d7cfdbd7d1d9d3da98d5d9db" class="ml"><span class="__cf_email__" data-cfemail="90f8f5fcfcffd0f1fbe3f8f9e4f1f4f1e9fdf1f7fff5fcbef3fffd">[email&#160;protected]</span></a></div>
+        <div class="coc"><div class="coi">✉️</div><h3>Email</h3><p>Typically respond within 24 hours.</p><a href="mailto:hello@manifestuniversecrets.com" class="ml">hello@manifestuniversecrets.com</a></div>
         <div class="coc"><div class="coi">🌍</div><h3>Global Reach</h3><p>Clients across 70+ countries. Sessions via Zoom in English & Hindi.</p></div>
       </div>
     </div>
@@ -759,8 +995,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <a href="#" class="sa"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
-    <div class="fc"><h4>Navigate</h4><ul class="fll"><li><a href="#about">About</a></li><li><a href="#awards">Awards</a></li><li><a href="#methodology">Methodology</a></li><li><a href="#ebooks">eBooks</a></li><li><a href="#booking">Book Session</a></li></ul></div>
-    <div class="fc"><h4>Sessions</h4><ul class="fll"><li><a href="#booking">Specific Person</a></li><li><a href="#booking">Career</a></li><li><a href="#booking">Manifestation</a></li><li><a href="#booking">21-Day Program</a></li></ul></div>
+    <div class="fc"><h4>Navigate</h4><ul class="fll"><li><a href="#about">About</a></li><li><a href="#awards">Awards</a></li><li><a href="#methodology">Methodology</a></li><li><a href="#ebooks">eBooks</a></li><li><a href="#booking">Book Session</a></li><li><a href="#program21">21-Day Program</a></li></ul></div>
+    <div class="fc"><h4>Sessions</h4><ul class="fll"><li><a href="#booking">Specific Person</a></li><li><a href="#booking">Career</a></li><li><a href="#booking">Manifestation</a></li><li><a href="#program21">21-Day Program</a></li></ul></div>
     <div class="fc"><h4>Legal</h4><ul class="fll"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Refund Policy</a></li></ul></div>
   </div>
   <div class="fbot"><p>&copy; 2026 Akshita Dayma Goel. All rights reserved.</p><span>✦ International Manifestation Coach</span></div>
@@ -773,10 +1009,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <div class="modal" id="contactModal">
   <div class="mbox"><button class="mcl" onclick="closeM('contactModal')">&times;</button><span class="micon">💌</span><h3>Message Sent!</h3><p>We'll get back to you within 24 hours.</p><button class="btn btn-p" style="width:100%;margin-top:1.3rem;" onclick="closeM('contactModal')">Close</button></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ═══ CURSOR ═══
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -789,30 +1024,16 @@ document.querySelectorAll('a,button,.cat-card,.tier-card,.awc,.ebc,.mc,.sa,.coc,
   el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
 });
 
-// ═══ HIDDEN ADMIN CORNER MARK ═══
-// Triple-click the bottom-right ✦ to go to admin login
-// This prevents accidental clicks by visitors
+// ═══ ADMIN CORNER ═══
 (function(){
   const corner=document.getElementById('adminCorner');
   let clicks=0,timer=null;
   corner.addEventListener('click',()=>{
-    clicks++;
-    clearTimeout(timer);
-    if(clicks>=3){
-      clicks=0;
-      window.location.href='admin-login.html';
-    }else{
-      // Reset click count after 1.5 seconds of inactivity
-      timer=setTimeout(()=>{clicks=0;},1500);
-    }
+    clicks++;clearTimeout(timer);
+    if(clicks>=3){clicks=0;window.location.href='admin-login.html';}
+    else timer=setTimeout(()=>{clicks=0;},1500);
   });
-  // Keyboard shortcut: Ctrl+Shift+A (extra hidden option)
-  document.addEventListener('keydown',e=>{
-    if(e.ctrlKey&&e.shiftKey&&e.key==='A'){
-      e.preventDefault();
-      window.location.href='admin-login.html';
-    }
-  });
+  document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();window.location.href='admin-login.html';}});
 })();
 
 // ═══ LOADER ═══
@@ -826,20 +1047,45 @@ function iStars(){stars=[];for(let i=0;i<150;i++)stars.push({x:Math.random()*scE
 function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=>{const a=.2+.4*Math.sin(t*s.sp*100+s.ph);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();});requestAnimationFrame(drw);}
 window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
 
+// ═══ PARTICLES ═══
+(function(){
+  const container=document.getElementById('progParticles');if(!container)return;
+  const colors=['rgba(201,168,76,.7)','rgba(232,213,163,.5)','rgba(224,201,240,.4)','rgba(126,200,227,.4)'];
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');p.className='prog-particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.bottom=-(Math.random()*20)+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.setProperty('--dur',(7+Math.random()*10)+'s');
+    p.style.setProperty('--delay',(Math.random()*12)+'s');
+    p.style.width=p.style.height=(1+Math.random()*3)+'px';
+    container.appendChild(p);
+  }
+})();
+
 // ═══ NAV ═══
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
 const hbg=document.getElementById('hbg'),mn=document.getElementById('mnav');
 hbg.addEventListener('click',()=>{hbg.classList.toggle('open');mn.classList.toggle('open');});
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{const h=a.getAttribute('href');if(h&&h.startsWith('#')){e.preventDefault();const el=document.querySelector(h);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}hbg.classList.remove('open');mn.classList.remove('open');});
+  a.addEventListener('click',e=>{
+    const h=a.getAttribute('href');
+    if(h&&h.startsWith('#')){e.preventDefault();const el=document.querySelector(h);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+    hbg.classList.remove('open');mn.classList.remove('open');
+  });
 });
 
 // ═══ REVEAL ═══
 const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>ro.observe(el));
 
+// Animate pills
+const pillObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.prog21-pill').forEach((p,i)=>setTimeout(()=>p.classList.add('vis'),i*100));});},{threshold:.3});
+const pillContainer=document.getElementById('prog21Pills');
+if(pillContainer)pillObs.observe(pillContainer);
+
 // ═══ TOAST ═══
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
 // ═══ DATA ═══
 function loadData(key,def){try{return JSON.parse(localStorage.getItem(key))||def;}catch(e){return def;}}
@@ -864,10 +1110,10 @@ let ebookData=loadData('ebooks',DEFAULT_EBOOKS);
 // ═══ RENDER EBOOKS ═══
 function renderEbooks(){
   const grid=document.getElementById('ebooksGrid');
-  grid.innerHTML=ebookData.map((eb,i)=>`
+  grid.innerHTML=ebookData.map(eb=>`
     <div class="ebc rv">
       <div class="ecv">
-        ${eb.img?`<img src="${eb.img}" alt="${eb.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">`:`<span class="ecover-icon">${eb.icon||'📖'}</span>`}
+        ${eb.img?`<img src="${eb.img}" alt="${eb.title}">`:`<span class="ecover-icon">${eb.icon||'📖'}</span>`}
         ${eb.badge?`<div class="ebadge">${eb.badge}</div>`:''}
       </div>
       <div class="ebb">
@@ -889,12 +1135,7 @@ function renderEbooks(){
 const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day'};
 const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program'};
 let currentFilter='all';
-function filterTests(cat,btn){
-  currentFilter=cat;
-  document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTestimonials();
-}
+function filterTests(cat,btn){currentFilter=cat;document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTestimonials();}
 function renderTestimonials(){
   const track=document.getElementById('testScroll');
   const filtered=currentFilter==='all'?testimonials:testimonials.filter(t=>t.cat===currentFilter);
@@ -928,20 +1169,80 @@ function lbNav(d){if(!lbImgs.length)return;lbIdx=(lbIdx+d+lbImgs.length)%lbImgs.
 function lbBgClick(e){if(e.target===document.getElementById('lb'))closeLB();}
 document.addEventListener('keydown',e=>{if(!document.getElementById('lb').classList.contains('open'))return;if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);if(e.key==='Escape')closeLB();});
 
-// ═══ BOOKING ═══
+// ═══ BOOKING — Tier click → Step 3 ═══
 const CAL_USER='manifestuniversecrets';
-const CAL_URLS={'specific-person':{gold:`https://cal.com/${CAL_USER}/sp-gold`,diamond:`https://cal.com/${CAL_USER}/sp-diamond`,platinum:`https://cal.com/${CAL_USER}/sp-platinum`},'career':{gold:`https://cal.com/${CAL_USER}/career-gold`,diamond:`https://cal.com/${CAL_USER}/career-diamond`,platinum:`https://cal.com/${CAL_USER}/career-platinum`},'manifestation':{gold:`https://cal.com/${CAL_USER}/manifestation-gold`,diamond:`https://cal.com/${CAL_USER}/manifestation-diamond`,platinum:`https://cal.com/${CAL_USER}/manifestation-platinum`},'program-21day':{'sp-21':`https://cal.com/${CAL_USER}/sp-21day`,'career-21':`https://cal.com/${CAL_USER}/career-21day`,'manifestation-21':`https://cal.com/${CAL_USER}/manifestation-21day`}};
+const CAL_URLS={
+  'specific-person':{gold:`https://cal.com/${CAL_USER}/sp-gold`,diamond:`https://cal.com/${CAL_USER}/sp-diamond`,platinum:`https://cal.com/${CAL_USER}/sp-platinum`},
+  'career':{gold:`https://cal.com/${CAL_USER}/career-gold`,diamond:`https://cal.com/${CAL_USER}/career-diamond`,platinum:`https://cal.com/${CAL_USER}/career-platinum`},
+  'manifestation':{gold:`https://cal.com/${CAL_USER}/manifestation-gold`,diamond:`https://cal.com/${CAL_USER}/manifestation-diamond`,platinum:`https://cal.com/${CAL_USER}/manifestation-platinum`}
+};
 const CAL_PARAMS='?theme=dark&hideEventTypeDetails=0&brandColor=c9a84c';
-const TIER_DATA={'specific-person':[{tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Break No Contact',includes:['Energetic & emotional analysis','No-contact energy reset','Subconscious calming','Identity shift','Visualization + affirmations'],perfect:['Break silence','Reduce anxiety','Feel in control','See initial movement'],popular:'Starter'},{tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Consistent Communication',includes:['Everything in Gold','Subconscious rewiring','SP scripting technique','Mirror work','Communication stabilisation'],perfect:['Break NC AND maintain chat','Stop hot & cold behaviour','Feel chosen','Build connection'],popular:'Most Popular'},{tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Commitment & Long-Term Union',includes:['Everything in Diamond','Deep subconscious rewiring','Marriage scripting','Energy healing','Advanced visualization'],perfect:['Bring person back AND secure commitment','Manifest proposal/marriage','Feel loved & chosen','Stable long-term relationship'],popular:'Premium'}],'career':[{tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Dream Job / Job Switch',includes:['Career & energy analysis','Belief reset','Job attraction scripting','Confidence activation','Visualization + affirmations'],perfect:['Manifest dream job','Switch role/company','Receive interview calls','Feel confident'],popular:'Starter'},{tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Promotion, Growth & Money Flow',includes:['Everything in Gold','Money block removal','Money magnetism activation','Identity shift to leadership','Financial flow stabilisation'],perfect:['Get promoted','Increase income','Smoother money flow','Higher authority & growth'],popular:'Most Popular'},{tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Richest Timeline & Massive Abundance',includes:['Everything in Diamond','Wealth identity rewiring','Millionaire frequency activation','Timeline shift','Expansion energy work'],perfect:['Activate richest timeline','Massive success & abundance','High-income identity','Rapid growth & expansion'],popular:'Premium'}],'manifestation':[{tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Specific Goal / Quick Shift',includes:['Energetic & emotional analysis','Belief reset','Goal-specific scripting','Identity shift','Simple visualization'],perfect:['Manifest one specific goal','Clarity & stability','Quick movement','Stop overthinking'],popular:'Starter'},{tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Multiple Areas / Stability & Growth',includes:['Everything in Gold','Deep emotional & mental blocks','Emotional regulation','Confidence activation','Multi-goal alignment'],perfect:['Improve multiple areas','Emotionally balanced','Consistent results','Steady growth'],popular:'Most Popular'},{tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Complete Life Transformation',includes:['Everything in Diamond','Identity + life patterns rewiring','Highest timeline activation','Abundance energy alignment','Full life alignment'],perfect:['Transform entire life','Highest self','Manifest multiple desires','Peace, clarity, success, abundance'],popular:'Premium'}]};
-const PROG_DATA={'sp-21':{icon:'❤️',title:'21-Day SP Manifestation Experience',sub:'A complete love reality shift',inr:'₹70,000',usd:'$769.99',forYou:['SP gone distant or cold','Stuck in no contact','Feel anxious or drained','Tired of overthinking',"Want commitment, not just them back",'Ready to stop chasing'],whatHappens:['Identify what is blocking your connection','Break anxious patterns','Rebuild your self-concept','Align energy so SP responds differently','Daily guidance throughout'],results:['They start thinking about you more','They start reaching out','They start showing effort','Feel drawn towards you again',"Don't want to lose you"]},'career-21':{icon:'💼',title:'21-Day Career Manifestation Experience',sub:'A complete career reality shift',inr:'₹70,000',usd:'$769.99',forYou:['Stuck in current career path','Not getting opportunities','Feel underpaid or overlooked','Want better job or promotion','Tired of rejections','Ready to step into your best version'],whatHappens:['Identify career & money blocks','Remove fear & self-doubt','Rebuild confidence & identity','Align energy with higher income','Daily guidance throughout'],results:['Opportunities increase','Attract better roles & salaries','Get recognised & valued','Smoother money flow','Step into aligned career path']},'manifestation-21':{icon:'✨',title:'21-Day Manifestation Experience',sub:'A complete reality shift',inr:'₹70,000',usd:'$769.99',forYou:['Stuck in multiple areas','Tired of overthinking & delays','Want clarity, confidence, control','Ready to stop chasing',"Want transformation, not just change",'Serious about becoming highest self'],whatHappens:['Identify exactly what is blocking you','Shift emotional & mental patterns','Rebuild identity & self-worth','Align energy with desired reality','Daily guidance throughout'],results:['Opportunities start aligning','Things work in your favour','Feel more confident','Desires unfold naturally','Attract everything effortlessly']}};
-let bCat={name:'',slug:''},bTier={name:'',price:'',slug:''},bProg={name:'',slug:''},bIs21=false;
+const TIER_DATA={
+  'specific-person':[
+    {tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Break No Contact',includes:['Energetic & emotional analysis','No-contact energy reset','Subconscious calming','Identity shift','Visualization + affirmations'],perfect:['Break silence','Reduce anxiety','Feel in control','See initial movement'],popular:'Starter'},
+    {tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Consistent Communication',includes:['Everything in Gold','Subconscious rewiring','SP scripting technique','Mirror work','Communication stabilisation'],perfect:['Break NC AND maintain chat','Stop hot & cold behaviour','Feel chosen','Build connection'],popular:'Most Popular'},
+    {tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Commitment & Long-Term Union',includes:['Everything in Diamond','Deep subconscious rewiring','Marriage scripting','Energy healing','Advanced visualization'],perfect:['Bring person back AND secure commitment','Manifest proposal/marriage','Feel loved & chosen','Stable long-term relationship'],popular:'Premium'}
+  ],
+  'career':[
+    {tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Dream Job / Job Switch',includes:['Career & energy analysis','Belief reset','Job attraction scripting','Confidence activation','Visualization + affirmations'],perfect:['Manifest dream job','Switch role/company','Receive interview calls','Feel confident'],popular:'Starter'},
+    {tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Promotion, Growth & Money Flow',includes:['Everything in Gold','Money block removal','Money magnetism activation','Identity shift to leadership','Financial flow stabilisation'],perfect:['Get promoted','Increase income','Smoother money flow','Higher authority & growth'],popular:'Most Popular'},
+    {tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Richest Timeline & Massive Abundance',includes:['Everything in Diamond','Wealth identity rewiring','Millionaire frequency activation','Timeline shift','Expansion energy work'],perfect:['Activate richest timeline','Massive success & abundance','High-income identity','Rapid growth & expansion'],popular:'Premium'}
+  ],
+  'manifestation':[
+    {tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Specific Goal / Quick Shift',includes:['Energetic & emotional analysis','Belief reset','Goal-specific scripting','Identity shift','Simple visualization'],perfect:['Manifest one specific goal','Clarity & stability','Quick movement','Stop overthinking'],popular:'Starter'},
+    {tier:'diamond',gem:'💎',name:'Diamond',duration:'45 Minutes',inr:'₹27,000',usd:'$320',focus:'Multiple Areas / Stability & Growth',includes:['Everything in Gold','Deep emotional & mental blocks','Emotional regulation','Confidence activation','Multi-goal alignment'],perfect:['Improve multiple areas','Emotionally balanced','Consistent results','Steady growth'],popular:'Most Popular'},
+    {tier:'platinum',gem:'👑',name:'Platinum',duration:'60 Minutes',inr:'₹35,000',usd:'$386',focus:'Complete Life Transformation',includes:['Everything in Diamond','Identity + life patterns rewiring','Highest timeline activation','Abundance energy alignment','Full life alignment'],perfect:['Transform entire life','Highest self','Manifest multiple desires','Peace, clarity, success, abundance'],popular:'Premium'}
+  ]
+};
+let bCat={name:'',slug:''},bTier={name:'',price:'',slug:''};
 
-function pickCat(el,name,slug){document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');bCat={name,slug};bIs21=(slug==='program-21day');const btn=document.getElementById('btnS2');btn.disabled=false;btn.style.opacity='1';}
-function pickTier(el,tierSlug,tierName,price){document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');bTier={name:tierName,price,slug:tierSlug};bProg={name:'',slug:''};const btn=document.getElementById('btnS3');btn.disabled=false;btn.style.opacity='1';}
-function selectProg(el,progSlug,progName){document.querySelectorAll('.stype-tab').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');renderProgCard(progSlug);bProg={name:progName,slug:progSlug};bTier={name:progName,price:'₹70,000',slug:progSlug};const btn=document.getElementById('btnS3');btn.disabled=false;btn.style.opacity='1';}
-function renderTiers(catSlug){const tiers=TIER_DATA[catSlug]||[];document.getElementById('tierSection').innerHTML=`<div class="tier-grid">${tiers.map(t=>`<div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}')"><div class="tier-popular">${t.popular}</div><div class="tier-header"><span class="tier-gem">${t.gem}</span><span class="tier-name">${t.name}</span><span class="tier-duration">⏱ ${t.duration}</span><div class="tier-price-row"><span class="tier-price-inr">${t.inr}</span><span class="tier-price-usd">/ ${t.usd}</span></div><span class="tier-focus">Focus: ${t.focus}</span></div><span class="tier-includes">What's Included</span><ul class="tier-features">${t.includes.map(i=>`<li>${i}</li>`).join('')}</ul><div class="tier-perfect"><span class="tier-perfect-title">Perfect if you want to</span><ul>${t.perfect.map(p=>`<li>${p}</li>`).join('')}</ul></div></div>`).join('')}</div><div class="bk-warning"><strong>⚠️ Important:</strong> This is a guided transformation session. Everything shared must be practiced consistently for results.<br>I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em></div>`;}
-function renderProgCard(slug){const d=PROG_DATA[slug];if(!d)return;document.getElementById('progCardWrap').innerHTML=`<div class="prog-card"><div class="prog-badge">21 Days</div><span class="prog-icon">${d.icon}</span><h3>${d.title}</h3><span class="prog-sub">${d.sub}</span><div class="prog-price-row"><span class="prog-inr">${d.inr}</span><span class="prog-usd">/ ${d.usd}</span></div><span style="font-size:.72rem;color:var(--muted);display:block;margin-bottom:.8rem;">⏳ 21 Days · 3 × 60-min Sessions + Daily Guidance</span><span class="prog-includes">✨ This Is For You If…</span><div class="prog-body"><div class="prog-col"><h4>You resonate with</h4><ul class="prog-list">${d.forYou.map(i=>`<li>${i}</li>`).join('')}</ul></div><div class="prog-col"><h4>How it happens</h4><ul class="prog-list">${d.whatHappens.map(i=>`<li>${i}</li>`).join('')}</ul></div></div><div class="prog-result"><strong>⚡ The Result</strong>${d.results.map(r=>`<span style="display:block;padding:.1rem 0 .1rem 1.2rem;position:relative;"><span style="position:absolute;left:0;">✨</span>${r}</span>`).join('')}</div></div>`;}
-function buildBC(cid){const el=document.getElementById(cid);if(!el)return;let h='';if(bCat.name)h+=`<div class="bk-chip"><span>Category</span>${bCat.name}</div>`;if(bTier.name){h+='<div class="bk-arrow">›</div>';h+=`<div class="bk-chip"><span>Session</span>${bTier.name} · ${bTier.price}</div>`;}el.innerHTML=h;}
+function pickCat(el,name,slug){
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');bCat={name,slug};bTier={name:'',price:'',slug:''};
+  setTimeout(()=>goStep(2),220);
+}
+function pickTier(el,tierSlug,tierName,price){
+  document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');bTier={name:tierName,price,slug:tierSlug};
+  showToast('✦ '+tierName+' selected — loading your calendar…');
+  setTimeout(()=>goStep(3),480);
+}
+function renderTiers(catSlug){
+  const tiers=TIER_DATA[catSlug]||[];
+  document.getElementById('tierSection').innerHTML=`
+    <div class="tier-grid">
+      ${tiers.map(t=>`
+        <div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}')">
+          <div class="tier-popular">${t.popular}</div>
+          <div class="tier-header">
+            <span class="tier-gem">${t.gem}</span>
+            <span class="tier-name">${t.name}</span>
+            <span class="tier-duration">⏱ ${t.duration}</span>
+            <div class="tier-price-row"><span class="tier-price-inr">${t.inr}</span><span class="tier-price-usd">/ ${t.usd}</span></div>
+            <span class="tier-focus">Focus: ${t.focus}</span>
+          </div>
+          <span class="tier-includes">What's Included</span>
+          <ul class="tier-features">${t.includes.map(i=>`<li>${i}</li>`).join('')}</ul>
+          <div class="tier-perfect">
+            <span class="tier-perfect-title">Perfect if you want to</span>
+            <ul>${t.perfect.map(p=>`<li>${p}</li>`).join('')}</ul>
+          </div>
+          <div class="tier-select-hint">Tap to select & schedule instantly →</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="bk-warning">
+      <strong>⚠️ Important:</strong> This is a guided transformation session. Everything shared must be practiced consistently for results.<br>
+      I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em>
+    </div>`;
+}
+function buildBC(cid){
+  const el=document.getElementById(cid);if(!el)return;
+  let h='';
+  if(bCat.name)h+=`<div class="bk-chip"><span>Category</span>${bCat.name}</div>`;
+  if(bTier.name){h+='<div class="bk-arrow">›</div>';h+=`<div class="bk-chip"><span>Session</span>${bTier.name} · ${bTier.price}</div>`;}
+  el.innerHTML=h;
+}
 function goStep(n){
   [1,2,3].forEach(i=>{
     document.getElementById('sp'+i).classList.remove('active');
@@ -949,41 +1250,87 @@ function goStep(n){
     s.classList.remove('active','done');sl.classList.remove('active');
     if(i<n){s.classList.add('done');s.textContent='✓';}
     else if(i===n){s.classList.add('active');s.textContent=i;sl.classList.add('active');}
-    else{s.textContent=i;}
+    else s.textContent=i;
     if(i<3)document.getElementById('sln'+i).classList.toggle('done',i<n);
   });
   document.getElementById('sp'+n).classList.add('active');
-  if(n===2){
-    document.getElementById('catLabel').textContent=bCat.name;buildBC('breadcrumb2');
-    if(bIs21){
-      document.getElementById('tierSection').style.display='none';
-      const ps=document.getElementById('progSection');ps.style.display='block';
-      ps.innerHTML=`<div class="stype-tabs" id="progTabs"><button class="stype-tab sel" onclick="selectProg(this,'sp-21','21-Day SP')">💞 Specific Person</button><button class="stype-tab" onclick="selectProg(this,'career-21','21-Day Career')">💼 Career</button><button class="stype-tab" onclick="selectProg(this,'manifestation-21','21-Day Manifestation')">✨ Manifestation</button></div><div id="progCardWrap"></div><div class="bk-warning" style="margin-top:1rem;"><strong>🚨 Important:</strong> This is for people who are serious about results — ready to commit for 21 days.</div>`;
-      bProg={name:'21-Day SP',slug:'sp-21'};bTier={name:'21-Day SP',price:'₹70,000',slug:'sp-21'};renderProgCard('sp-21');
-      const btn=document.getElementById('btnS3');btn.disabled=false;btn.style.opacity='1';
-    }else{
-      document.getElementById('tierSection').style.display='block';
-      document.getElementById('progSection').style.display='none';
-      renderTiers(bCat.slug);
-      const btn=document.getElementById('btnS3');btn.disabled=true;btn.style.opacity='.45';
-    }
-  }
+  if(n===2){document.getElementById('catLabel').textContent=bCat.name;buildBC('breadcrumb2');renderTiers(bCat.slug);}
   if(n===3){buildBC('breadcrumb3');loadCal();}
+  if(n>1){const bkSection=document.getElementById('booking');if(bkSection)setTimeout(()=>bkSection.scrollIntoView({behavior:'smooth',block:'start'}),100);}
 }
 function loadCal(){
   const frame=document.getElementById('calFrame');
   const loading=document.getElementById('calLoading');
   const link=document.getElementById('calOpenLink');
-  let url;
-  if(bIs21){url=(CAL_URLS['program-21day']||{})[bTier.slug];}
-  else{url=(CAL_URLS[bCat.slug]||{})[bTier.slug];}
+  let url=(CAL_URLS[bCat.slug]||{})[bTier.slug];
   if(url){
-    const fullUrl=url+CAL_PARAMS;frame.src=fullUrl;
-    if(link)link.href=url;loading.style.display='flex';frame.style.display='none';
+    const fullUrl=url+CAL_PARAMS;
+    frame.src=fullUrl;
+    if(link)link.href=url;
+    loading.style.display='flex';frame.style.display='none';
+    // Listen for iframe load
+    frame.onload=function(){loading.style.display='none';frame.style.display='block';};
   }else{
     loading.innerHTML=`<p style="color:var(--muted);font-size:.85rem;text-align:center;line-height:1.75;max-width:360px;">Please <a href="https://cal.com/${CAL_USER}" target="_blank" style="color:var(--gold);">open Cal.com</a> and book your <strong style="color:var(--gold-light);">${bCat.name} · ${bTier.name} (${bTier.price})</strong> session.</p>`;
     loading.style.display='flex';frame.style.display='none';
   }
+}
+
+// ═══ 21-DAY PROGRAM — Inline cal.com embeds ═══
+const CAL_21_URLS={
+  'sp-21day':`https://cal.com/${CAL_USER}/sp-21day`,
+  'career-21day':`https://cal.com/${CAL_USER}/career-21day`,
+  'manifestation-21day':`https://cal.com/${CAL_USER}/manifestation-21day`
+};
+
+function toggle21Cal(slug,calId,cardId){
+  const wrap=document.getElementById(calId);
+  if(!wrap)return;
+  const isOpen=wrap.classList.contains('open');
+  // Close all 21-day cals first
+  document.querySelectorAll('.prog21-cal-wrap.open').forEach(w=>{
+    w.classList.remove('open');
+    const hintId='hint-'+w.id;
+    const hint=document.getElementById(hintId);
+    if(hint){hint.style.display='';hint.textContent='✦ Tap to schedule your 21-day program';}
+    // Deselect card
+    const card=w.closest('.tier-card');
+    if(card)card.classList.remove('sel');
+  });
+  if(isOpen)return; // was open, now closed — done
+  // Open this one
+  const card=document.getElementById(cardId);
+  if(card)card.classList.add('sel');
+  wrap.classList.add('open');
+  const hint=document.getElementById('hint-'+calId);
+  if(hint){hint.style.display='none';}
+  // Load iframe only once
+  const frame=document.getElementById(calId+'-frame');
+  const loading=document.getElementById(calId+'-loading');
+  if(frame&&!frame.src){
+    const url=(CAL_21_URLS[slug]||`https://cal.com/${CAL_USER}`)+CAL_PARAMS;
+    frame.src=url;
+    if(loading){loading.style.display='flex';}
+    frame.style.display='none';
+    // Use JS event listener — NOT inline onload (fixes the ReferenceError)
+    frame.addEventListener('load',function onLoad(){
+      frame.removeEventListener('load',onLoad);
+      if(loading)loading.style.display='none';
+      frame.style.display='block';
+    });
+  }
+  // Scroll the calendar into view
+  setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
+  showToast('📅 Calendar loaded — pick your time!');
+}
+
+function close21Cal(calId,hintId){
+  const wrap=document.getElementById(calId);
+  if(wrap){wrap.classList.remove('open');}
+  const hint=document.getElementById(hintId);
+  if(hint){hint.style.display='';hint.textContent='✦ Tap to schedule your 21-day program';}
+  const card=wrap&&wrap.closest('.tier-card');
+  if(card)card.classList.remove('sel');
 }
 
 // ═══ MODALS ═══
@@ -999,4 +1346,3 @@ renderTestimonials();
 </script>
 </body>
 </html>
-
