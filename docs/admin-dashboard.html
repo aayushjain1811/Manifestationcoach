@@ -188,7 +188,7 @@ body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;bo
 .ach-type.feature{background:rgba(126,200,227,.12);color:var(--blue);}
 .ach-type.certification{background:rgba(201,176,224,.12);color:var(--lavender);}
 
-/* JOURNALS */
+/* JOURNAL */
 .journal-list{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;}
 .journal-card{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.3rem 1.5rem;transition:all .3s;position:relative;}
 .journal-card:hover{border-color:rgba(201,176,224,.25);}
@@ -318,7 +318,7 @@ body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;bo
     <button class="sb-item" onclick="showPanel('testimonials',this)"><span class="icon">📸</span><span class="label">Testimonials</span><span class="sb-badge" id="testBadge">0</span></button>
     <button class="sb-item" onclick="showPanel('ebooks',this)"><span class="icon">📚</span><span class="label">eBooks</span><span class="sb-badge" id="ebBadge">0</span></button>
     <button class="sb-item" onclick="showPanel('achievements',this)"><span class="icon">🏆</span><span class="label">Achievements</span><span class="sb-badge" id="achBadge">0</span></button>
-    <button class="sb-item" onclick="showPanel('journals',this)"><span class="icon">📓</span><span class="label">Journals</span><span class="sb-badge" id="jrnBadge">0</span></button>
+    <button class="sb-item" onclick="showPanel('journal',this)"><span class="icon">📓</span><span class="label">Journal</span><span class="sb-badge" id="jrnBadge">0</span></button>
     <div class="sb-section">Bookings</div>
     <button class="sb-item" onclick="showPanel('bookings',this)"><span class="icon">📅</span><span class="label">Cal.com Bookings</span></button>
     <div class="sb-section">System</div>
@@ -362,7 +362,7 @@ body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;bo
           <div>
             <div class="mini-stat"><span class="ms-label">SP Testimonials</span><span class="ms-val" id="qs-sp">0</span></div>
             <div class="mini-stat"><span class="ms-label">eBooks with PDF</span><span class="ms-val" id="qs-ebwpdf">0</span></div>
-            <div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-awards">0</span></div>
+            <div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-achievements">0</span></div>
             <div class="mini-stat"><span class="ms-label">Certifications</span><span class="ms-val" id="qs-certs">0</span></div>
             <div class="mini-stat"><span class="ms-label">Journal entries</span><span class="ms-val" id="qs-jrns">0</span></div>
           </div>
@@ -438,7 +438,7 @@ body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;bo
 
     <!-- ACHIEVEMENTS -->
     <div class="panel" id="panel-achievements">
-      <div class="section-title">Achievements &amp; Awards <button class="adm-btn gold sm" onclick="clearAchForm();scrollToAdd('achAdd')">+ Add New</button></div>
+      <div class="section-title">Achievements &amp; Achievements <button class="adm-btn gold sm" onclick="clearAchForm();scrollToAdd('achAdd')">+ Add New</button></div>
       <div class="adm-form" id="achAdd">
         <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;" id="achFormTitle">Add Achievement</div>
         <input type="hidden" id="editAchIdx" value="-1">
@@ -465,8 +465,8 @@ body.ch #cur{width:12px;height:12px;}body.ch #cur-ring{width:40px;height:40px;bo
       <div class="ach-grid" id="admAchGrid"></div>
     </div>
 
-    <!-- JOURNALS -->
-    <div class="panel" id="panel-journals">
+    <!-- JOURNAL -->
+    <div class="panel" id="panel-journal">
       <div class="section-title">Journal &amp; Blog Posts <button class="adm-btn gold sm" onclick="clearJrnForm();scrollToAdd('jrnAdd')">+ Add New</button></div>
       <div class="adm-form" id="jrnAdd">
         <div style="font-size:.78rem;color:var(--gold-light);font-weight:500;margin-bottom:1.2rem;" id="jrnFormTitle">Add Journal Entry</div>
@@ -584,6 +584,17 @@ function doLogout(){sessionStorage.removeItem('adg_admin');window.location.href=
 // CLOCK
 setInterval(()=>{document.getElementById('liveClock').textContent=new Date().toLocaleTimeString('en-IN',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
 
+function ld(key, fallback){
+  try{
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  }catch{
+    return fallback;
+  }
+}
+
+function sd(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
+}
 // TOAST
 function toast(msg,type=''){
   const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;
@@ -591,7 +602,7 @@ function toast(msg,type=''){
 }
 
 // PANELS
-const PM={dashboard:{t:'Dashboard',s:'Overview'},testimonials:{t:'Testimonials',s:'Manage Screenshots'},ebooks:{t:'eBooks',s:'Manage eBooks'},achievements:{t:'Achievements',s:'Awards & Milestones'},journals:{t:'Journals',s:'Blog & Journal Posts'},bookings:{t:'Cal.com Bookings',s:'Booking Management'},settings:{t:'Settings',s:'System Settings'}};
+const PM={dashboard:{t:'Dashboard',s:'Overview'},testimonials:{t:'Testimonials',s:'Manage Screenshots'},ebooks:{t:'eBooks',s:'Manage eBooks'},achievements:{t:'Achievements',s:'Achievements & Milestones'},journal:{t:'Journal',s:'Blog & Journal Posts'},bookings:{t:'Cal.com Bookings',s:'Booking Management'},settings:{t:'Settings',s:'System Settings'}};
 function showPanel(n,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
@@ -605,9 +616,6 @@ function showPanel(n,btn){
 }
 function scrollToAdd(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
 
-// DATA
-function ld(k,d){try{return JSON.parse(localStorage.getItem(k))||d;}catch{return d;}}
-function sd(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{toast('Storage full — export data first','error');}}
 
 // ─── CLOUDINARY HELPERS ───────────────────────────────────────────────────────
 // Delete a file from Cloudinary by public_id
@@ -649,51 +657,71 @@ const DEF_EBOOKS=[
   {id:6,title:'Full eBook Bundle — All 5 Guides',tag:'Complete Collection',price:'$97',orig:'$225',desc:'All 5 guides at a massive discount.',features:['All 5 eBooks','Save 50%+','Bonus meditation audio','Lifetime updates'],badge:'Best Value',icon:'🎁',img:'',imgPublicId:'',pdfUrl:'',pdfPublicId:''}
 ];
 
-let testimonials=ld('adg_testimonials',[
-  {id:1,cat:'sp',label:'Got him back!',img:'',public_id:''},
-  {id:2,cat:'career',label:'Dream job in 2 weeks',img:'',public_id:''},
-  {id:3,cat:'manifestation',label:'Manifested ₹5L',img:'',public_id:''},
-  {id:4,cat:'program',label:'21-day miracle',img:'',public_id:''}
-]);
-let ebooks=ld('adg_ebooks',DEF_EBOOKS);
-let achievements=ld('adg_achievements',[
-  {id:1,title:'100K+ Lives Transformed',type:'milestone',org:'Self',date:'2025',desc:'Over one hundred thousand lives transformed globally through coaching.',img:'',imgPublicId:'',link:''},
-  {id:2,title:'Featured in Times of India',type:'feature',org:'Times of India',date:'Feb 2025',desc:'Recognised as a top manifestation coach in India.',img:'',imgPublicId:'',link:''},
-  {id:3,title:'ICF Certified Coach',type:'certification',org:'International Coaching Federation',date:'2023',desc:'Internationally certified life and manifestation coach.',img:'',imgPublicId:'',link:''}
-]);
-let journals=ld('adg_journals',[
-  {id:1,title:'Why Manifestation Actually Works',cat:'manifestation',date:'2025-03-10',mood:'💫',excerpt:'Most people think manifestation is about vision boards. It is so much deeper than that…',content:'',tags:['manifestation','mindset'],img:'',imgPublicId:''},
-  {id:2,title:'The Healing Power of Self-Love',cat:'personal',date:'2025-02-20',mood:'🌸',excerpt:'Before you can attract anyone, you need to fall in love with yourself first.',content:'',tags:['self-love','healing'],img:'',imgPublicId:''}
-]);
+const API = "http://localhost:5000";
+
+let testimonials = [];
+let ebooks = [];
+let achievements = [];
+let journal = [];
+async function loadTestimonials() {
+  const res = await fetch(API + "/testimonials");
+  testimonials = await res.json();
+  renderTests();
+}
+
+async function loadEbooks() {
+  const res = await fetch(API + "/ebooks");
+  ebooks = await res.json();
+  renderEbooks();
+}
+async function loadAchievements() {
+  const res = await fetch(API + "/achievements");
+  achievements = await res.json();
+  renderAch();
+}
+
+async function loadJournal() {
+  const res = await fetch(API + "/journal");
+  journal = await res.json();
+  renderJrn();
+}
+
+async function initData() {
+  await loadTestimonials();
+  await loadEbooks();
+  await loadAchievements();   // ✅ added
+  await loadJournal();       // ✅ added
+  updateDash();
+}
+
 
 // DASHBOARD
 function updateDash(){
   document.getElementById('ds-tests').textContent=testimonials.length;
   document.getElementById('ds-ebooks').textContent=ebooks.length;
   document.getElementById('ds-ach').textContent=achievements.length;
-  document.getElementById('ds-jrn').textContent=journals.length;
+  document.getElementById('ds-jrn').textContent=journal.length;
   document.getElementById('testBadge').textContent=testimonials.length;
   document.getElementById('ebBadge').textContent=ebooks.length;
   document.getElementById('achBadge').textContent=achievements.length;
-  document.getElementById('jrnBadge').textContent=journals.length;
+  document.getElementById('jrnBadge').textContent=journal.length;
   document.getElementById('qs-sp').textContent=testimonials.filter(t=>t.cat==='sp').length;
   document.getElementById('qs-ebwpdf').textContent=ebooks.filter(e=>e.pdfUrl).length;
-  document.getElementById('qs-awards').textContent=achievements.filter(a=>a.type==='award').length;
+  document.getElementById('qs-achievements').textContent=achievements.filter(a=>a.type==='award').length;
   document.getElementById('qs-certs').textContent=achievements.filter(a=>a.type==='certification').length;
-  document.getElementById('qs-jrns').textContent=journals.length;
+  document.getElementById('qs-jrns').textContent=journal.length;
   document.getElementById('activityFeed').innerHTML=[
     {c:'gold',t:`<strong>${testimonials.length}</strong> testimonials active`,d:'Live'},
     {c:'blue',t:`<strong>${ebooks.length}</strong> eBooks · <strong>${ebooks.filter(e=>e.pdfUrl).length}</strong> with PDF`,d:'Live'},
     {c:'gold',t:`<strong>${achievements.length}</strong> achievements showcased`,d:'Live'},
-    {c:'purple',t:`<strong>${journals.length}</strong> journal entries published`,d:'Live'},
+    {c:'purple',t:`<strong>${journal.length}</strong> journal entries published`,d:'Live'},
     {c:'green',t:'Admin session active',d:'Now'},
   ].map(a=>`<div class="activity-item"><div class="act-dot ${a.c}"></div><div class="act-text">${a.t}</div><div class="act-time">${a.d}</div></div>`).join('');
   // Load cloud images when dashboard is shown
   loadCloudImages();
 }
 
-// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
-let tImg='', tImgId='';
+
 
 async function handleTestImg(e){
   const f=e.target.files[0];if(!f)return;
@@ -711,27 +739,53 @@ async function handleTestImg(e){
 }
 function previewTestUrl(u){if(u){tImg=u;tImgId='';showPrev('testImgPreview',u);}}
 function clearTestForm(){tImg='';tImgId='';['newTestLabel','newTestUrl'].forEach(id=>document.getElementById(id).value='');hidePrev('testImgPreview');}
-function addTestimonial(){
-  testimonials.push({
-    id:Date.now(),
-    cat:document.getElementById('newTestCat').value,
-    label:document.getElementById('newTestLabel').value||'Client result',
-    img:tImg||document.getElementById('newTestUrl').value||'',
-    public_id:tImgId  // ✅ save public_id
-  });
-  sd('adg_testimonials',testimonials);clearTestForm();renderTests();updateDash();toast('✓ Screenshot added!','success');
+async function addTestimonial(){
+  const newItem = {
+    cat: document.getElementById('newTestCat').value,
+    label: document.getElementById('newTestLabel').value || 'Client result',
+    img: tImg || document.getElementById('newTestUrl').value || '',
+    public_id: tImgId
+  };
+
+  try {
+    await fetch("http://localhost:5000/add-testimonial", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newItem)
+    });
+
+    clearTestForm();
+    await loadTestimonials();
+    updateDash();
+
+    toast("✅ Saved in MongoDB","success");
+
+  } catch (err) {
+    toast("❌ Failed to save","error");
+  }
 }
 function updateTestCat(id,cat){testimonials=testimonials.map(t=>t.id===id?{...t,cat}:t);sd('adg_testimonials',testimonials);}
 
 async function delTest(id){
-  confirm2('Delete Screenshot','Remove this screenshot permanently?', async ()=>{
-    const item=testimonials.find(t=>t.id===id);
-    // ✅ Delete from Cloudinary if we have a public_id
-    if(item && item.public_id){
+  confirm2('Delete Screenshot','Remove this?', async ()=>{
+
+    const item = testimonials.find(t => t._id === id);
+
+    // 🔥 delete from Cloudinary
+    if(item?.public_id){
       await deleteFromCloudinary(item.public_id,'image');
     }
-    testimonials=testimonials.filter(t=>t.id!==id);
-    sd('adg_testimonials',testimonials);renderTests();updateDash();toast('Removed','success');
+
+    // 🔥 delete from MongoDB
+    await fetch("http://localhost:5000/delete-testimonial/" + id, {
+      method: "DELETE"
+    });
+
+    await loadTestimonials();
+    updateDash();
+    toast('Deleted','success');
   });
 }
 
@@ -743,7 +797,7 @@ function renderTests(){
   if(!testimonials.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">📸</span><p>No testimonials yet.</p></div>`;return;}
   g.innerHTML=testimonials.map(t=>`<div class="test-card">
     ${t.img?`<img src="${t.img}" class="test-thumb" alt="">`:`<div class="test-thumb-empty"><span>📱</span><span>No image</span></div>`}
-    <div class="test-footer"><span class="tcat ${t.cat}">${catMap[t.cat]}</span><div class="test-actions"><button class="icon-btn del" onclick="delTest(${t.id})">🗑</button></div></div>
+    <div class="test-footer"><span class="tcat ${t.cat}">${catMap[t.cat]}</span><div class="test-actions"><button class="icon-btn del" onclick="delTest('${t._id}')">🗑</button></div></div>
     <div class="test-label">${t.label||''}</div>
     <div style="padding:0 .7rem .6rem;"><select class="mini-sel" onchange="updateTestCat(${t.id},this.value)">
       <option value="sp" ${t.cat==='sp'?'selected':''}>💞 SP</option>
@@ -754,6 +808,7 @@ function renderTests(){
 }
 
 // ─── EBOOKS ───────────────────────────────────────────────────────────────────
+let tImg = '', tImgId = '';
 let eImg='', eImgId='', ePdf='', ePdfId='', ePdfName='', ePdfSize=0;
 
 async function handleEbImg(e){
@@ -803,25 +858,39 @@ function clearEbookForm(){
   ['ebTitle','ebTag','ebPrice','ebOrig','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
   hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();
 }
-function saveEbook(){
-  const idx=parseInt(document.getElementById('editEbookIdx').value);
-  const eb={
-    id:idx>=0?ebooks[idx].id:Date.now(),
-    title:v('ebTitle')||'eBook',
-    tag:v('ebTag')||'Manifestation',
-    price:v('ebPrice')||'$47',
-    orig:v('ebOrig')||'$67',
-    desc:v('ebDesc'),
-    features:v('ebFeatures').split('\n').filter(Boolean),
-    badge:v('ebBadge'),
-    icon:'📖',
-    img:eImg||v('ebImgUrl'),
-    imgPublicId:eImgId,       // ✅ save image public_id
-    pdfUrl:ePdf||v('ebPdfUrl'),
-    pdfPublicId:ePdfId        // ✅ save pdf public_id
+async function saveEbook(){
+  const eb = {
+    title: v('ebTitle'),
+    tag: v('ebTag'),
+    price: v('ebPrice'),
+    orig: v('ebOrig'),
+    desc: v('ebDesc'),
+    features: v('ebFeatures').split('\n').filter(Boolean),
+    badge: v('ebBadge'),
+    img: eImg || v('ebImgUrl'),
+    imgPublicId: eImgId,
+    pdfUrl: ePdf || v('ebPdfUrl'),
+    pdfPublicId: ePdfId
   };
-  if(idx>=0){ebooks[idx]=eb;toast('✓ eBook updated!','success');}else{ebooks.push(eb);toast('✓ eBook added!','success');}
-  sd('adg_ebooks',ebooks);clearEbookForm();renderEbooks();updateDash();
+
+  try {
+    await fetch("http://localhost:5000/add-ebook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(eb)
+    });
+
+    clearEbookForm();
+    await loadEbooks();
+    updateDash();
+
+    toast("✅ eBook saved to DB","success");
+
+  } catch (err) {
+    toast("❌ Failed to save","error");
+  }
 }
 function editEbook(i){
   const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
@@ -831,14 +900,23 @@ function editEbook(i){
   scrollToAdd('ebAdd');
 }
 
-async function delEbook(i){
-  confirm2('Delete eBook',`Delete "${ebooks[i].title}"?`, async ()=>{
-    const eb=ebooks[i];
-    // ✅ Delete cover image from Cloudinary
-    if(eb.imgPublicId) await deleteFromCloudinary(eb.imgPublicId,'image');
-    // ✅ Delete PDF from Cloudinary
-    if(eb.pdfPublicId) await deleteFromCloudinary(eb.pdfPublicId,'raw');
-    ebooks.splice(i,1);sd('adg_ebooks',ebooks);renderEbooks();updateDash();toast('eBook deleted','success');
+async function delEbook(id){
+  confirm2('Delete eBook','Delete this?', async ()=>{
+
+    const eb = ebooks.find(e => e._id === id);
+
+    // 🔥 delete from Cloudinary
+    if(eb?.imgPublicId) await deleteFromCloudinary(eb.imgPublicId,'image');
+    if(eb?.pdfPublicId) await deleteFromCloudinary(eb.pdfPublicId,'raw');
+
+    // 🔥 delete from MongoDB
+    await fetch("http://localhost:5000/delete-ebook/" + id, {
+      method: "DELETE"
+    });
+
+    await loadEbooks();
+    updateDash();
+    toast('Deleted','success');
   });
 }
 
@@ -850,7 +928,7 @@ function renderEbooks(){
     <div class="ebook-thumb">${eb.img?`<img src="${eb.img}" alt="">`:(eb.icon||'📖')}</div>
     <div class="ebook-info"><h4>${eb.title}</h4><p>${eb.tag} · <strong style="color:var(--gold);">${eb.price}</strong> <span style="text-decoration:line-through;opacity:.4;">${eb.orig}</span></p>
     <div class="badges">${eb.badge?`<span class="tag-pill">${eb.badge}</span>`:''}<span class="tag-pill" style="background:rgba(126,200,227,.08);color:var(--blue);">${eb.features.length} features</span>${eb.pdfUrl?`<a href="${eb.pdfUrl}" target="_blank" class="pdf-badge">📄 PDF</a>`:`<span class="pdf-badge no-pdf">📄 No PDF</span>`}</div></div>
-    <div class="ebook-actions"><button class="adm-btn outline sm" onclick="editEbook(${i})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delEbook(${i})">🗑 Delete</button></div>
+    <div class="ebook-actions"><button class="adm-btn outline sm" onclick="editEbook(${i})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delEbook('${eb._id}')">🗑 Delete</button></div>
   </div>`).join('');
 }
 
@@ -877,21 +955,28 @@ function clearAchForm(){
   ['achTitle','achOrg','achDate','achDesc','achImgUrl','achLink'].forEach(id=>document.getElementById(id).value='');
   hidePrev('achImgPreview');aImg='';aImgId='';
 }
-function saveAchievement(){
-  const idx=parseInt(v('editAchIdx'));
-  const ac={
-    id:idx>=0?achievements[idx].id:Date.now(),
-    title:v('achTitle')||'Achievement',
-    type:v('achType'),
-    org:v('achOrg'),
-    date:v('achDate'),
-    desc:v('achDesc'),
-    img:aImg||v('achImgUrl'),
-    imgPublicId:aImgId,   // ✅ save public_id
-    link:v('achLink')
+async function saveAchievement(){
+  const ac = {
+    title: v('achTitle'),
+    type: v('achType'),
+    org: v('achOrg'),
+    date: v('achDate'),
+    desc: v('achDesc'),
+    img: aImg || v('achImgUrl'),
+    imgPublicId: aImgId,
+    link: v('achLink')
   };
-  if(idx>=0){achievements[idx]=ac;toast('✓ Achievement updated!','success');}else{achievements.push(ac);toast('✓ Achievement added!','success');}
-  sd('adg_achievements',achievements);clearAchForm();renderAch();updateDash();
+
+  await fetch(API + "/add-achievement", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(ac)
+  });
+
+  clearAchForm();
+  await loadAchievements();
+  updateDash();
+  toast("Saved","success");
 }
 function editAch(i){
   const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';
@@ -901,12 +986,18 @@ function editAch(i){
 }
 
 async function delAch(i){
-  confirm2('Delete Achievement',`Remove "${achievements[i].title}"?`, async ()=>{
-    const ac=achievements[i];
-    // ✅ Delete image from Cloudinary
-    if(ac.imgPublicId) await deleteFromCloudinary(ac.imgPublicId,'image');
-    achievements.splice(i,1);sd('adg_achievements',achievements);renderAch();updateDash();toast('Achievement deleted','success');
+  const ac = achievements[i];
+
+  if(ac.imgPublicId){
+    await deleteFromCloudinary(ac.imgPublicId,'image');
+  }
+
+  await fetch(API + "/delete-achievement/" + ac._id, {
+    method: "DELETE"
   });
+
+  await loadAchievements();
+  updateDash();
 }
 
 const achTypeLabel={award:'Award',milestone:'Milestone',feature:'Media Feature',certification:'Certification'};
@@ -922,7 +1013,7 @@ function renderAch(){
   </div>`).join('');
 }
 
-// ─── JOURNALS ─────────────────────────────────────────────────────────────────
+// ─── JOURNAL ─────────────────────────────────────────────────────────────────
 let jImg='', jImgId='';
 
 async function handleJrnImg(e){
@@ -946,47 +1037,60 @@ function clearJrnForm(){
   document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
   hidePrev('jrnImgPreview');jImg='';jImgId='';
 }
-function saveJournal(){
-  const idx=parseInt(v('editJrnIdx'));
-  const jr={
-    id:idx>=0?journals[idx].id:Date.now(),
-    title:v('jrnTitle')||'Journal Entry',
-    cat:v('jrnCat'),
-    date:v('jrnDate')||new Date().toISOString().split('T')[0],
-    mood:v('jrnMood'),
-    excerpt:v('jrnExcerpt'),
-    content:v('jrnContent'),
-    tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
-    img:jImg||v('jrnImgUrl'),
-    imgPublicId:jImgId   // ✅ save public_id
+async function saveJournal(){
+  const jr = {
+    title: v('jrnTitle'),
+    cat: v('jrnCat'),
+    date: v('jrnDate'),
+    mood: v('jrnMood'),
+    excerpt: v('jrnExcerpt'),
+    content: v('jrnContent'),
+    tags: v('jrnTags').split(',').map(t=>t.trim()),
+    img: jImg || v('jrnImgUrl'),
+    imgPublicId: jImgId
   };
-  if(idx>=0){journals[idx]=jr;toast('✓ Entry updated!','success');}else{journals.push(jr);toast('✓ Entry added!','success');}
-  sd('adg_journals',journals);clearJrnForm();renderJrn();updateDash();
+
+  await fetch(API + "/add-journal", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(jr)
+  });
+
+  clearJrnForm();
+  await loadJournal();
+  updateDash();
+  toast("Saved","success");
 }
 function editJrn(i){
-  const jr=journals[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';
+  const jr=journal[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';
   sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);sv('jrnMood',jr.mood);sv('jrnExcerpt',jr.excerpt);sv('jrnContent',jr.content);sv('jrnTags',(jr.tags||[]).join(', '));sv('jrnImgUrl',jr.img||'');
   if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}
   scrollToAdd('jrnAdd');
 }
 
 async function delJrn(i){
-  confirm2('Delete Entry',`Remove "${journals[i].title}"?`, async ()=>{
-    const jr=journals[i];
-    // ✅ Delete image from Cloudinary
-    if(jr.imgPublicId) await deleteFromCloudinary(jr.imgPublicId,'image');
-    journals.splice(i,1);sd('adg_journals',journals);renderJrn();updateDash();toast('Entry deleted','success');
+  const jr = journal[i];
+
+  if(jr.imgPublicId){
+    await deleteFromCloudinary(jr.imgPublicId,'image');
+  }
+
+  await fetch(API + "/delete-journal/" + jr._id, {
+    method: "DELETE"
   });
+
+  await loadJournal();
+  updateDash();
 }
 
 const jCatLabel={mindset:'🧠 Mindset',love:'💞 Love',manifestation:'✨ Manifestation',career:'💼 Career',personal:'🌸 Personal',spiritual:'🕊️ Spiritual'};
 function renderJrn(){
-  document.getElementById('jrnCount').textContent=journals.length;document.getElementById('jrnBadge').textContent=journals.length;
+  document.getElementById('jrnCount').textContent=journal.length;document.getElementById('jrnBadge').textContent=journal.length;
   const l=document.getElementById('admJrnList');
-  if(!journals.length){l.innerHTML=`<div class="empty-state"><span class="ei">📓</span><p>No journal entries yet. Write your first one above.</p></div>`;return;}
-  const sorted=[...journals].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!journal.length){l.innerHTML=`<div class="empty-state"><span class="ei">📓</span><p>No journal entries yet. Write your first one above.</p></div>`;return;}
+  const sorted=[...journal].sort((a,b)=>new Date(b.date)-new Date(a.date));
   l.innerHTML=sorted.map(jr=>{
-    const oi=journals.findIndex(j=>j.id===jr.id);
+    const oi=journal.findIndex(j=>j.id===jr.id);
     return `<div class="journal-card">
     <div class="jc-header"><div><div class="jc-title">${jr.mood} ${jr.title}</div><div class="jc-meta">${jCatLabel[jr.cat]||jr.cat}</div></div><div class="jc-date">${new Date(jr.date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div></div>
     <div class="jc-body">${jr.excerpt||jr.content.slice(0,200)||(jr.content?jr.content.slice(0,200):'No content yet.')}</div>
@@ -1085,14 +1189,14 @@ function changePwd(){
   ['curPwd','newPwd','confPwd'].forEach(id=>sv(id,''));
 }
 function exportData(){
-  const d={testimonials,ebooks,achievements,journals,exportedAt:new Date().toISOString()};
+  const d={testimonials,ebooks,achievements,journal,exportedAt:new Date().toISOString()};
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='adg-export.json';a.click();
   toast('✓ Data exported','success');
 }
 function confirmReset(){
-  confirm2('Reset All Data','This will delete ALL testimonials, achievements, journals and reset eBooks to defaults.',()=>{
-    sd('adg_testimonials',[]);sd('adg_ebooks',DEF_EBOOKS);sd('adg_achievements',[]);sd('adg_journals',[]);
-    testimonials=[];ebooks=[...DEF_EBOOKS];achievements=[];journals=[];
+  confirm2('Reset All Data','This will delete ALL testimonials, achievements, journal and reset eBooks to defaults.',()=>{
+    sd('adg_testimonials',[]);sd('adg_ebooks',DEF_EBOOKS);sd('adg_achievements',[]);sd('adg_journal',[]);
+    testimonials=[];ebooks=[...DEF_EBOOKS];achievements=[];journal=[];
     renderTests();renderEbooks();renderAch();renderJrn();updateDash();
     toast('Data reset','success');
   });
@@ -1113,7 +1217,7 @@ function hidePrev(id){const el=document.getElementById(id);if(el)el.style.displa
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
-updateDash();renderTests();renderEbooks();renderAch();renderJrn();
+initData();renderAch();renderJrn();
 </script>
 </body>
 </html>

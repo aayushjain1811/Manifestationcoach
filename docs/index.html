@@ -22,7 +22,6 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;font-size:15px;line-height:1.6;cursor:none;}
 
-/* CURSOR — hidden on touch devices */
 #cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
 #cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
 body.ch #cur{width:14px;height:14px;background:var(--gold-light);}
@@ -30,7 +29,6 @@ body.ch #cur-ring{width:44px;height:44px;border-color:var(--gold);}
 body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 @media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
 
-/* ADMIN CORNER */
 .admin-corner{position:fixed;bottom:0;right:0;width:44px;height:44px;z-index:8999;cursor:pointer;display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;}
 .admin-corner::before{content:'';position:absolute;bottom:10px;right:0;width:16px;height:1px;background:rgba(201,168,76,.12);transition:background .4s;}
 .admin-corner::after{content:'';position:absolute;bottom:0;right:10px;width:1px;height:16px;background:rgba(201,168,76,.12);transition:background .4s;}
@@ -38,7 +36,6 @@ body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 .admin-corner .adm-sigil{font-size:.52rem;color:rgba(201,168,76,.1);line-height:1;transition:color .4s,transform .4s;pointer-events:none;user-select:none;}
 .admin-corner:hover .adm-sigil{color:rgba(201,168,76,.4);transform:scale(1.2);}
 
-/* LOADER */
 #loader{position:fixed;inset:0;background:var(--dark);z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease;}
 #loader.hide{opacity:0;visibility:hidden;}
 .ld-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);margin-bottom:1.8rem;animation:ldPulse 1.5s ease-in-out infinite;}
@@ -50,11 +47,9 @@ body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 @keyframes ldFill{to{width:100%;}}@keyframes ldPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
 @keyframes ldDot{0%,100%{opacity:.3;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
 
-/* BG */
 .bg-grad{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 55%,rgba(21,14,53,.9) 0%,transparent 55%),radial-gradient(ellipse at 85% 20%,rgba(12,16,48,.7) 0%,transparent 50%),linear-gradient(165deg,var(--dark) 0%,var(--dark2) 55%,var(--purple) 100%);}
 #sc{position:fixed;inset:0;z-index:-1;pointer-events:none;}
 
-/* NAV */
 nav{position:fixed;top:0;width:100%;z-index:800;padding:1.1rem 5%;transition:all .4s cubic-bezier(.16,1,.3,1);}
 nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
 .nw{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
@@ -78,7 +73,6 @@ nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(
 .mnav .mncta{font-size:.9rem!important;font-family:'DM Sans',sans-serif!important;padding:.7rem 2rem;border:1px solid var(--gold);color:var(--gold)!important;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem;}
 .mnav .mncta:hover{background:var(--gold);color:var(--dark)!important;}
 
-/* SECTIONS */
 section{padding:5.5rem 5%;position:relative;}
 .container{max-width:1280px;margin:0 auto;}
 .sl{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:.6rem;}
@@ -157,17 +151,56 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .sn{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);display:block;line-height:1;margin-bottom:.25rem;}
 .slb{font-size:.68rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;}
 
-/* AWARDS */
-.awg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
-.awc{background:var(--glass);border:1px solid var(--border);border-radius:2px;padding:1.6rem 1.2rem;text-align:center;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
-.awc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
-.awc:hover{border-color:var(--gold-border);transform:translateY(-4px);background:rgba(201,168,76,.05);}
+/* ACHIEVEMENTS */
+.awg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
+.awc{background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;cursor:default;}
+.awc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
+.awc:hover{border-color:var(--gold-border);transform:translateY(-5px);background:rgba(201,168,76,.05);box-shadow:0 20px 40px rgba(0,0,0,.3);}
 .awc:hover::before{opacity:1;}
-.awi{font-size:1.5rem;display:block;margin-bottom:.8rem;}
-.awc h3{font-size:.85rem;color:var(--gold-light);font-weight:500;margin-bottom:.35rem;line-height:1.4;}
-.awc p{font-size:.73rem;color:var(--muted);}
+.aw-photo-area{width:100%;height:160px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--dark2),var(--purple));}
+.aw-photo-area img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .6s ease;}
+.awc:hover .aw-photo-area img{transform:scale(1.05);}
+.aw-photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(7,10,26,.9) 100%);}
+.aw-photo-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;}
+.aw-year-badge{position:absolute;top:10px;right:10px;background:rgba(201,168,76,.9);color:var(--dark);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:1px;}
+.aw-body{padding:1.2rem 1.2rem 1.4rem;}
+.awi{font-size:1.3rem;display:block;margin-bottom:.5rem;}
+.awc h3{font-size:.88rem;color:var(--gold-light);font-weight:500;margin-bottom:.3rem;line-height:1.4;}
+.awc p{font-size:.73rem;color:var(--muted);line-height:1.5;}
+.aw-ribbon{display:inline-flex;align-items:center;gap:.3rem;margin-top:.6rem;padding:.22rem .65rem;border:1px solid rgba(201,168,76,.25);border-radius:1px;font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+.aw-ribbon::before{content:'🏅';font-size:.7rem;}
 .mb{margin-top:2rem;padding:1.3rem 2rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;text-align:center;}
 .mb p{font-size:.82rem;color:var(--muted);line-height:1.9;}
+
+/* JOURNAL */
+#journal{background:linear-gradient(160deg,rgba(21,14,53,.25) 0%,transparent 60%);}
+.jrnl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.jrnl-card{background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;display:flex;flex-direction:column;}
+.jrnl-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(180deg,var(--gold-dark),var(--gold));opacity:0;transition:opacity .4s;}
+.jrnl-card:hover{transform:translateY(-6px);border-color:var(--gold-border);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+.jrnl-card:hover::before{opacity:1;}
+.jrnl-img{width:100%;height:200px;overflow:hidden;position:relative;background:linear-gradient(160deg,var(--dark2),var(--purple));}
+.jrnl-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;}
+.jrnl-card:hover .jrnl-img img{transform:scale(1.05);}
+.jrnl-img-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.jrnl-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,10,26,.6) 100%);}
+.jrnl-platform{position:absolute;top:10px;left:10px;padding:.22rem .7rem;border-radius:1px;font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;}
+.jrnl-platform.republic{background:rgba(255,80,80,.9);color:#fff;}
+.jrnl-platform.dailyhunt{background:rgba(255,160,0,.9);color:#000;}
+.jrnl-platform.ceo{background:rgba(201,168,76,.9);color:var(--dark);}
+.jrnl-platform.success{background:rgba(126,200,227,.9);color:var(--dark);}
+.jrnl-platform.india{background:rgba(255,153,51,.9);color:#fff;}
+.jrnl-platform.default{background:rgba(168,181,200,.9);color:var(--dark);}
+.jrnl-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;}
+.jrnl-date{font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;display:block;}
+.jrnl-card h3{font-size:1rem;color:var(--gold-light);font-weight:500;margin-bottom:.5rem;line-height:1.4;flex:1;}
+.jrnl-excerpt{font-size:.8rem;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:1.2rem;}
+.jrnl-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.9rem;border-top:1px solid var(--border);}
+.jrnl-source{font-size:.68rem;color:var(--gold);letter-spacing:.08em;}
+.jrnl-link{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;border:1px solid rgba(201,168,76,.35);border-radius:2px;font-size:.68rem;color:var(--gold);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:all .3s;}
+.jrnl-link:hover{background:var(--gold);color:var(--dark);border-color:var(--gold);}
+.jrnl-link svg{width:10px;height:10px;fill:currentColor;transition:transform .3s;}
+.jrnl-link:hover svg{transform:translate(2px,-2px);}
 
 /* METHODOLOGY */
 .mg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
@@ -182,28 +215,46 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .qb cite{font-size:.73rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
 
 /* EBOOKS */
-.ebg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
-.ebc{background:var(--glass);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;}
-.ebc::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(180deg,var(--gold-dark),var(--gold));opacity:0;transition:opacity .4s;}
-.ebc:hover{transform:translateY(-6px);border-color:var(--gold-border);}
-.ebc:hover::before{opacity:1;}
-.ecv{width:100%;height:200px;background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden;}
-.ecv img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.ecv .ecover-icon{position:relative;z-index:1;font-size:3.5rem;}
-.ebadge{position:absolute;top:10px;right:10px;background:var(--gold);color:var(--dark);font-size:.6rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .6rem;border-radius:1px;z-index:1;}
-.ebb{padding:1.5rem;}
-.etag{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:block;}
-.ebc h3{font-size:1.05rem;color:var(--gold-light);font-weight:500;margin-bottom:.55rem;line-height:1.35;}
-.ebc p{font-size:.81rem;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:1.1rem;}
+.ebg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
+.ebc{background:var(--glass);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;display:flex;flex-direction:column;}
+.ebc:hover{transform:translateY(-8px);border-color:var(--gold-border);box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.15);}
+.ecv{width:100%;height:240px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.ecv-bg{position:absolute;inset:0;transition:transform .6s ease;}
+.ebc:hover .ecv-bg{transform:scale(1.06);}
+.ecv-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .6s ease;}
+.ebc:hover .ecv-img{transform:scale(1.05);}
+.ecv-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(7,10,26,.85) 100%);}
+.ecover-icon-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.ecover-icon{font-size:3.2rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
+.ecover-title-preview{font-family:'Cormorant Garamond',serif;font-size:.85rem;color:rgba(232,213,163,.8);text-align:center;max-width:140px;line-height:1.3;font-style:italic;}
+.ebc-spine{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold));opacity:.6;transition:opacity .4s;}
+.ebc:hover .ebc-spine{opacity:1;}
+.ebadge{position:absolute;top:12px;right:12px;z-index:3;padding:.28rem .75rem;border-radius:2px;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(8px);}
+.ebadge.bestseller{background:rgba(201,168,76,.9);color:var(--dark);}
+.ebadge.popular{background:rgba(126,200,227,.85);color:var(--dark);}
+.ebadge.new{background:rgba(224,201,240,.85);color:var(--dark);}
+.ebadge.value{background:rgba(255,180,60,.9);color:var(--dark);}
+.ebb{padding:1.5rem 1.5rem 1.7rem;flex:1;display:flex;flex-direction:column;position:relative;}
+.etag{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:block;}
+.ebc h3{font-size:1.05rem;color:#fff;font-weight:500;margin-bottom:.5rem;line-height:1.35;}
+.ebc p{font-size:.8rem;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:1rem;flex:1;}
+.e-stars{display:flex;align-items:center;gap:.25rem;margin-bottom:.8rem;}
+.e-star{color:var(--gold);font-size:.75rem;}
+.e-reviews{font-size:.68rem;color:var(--muted);margin-left:.3rem;}
 .efl{list-style:none;margin-bottom:1.3rem;}
-.efl li{font-size:.77rem;color:var(--muted);padding:.28rem 0 .28rem 1rem;border-bottom:1px solid var(--border);position:relative;font-weight:300;}
+.efl li{font-size:.76rem;color:var(--muted);padding:.3rem 0 .3rem 1.1rem;border-bottom:1px solid var(--border);position:relative;font-weight:300;display:flex;align-items:flex-start;gap:.3rem;}
 .efl li:last-child{border-bottom:none;}
-.efl li::before{content:'—';position:absolute;left:0;color:var(--gold);font-size:.7rem;}
-.efr{display:flex;justify-content:space-between;align-items:center;}
-.ep{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold);}
-.ep .orig{font-size:.82rem;color:var(--muted);text-decoration:line-through;margin-right:.35rem;font-family:'DM Sans',sans-serif;}
+.efl li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-size:.7rem;font-weight:600;top:4px;}
+.efr{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto;}
+.ep{display:flex;align-items:baseline;gap:.4rem;}
+.ep-price{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--gold);line-height:1;}
+.ep-orig{font-size:.8rem;color:var(--muted);text-decoration:line-through;}
+.ep-save{font-size:.63rem;color:#7ec8e3;letter-spacing:.06em;padding:.15rem .5rem;background:rgba(126,200,227,.1);border-radius:1px;margin-left:.2rem;}
+.ebuy-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;background:var(--gold);color:var(--dark);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.ebuy-btn:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,168,76,.35);}
+.ebuy-btn svg{width:12px;height:12px;fill:currentColor;}
 
-/* BOOKING */
+/* BOOKING SECTION */
 .bkw{max-width:1100px;margin:0 auto;}
 .steps{display:flex;align-items:center;justify-content:center;margin-bottom:2.5rem;gap:.3rem;}
 .sci{display:flex;align-items:center;}
@@ -217,7 +268,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .spanel{display:none;}.spanel.active{display:block;animation:panIn .4s cubic-bezier(.16,1,.3,1);}
 @keyframes panIn{from{opacity:0;transform:translateX(14px);}to{opacity:1;transform:translateX(0);}}
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-bottom:1.8rem;}
-.cat-card{border:1px solid var(--border);border-radius:3px;padding:1.6rem 1.2rem;text-align:center;cursor:pointer;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
+.cat-card{border:1px solid var(--border);border-radius:3px;padding:1.6rem 1.2rem;text-align:left;cursor:pointer;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;background:var(--glass);}
 .cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold));transform:scaleX(0);transition:transform .35s;transform-origin:left;}
 .cat-card:hover,.cat-card.sel{border-color:var(--gold);background:rgba(201,168,76,.06);}
 .cat-card:hover::before,.cat-card.sel::before{transform:scaleX(1);}
@@ -333,95 +384,458 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .prog21-urgency-item strong{color:var(--gold-light);}
 .prog21-urgency-item .urgency-icon{width:22px;height:22px;border-radius:50%;background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;}
 .prog21-urgency-sep{width:1px;height:18px;background:rgba(255,255,255,.1);}
-.prog21-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
 
-/* ═══ 21-Day Cal Embed (same style as booking section) ═══ */
-.prog21-cal-wrap{
-  margin-top:1.2rem;
-  border:1px solid var(--border);
-  border-radius:2px;
+/* ═══════════════════════════
+   21-DAY PROGRAM CARDS — SCREENSHOT STYLE
+   ═══════════════════════════ */
+.prog21-flow{max-width:1100px;margin:0 auto;}
+.prog21-steps{display:flex;align-items:center;justify-content:center;margin-bottom:2.5rem;gap:.3rem;}
+.p21-panel{display:none;}.p21-panel.active{display:block;animation:panIn .4s cubic-bezier(.16,1,.3,1);}
+
+/* New screenshot-style 21-day cards grid */
+.p21-cards-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.4rem;
+  margin-bottom:1.8rem;
+}
+
+/* Card outer */
+.p21-prog-card{
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;
+  background:rgba(12,16,40,.85);
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+  position:relative;
   overflow:hidden;
-  background:var(--glass);
-  display:none;
-  animation:panIn .4s cubic-bezier(.16,1,.3,1);
-}
-.prog21-cal-wrap.open{display:block;}
-.prog21-cal-header{
-  padding:.65rem 1rem;
-  background:rgba(201,168,76,.08);
-  border-bottom:1px solid rgba(201,168,76,.15);
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:.5rem;
+  flex-direction:column;
 }
-.prog21-cal-header span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);}
-.prog21-cal-close{
-  background:none;border:1px solid rgba(201,168,76,.3);color:var(--muted);
-  font-size:.85rem;cursor:pointer;transition:all .3s;padding:.25rem .55rem;border-radius:2px;
-  line-height:1;flex-shrink:0;
+.p21-prog-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
 }
-.prog21-cal-close:hover{color:var(--gold);border-color:var(--gold);}
-.prog21-cal-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:2.5rem 1rem;min-height:200px;}
-.prog21-cal-loading p{font-size:.8rem;color:var(--muted);}
-.prog21-cal-iframe{width:100%;min-height:600px;border:none;display:none;}
-.prog21-cal-iframe.loaded{display:block;}
-.prog21-tap-hint{margin-top:1.2rem;padding:.65rem;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:2px;font-size:.7rem;color:var(--muted);letter-spacing:.08em;transition:all .3s;position:relative;overflow:hidden;}
-.prog21-tap-hint::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:tapHintShine 3s linear infinite;}
-@keyframes tapHintShine{to{left:200%;}}
-.tier-card:hover .prog21-tap-hint{border-color:rgba(201,168,76,.4);color:var(--gold-light);}
-.tier-card.diamond-tier:hover .prog21-tap-hint{border-color:rgba(126,200,227,.5);color:var(--diamond-light);}
-.tier-card.platinum-tier:hover .prog21-tap-hint{border-color:rgba(224,201,240,.5);color:var(--platinum-light);}
+.p21-prog-card.sel{
+  box-shadow:0 0 0 2px var(--gold);
+}
 
-/* TESTIMONIALS */
+/* Top tag badge */
+.p21-top-tag{
+  position:absolute;top:0;left:0;right:0;
+  text-align:center;
+  padding:.35rem 1rem;
+  font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  backdrop-filter:blur(8px);
+  z-index:2;
+}
+.p21-prog-card.sp-card .p21-top-tag{background:rgba(201,168,76,.9);color:var(--dark);}
+.p21-prog-card.career-card .p21-top-tag{background:rgba(255,180,60,.85);color:var(--dark);}
+.p21-prog-card.manifestation-card .p21-top-tag{background:rgba(100,180,255,.85);color:var(--dark);}
+
+/* Card inner body */
+.p21-card-body{
+  padding:2.4rem 1.6rem 0;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Icon + title row */
+.p21-card-icon{
+  font-size:2rem;
+  display:block;
+  margin-bottom:.6rem;
+  margin-top:.3rem;
+}
+.p21-card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;
+  font-weight:500;
+  color:#fff;
+  margin-bottom:.35rem;
+  line-height:1.2;
+}
+
+/* Sessions subtitle bar */
+.p21-sessions-bar{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:1.1rem;
+  padding:.35rem 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.p21-sessions-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);flex-shrink:0;
+}
+.p21-prog-card.career-card .p21-sessions-dot{background:rgba(255,180,60,.9);}
+.p21-prog-card.manifestation-card .p21-sessions-dot{background:rgba(100,180,255,.9);}
+
+/* Price */
+.p21-price-wrap{
+  display:flex;align-items:baseline;gap:.5rem;
+  margin-bottom:.35rem;
+}
+.p21-price-inr{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;
+  color:#fff;
+  line-height:1;
+}
+.p21-price-usd{
+  font-size:.75rem;
+  color:var(--muted);
+}
+
+/* Focus tagline */
+.p21-focus-tag{
+  font-size:.65rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:600;
+  margin-bottom:1.2rem;
+}
+.p21-prog-card.sp-card .p21-focus-tag{color:var(--gold);}
+.p21-prog-card.career-card .p21-focus-tag{color:rgba(255,200,80,1);}
+.p21-prog-card.manifestation-card .p21-focus-tag{color:rgba(126,200,227,1);}
+
+/* "This is for you if..." section */
+.p21-section-title{
+  font-size:.6rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.6rem;
+  padding:.5rem 0 .4rem;
+  border-top:1px solid rgba(255,255,255,.07);
+  display:block;
+}
+.p21-for-list{
+  list-style:none;
+  margin-bottom:.4rem;
+}
+.p21-for-list li{
+  font-size:.75rem;
+  color:var(--muted);
+  padding:.22rem 0 .22rem .9rem;
+  position:relative;
+  font-weight:300;
+  line-height:1.45;
+}
+.p21-for-list li::before{
+  content:'✦';
+  position:absolute;left:0;
+  font-size:.48rem;top:5px;
+}
+.p21-prog-card.sp-card .p21-for-list li::before{color:var(--gold);}
+.p21-prog-card.career-card .p21-for-list li::before{color:rgba(255,200,80,.8);}
+.p21-prog-card.manifestation-card .p21-for-list li::before{color:var(--diamond);}
+
+/* "The Result" section */
+.p21-result-area{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;
+  padding:.9rem 1rem;
+  margin:0 0 0;
+}
+.p21-result-title{
+  font-size:.58rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.55rem;
+  display:block;
+}
+.p21-result-list{list-style:none;}
+.p21-result-list li{
+  font-size:.74rem;
+  color:var(--muted);
+  padding:.2rem 0 .2rem 1.1rem;
+  position:relative;
+  font-weight:300;
+}
+.p21-result-list li::before{
+  content:'✔';
+  position:absolute;left:0;
+  font-size:.62rem;top:3px;
+}
+.p21-prog-card.sp-card .p21-result-list li::before{color:var(--gold);}
+.p21-prog-card.career-card .p21-result-list li::before{color:rgba(255,200,80,.9);}
+.p21-prog-card.manifestation-card .p21-result-list li::before{color:var(--diamond);}
+
+/* CTA Button at bottom */
+.p21-card-cta{
+  margin-top:auto;
+  padding:1rem 1.6rem 1.4rem;
+}
+.p21-cta-btn{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.75rem 1.2rem;
+  border-radius:3px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;border:none;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.p21-prog-card.sp-card .p21-cta-btn{
+  background:transparent;
+  border:1px dashed rgba(201,168,76,.45);
+  color:var(--gold-light);
+}
+.p21-prog-card.sp-card:hover .p21-cta-btn,
+.p21-prog-card.sp-card.sel .p21-cta-btn{
+  background:var(--gold);color:var(--dark);border-color:var(--gold);
+}
+.p21-prog-card.career-card .p21-cta-btn{
+  background:transparent;
+  border:1px dashed rgba(255,180,60,.45);
+  color:rgba(255,210,100,1);
+}
+.p21-prog-card.career-card:hover .p21-cta-btn,
+.p21-prog-card.career-card.sel .p21-cta-btn{
+  background:rgba(255,180,60,.9);color:var(--dark);border-color:rgba(255,180,60,.9);
+}
+.p21-prog-card.manifestation-card .p21-cta-btn{
+  background:transparent;
+  border:1px dashed rgba(126,200,227,.45);
+  color:var(--diamond-light);
+}
+.p21-prog-card.manifestation-card:hover .p21-cta-btn,
+.p21-prog-card.manifestation-card.sel .p21-cta-btn{
+  background:var(--diamond);color:var(--dark);border-color:var(--diamond);
+}
+
+/* SP card gets gold border highlight — matches screenshot */
+.p21-prog-card.sp-card{
+  border-color:rgba(201,168,76,.45);
+  box-shadow:0 0 0 1px rgba(201,168,76,.1),0 8px 40px rgba(201,168,76,.08);
+}
+
+/* Calendar panel */
+.p21-cal-wrap{border:1px solid var(--border);border-radius:2px;overflow:hidden;background:var(--glass);position:relative;min-height:650px;}
+.p21-cal-iframe{width:100%;min-height:650px;border:none;display:none;}
+.p21-cal-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:var(--glass);}
+.p21-cal-loading p{font-size:.85rem;color:var(--muted);}
+.p21-bknav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:1rem;flex-wrap:wrap;}
+.p21-bkback{background:none;border:1px solid var(--border);color:var(--muted);padding:.7rem 1.5rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
+.p21-bkback:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ═══════════════════════════
+   TESTIMONIALS
+   ═══════════════════════════ */
 .test-cats{display:flex;gap:.7rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap;}
 .test-cat-btn{padding:.5rem 1.4rem;border:1px solid var(--border);border-radius:20px;background:var(--glass);color:var(--muted);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
 .test-cat-btn:hover,.test-cat-btn.active{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,.08);}
 .test-scroll-wrap{position:relative;}
-.test-scroll-track{display:flex;gap:1.2rem;overflow-x:auto;padding:.5rem 0 1.5rem;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent;scroll-behavior:smooth;}
+.test-scroll-track{
+  display:flex;gap:1.4rem;overflow-x:auto;
+  padding:1rem 0 2rem;
+  scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+}
 .test-scroll-track::-webkit-scrollbar{height:4px;}
-.test-scroll-track::-webkit-scrollbar-track{background:transparent;}
 .test-scroll-track::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px;}
-.test-card{flex:0 0 200px;background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
-.test-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 30px rgba(201,168,76,.15);}
-.test-cat-tag{position:absolute;top:8px;left:8px;z-index:2;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:1px;font-weight:500;}
-.test-cat-tag.sp{background:rgba(255,100,150,.15);color:#ff6496;}
-.test-cat-tag.career{background:rgba(201,168,76,.15);color:var(--gold);}
-.test-cat-tag.manifestation{background:rgba(126,200,227,.15);color:var(--diamond);}
-.test-cat-tag.program{background:rgba(224,201,240,.15);color:var(--platinum);}
-.test-img-wrap{width:100%;aspect-ratio:9/16;overflow:hidden;background:linear-gradient(160deg,var(--dark2),var(--purple));display:flex;align-items:center;justify-content:center;}
-.test-img-wrap img{width:100%;height:100%;object-fit:cover;}
-.test-img-empty{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;}
-.test-img-empty span{font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-align:center;padding:.5rem;}
-.test-card-label{padding:.6rem .8rem;font-size:.68rem;color:var(--muted);}
-.test-scroll-arrows{display:flex;gap:.5rem;justify-content:center;margin-top:.8rem;}
-.test-arrow{width:32px;height:32px;border:1px solid var(--border);border-radius:50%;background:var(--glass);color:var(--muted);font-size:.9rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
-.test-arrow:hover{border-color:var(--gold);color:var(--gold);}
+.test-card{
+  flex:0 0 200px;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+  position:relative;
+  background:#0c1020;
+  border:1px solid var(--border);
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.test-card:hover{
+  border-color:rgba(201,168,76,.55);
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 20px 50px rgba(201,168,76,.15);
+}
+.test-cat-tag{
+  position:absolute;top:8px;left:8px;z-index:5;
+  font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.24rem .65rem;border-radius:6px;font-weight:600;
+  backdrop-filter:blur(12px);
+}
+.test-cat-tag.sp{background:rgba(255,80,130,.88);color:#fff;}
+.test-cat-tag.career{background:rgba(201,168,76,.9);color:var(--dark);}
+.test-cat-tag.manifestation{background:rgba(126,200,227,.88);color:var(--dark);}
+.test-cat-tag.program{background:rgba(224,201,240,.88);color:var(--dark);}
+.test-img-wrap{
+  width:100%;
+  aspect-ratio:9/16;
+  overflow:hidden;
+  position:relative;
+  background:linear-gradient(160deg,#0c1020,#150e35);
+}
+.test-img-wrap img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+  transition:transform .55s ease;
+}
+.test-card:hover .test-img-wrap img{transform:scale(1.04);}
+.test-img-empty{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:.7rem;
+}
+.test-img-empty .empty-icon{font-size:2.8rem;}
+.test-img-empty span{font-size:.62rem;color:rgba(201,168,76,.4);letter-spacing:.07em;text-align:center;padding:0 1rem;line-height:1.6;}
+.test-view-overlay{
+  position:absolute;inset:0;z-index:4;
+  background:rgba(7,10,26,.0);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:all .35s;
+}
+.test-card:hover .test-view-overlay{opacity:1;background:rgba(7,10,26,.35);}
+.test-view-btn{
+  display:flex;align-items:center;gap:.4rem;
+  padding:.55rem 1.3rem;border-radius:24px;
+  background:rgba(201,168,76,.95);color:var(--dark);
+  font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  transform:scale(.85);transition:transform .35s;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
+}
+.test-card:hover .test-view-btn{transform:scale(1);}
+.test-card-footer{
+  padding:.55rem .8rem;
+  background:rgba(7,10,26,.92);
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.test-card-label{font-size:.63rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.test-card-arrow{color:var(--gold);font-size:.72rem;opacity:0;transition:all .3s;transform:translateX(-4px);}
+.test-card:hover .test-card-arrow{opacity:1;transform:translateX(0);}
+.test-scroll-arrows{display:flex;gap:.6rem;justify-content:center;margin-top:.6rem;}
+.test-arrow{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;background:var(--glass);color:var(--muted);font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
+.test-arrow:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08);}
 
-/* LIGHTBOX */
-.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);z-index:3000;align-items:center;justify-content:center;padding:1.5rem;}
-.lb.open{display:flex;}
-.lb-inner{position:relative;max-width:360px;width:100%;animation:lbIn .35s cubic-bezier(.16,1,.3,1);}
+/* ═══════════════════════════
+   LIGHTBOX — LARGE IMAGE, FULL SCREEN FEEL
+   ═══════════════════════════ */
+.lb{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.97);
+  backdrop-filter:blur(24px);
+  z-index:3000;
+  align-items:center;justify-content:center;
+  padding:1rem;
+}
+.lb.open{display:flex;animation:lbFadeIn .25s ease;}
+@keyframes lbFadeIn{from{opacity:0;}to{opacity:1;}}
+
+.lb-inner{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  /* Allow up to 95% viewport height use */
+  max-height:95vh;
+  /* Width: for portrait screenshots, max 520px but can go wider on landscape */
+  width:min(520px, 90vw);
+  animation:lbIn .3s cubic-bezier(.16,1,.3,1);
+}
 @keyframes lbIn{from{opacity:0;transform:scale(.88);}to{opacity:1;transform:scale(1);}}
-.lb-phone{background:#111827;border-radius:28px;border:1px solid rgba(201,168,76,.35);overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7);}
-.lb-notch{background:#111827;height:28px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(255,255,255,.05);}
-.lb-notch-pill{width:55px;height:7px;background:#1f2937;border-radius:4px;}
-.lb-status{background:#1a1a2e;padding:.35rem .9rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);}
-.lb-contact{display:flex;align-items:center;gap:.5rem;}
-.lb-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:9px;}
-.lb-cname{font-size:.7rem;color:#e2e8f0;font-weight:500;}
-.lb-online{font-size:.58rem;color:#25d366;}
-.lb-icons{display:flex;gap:.5rem;font-size:.8rem;opacity:.6;}
-.lb-img-wrap{max-height:65vh;overflow-y:auto;background:#0a0a1a;scrollbar-width:thin;}
-.lb-img-wrap img{width:100%;display:block;}
-.lb-bottom{background:#1a1a2e;height:28px;display:flex;align-items:center;justify-content:center;border-top:1px solid rgba(255,255,255,.05);}
-.lb-home-bar{width:70px;height:3px;background:#374151;border-radius:2px;}
-.lb-close{position:absolute;top:-42px;right:0;background:rgba(7,10,26,.9);border:1px solid var(--gold);color:var(--gold);width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
-.lb-close:hover{background:var(--gold);color:var(--dark);}
-.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(7,10,26,.9);border:1px solid var(--border);color:var(--gold);width:36px;height:36px;border-radius:50%;cursor:pointer;transition:all .3s;font-size:1rem;display:flex;align-items:center;justify-content:center;}
-.lb-prev{left:-46px;}.lb-next{right:-46px;}
-.lb-prev:hover,.lb-next:hover{border-color:var(--gold);}
-.lb-counter{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-size:.7rem;color:var(--muted);letter-spacing:.1em;white-space:nowrap;}
+
+/* The image box — TALL, no artificial height cap */
+.lb-img-box{
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  background:#0a0e1a;
+  border:1px solid rgba(201,168,76,.3);
+  box-shadow:0 0 0 1px rgba(201,168,76,.08),0 40px 120px rgba(0,0,0,.9);
+  /* Key: let it be as tall as viewport allows */
+  max-height:calc(95vh - 100px);
+  overflow-y:auto;
+  scrollbar-width:none;
+  position:relative;
+}
+.lb-img-box::-webkit-scrollbar{display:none;}
+.lb-img-box img{
+  width:100%;
+  height:auto;
+  display:block;
+  /* Never constrain height — show full image */
+  max-height:none;
+  object-fit:contain;
+}
+.lb-no-img{
+  padding:5rem 2rem;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:1.2rem;
+  min-height:300px;
+}
+.lb-no-img span{font-size:3.5rem;}
+.lb-no-img p{font-size:.88rem;color:var(--muted);}
+
+/* Close — top right of the VIEWPORT, always accessible */
+.lb-close{
+  position:fixed;top:1.2rem;right:1.2rem;
+  background:rgba(10,14,28,.92);
+  border:1px solid rgba(201,168,76,.5);
+  color:var(--gold);
+  width:40px;height:40px;border-radius:50%;
+  font-size:1rem;cursor:pointer;transition:all .3s;
+  display:flex;align-items:center;justify-content:center;
+  z-index:10;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.lb-close:hover{background:var(--gold);color:var(--dark);transform:scale(1.1);}
+
+/* Label bar below image */
+.lb-label-bar{
+  margin-top:.65rem;
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  flex-shrink:0;
+}
+.lb-label-text{
+  font-size:.75rem;color:var(--muted);
+  letter-spacing:.07em;
+  padding:.3rem .9rem;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;
+}
+
+/* Nav arrows — large, easy to tap */
+.lb-prev,.lb-next{
+  position:fixed;
+  top:50%;transform:translateY(-50%);
+  background:rgba(10,14,28,.9);
+  border:1px solid rgba(201,168,76,.4);
+  color:var(--gold);
+  width:48px;height:48px;border-radius:50%;
+  cursor:pointer;transition:all .3s;
+  font-size:1.3rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.lb-prev{left:1rem;}.lb-next{right:1rem;}
+.lb-prev:hover,.lb-next:hover{
+  border-color:var(--gold);
+  background:rgba(201,168,76,.15);
+  transform:translateY(-50%) scale(1.08);
+}
+
+/* Counter pill — bottom center */
+.lb-counter{
+  position:fixed;
+  bottom:1.2rem;left:50%;transform:translateX(-50%);
+  font-size:.72rem;color:rgba(255,255,255,.6);
+  letter-spacing:.14em;white-space:nowrap;
+  background:rgba(7,10,26,.88);
+  padding:.35rem 1rem;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+}
 
 /* CONTACT */
 .cog{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;}
@@ -471,13 +885,10 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 .mbox p{font-size:.85rem;color:var(--muted);line-height:1.75;margin-bottom:.6rem;}
 .micon{font-size:2.2rem;display:block;margin-bottom:1rem;animation:bIn .5s ease-out .2s both;}
 @keyframes bIn{0%{transform:scale(0);opacity:0;}60%{transform:scale(1.12);}100%{transform:scale(1);opacity:1;}}
-
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:rgba(7,10,26,.95);border:1px solid var(--gold);border-radius:2px;padding:.8rem 1.4rem;font-size:.8rem;color:var(--gold-light);z-index:20000;transform:translateY(20px);opacity:0;transition:all .35s;pointer-events:none;max-width:calc(100vw - 3rem);}
 .toast.show{transform:translateY(0);opacity:1;}
 
-/* ══════════════════════════════
-   RESPONSIVE — MOBILE FIRST
-   ══════════════════════════════ */
+/* RESPONSIVE */
 @media(max-width:1100px){
   .hg{grid-template-columns:1fr;gap:3rem;text-align:center;}
   .hv{order:-1;}.ht p{margin:0 auto 2.2rem;}.hbtns{justify-content:center;}
@@ -490,10 +901,11 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .cog{grid-template-columns:1fr;}
   .fg2{grid-template-columns:1fr 1fr;gap:2rem;}
   .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .p21-cards-grid{grid-template-columns:repeat(2,1fr);}
   .prog21-features{grid-template-columns:1fr;}
-  .prog21-tiers{grid-template-columns:1fr;}
   .prog21-headline{font-size:2.6rem;}
   .about-badge{right:-10px;}
+  .jrnl-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:768px){
   body{font-size:14px;}
@@ -507,6 +919,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .mg{grid-template-columns:1fr;}
   .ebg{grid-template-columns:1fr;}
   .cat-grid{grid-template-columns:1fr;}
+  .p21-cards-grid{grid-template-columns:1fr;}
   .tier-grid{grid-template-columns:1fr;}
   .sr{grid-template-columns:repeat(2,1fr);}
   .fg2{grid-template-columns:1fr;gap:1.8rem;}
@@ -518,29 +931,18 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .steps .slabel{display:none;}
   .hero-frame-wrap{width:220px;height:280px;}
   .about-frame-wrap{max-width:150px;}
-  .lb-prev{left:-38px;}.lb-next{right:-38px;}
-  .prog21-tiers{grid-template-columns:1fr;}
+  .lb-prev{left:.4rem;}.lb-next{right:.4rem;}
+  .lb-inner{width:min(420px,90vw);}
   .prog21-headline{font-size:1.9rem;}
   .prog21-features{grid-template-columns:1fr;}
-  .prog21-card:nth-child(even){border-right:none;}
-  .prog21-card:nth-child(3){border-bottom:1px solid rgba(201,168,76,.1);}
-  .prog21-card:nth-child(4){border-bottom:none;}
   .prog21-urgency{gap:.8rem;}
   .prog21-urgency-sep{display:none;}
-  .prog21-advert-ticker{gap:.7rem;}
   .awg{grid-template-columns:repeat(2,1fr);}
   .qb{padding:1.8rem 1.2rem;}
   .qb blockquote{font-size:1.2rem;}
   .cfb{padding:1.5rem;}
-  .tier-card{padding:1.4rem 1.1rem;}
-  .cal-wrap{min-height:550px;}
-  .cal-wrap iframe{min-height:550px;}
-  .prog21-cal-iframe{min-height:500px;}
-  .prog21-subline{font-size:.82rem;}
-  .prog21-pills{gap:.5rem;}
-  .prog21-pill{font-size:.68rem;padding:.4rem .85rem;}
-  .heb{font-size:.65rem;}
-  .logo{font-size:.9rem;letter-spacing:.15em;}
+  .jrnl-grid{grid-template-columns:1fr;}
+  .test-card{flex:0 0 160px;}
 }
 @media(max-width:480px){
   section{padding:3.5rem 4%;}
@@ -548,23 +950,22 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .awg{grid-template-columns:1fr;}
   .hero-frame-wrap{width:185px;height:235px;}
   .lb-prev,.lb-next{display:none;}
-  .lb-inner{max-width:290px;}
+  .lb-inner{width:min(380px,94vw);}
   .efr{flex-direction:column;align-items:flex-start;gap:.7rem;}
-  .efr .btn{width:100%;text-align:center;}
+  .efr .ebuy-btn{width:100%;text-align:center;justify-content:center;}
   .mnav a{font-size:1.5rem;}
   .prog21-headline{font-size:1.65rem;}
-  .tier-price-inr{font-size:1.4rem;}
   .sr{grid-template-columns:repeat(2,1fr);gap:.8rem;}
   .sn{font-size:1.5rem;}
   .steps{gap:.15rem;}
   .sline{width:18px;}
   .sc{width:26px;height:26px;font-size:.65rem;}
+  .test-card{flex:0 0 150px;}
 }
 </style>
 </head>
 <body>
 <div id="cur"></div><div id="cur-ring"></div>
-
 <div class="admin-corner" id="adminCorner"><span class="adm-sigil">✦</span></div>
 
 <div id="loader">
@@ -579,7 +980,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     <a href="#hero" class="logo">Akshita Dayma Goel</a>
     <ul class="nl">
       <li><a href="#hero">Home</a></li><li><a href="#about">About</a></li>
-      <li><a href="#awards">Awards</a></li><li><a href="#methodology">Methodology</a></li>
+      <li><a href="#achievements">Achievements</a></li><li><a href="#journal">Journal</a></li>
+      <li><a href="#methodology">Methodology</a></li>
       <li><a href="#ebooks">eBooks</a></li><li><a href="#testimonials">Testimonials</a></li>
       <li><a href="#program21">21-Day</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -589,10 +991,10 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </nav>
 <div class="mnav" id="mnav">
-  <a href="#hero">Home</a><a href="#about">About</a><a href="#awards">Awards</a>
-  <a href="#methodology">Methodology</a><a href="#ebooks">eBooks</a>
-  <a href="#testimonials">Testimonials</a><a href="#program21">21-Day Program</a>
-  <a href="#contact">Contact</a>
+  <a href="#hero">Home</a><a href="#about">About</a><a href="#achievements">Achievements</a>
+  <a href="#journal">Journal</a><a href="#methodology">Methodology</a>
+  <a href="#ebooks">eBooks</a><a href="#testimonials">Testimonials</a>
+  <a href="#program21">21-Day Program</a><a href="#contact">Contact</a>
   <a href="#booking" class="mncta">Book Session</a>
 </div>
 
@@ -611,8 +1013,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     <div class="hv">
       <div class="hero-frame-wrap">
         <div class="hero-photo-frame">
-          <img src="" alt="Akshita Dayma Goel" id="heroPhoto" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="hero-photo-placeholder" style="display:none"><span style="font-size:4rem;position:relative;z-index:1;">✨</span><span style="font-size:.65rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;position:relative;z-index:1;">Your Photo Here</span></div>
+          <img src="/images/hero.jpg" alt="Akshita Dayma Goel" id="heroPhoto" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="hero-photo-placeholder" style="display:none"><span style="font-size:4rem;position:relative;z-index:1;"></span><span style="font-size:.65rem;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;position:relative;z-index:1;"></span></div>
         </div>
         <div class="hf-corner tl"></div><div class="hf-corner tr"></div>
         <div class="hf-corner bl"></div><div class="hf-corner br"></div>
@@ -634,8 +1036,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <div class="about-ring-outer"></div>
         <div class="about-ring-spin"></div>
         <div class="about-photo-card">
-          <img src="" alt="Akshita" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="about-photo-placeholder" style="display:none;width:100%;height:100%;"><span style="font-size:3.5rem;">🌙</span><span style="font-size:.62rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;">Your Photo</span></div>
+          <img src="/images/about.jpg" alt="Akshita" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="about-photo-placeholder" style="display:none;width:100%;height:100%;"><span style="font-size:3.5rem;"></span><span style="font-size:.62rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;"></span></div>
         </div>
         <div class="about-badge"><span class="bn">11+</span><span class="bl2">Yrs Exp.</span></div>
       </div>
@@ -664,22 +1066,24 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- AWARDS -->
-<section id="awards" style="background:linear-gradient(160deg,rgba(201,168,76,.03) 0%,transparent 60%);">
+<!-- ACHIEVEMENTS -->
+<section id="achievements" style="background:linear-gradient(160deg,rgba(201,168,76,.03) 0%,transparent 60%);">
   <div class="container">
-    <p class="sl rv">Recognition</p><h2 class="st rv d1">Awards & Accolades</h2>
+    <p class="sl rv">Recognition</p>
+    <h2 class="st rv d1">Achievements & Accolades</h2>
     <p class="ss rv d2">Celebrated globally for transformational impact</p>
-    <div class="awg">
-      <div class="awc rv d1"><span class="awi">🏆</span><h3>Life Coach of the Year 2025</h3><p>Awarded by Ameesha Patel</p></div>
-      <div class="awc rv d2"><span class="awi">🏆</span><h3>Most Celebrated Global Manifestation Coach</h3><p>Awarded by Amrita Rao</p></div>
-      <div class="awc rv d3"><span class="awi">🏆</span><h3>Nari Shakti Award</h3><p>Women Empowerment Recognition</p></div>
-      <div class="awc rv d4"><span class="awi">🏆</span><h3>International Brilliance Award</h3><p>Global Impact Recognition</p></div>
-      <div class="awc rv d1"><span class="awi">🏆</span><h3>Icons of Bharat Award</h3><p>National Honour</p></div>
-      <div class="awc rv d2"><span class="awi">🏆</span><h3>Global Impact Coach Recognition</h3><p>20+ National & International Honours</p></div>
-      <div class="awc rv d3"><span class="awi">🏆</span><h3>Top 50 Powerful Personalities</h3><p>Leadership Recognition</p></div>
-      <div class="awc rv d4"><span class="awi">🏆</span><h3>Mentors of Impact</h3><p>India's Top Coach 2026</p></div>
-    </div>
+    <div class="awg" id="achievementsGrid"></div>
     <div class="mb rv"><p>Featured across: <strong style="color:var(--gold-light);">Republic · DailyHunt · The Indian Bulletin · Success India Magazine · CEO India Magazine</strong></p></div>
+  </div>
+</section>
+
+<!-- JOURNAL -->
+<section id="journal">
+  <div class="container">
+    <p class="sl rv">Press & Media</p>
+    <h2 class="st rv d1">Featured In</h2>
+    <p class="ss rv d2">Coverage from leading publications and media houses</p>
+    <div class="jrnl-grid" id="journalGrid"></div>
   </div>
 </section>
 
@@ -703,7 +1107,8 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <!-- EBOOKS -->
 <section id="ebooks" style="background:linear-gradient(160deg,rgba(21,14,53,.2) 0%,transparent 60%);">
   <div class="container">
-    <p class="sl rv">eBooks & Guides</p><h2 class="st rv d1">Transform with the Right Knowledge</h2>
+    <p class="sl rv">eBooks & Guides</p>
+    <h2 class="st rv d1">Transform with the Right Knowledge</h2>
     <p class="ss rv d2">25,000+ copies sold globally</p>
     <div class="ebg" id="ebooksGrid"></div>
   </div>
@@ -759,6 +1164,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <section id="program21">
   <div class="prog-particles" id="progParticles"></div>
   <div class="container">
+    <!-- Header banner -->
     <div class="prog21-advert-banner rv">
       <div style="display:flex;justify-content:center;margin-bottom:1.2rem;">
         <div class="prog21-advert-ticker">
@@ -782,6 +1188,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       </div>
     </div>
 
+    <!-- Feature cards -->
     <div class="prog21-features">
       <div class="prog21-card rv d1"><span class="prog21-card-num">01</span><span class="mi">✨</span><h3>VIP Access Experience</h3><p>Get exclusive, priority-level support throughout your journey — you're not just a client, you're a priority.</p></div>
       <div class="prog21-card rv d2"><span class="prog21-card-num">02</span><span class="mi">✨</span><h3>Regular Check-ins & Guidance</h3><p>Stay aligned with consistent check-ins to track your progress, clear doubts, and keep your energy right.</p></div>
@@ -789,6 +1196,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       <div class="prog21-card rv d4"><span class="prog21-card-num">04</span><span class="mi">✨</span><h3>3 Platinum Sessions at the Price of 2</h3><p>Deep-dive transformation with 3 high-impact sessions while paying for just 2 — designed to accelerate results.</p></div>
     </div>
 
+    <!-- Urgency bar -->
     <div class="prog21-urgency rv">
       <div class="prog21-urgency-item"><div class="urgency-icon">🔥</div><span>Only <strong>3 spots left</strong> this month</span></div>
       <div class="prog21-urgency-sep"></div>
@@ -799,118 +1207,162 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       <div class="prog21-urgency-item"><div class="urgency-icon">💬</div><span><strong>English & Hindi</strong></span></div>
     </div>
 
-    <div class="prog21-tiers">
-      <!-- SP 21-Day -->
-      <div class="tier-card gold-tier rv d1" id="p21card-sp" onclick="toggle21Cal('sp-21day','cal-sp21','p21card-sp')" style="cursor:pointer;">
-        <div class="tier-popular">Specific Person</div>
-        <span class="tier-gem">💞</span>
-        <div class="tier-header">
-          <span class="tier-name">SP 21-Day Experience</span>
-          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
-          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
-          <span class="tier-focus">Attract & Secure Your Person</span>
-        </div>
-        <span class="tier-includes">This Is For You If…</span>
-        <ul class="tier-features">
-          <li>SP gone distant or cold</li><li>Stuck in no contact</li>
-          <li>Feel anxious or drained</li><li>Tired of overthinking</li>
-          <li>Want commitment, not just them back</li><li>Ready to stop chasing</li>
-        </ul>
-        <div class="tier-perfect">
-          <span class="tier-perfect-title">The Result</span>
-          <ul>
-            <li>They start thinking about you more</li><li>They start reaching out</li>
-            <li>They start showing effort</li><li>Feel drawn towards you again</li>
-          </ul>
-        </div>
-        <div class="prog21-tap-hint" id="hint-cal-sp21">✦ Tap to schedule your 21-day program</div>
-        <div class="prog21-cal-wrap" id="cal-sp21">
-          <div class="prog21-cal-header">
-            <span>📅 Pick Your Session Time</span>
-            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-sp21','hint-cal-sp21')">✕ Close</button>
+    <!-- STEP FLOW -->
+    <div class="prog21-flow rv">
+      <div class="prog21-steps">
+        <div class="sci"><div class="sc active" id="p21sc1">1</div><div class="slabel active" id="p21sl1">Choose Program</div></div>
+        <div class="sline" id="p21sln1"></div>
+        <div class="sci"><div class="sc" id="p21sc2">2</div><div class="slabel" id="p21sl2">Schedule</div></div>
+      </div>
+
+      <!-- Panel 1: Screenshot-style cards -->
+      <div class="p21-panel active" id="p21sp1">
+        <div class="p21-cards-grid">
+
+          <!-- SP 21-Day -->
+          <div class="p21-prog-card sp-card" onclick="p21PickCat(this,'sp-21day','❤️ 21-Day SP Manifestation','sp')">
+            <div class="p21-top-tag">Specific Person</div>
+            <div class="p21-card-body">
+              <span class="p21-card-icon">💗</span>
+              <div class="p21-card-title">SP 21-Day Experience</div>
+              <div class="p21-sessions-bar">
+                <div class="p21-sessions-dot"></div>
+                <span>21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+              </div>
+              <div class="p21-price-wrap">
+                <span class="p21-price-inr">₹70,000</span>
+                <span class="p21-price-usd">/ $769.99</span>
+              </div>
+              <div class="p21-focus-tag">Attract &amp; Secure Your Person</div>
+
+              <span class="p21-section-title">This is for you if…</span>
+              <ul class="p21-for-list">
+                <li>SP gone distant or cold</li>
+                <li>Stuck in no contact</li>
+                <li>Feel anxious or drained</li>
+                <li>Tired of overthinking</li>
+                <li>Want commitment, not just them back</li>
+                <li>Ready to stop chasing</li>
+              </ul>
+
+              <div class="p21-result-area">
+                <span class="p21-result-title">The Result</span>
+                <ul class="p21-result-list">
+                  <li>✔ They start thinking about you more</li>
+                  <li>✔ They start reaching out</li>
+                  <li>✔ They start showing effort</li>
+                  <li>✔ Feel drawn towards you again</li>
+                </ul>
+              </div>
+            </div>
+            <div class="p21-card-cta">
+              <button class="p21-cta-btn">✦ Tap to schedule your 21-day program</button>
+            </div>
           </div>
-          <div class="prog21-cal-loading" id="cal-sp21-loading">
-            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
-            <p>Loading your calendar…</p>
+
+          <!-- Career 21-Day -->
+          <div class="p21-prog-card career-card" onclick="p21PickCat(this,'career-21day','💼 21-Day Career Manifestation','career')">
+            <div class="p21-top-tag">Career</div>
+            <div class="p21-card-body">
+              <span class="p21-card-icon">💼</span>
+              <div class="p21-card-title">Career 21-Day Experience</div>
+              <div class="p21-sessions-bar">
+                <div class="p21-sessions-dot"></div>
+                <span>21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+              </div>
+              <div class="p21-price-wrap">
+                <span class="p21-price-inr">₹70,000</span>
+                <span class="p21-price-usd">/ $769.99</span>
+              </div>
+              <div class="p21-focus-tag">Richest Career Timeline</div>
+
+              <span class="p21-section-title">This is for you if…</span>
+              <ul class="p21-for-list">
+                <li>Stuck in current career path</li>
+                <li>Not getting opportunities</li>
+                <li>Feel underpaid or overlooked</li>
+                <li>Want better job or promotion</li>
+                <li>Tired of rejections</li>
+                <li>Ready to step into your best version</li>
+              </ul>
+
+              <div class="p21-result-area">
+                <span class="p21-result-title">The Result</span>
+                <ul class="p21-result-list">
+                  <li>✔ Opportunities increase</li>
+                  <li>✔ Attract better roles &amp; salaries</li>
+                  <li>✔ Get recognised &amp; valued</li>
+                  <li>✔ Step into aligned career path</li>
+                </ul>
+              </div>
+            </div>
+            <div class="p21-card-cta">
+              <button class="p21-cta-btn">✦ Tap to schedule your 21-day program</button>
+            </div>
           </div>
-          <iframe class="prog21-cal-iframe" id="cal-sp21-frame" src="" title="SP 21-Day booking"></iframe>
+
+          <!-- Manifestation 21-Day -->
+          <div class="p21-prog-card manifestation-card" onclick="p21PickCat(this,'manifestation-21day','✨ 21-Day Manifestation Experience','manifestation')">
+            <div class="p21-top-tag">Manifestation</div>
+            <div class="p21-card-body">
+              <span class="p21-card-icon">✨</span>
+              <div class="p21-card-title">Manifestation 21-Day Experience</div>
+              <div class="p21-sessions-bar">
+                <div class="p21-sessions-dot"></div>
+                <span>21 Days · 3 × 60-min Sessions + Daily Guidance</span>
+              </div>
+              <div class="p21-price-wrap">
+                <span class="p21-price-inr">₹70,000</span>
+                <span class="p21-price-usd">/ $769.99</span>
+              </div>
+              <div class="p21-focus-tag">Complete Life Transformation</div>
+
+              <span class="p21-section-title">This is for you if…</span>
+              <ul class="p21-for-list">
+                <li>Stuck in multiple areas</li>
+                <li>Tired of overthinking &amp; delays</li>
+                <li>Want clarity, confidence, control</li>
+                <li>Ready to stop chasing</li>
+                <li>Want transformation, not just change</li>
+                <li>Serious about becoming highest self</li>
+              </ul>
+
+              <div class="p21-result-area">
+                <span class="p21-result-title">The Result</span>
+                <ul class="p21-result-list">
+                  <li>✔ Opportunities start aligning</li>
+                  <li>✔ Things work in your favour</li>
+                  <li>✔ Feel more confident</li>
+                  <li>✔ Attract everything effortlessly</li>
+                </ul>
+              </div>
+            </div>
+            <div class="p21-card-cta">
+              <button class="p21-cta-btn">✦ Tap to schedule your 21-day program</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Career 21-Day -->
-      <div class="tier-card diamond-tier rv d2" id="p21card-career" onclick="toggle21Cal('career-21day','cal-career21','p21card-career')" style="cursor:pointer;">
-        <div class="tier-popular" style="background:rgba(126,200,227,.12);color:var(--diamond-light);">Career</div>
-        <span class="tier-gem">💼</span>
-        <div class="tier-header">
-          <span class="tier-name" style="color:var(--diamond-light);">Career 21-Day Experience</span>
-          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
-          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
-          <span class="tier-focus" style="color:var(--diamond);">Richest Career Timeline</span>
-        </div>
-        <span class="tier-includes">This Is For You If…</span>
-        <ul class="tier-features">
-          <li>Stuck in current career path</li><li>Not getting opportunities</li>
-          <li>Feel underpaid or overlooked</li><li>Want better job or promotion</li>
-          <li>Tired of rejections</li><li>Ready to step into your best version</li>
-        </ul>
-        <div class="tier-perfect">
-          <span class="tier-perfect-title">The Result</span>
-          <ul>
-            <li>Opportunities increase</li><li>Attract better roles & salaries</li>
-            <li>Get recognised & valued</li><li>Step into aligned career path</li>
-          </ul>
-        </div>
-        <div class="prog21-tap-hint" id="hint-cal-career21">✦ Tap to schedule your 21-day program</div>
-        <div class="prog21-cal-wrap" id="cal-career21">
-          <div class="prog21-cal-header">
-            <span>📅 Pick Your Session Time</span>
-            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-career21','hint-cal-career21')">✕ Close</button>
-          </div>
-          <div class="prog21-cal-loading" id="cal-career21-loading">
+      <!-- Panel 2: Calendar -->
+      <div class="p21-panel" id="p21sp2">
+        <div class="bk-breadcrumb" id="p21Breadcrumb"></div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;">Pick your preferred date and time for your 21-Day Program.</p>
+        <div class="p21-cal-wrap">
+          <div class="p21-cal-loading" id="p21CalLoading">
             <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
             <p>Loading your calendar…</p>
           </div>
-          <iframe class="prog21-cal-iframe" id="cal-career21-frame" src="" title="Career 21-Day booking"></iframe>
+          <iframe class="p21-cal-iframe" id="p21CalFrame" src="" title="21-Day Program booking"></iframe>
+        </div>
+        <div class="p21-bknav">
+          <button class="p21-bkback" onclick="p21GoStep(1)">← Back to Programs</button>
+          <a id="p21CalOpenLink" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn btn-o" style="text-decoration:none;font-size:.72rem;">Open in new tab ↗</a>
         </div>
       </div>
 
-      <!-- Manifestation 21-Day -->
-      <div class="tier-card platinum-tier rv d3" id="p21card-manif" onclick="toggle21Cal('manifestation-21day','cal-manif21','p21card-manif')" style="cursor:pointer;">
-        <div class="tier-popular" style="background:rgba(224,201,240,.12);color:var(--platinum-light);">Manifestation</div>
-        <span class="tier-gem">✨</span>
-        <div class="tier-header">
-          <span class="tier-name" style="color:var(--platinum-light);">Manifestation 21-Day Experience</span>
-          <span class="tier-duration">⏱ 21 Days · 3 × 60-min Sessions + Daily Guidance</span>
-          <div class="tier-price-row"><span class="tier-price-inr">₹70,000</span><span class="tier-price-usd">/ $769.99</span></div>
-          <span class="tier-focus" style="color:var(--platinum);">Complete Life Transformation</span>
-        </div>
-        <span class="tier-includes">This Is For You If…</span>
-        <ul class="tier-features">
-          <li>Stuck in multiple areas</li><li>Tired of overthinking & delays</li>
-          <li>Want clarity, confidence, control</li><li>Ready to stop chasing</li>
-          <li>Want transformation, not just change</li><li>Serious about becoming highest self</li>
-        </ul>
-        <div class="tier-perfect">
-          <span class="tier-perfect-title">The Result</span>
-          <ul>
-            <li>Opportunities start aligning</li><li>Things work in your favour</li>
-            <li>Feel more confident</li><li>Attract everything effortlessly</li>
-          </ul>
-        </div>
-        <div class="prog21-tap-hint" id="hint-cal-manif21">✦ Tap to schedule your 21-day program</div>
-        <div class="prog21-cal-wrap" id="cal-manif21">
-          <div class="prog21-cal-header">
-            <span>📅 Pick Your Session Time</span>
-            <button class="prog21-cal-close" onclick="event.stopPropagation();close21Cal('cal-manif21','hint-cal-manif21')">✕ Close</button>
-          </div>
-          <div class="prog21-cal-loading" id="cal-manif21-loading">
-            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
-            <p>Loading your calendar…</p>
-          </div>
-          <iframe class="prog21-cal-iframe" id="cal-manif21-frame" src="" title="Manifestation 21-Day booking"></iframe>
-        </div>
-      </div>
-    </div>
+    </div><!-- /prog21-flow -->
 
     <div class="bk-warning rv" style="margin-top:2rem;">
       <strong>🚨 Important:</strong> This program is for people who are serious about results — ready to commit fully for 21 days. I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em>
@@ -923,7 +1375,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   <div class="container">
     <p class="sl rv">Client Stories</p>
     <h2 class="st rv d1">What Clients Say</h2>
-    <p class="ss rv d2">Real WhatsApp conversations — tap any screenshot to view in full</p>
+    <p class="ss rv d2">Real client results — tap any screenshot to view in full</p>
     <div class="test-cats rv">
       <button class="test-cat-btn active" onclick="filterTests('all',this)">All</button>
       <button class="test-cat-btn" onclick="filterTests('sp',this)">💞 Specific Person</button>
@@ -941,23 +1393,18 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX — large, properly visible -->
 <div class="lb" id="lb" onclick="lbBgClick(event)">
+  <button class="lb-close" onclick="closeLB()">✕</button>
+  <button class="lb-prev" onclick="lbNav(-1)">‹</button>
+  <button class="lb-next" onclick="lbNav(1)">›</button>
   <div class="lb-inner">
-    <button class="lb-close" onclick="closeLB()">✕</button>
-    <button class="lb-prev" onclick="lbNav(-1)">‹</button>
-    <button class="lb-next" onclick="lbNav(1)">›</button>
-    <div class="lb-phone">
-      <div class="lb-notch"><div class="lb-notch-pill"></div></div>
-      <div class="lb-status">
-        <div class="lb-contact"><div class="lb-avatar">💬</div><div><div class="lb-cname">Client Chat</div><div class="lb-online">online</div></div></div>
-        <div class="lb-icons">📞 📹 ⋮</div>
-      </div>
-      <div class="lb-img-wrap"><img id="lbImg" src="" alt=""></div>
-      <div class="lb-bottom"><div class="lb-home-bar"></div></div>
+    <div class="lb-img-box" id="lbImgBox"></div>
+    <div class="lb-label-bar">
+      <span class="lb-label-text" id="lbLabel"></span>
     </div>
-    <div class="lb-counter" id="lbCounter">1 / 1</div>
   </div>
+  <div class="lb-counter" id="lbCounter">1 / 1</div>
 </div>
 
 <!-- CONTACT -->
@@ -978,9 +1425,9 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         </form>
       </div>
       <div class="cos rv-r">
-        <div class="coc"><div class="coi">💬</div><h3>WhatsApp</h3><p>Get instant answers via WhatsApp.</p><a href="https://wa.me/1234567890" class="wab" target="_blank">Chat on WhatsApp</a></div>
-        <div class="coc"><div class="coi">✉️</div><h3>Email</h3><p>Typically respond within 24 hours.</p><a href="mailto:hello@manifestuniversecrets.com" class="ml">hello@manifestuniversecrets.com</a></div>
+        <div class="coc"><div class="coi">✉️</div><h3>Email</h3><p>Reach out directly — typically respond within 24 hours.</p><a href="mailto:manifest@universecrets.com" class="ml">manifest@universecrets.com</a></div>
         <div class="coc"><div class="coi">🌍</div><h3>Global Reach</h3><p>Clients across 70+ countries. Sessions via Zoom in English & Hindi.</p></div>
+        <div class="coc"><div class="coi">📅</div><h3>Book a Session</h3><p>Ready to start your transformation? Book directly via the scheduling system.</p><a href="#booking" class="btn btn-p" style="font-size:.75rem;margin-top:.2rem;display:inline-block;">Book Now</a></div>
       </div>
     </div>
   </div>
@@ -995,7 +1442,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <a href="#" class="sa"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
-    <div class="fc"><h4>Navigate</h4><ul class="fll"><li><a href="#about">About</a></li><li><a href="#awards">Awards</a></li><li><a href="#methodology">Methodology</a></li><li><a href="#ebooks">eBooks</a></li><li><a href="#booking">Book Session</a></li><li><a href="#program21">21-Day Program</a></li></ul></div>
+    <div class="fc"><h4>Navigate</h4><ul class="fll"><li><a href="#about">About</a></li><li><a href="#achievements">Achievements</a></li><li><a href="#journal">Journal</a></li><li><a href="#methodology">Methodology</a></li><li><a href="#ebooks">eBooks</a></li><li><a href="#booking">Book Session</a></li><li><a href="#program21">21-Day Program</a></li></ul></div>
     <div class="fc"><h4>Sessions</h4><ul class="fll"><li><a href="#booking">Specific Person</a></li><li><a href="#booking">Career</a></li><li><a href="#booking">Manifestation</a></li><li><a href="#program21">21-Day Program</a></li></ul></div>
     <div class="fc"><h4>Legal</h4><ul class="fll"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Refund Policy</a></li></ul></div>
   </div>
@@ -1004,7 +1451,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 
 <!-- MODALS -->
 <div class="modal" id="buyModal">
-  <div class="mbox"><button class="mcl" onclick="closeM('buyModal')">&times;</button><span class="micon">🎉</span><h3 id="mTitle">eBook</h3><p>Thank you! You'll receive an email with your download link within minutes.</p><p style="margin-top:.8rem;padding:.9rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;font-size:.82rem;"><strong style="color:var(--gold-light);">Amount:</strong> $<span id="mPrice">0</span></p><button class="btn btn-p" style="width:100%;margin-top:1.3rem;" onclick="closeM('buyModal')">Continue</button></div>
+  <div class="mbox"><button class="mcl" onclick="closeM('buyModal')">&times;</button><span class="micon">🎉</span><h3 id="mTitle">eBook</h3><p>Thank you! You'll receive an email with your download link within minutes.</p><p style="margin-top:.8rem;padding:.9rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;font-size:.82rem;"><strong style="color:var(--gold-light);">Amount:</strong> <span id="mPrice">0</span></p><button class="btn btn-p" style="width:100%;margin-top:1.3rem;" onclick="closeM('buyModal')">Continue</button></div>
 </div>
 <div class="modal" id="contactModal">
   <div class="mbox"><button class="mcl" onclick="closeM('contactModal')">&times;</button><span class="micon">💌</span><h3>Message Sent!</h3><p>We'll get back to you within 24 hours.</p><button class="btn btn-p" style="width:100%;margin-top:1.3rem;" onclick="closeM('contactModal')">Close</button></div>
@@ -1012,19 +1459,21 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══ CURSOR ═══
+const API_BASE = "http://localhost:5000";
+
+// CURSOR
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
 (function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
 document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
 document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
-document.querySelectorAll('a,button,.cat-card,.tier-card,.awc,.ebc,.mc,.sa,.coc,.test-card,.test-arrow,.test-cat-btn').forEach(el=>{
+document.querySelectorAll('a,button,.cat-card,.tier-card,.awc,.ebc,.mc,.sa,.coc,.test-card,.test-arrow,.test-cat-btn,.jrnl-card,.p21-prog-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
 });
 
-// ═══ ADMIN CORNER ═══
+// ADMIN CORNER
 (function(){
   const corner=document.getElementById('adminCorner');
   let clicks=0,timer=null;
@@ -1036,10 +1485,10 @@ document.querySelectorAll('a,button,.cat-card,.tier-card,.awc,.ebc,.mc,.sa,.coc,
   document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();window.location.href='admin-login.html';}});
 })();
 
-// ═══ LOADER ═══
+// LOADER
 window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hide'),2200));
 
-// ═══ STARS ═══
+// STARS
 const scEl=document.getElementById('sc'),ctx=scEl.getContext('2d');
 let stars=[],t=0;
 function rsz(){scEl.width=innerWidth;scEl.height=innerHeight;}
@@ -1047,7 +1496,7 @@ function iStars(){stars=[];for(let i=0;i<150;i++)stars.push({x:Math.random()*scE
 function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=>{const a=.2+.4*Math.sin(t*s.sp*100+s.ph);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();});requestAnimationFrame(drw);}
 window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
 
-// ═══ PARTICLES ═══
+// PARTICLES
 (function(){
   const container=document.getElementById('progParticles');if(!container)return;
   const colors=['rgba(201,168,76,.7)','rgba(232,213,163,.5)','rgba(224,201,240,.4)','rgba(126,200,227,.4)'];
@@ -1063,7 +1512,7 @@ window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
   }
 })();
 
-// ═══ NAV ═══
+// NAV
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
 const hbg=document.getElementById('hbg'),mn=document.getElementById('mnav');
 hbg.addEventListener('click',()=>{hbg.classList.toggle('open');mn.classList.toggle('open');});
@@ -1075,108 +1524,241 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-// ═══ REVEAL ═══
+// REVEAL
 const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>ro.observe(el));
-
-// Animate pills
 const pillObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.prog21-pill').forEach((p,i)=>setTimeout(()=>p.classList.add('vis'),i*100));});},{threshold:.3});
 const pillContainer=document.getElementById('prog21Pills');
 if(pillContainer)pillObs.observe(pillContainer);
 
-// ═══ TOAST ═══
+// TOAST
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
-// ═══ DATA ═══
-function loadData(key,def){try{return JSON.parse(localStorage.getItem(key))||def;}catch(e){return def;}}
-
-const DEFAULT_EBOOKS=[
-  {id:1,title:'The Subconscious Shift Formula',tag:'Manifestation',price:'$47',orig:'$67',desc:'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.',features:['Subconscious reprogramming techniques','Step-by-step belief transformation','Practical daily rituals','Instant digital download'],badge:'Bestseller',icon:'📖',img:''},
-  {id:2,title:'Manifest Your Soulmate',tag:'Love & Relationships',price:'$37',orig:'$57',desc:'Heal relationship patterns and align yourself with deep, fulfilling love.',features:['Healing past relationship trauma','Energetic alignment for love','Attract meaningful partnerships','Instant digital download'],badge:'Popular',icon:'💫',img:''},
-  {id:3,title:'Money Mindset Mastery',tag:'Wealth & Abundance',price:'$47',orig:'$67',desc:'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.',features:['Identify & dissolve money blocks','Build an abundance frequency','Manifestation + strategic action','Instant digital download'],badge:'',icon:'💰',img:''},
-  {id:4,title:'Aligned Career Manifestation',tag:'Career & Purpose',price:'$37',orig:'$57',desc:'Align your purpose with your profession — manifest your dream career.',features:["Clarity on your soul's purpose",'Energetic alignment with success','Overcome imposter syndrome','Instant digital download'],badge:'',icon:'🎯',img:''},
-  {id:5,title:'Neuroplasticity Manifestation Guide',tag:'Mindset & Reprogramming',price:'$57',orig:'$77',desc:'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.',features:['Brain science made accessible','Neural pathway rewiring exercises','30-day transformation plan','Instant digital download'],badge:'New',icon:'🧠',img:''},
-  {id:6,title:'Full eBook Bundle — All 5 Guides',tag:'Complete Collection',price:'$97',orig:'$225',desc:'Get all 5 transformation guides at a massive discount.',features:['All 5 eBooks included','Save over 50% vs buying separately','Bonus: Guided meditation audio','Lifetime access & free updates'],badge:'Best Value',icon:'🎁',img:''}
+// ACHIEVEMENTS DATA & RENDER
+const DEFAULT_ACHIEVEMENTS=[
+  {id:1,title:'Life Coach of the Year 2025',desc:'Awarded by Ameesha Patel',icon:'🏆',year:'2025',img:''},
+  {id:2,title:'Most Celebrated Global Manifestation Coach',desc:'Awarded by Amrita Rao',icon:'🏆',year:'2025',img:''},
+  {id:3,title:'Nari Shakti Award',desc:'Women Empowerment Recognition',icon:'🏆',year:'2024',img:''},
+  {id:4,title:'International Brilliance Award',desc:'Global Impact Recognition',icon:'🏆',year:'2024',img:''},
+  {id:5,title:'Icons of Bharat Award',desc:'National Honour',icon:'🏆',year:'2023',img:''},
+  {id:6,title:'Global Impact Coach Recognition',desc:'20+ National & International Honours',icon:'🏆',year:'2023',img:''},
+  {id:7,title:'Top 50 Powerful Personalities',desc:'Leadership Recognition',icon:'🏆',year:'2022',img:''},
+  {id:8,title:'Mentors of Impact',desc:"India's Top Coach 2026",icon:'🏆',year:'2026',img:''}
 ];
+let achievementsData=DEFAULT_ACHIEVEMENTS;
 
-let testimonials=loadData('testimonials',[
-  {id:1,cat:'sp',label:'Got him back!',img:''},
-  {id:2,cat:'career',label:'Dream job in 2 weeks',img:''},
-  {id:3,cat:'manifestation',label:'Manifested ₹5L',img:''},
-  {id:4,cat:'program',label:'21-day miracle',img:''}
-]);
-let ebookData=loadData('ebooks',DEFAULT_EBOOKS);
-
-// ═══ RENDER EBOOKS ═══
-function renderEbooks(){
-  const grid=document.getElementById('ebooksGrid');
-  grid.innerHTML=ebookData.map(eb=>`
-    <div class="ebc rv">
-      <div class="ecv">
-        ${eb.img?`<img src="${eb.img}" alt="${eb.title}">`:`<span class="ecover-icon">${eb.icon||'📖'}</span>`}
-        ${eb.badge?`<div class="ebadge">${eb.badge}</div>`:''}
+function renderAchievements(){
+  const grid=document.getElementById('achievementsGrid');if(!grid)return;
+  grid.innerHTML=achievementsData.map((a,i)=>`
+    <div class="awc rv d${(i%4)+1}">
+      <div class="aw-photo-area">
+        ${a.img?`<img src="${a.img}" alt="${a.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+        <div class="aw-photo-empty" ${a.img?'style="display:none"':''}>
+          <span style="font-size:2.5rem;">${a.icon||'🏆'}</span>
+          <span style="font-size:.6rem;color:rgba(201,168,76,.4);letter-spacing:.1em;text-transform:uppercase;">Award Photo</span>
+        </div>
+        <div class="aw-photo-overlay"></div>
+        ${a.year?`<div class="aw-year-badge">${a.year}</div>`:''}
       </div>
-      <div class="ebb">
-        <span class="etag">${eb.tag}</span>
-        <h3>${eb.title}</h3>
-        <p>${eb.desc}</p>
-        <ul class="efl">${eb.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-        <div class="efr">
-          <div class="ep"><span class="orig">${eb.orig}</span>${eb.price}</div>
-          <button class="btn btn-p" onclick="openBuy('${eb.title.replace(/'/g,"\\'")}','${eb.price.replace('$','')}')">Buy Now</button>
+      <div class="aw-body">
+        <span class="awi">${a.icon||'🏆'}</span>
+        <h3>${a.title}</h3>
+        <p>${a.desc}</p>
+        <div class="aw-ribbon">Recognised</div>
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.awc').forEach(el=>ro.observe(el));
+}
+async function fetchAchievements(){
+  try{const res=await fetch(`${API_BASE}/achievements`);if(res.ok)achievementsData=await res.json();}catch(e){}
+  renderAchievements();
+}
+
+// JOURNAL DATA & RENDER
+const DEFAULT_JOURNAL=[
+  {id:1,title:'Akshita Dayma Goel Named Life Coach of the Year 2025',excerpt:'International Manifestation Coach recognised for transformational impact on over 100,000 clients across 70+ countries.',date:'March 2025',source:'Republic TV',platform:'republic',link:'#',img:''},
+  {id:2,title:'How Akshita Is Changing Lives Through Manifestation Science',excerpt:'An in-depth feature on the science and spirituality behind her unique coaching methodology.',date:'Feb 2025',source:'CEO India Magazine',platform:'ceo',link:'#',img:''},
+  {id:3,title:'Top 50 Powerful Personalities in India',excerpt:'Recognised among India\'s most influential voices in personal development and spiritual coaching.',date:'Jan 2025',source:'Success India Magazine',platform:'success',link:'#',img:''},
+  {id:4,title:'Nari Shakti: Women Leading the World Transformation',excerpt:'Featured as a leader in women empowerment and global consciousness transformation.',date:'Dec 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''},
+  {id:5,title:'The DailyHunt Interview: Manifesting Your Richest Timeline',excerpt:'A candid conversation about breaking limiting beliefs, the science of manifestation, and how to attract your dream life.',date:'Nov 2024',source:'DailyHunt',platform:'dailyhunt',link:'#',img:''},
+  {id:6,title:'Icons of Bharat: Coaches Changing India From Within',excerpt:'Celebrated as one of India\'s most impactful coaches whose work spans 70+ countries.',date:'Oct 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''}
+];
+let journalData=DEFAULT_JOURNAL;
+
+function renderJournal(){
+  const grid=document.getElementById('journalGrid');if(!grid)return;
+  grid.innerHTML=journalData.map((j,i)=>`
+    <div class="jrnl-card rv d${(i%3)+1}">
+      <div class="jrnl-img">
+        ${j.img?`<img src="${j.img}" alt="${j.title}" onerror="this.parentElement.innerHTML='<div class=jrnl-img-empty>📰</div>'">`:`<div class="jrnl-img-empty">📰</div>`}
+        <div class="jrnl-img-overlay"></div>
+        <div class="jrnl-platform ${j.platform||'default'}">${j.source}</div>
+      </div>
+      <div class="jrnl-body">
+        <span class="jrnl-date">${j.date||''}</span>
+        <h3>${j.title}</h3>
+        <p class="jrnl-excerpt">${j.excerpt}</p>
+        <div class="jrnl-footer">
+          <span class="jrnl-source">${j.source}</span>
+          <a href="${j.link||'#'}" target="_blank" class="jrnl-link">Read Article<svg viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
         </div>
       </div>
     </div>
   `).join('');
-  document.querySelectorAll('#ebooksGrid .rv').forEach(el=>el.classList.add('vis'));
+  document.querySelectorAll('.jrnl-card').forEach(el=>ro.observe(el));
+}
+async function fetchJournal(){
+  try{const res=await fetch(`${API_BASE}/journal`);if(res.ok)journalData=await res.json();}catch(e){}
+  renderJournal();
 }
 
-// ═══ TESTIMONIALS ═══
+// EBOOKS DATA & RENDER
+const DEFAULT_EBOOKS=[
+  {id:1,title:'The Subconscious Shift Formula',tag:'Manifestation',price:'$47',orig:'$67',desc:'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.',features:['Subconscious reprogramming techniques','Step-by-step belief transformation','Practical daily rituals','Instant digital download'],badge:'bestseller',badgeText:'Bestseller',icon:'📖',img:'',reviews:1240,rating:5},
+  {id:2,title:'Manifest Your Soulmate',tag:'Love & Relationships',price:'$37',orig:'$57',desc:'Heal relationship patterns and align yourself with deep, fulfilling love.',features:['Healing past relationship trauma','Energetic alignment for love','Attract meaningful partnerships','Instant digital download'],badge:'popular',badgeText:'Popular',icon:'💫',img:'',reviews:982,rating:5},
+  {id:3,title:'Money Mindset Mastery',tag:'Wealth & Abundance',price:'$47',orig:'$67',desc:'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.',features:['Identify & dissolve money blocks','Build an abundance frequency','Manifestation + strategic action','Instant digital download'],badge:'',badgeText:'',icon:'💰',img:'',reviews:756,rating:5},
+  {id:4,title:'Aligned Career Manifestation',tag:'Career & Purpose',price:'$37',orig:'$57',desc:"Align your purpose with your profession — manifest your dream career.",features:["Clarity on your soul's purpose",'Energetic alignment with success','Overcome imposter syndrome','Instant digital download'],badge:'',badgeText:'',icon:'🎯',img:'',reviews:621,rating:5},
+  {id:5,title:'Neuroplasticity Manifestation Guide',tag:'Mindset & Reprogramming',price:'$57',orig:'$77',desc:'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.',features:['Brain science made accessible','Neural pathway rewiring exercises','30-day transformation plan','Instant digital download'],badge:'new',badgeText:'New',icon:'🧠',img:'',reviews:412,rating:5},
+  {id:6,title:'Full eBook Bundle — All 5 Guides',tag:'Complete Collection',price:'$97',orig:'$225',desc:'Get all 5 transformation guides at a massive discount.',features:['All 5 eBooks included','Save over 50% vs buying separately','Bonus: Guided meditation audio','Lifetime access & free updates'],badge:'value',badgeText:'Best Value',icon:'🎁',img:'',reviews:2100,rating:5}
+];
+let ebookData=DEFAULT_EBOOKS;
+
+function calcSaving(orig,price){
+  const o=parseFloat((orig||'').replace(/[^0-9.]/g,''));
+  const p=parseFloat((price||'').replace(/[^0-9.]/g,''));
+  if(o&&p&&o>p)return`Save ${Math.round((1-p/o)*100)}%`;return'';
+}
+function renderEbooks(){
+  const grid=document.getElementById('ebooksGrid');if(!grid)return;
+  grid.innerHTML=ebookData.map(b=>{
+    const saving=calcSaving(b.orig,b.price);
+    const gradients={'📖':'linear-gradient(135deg,#1a1530 0%,#2d1e4a 50%,#1a1030 100%)','💫':'linear-gradient(135deg,#1a1020 0%,#3d1a2a 50%,#1a0f1e 100%)','💰':'linear-gradient(135deg,#0f1820 0%,#1a3020 50%,#0a1215 100%)','🎯':'linear-gradient(135deg,#101520 0%,#1a2035 50%,#0a1020 100%)','🧠':'linear-gradient(135deg,#0f1520 0%,#152535 50%,#0a1020 100%)','🎁':'linear-gradient(135deg,#1a1020 0%,#2a1a35 50%,#1a0f28 100%)'};
+    const bg=gradients[b.icon]||'linear-gradient(135deg,#0f1020,#1a1535)';
+    return`<div class="ebc rv d${((ebookData.indexOf(b))%3)+1}">
+      <div class="ebc-spine"></div>
+      <div class="ecv">
+        <div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>
+        ${b.img?`<img class="ecv-img" src="${b.img}" alt="${b.title}" onerror="this.style.display='none'">`:''} 
+        <div class="ecv-overlay"></div>
+        <div class="ecover-icon-wrap"><span class="ecover-icon">${b.icon||'📘'}</span><span class="ecover-title-preview">${b.title}</span></div>
+        ${b.badge?`<div class="ebadge ${b.badge}">${b.badgeText||b.badge}</div>`:''}
+      </div>
+      <div class="ebb">
+        <span class="etag">${b.tag||''}</span>
+        <h3>${b.title}</h3>
+        <div class="e-stars">${[1,2,3,4,5].map(()=>'<span class="e-star">★</span>').join('')}<span class="e-reviews">(${(b.reviews||0).toLocaleString()})</span></div>
+        <p>${b.desc}</p>
+        <ul class="efl">${(b.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
+        <div class="efr">
+          <div class="ep">
+            ${b.orig?`<span class="ep-orig">${b.orig}</span>`:''}
+            <span class="ep-price">${b.price}</span>
+            ${saving?`<span class="ep-save">${saving}</span>`:''}
+          </div>
+          <button class="ebuy-btn" onclick="openBuy('${b.title}','${b.price}')">Buy Now<svg viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.ebc').forEach(el=>ro.observe(el));
+}
+async function fetchEbooks(){
+  try{const res=await fetch(`${API_BASE}/ebooks`);if(res.ok)ebookData=await res.json();}catch(e){}
+  renderEbooks();
+}
+
+// TESTIMONIALS
 const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day'};
 const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program'};
 let currentFilter='all';
-function filterTests(cat,btn){currentFilter=cat;document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTestimonials();}
+let testimonials=[];
+
+function filterTests(cat,btn){
+  currentFilter=cat;
+  document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTestimonials();
+}
+
 function renderTestimonials(){
-  const track=document.getElementById('testScroll');
-  const filtered=currentFilter==='all'?testimonials:testimonials.filter(t=>t.cat===currentFilter);
-  if(!filtered.length){track.innerHTML=`<div style="padding:3rem;color:var(--muted);font-size:.85rem;white-space:nowrap;">No screenshots in this category yet.</div>`;return;}
-  track.innerHTML=filtered.map(t=>`
+  const container=document.getElementById('testScroll');
+  let data=testimonials||[];
+  if(currentFilter!=='all')data=data.filter(t=>t.cat===currentFilter);
+  if(data.length===0){
+    container.innerHTML=`<div style="padding:3rem 2rem;color:var(--muted);font-size:.88rem;text-align:center;min-width:340px;line-height:1.8;">No testimonials yet for this category</div>`;
+    return;
+  }
+  container.innerHTML=data.map(t=>`
     <div class="test-card" onclick="openLBById(${t.id})">
-      <div class="test-cat-tag ${catTagClass[t.cat]}">${catLabels[t.cat]}</div>
+      <div class="test-cat-tag ${catTagClass[t.cat]||''}">${catLabels[t.cat]||'Result'}</div>
       <div class="test-img-wrap">
-        ${t.img?`<img src="${t.img}" alt="Client screenshot">`:`<div class="test-img-empty"><span>📱 Screenshot</span></div>`}
+        ${t.img
+          ?`<img src="${t.img}" alt="${t.label||'Testimonial'}" loading="lazy">`
+          :`<div class="test-img-empty">
+              <div class="empty-icon">✨</div>
+              <span>Client result screenshot</span>
+            </div>`
+        }
+        <div class="test-view-overlay">
+          <div class="test-view-btn">👁 View Full</div>
+        </div>
       </div>
-      <div class="test-card-label">${t.label||'Client result'}</div>
+      <div class="test-card-footer">
+        <span class="test-card-label">${t.label||'Client Result'}</span>
+        <span class="test-card-arrow">→</span>
+      </div>
     </div>
   `).join('');
 }
-function scrollTests(dir){const t=document.getElementById('testScroll');t.scrollLeft+=dir*250;}
+
+async function fetchTestimonials(){
+  try{const res=await fetch(`${API_BASE}/testimonials`);if(res.ok)testimonials=await res.json();}catch(e){testimonials=[];}
+  renderTestimonials();
+}
+function scrollTests(dir){const t=document.getElementById('testScroll');t.scrollLeft+=dir*260;}
+
+// LIGHTBOX — improved large view
+let lbIdx=0,lbData=[];
+
 function openLBById(id){
   const filtered=currentFilter==='all'?testimonials:testimonials.filter(t=>t.cat===currentFilter);
   const idx=filtered.findIndex(t=>t.id===id);
-  const imgs=filtered.filter(t=>t.img).map(t=>t.img);
-  if(!imgs.length)return;
-  const imgIdx=filtered.slice(0,idx+1).filter(t=>t.img).length-1;
-  if(imgIdx<0)return;
-  lbIdx=imgIdx;lbImgs=imgs;
-  document.getElementById('lbImg').src=lbImgs[lbIdx];
-  document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbImgs.length;
-  document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden';
+  lbData=filtered;lbIdx=idx>=0?idx:0;
+  showLB();
 }
-let lbIdx=0,lbImgs=[];
+function showLB(){
+  const item=lbData[lbIdx];if(!item)return;
+  const box=document.getElementById('lbImgBox');
+  const lbl=document.getElementById('lbLabel');
+  if(lbl)lbl.textContent=item.label||'';
+  if(item.img){
+    box.innerHTML=`<img src="${item.img}" alt="${item.label||'Testimonial'}" onerror="this.parentElement.innerHTML='<div class=lb-no-img><span>🖼️</span><p>Image could not be loaded</p></div>'">`;
+  }else{
+    box.innerHTML=`<div class="lb-no-img"><span>💬</span><p>${item.label||'Client testimonial'}</p></div>`;
+  }
+  document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbData.length;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 function closeLB(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
-function lbNav(d){if(!lbImgs.length)return;lbIdx=(lbIdx+d+lbImgs.length)%lbImgs.length;document.getElementById('lbImg').src=lbImgs[lbIdx];document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbImgs.length;}
+function lbNav(d){if(!lbData.length)return;lbIdx=(lbIdx+d+lbData.length)%lbData.length;showLB();}
 function lbBgClick(e){if(e.target===document.getElementById('lb'))closeLB();}
-document.addEventListener('keydown',e=>{if(!document.getElementById('lb').classList.contains('open'))return;if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);if(e.key==='Escape')closeLB();});
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lb').classList.contains('open'))return;
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+  if(e.key==='Escape')closeLB();
+});
 
-// ═══ BOOKING — Tier click → Step 3 ═══
+// BOOKING (main session)
 const CAL_USER='manifestuniversecrets';
 const CAL_URLS={
   'specific-person':{gold:`https://cal.com/${CAL_USER}/sp-gold`,diamond:`https://cal.com/${CAL_USER}/sp-diamond`,platinum:`https://cal.com/${CAL_USER}/sp-platinum`},
   'career':{gold:`https://cal.com/${CAL_USER}/career-gold`,diamond:`https://cal.com/${CAL_USER}/career-diamond`,platinum:`https://cal.com/${CAL_USER}/career-platinum`},
   'manifestation':{gold:`https://cal.com/${CAL_USER}/manifestation-gold`,diamond:`https://cal.com/${CAL_USER}/manifestation-diamond`,platinum:`https://cal.com/${CAL_USER}/manifestation-platinum`}
 };
-const CAL_PARAMS='?theme=dark&hideEventTypeDetails=0&brandColor=c9a84c';
+const CAL_PARAMS='?theme=dark&brandColor=c9a84c';
 const TIER_DATA={
   'specific-person':[
     {tier:'gold',gem:'🥇',name:'Gold',duration:'30 Minutes',inr:'₹21,000',usd:'$250',focus:'Break No Contact',includes:['Energetic & emotional analysis','No-contact energy reset','Subconscious calming','Identity shift','Visualization + affirmations'],perfect:['Break silence','Reduce anxiety','Feel in control','See initial movement'],popular:'Starter'},
@@ -1256,7 +1838,15 @@ function goStep(n){
   document.getElementById('sp'+n).classList.add('active');
   if(n===2){document.getElementById('catLabel').textContent=bCat.name;buildBC('breadcrumb2');renderTiers(bCat.slug);}
   if(n===3){buildBC('breadcrumb3');loadCal();}
-  if(n>1){const bkSection=document.getElementById('booking');if(bkSection)setTimeout(()=>bkSection.scrollIntoView({behavior:'smooth',block:'start'}),100);}
+  if(n>1){
+    setTimeout(()=>{
+      const stepsBar=document.querySelector('#booking .steps');
+      if(stepsBar){
+        const top=stepsBar.getBoundingClientRect().top+window.scrollY - 100;
+        window.scrollTo({top,behavior:'smooth'});
+      }
+    },100);
+  }
 }
 function loadCal(){
   const frame=document.getElementById('calFrame');
@@ -1268,7 +1858,6 @@ function loadCal(){
     frame.src=fullUrl;
     if(link)link.href=url;
     loading.style.display='flex';frame.style.display='none';
-    // Listen for iframe load
     frame.onload=function(){loading.style.display='none';frame.style.display='block';};
   }else{
     loading.innerHTML=`<p style="color:var(--muted);font-size:.85rem;text-align:center;line-height:1.75;max-width:360px;">Please <a href="https://cal.com/${CAL_USER}" target="_blank" style="color:var(--gold);">open Cal.com</a> and book your <strong style="color:var(--gold-light);">${bCat.name} · ${bTier.name} (${bTier.price})</strong> session.</p>`;
@@ -1276,73 +1865,113 @@ function loadCal(){
   }
 }
 
-// ═══ 21-DAY PROGRAM — Inline cal.com embeds ═══
+// 21-DAY STEP FLOW
 const CAL_21_URLS={
   'sp-21day':`https://cal.com/${CAL_USER}/sp-21day`,
   'career-21day':`https://cal.com/${CAL_USER}/career-21day`,
   'manifestation-21day':`https://cal.com/${CAL_USER}/manifestation-21day`
 };
 
-function toggle21Cal(slug,calId,cardId){
-  const wrap=document.getElementById(calId);
-  if(!wrap)return;
-  const isOpen=wrap.classList.contains('open');
-  // Close all 21-day cals first
-  document.querySelectorAll('.prog21-cal-wrap.open').forEach(w=>{
-    w.classList.remove('open');
-    const hintId='hint-'+w.id;
-    const hint=document.getElementById(hintId);
-    if(hint){hint.style.display='';hint.textContent='✦ Tap to schedule your 21-day program';}
-    // Deselect card
-    const card=w.closest('.tier-card');
-    if(card)card.classList.remove('sel');
+let p21Cat={name:'',slug:'',label:''};
+
+function p21PickCat(el, slug, name, catType){
+  document.querySelectorAll('.p21-prog-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  p21Cat={name,slug,catType};
+  showToast('✦ '+name+' selected — loading your calendar…');
+  setTimeout(()=>p21GoStep(2),300);
+}
+
+function p21GoStep(n){
+  [1,2].forEach(i=>{
+    const s=document.getElementById('p21sc'+i);
+    const sl=document.getElementById('p21sl'+i);
+    s.classList.remove('active','done');sl.classList.remove('active');
+    if(i<n){s.classList.add('done');s.textContent='✓';}
+    else if(i===n){s.classList.add('active');s.textContent=i;sl.classList.add('active');}
+    else s.textContent=i;
+    if(i<2){document.getElementById('p21sln'+i).classList.toggle('done',i<n);}
   });
-  if(isOpen)return; // was open, now closed — done
-  // Open this one
-  const card=document.getElementById(cardId);
-  if(card)card.classList.add('sel');
-  wrap.classList.add('open');
-  const hint=document.getElementById('hint-'+calId);
-  if(hint){hint.style.display='none';}
-  // Load iframe only once
-  const frame=document.getElementById(calId+'-frame');
-  const loading=document.getElementById(calId+'-loading');
-  if(frame&&!frame.src){
-    const url=(CAL_21_URLS[slug]||`https://cal.com/${CAL_USER}`)+CAL_PARAMS;
-    frame.src=url;
-    if(loading){loading.style.display='flex';}
-    frame.style.display='none';
-    // Use JS event listener — NOT inline onload (fixes the ReferenceError)
-    frame.addEventListener('load',function onLoad(){
-      frame.removeEventListener('load',onLoad);
-      if(loading)loading.style.display='none';
-      frame.style.display='block';
-    });
+
+  document.querySelectorAll('.p21-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p21sp'+n).classList.add('active');
+
+  if(n===2){
+    const bc=document.getElementById('p21Breadcrumb');
+    if(bc)bc.innerHTML=`<div class="bk-chip"><span>Program</span>${p21Cat.name}</div><div class="bk-arrow">›</div><div class="bk-chip"><span>Duration</span>21 Days · 3 Sessions</div>`;
+
+    const frame=document.getElementById('p21CalFrame');
+    const loading=document.getElementById('p21CalLoading');
+    const link=document.getElementById('p21CalOpenLink');
+    const url=CAL_21_URLS[p21Cat.slug];
+
+    if(url){
+      const fullUrl=url+'?theme=dark&brandColor=c9a84c';
+      if(frame.getAttribute('data-loaded')!==fullUrl){
+        frame.setAttribute('data-loaded',fullUrl);
+        frame.src=fullUrl;
+        loading.style.display='flex';frame.style.display='none';
+        frame.addEventListener('load',function onL(){
+          frame.removeEventListener('load',onL);
+          loading.style.display='none';frame.style.display='block';
+        });
+      } else {
+        loading.style.display='none';frame.style.display='block';
+      }
+      if(link)link.href=url;
+    } else {
+      loading.innerHTML=`<p style="color:var(--muted);font-size:.85rem;text-align:center;line-height:1.75;max-width:360px;">Please <a href="https://cal.com/${CAL_USER}" target="_blank" style="color:var(--gold);">open Cal.com</a> to book your <strong style="color:var(--gold-light);">${p21Cat.name}</strong>.</p>`;
+      loading.style.display='flex';frame.style.display='none';
+    }
+
+    setTimeout(()=>{
+      const flow=document.querySelector('.prog21-flow');
+      if(flow){
+        const top=flow.getBoundingClientRect().top+window.scrollY - 100;
+        window.scrollTo({top,behavior:'smooth'});
+      }
+    },120);
   }
-  // Scroll the calendar into view
-  setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'nearest'}),200);
-  showToast('📅 Calendar loaded — pick your time!');
+
+  if(n===1){
+    document.querySelectorAll('.p21-prog-card').forEach(c=>c.classList.remove('sel'));
+    setTimeout(()=>{
+      const flow=document.querySelector('.prog21-flow');
+      if(flow){
+        const top=flow.getBoundingClientRect().top+window.scrollY - 100;
+        window.scrollTo({top,behavior:'smooth'});
+      }
+    },80);
+  }
 }
 
-function close21Cal(calId,hintId){
-  const wrap=document.getElementById(calId);
-  if(wrap){wrap.classList.remove('open');}
-  const hint=document.getElementById(hintId);
-  if(hint){hint.style.display='';hint.textContent='✦ Tap to schedule your 21-day program';}
-  const card=wrap&&wrap.closest('.tier-card');
-  if(card)card.classList.remove('sel');
-}
-
-// ═══ MODALS ═══
+// MODALS
 function openM(id){document.getElementById(id).classList.add('active');document.body.style.overflow='hidden';}
 function closeM(id){document.getElementById(id).classList.remove('active');document.body.style.overflow='';}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m.id);}));
 function openBuy(t,p){document.getElementById('mTitle').textContent=t;document.getElementById('mPrice').textContent=p;openM('buyModal');}
-function submitForm(e){e.preventDefault();openM('contactModal');e.target.reset();}
 
-// ═══ INIT ═══
-renderEbooks();
-renderTestimonials();
+async function submitForm(e){
+  e.preventDefault();
+  const form=e.target;
+  const data={
+    firstName:form.querySelectorAll("input")[0].value,
+    lastName:form.querySelectorAll("input")[1].value,
+    email:form.querySelector("input[type='email']").value,
+    message:form.querySelector("textarea").value
+  };
+  try{
+    const res=await fetch(`${API_BASE}/contact`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+    if(res.ok){openM('contactModal');form.reset();}
+    else showToast("❌ Failed to send message");
+  }catch(err){showToast("⚠️ Server error");}
+}
+
+// INIT
+fetchAchievements();
+fetchJournal();
+fetchEbooks();
+fetchTestimonials();
 </script>
 </body>
 </html>
