@@ -194,7 +194,7 @@ footer span{color:var(--gold);}
     <div class="ticker-wrap">
       <div class="ticker">
         <div class="tick-dot"></div>
-        <span>Limited Spots — 21-Day Intensive Program</span>
+        <span>Limited Slots — 21-Day Intensive Program</span>
         <div class="tick-dot"></div>
         <span>3 Sessions · Daily Guidance · Real Results</span>
         <div class="tick-dot"></div>
@@ -226,7 +226,7 @@ footer span{color:var(--gold);}
 
     <!-- Urgency -->
     <div class="urgency-bar rv">
-      <div class="u-item"><div class="u-icon">🔥</div><span>Only <strong>3 spots left</strong> this month</span></div>
+      <div class="u-item"><div class="u-icon">🔥</div><span>Only <strong>3 slots left</strong> this month</span></div>
       <div class="u-sep"></div>
       <div class="u-item"><div class="u-icon">⚡</div><span><strong>Instant</strong> confirmation</span></div>
       <div class="u-sep"></div>
@@ -429,7 +429,12 @@ function p21GoStep(n){
       loading.style.display='flex';frame.style.display='none';
     }
   }
-  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===2){
+  document.getElementById('p21sp2').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
 }
 </script>
 </body>
