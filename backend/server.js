@@ -116,26 +116,35 @@ app.post("/delete-file", async (req, res) => {
 });
 
 /* ===========================
-   🔥 CAL.COM (UPDATED v2)
+   🔥 CAL.COM (FINAL FIX v2)
 =========================== */
-
 app.get("/cal/bookings", async (req, res) => {
   const key = process.env.CAL_API_KEY;
+  const username = process.env.CAL_USERNAME; // IMPORTANT
 
-  if (!key) {
-    return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+  if (!key || !username) {
+    return res.status(500).json({
+      error: "Missing CAL_API_KEY or CAL_USERNAME in .env"
+    });
   }
 
   try {
-    const r = await fetch("https://api.cal.com/v2/bookings/me", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${key}`,
-        "Content-Type": "application/json"
+    console.log("🔥 Fetching bookings...");
+
+    const r = await fetch(
+      `https://api.cal.com/v2/bookings?username=${username}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json"
+        }
       }
-    });
+    );
 
     const data = await r.json();
+
+    console.log("🔥 CAL RESPONSE:", data);
 
     if (!r.ok) {
       return res.status(r.status).json({
@@ -156,7 +165,7 @@ app.post("/cal/cancel/:bookingId", async (req, res) => {
   const key = process.env.CAL_API_KEY;
 
   if (!key) {
-    return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+    return res.status(500).json({ error: "CAL_API_KEY not set" });
   }
 
   try {
@@ -165,7 +174,7 @@ app.post("/cal/cancel/:bookingId", async (req, res) => {
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${key}`,
+          Authorization: `Bearer ${key}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -186,6 +195,7 @@ app.post("/cal/cancel/:bookingId", async (req, res) => {
     res.json(data);
 
   } catch (e) {
+    console.error("❌ Cancel error:", e);
     res.status(500).json({ error: e.message });
   }
 });

@@ -1383,7 +1383,14 @@ async function fetchBookings(){
   document.getElementById('calLoading').style.display='block';
   document.getElementById('bkWrap').innerHTML='';
   try{
-const r = await fetch(`${API}/cal/bookings`);
+const username = localStorage.getItem('cal_user');
+
+if (!username) {
+  toast("Username missing. Reconnect Cal.com", "error");
+  return;
+}
+
+const r = await fetch(`${API}/cal/bookings?username=${username}`);
     if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}
     const data=await r.json();allBk = data?.data?.bookings || [];
     document.getElementById('calSetup').style.display='none';
