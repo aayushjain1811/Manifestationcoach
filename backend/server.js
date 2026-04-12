@@ -1,5 +1,4 @@
-require("dotenv").config(); // ✅ load env
-
+require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
@@ -81,7 +80,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
 });
 
 /* ===========================
-   ✅ GET Cloudinary Files
+   ✅ Cloudinary Fetch
 =========================== */
 app.get("/get-images", async (req, res) => {
   const result = await cloudinary.search
@@ -102,7 +101,7 @@ app.get("/get-pdfs", async (req, res) => {
 });
 
 /* ===========================
-   ✅ DELETE FILE
+   ✅ Delete File
 =========================== */
 app.post("/delete-file", async (req, res) => {
   try {
@@ -115,46 +114,77 @@ app.post("/delete-file", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 /* ===========================
-   ✅ CAL.COM PROXY
+   🔥 CAL.COM (UPDATED v2)
 =========================== */
 
-// GET bookings (key stays on server, never exposed to browser)
 app.get("/cal/bookings", async (req, res) => {
   const key = process.env.CAL_API_KEY;
-  if (!key) return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+
+  if (!key) {
+    return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+  }
 
   try {
-    const r = await fetch(
-      `https://api.cal.com/v1/bookings?apiKey=${encodeURIComponent(key)}&take=100`
-    );
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      return res.status(r.status).json({ error: err.message || `Cal.com error ${r.status}` });
-    }
+    const r = await fetch("https://api.cal.com/v2/bookings", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${key}`,
+        "Content-Type": "application/json"
+      }
+    });
+
     const data = await r.json();
+
+    if (!r.ok) {
+      return res.status(r.status).json({
+        error: "Cal API error",
+        details: data
+      });
+    }
+
     res.json(data);
+
   } catch (e) {
+    console.error("❌ Fetch error:", e);
     res.status(500).json({ error: e.message });
   }
 });
 
-// POST cancel a booking
 app.post("/cal/cancel/:bookingId", async (req, res) => {
   const key = process.env.CAL_API_KEY;
-  if (!key) return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+
+  if (!key) {
+    return res.status(500).json({ error: "CAL_API_KEY not set in .env" });
+  }
 
   try {
     const r = await fetch(
-      `https://api.cal.com/v1/bookings/${req.params.bookingId}/cancel?apiKey=${encodeURIComponent(key)}`,
+      `https://api.cal.com/v2/bookings/${req.params.bookingId}/cancel`,
       {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: req.body.reason || "Cancelled by admin" })
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${key}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          reason: req.body.reason || "Cancelled by admin"
+        })
       }
     );
-    const data = await r.json().catch(() => ({ ok: true }));
+
+    const data = await r.json();
+
+    if (!r.ok) {
+      return res.status(r.status).json({
+        error: "Cancel failed",
+        details: data
+      });
+    }
+
     res.json(data);
+
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -193,7 +223,6 @@ app.get("/ebooks", async (req, res) => {
 
 app.put("/update-ebook/:id", async (req, res) => {
   const data = await Ebook.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!data) return res.status(404).json({ error: "Not found" });
   res.json(data);
 });
 
@@ -203,7 +232,7 @@ app.delete("/delete-ebook/:id", async (req, res) => {
 });
 
 /* ===========================
-   ✅ ACHIEVEMENT APIs
+   ✅ ACHIEVEMENTS APIs
 =========================== */
 app.get("/achievements", async (req, res) => {
   const data = await Achievement.find();
@@ -211,20 +240,18 @@ app.get("/achievements", async (req, res) => {
 });
 
 app.post("/add-achievement", async (req, res) => {
-  const newItem = new Achievement(req.body);
-  await newItem.save();
-  res.json({ message: "Saved" });
+  const data = await Achievement.create(req.body);
+  res.json(data);
 });
 
 app.put("/update-achievement/:id", async (req, res) => {
   const data = await Achievement.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!data) return res.status(404).json({ error: "Not found" });
   res.json(data);
 });
 
 app.delete("/delete-achievement/:id", async (req, res) => {
   await Achievement.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+  res.json({ success: true });
 });
 
 /* ===========================
@@ -236,27 +263,24 @@ app.get("/journal", async (req, res) => {
 });
 
 app.post("/add-journal", async (req, res) => {
-  const newItem = new Journal(req.body);
-  await newItem.save();
-  res.json({ message: "Saved" });
+  const data = await Journal.create(req.body);
+  res.json(data);
 });
 
 app.put("/update-journal/:id", async (req, res) => {
   const data = await Journal.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!data) return res.status(404).json({ error: "Not found" });
   res.json(data);
 });
 
 app.delete("/delete-journal/:id", async (req, res) => {
   await Journal.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+  res.json({ success: true });
 });
 
 /* ===========================
    ✅ START SERVER
 =========================== */
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
