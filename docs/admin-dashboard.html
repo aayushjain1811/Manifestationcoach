@@ -1385,7 +1385,7 @@ async function fetchBookings(){
   try{
 const r = await fetch(`${API}/cal/bookings`);
     if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}
-    const data=await r.json();allBk=data.bookings||data||[];
+    const data=await r.json();allBk = data?.data?.bookings || [];
     document.getElementById('calSetup').style.display='none';
     document.getElementById('bkSummary').style.display='grid';
     document.getElementById('bkToolbar').style.display='flex';
