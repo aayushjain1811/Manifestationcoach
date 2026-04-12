@@ -127,7 +127,7 @@ app.get("/cal/bookings", async (req, res) => {
   }
 
   try {
-    const r = await fetch("https://api.cal.com/v2/bookings", {
+    const r = await fetch("https://api.cal.com/v2/bookings/me", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${key}`,
