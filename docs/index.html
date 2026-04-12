@@ -241,8 +241,8 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .wide-inner{display:grid;grid-template-columns:1fr auto;gap:2.5rem;align-items:center;}
 .wide-right{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem;flex-shrink:0;}
 .wide-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);line-height:1;}
-.wide-price-orig{font-size:.75rem;color:var(--muted);text-decoration:line-through;text-align:right;}
-.wide-price-sub{font-size:.68rem;color:var(--muted);text-align:right;}
+.wide-price-orig{font-size:.98rem;color:var(--muted);text-decoration:line-through;text-align:right;}
+.wide-price-sub{font-size:.98rem;color:var(--muted);text-align:right;}
 .wide-highlight{display:flex;align-items:center;gap:.4rem;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.3rem .9rem;background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);border-radius:2px;white-space:nowrap;}
 .sov-card.wide-card p{max-width:600px;}
 
@@ -493,11 +493,11 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     <a href="#hero" class="logo">Akshita Dayma Goel</a>
     <ul class="nl">
       <li><a href="#hero">Home</a></li>
+      <li><a href="#services-overview">Offerings</a></li>      
       <li><a href="#about">About</a></li>
       <li><a href="#achievements">Achievements</a></li>
       <li><a href="#journal">Journal</a></li>
       <li><a href="#methodology">Methodology</a></li>
-      <li><a href="#services-overview">Offerings</a></li>
       <li><a href="#testimonials">Testimonials</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="sessions.html" class="ncta">Book Session</a></li>
@@ -589,7 +589,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
           <div class="wide-highlight">🔥 Only 3 slots left</div>
           <div class="wide-price">₹70,000</div>
           <div class="wide-price-sub">/ $769.99 per program</div>
-          <div class="wide-price-orig">₹1,05,000 value</div>
+          <div class="wide-price-orig">₹1,05,000 / $1127.93 value</div>
         </div>
       </div>
     </a>
@@ -765,7 +765,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
           <span class="cp-pill">Save ₹35,000</span>
         </div>
         <div class="cp-cta-row">
-          <span class="cp-cta-text">Claim your spot</span>
+          <span class="cp-cta-text">Claim your slot</span>
           <span class="cp-cta-arrow">→</span>
         </div>
       </a>
@@ -836,7 +836,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <div class="toast" id="toast"></div>
 
 <script>
-const API_BASE="http://localhost:5000";
+const API_BASE="https://adg-backend-sm2p.onrender.com";
 
 /* ── CURSOR ── */
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');

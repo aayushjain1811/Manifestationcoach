@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 :root{
+  --green:#5dcc7a;
   --dark:#070a1a;--dark2:#0c1030;--purple:#150e35;
   --gold:#c9a84c;--gold-light:#e8d5a3;--gold-dark:#9a7c30;
   --silver:#a8b5c8;--silver-light:#d4dde8;
@@ -172,7 +173,7 @@ footer span{color:var(--gold);}
 <div class="toast" id="toast"></div>
 
 <script>
-const API_BASE="http://localhost:5000";
+const API_BASE="https://adg-backend-sm2p.onrender.com";
 
 // Cursor
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
@@ -240,11 +241,17 @@ function renderEbooks(){
         <p>${b.desc}</p>
         <ul class="efl">${(b.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
         <div class="efr">
-          <div class="ep">
-            ${b.orig?`<span class="ep-orig">${b.orig}</span>`:''}
-            <span class="ep-price">${b.price}</span>
-            ${saving?`<span class="ep-save">${saving}</span>`:''}
-          </div>
+<div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
+  <div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
+    ${b.orig?`<span class="ep-orig">${b.orig}</span>`:''}
+    <span class="ep-price">${b.price}</span>
+    ${saving?`<span class="ep-save">${saving}</span>`:''}
+  </div>
+  ${b.priceInr?`<div style="display:flex;align-items:baseline;gap:.4rem;">
+    ${b.origInr?`<span style="font-size:.75rem;color:var(--muted);text-decoration:line-through;">${b.origInr}</span>`:''}
+    <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--green,#5dcc7a);line-height:1;">${b.priceInr}</span>
+  </div>`:''}
+</div>
           <button class="ebuy-btn" onclick="openBuy('${b.title}','${b.price}')">Buy Now ↗</button>
         </div>
       </div>

@@ -550,11 +550,13 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
           <div class="field-grp"><label>Title</label><input type="text" id="ebTitle" placeholder="eBook title"></div>
           <div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div>
         </div>
-        <div class="form-row three">
-          <div class="field-grp"><label>Sale Price</label><input type="text" id="ebPrice" placeholder="$47"></div>
-          <div class="field-grp"><label>Original Price</label><input type="text" id="ebOrig" placeholder="$67"></div>
-          <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
-        </div>
+<div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+  <div class="field-grp"><label>Sale Price (USD)</label><input type="text" id="ebPrice" placeholder="$47"></div>
+  <div class="field-grp"><label>Sale Price (INR)</label><input type="text" id="ebPriceInr" placeholder="₹3,999"></div>
+  <div class="field-grp"><label>Original Price (USD)</label><input type="text" id="ebOrig" placeholder="$67"></div>
+  <div class="field-grp"><label>Original Price (INR)</label><input type="text" id="ebOrigInr" placeholder="₹5,999"></div>
+  <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
+</div>
         <div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div>
         <div class="field-grp"><label>Features (one per line)</label><textarea id="ebFeatures" placeholder="Feature 1&#10;Feature 2" style="min-height:80px;"></textarea></div>
         <div class="field-grp">
@@ -752,7 +754,7 @@ function showPanel(n,btn){
 function scrollToAdd(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
 
 // ── API & DATA ──────────────────────────────────────────────────────────────
-const API="http://localhost:5000";
+const API="https://adg-backend-sm2p.onrender.com";
 let testimonials=[],ebooks=[],achievements=[],journal=[];
 
 async function loadTestimonials(){try{const r=await fetch(API+"/testimonials");testimonials=await r.json();}catch{testimonials=[];}renderTests();}
@@ -1095,19 +1097,58 @@ function removePdf(){ePdf='';ePdfId='';ePdfName='';ePdfSize=0;document.getElemen
 function fmtBytes(b){if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
 function clearEbookForm(){
   document.getElementById('editEbookIdx').value=-1;document.getElementById('ebFormTitle').textContent='Add eBook';
-  ['ebTitle','ebTag','ebPrice','ebOrig','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
+['ebTitle','ebTag','ebPrice','ebPriceInr','ebOrig','ebOrigInr','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
   hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();
 }
 async function saveEbook(){
-  const eb={title:v('ebTitle'),tag:v('ebTag'),price:v('ebPrice'),orig:v('ebOrig'),desc:v('ebDesc'),features:v('ebFeatures').split('\n').filter(Boolean),badge:v('ebBadge'),img:eImg||v('ebImgUrl'),imgPublicId:eImgId,pdfUrl:ePdf||v('ebPdfUrl'),pdfPublicId:ePdfId};
+  const id = document.getElementById('editEbookIdx').value;
+
+  const eb={
+    title:v('ebTitle'),
+    tag:v('ebTag'),
+    price:v('ebPrice'),
+    priceInr:v('ebPriceInr'),
+    orig:v('ebOrig'),
+    origInr:v('ebOrigInr'),
+    desc:v('ebDesc'),
+    features:v('ebFeatures').split('\n').filter(Boolean),
+    badge:v('ebBadge'),
+    img:eImg||v('ebImgUrl'),
+    imgPublicId:eImgId,
+    pdfUrl:ePdf||v('ebPdfUrl'),
+    pdfPublicId:ePdfId
+  };
+
   try{
-    await fetch(API+"/add-ebook",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});
-    clearEbookForm();await loadEbooks();updateDash();toast("✅ eBook saved","success");
-  }catch{toast("❌ Failed to save","error");}
+    if(id != -1){
+      // 🔥 UPDATE
+      await fetch(API+"/update-ebook/"+ebooks[id]._id,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(eb)
+      });
+      toast("✅ eBook updated","success");
+    }else{
+      // ADD
+      await fetch(API+"/add-ebook",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(eb)
+      });
+      toast("✅ eBook added","success");
+    }
+
+    clearEbookForm();
+    await loadEbooks();
+    updateDash();
+
+  }catch{
+    toast("❌ Failed","error");
+  }
 }
 function editEbook(i){
   const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
-  sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',eb.price);sv('ebOrig',eb.orig);sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
+sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',eb.price);sv('ebPriceInr',eb.priceInr||'');sv('ebOrig',eb.orig);sv('ebOrigInr',eb.origInr||'');sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
   if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}
   if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';sv('ebPdfUrl',eb.pdfUrl);ePdfName=eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}
   scrollToAdd('ebAdd');
@@ -1130,7 +1171,7 @@ function renderEbooks(){
     <div class="ebook-thumb">${eb.img?`<img src="${eb.img}" alt="">`:(eb.icon||'📖')}</div>
     <div class="ebook-info">
       <h4>${eb.title}</h4>
-      <p>${eb.tag||'—'} · <strong style="color:var(--gold);">${eb.price}</strong> <span style="text-decoration:line-through;opacity:.4;">${eb.orig||''}</span></p>
+      <p>${eb.tag||'—'} · <strong style="color:var(--gold);">${eb.price}</strong>${eb.priceInr?` <strong style="color:var(--green);">${eb.priceInr}</strong>`:''} <span style="text-decoration:line-through;opacity:.4;">${eb.orig||''}${eb.origInr?' / '+eb.origInr:''}</span></p>
       <div class="badges">
         ${eb.badge?`<span class="tag-pill">${eb.badge}</span>`:''}
         <span class="tag-pill" style="background:rgba(126,200,227,.07);color:var(--blue);">${(eb.features||[]).length} features</span>
@@ -1153,9 +1194,38 @@ function clearAchForm(){
   hidePrev('achImgPreview');aImg='';aImgId='';
 }
 async function saveAchievement(){
-  const ac={title:v('achTitle'),type:v('achType'),org:v('achOrg'),date:v('achDate'),desc:v('achDesc'),img:aImg||v('achImgUrl'),imgPublicId:aImgId,link:v('achLink')};
-  await fetch(API+"/add-achievement",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});
-  clearAchForm();await loadAchievements();updateDash();toast("✅ Achievement saved","success");
+  const id = document.getElementById('editAchIdx').value;
+
+  const ac={
+    title:v('achTitle'),
+    type:v('achType'),
+    org:v('achOrg'),
+    date:v('achDate'),
+    desc:v('achDesc'),
+    img:aImg||v('achImgUrl'),
+    imgPublicId:aImgId,
+    link:v('achLink')
+  };
+
+  if(id != -1){
+    await fetch(API+"/update-achievement/"+achievements[id]._id,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(ac)
+    });
+    toast("✅ Updated","success");
+  }else{
+    await fetch(API+"/add-achievement",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(ac)
+    });
+    toast("✅ Added","success");
+  }
+
+  clearAchForm();
+  await loadAchievements();
+  updateDash();
 }
 function editAch(i){
   const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';
@@ -1201,9 +1271,39 @@ function clearJrnForm(){
   hidePrev('jrnImgPreview');jImg='';jImgId='';
 }
 async function saveJournal(){
-  const jr={title:v('jrnTitle'),cat:v('jrnCat'),date:v('jrnDate'),mood:v('jrnMood'),excerpt:v('jrnExcerpt'),content:v('jrnContent'),tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),img:jImg||v('jrnImgUrl'),imgPublicId:jImgId};
-  await fetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});
-  clearJrnForm();await loadJournal();updateDash();toast("✅ Journal entry saved","success");
+  const id = document.getElementById('editJrnIdx').value;
+
+  const jr={
+    title:v('jrnTitle'),
+    cat:v('jrnCat'),
+    date:v('jrnDate'),
+    mood:v('jrnMood'),
+    excerpt:v('jrnExcerpt'),
+    content:v('jrnContent'),
+    tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
+    img:jImg||v('jrnImgUrl'),
+    imgPublicId:jImgId
+  };
+
+  if(id != -1){
+    await fetch(API+"/update-journal/"+journal[id]._id,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(jr)
+    });
+    toast("✅ Updated","success");
+  }else{
+    await fetch(API+"/add-journal",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(jr)
+    });
+    toast("✅ Added","success");
+  }
+
+  clearJrnForm();
+  await loadJournal();
+  updateDash();
 }
 function editJrn(i){
   const jr=journal[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';
@@ -1247,26 +1347,34 @@ function renderJrn(){
 
 // ── CAL.COM ─────────────────────────────────────────────────────────────────
 let allBk=[],bkFilter='all';
-function initBookings(){
-  const key=localStorage.getItem('cal_key');
-  if(key){document.getElementById('calApiKey').value=key;document.getElementById('calUsername').value=localStorage.getItem('cal_user')||'';connectCal(true);}
+function initBookings() {
+  const connected = localStorage.getItem('cal_connected');
+  if (connected) {
+    document.getElementById('calSetup').style.display = 'none';
+    fetchBookings();
+  }
 }
-async function connectCal(silent=false){
-  const key=document.getElementById('calApiKey').value.trim();
-  if(!key){toast('Please enter your Cal.com API key','error');return;}
-  localStorage.setItem('cal_key',key);localStorage.setItem('cal_user',document.getElementById('calUsername').value.trim());
-  if(!silent)toast('Connecting…','info');
+async function connectCal(silent = false) {
+  const key = document.getElementById('calApiKey').value.trim();
+  if (!key) { toast('Please enter your Cal.com API key', 'error'); return; }
+
+  // Only store a flag — never the key itself
+  localStorage.setItem('cal_connected', 'true');
+  localStorage.setItem('cal_user', document.getElementById('calUsername').value.trim());
+
+  if (!silent) toast('Connecting…', 'info');
   await fetchBookings();
 }
-function disconnectCal(){
-  confirm2('Disconnect Cal.com','This removes your API key from this browser.',()=>{
-    localStorage.removeItem('cal_key');localStorage.removeItem('cal_user');
-    allBk=[];document.getElementById('calApiKey').value='';document.getElementById('calUsername').value='';
-    document.getElementById('calSetup').style.display='block';
-    document.getElementById('bkSummary').style.display='none';
-    document.getElementById('bkToolbar').style.display='none';
-    document.getElementById('bkWrap').innerHTML='';
-    toast('Disconnected','success');
+function disconnectCal() {
+  confirm2('Disconnect Cal.com', 'This removes your Cal.com connection.', () => {
+    localStorage.removeItem('cal_connected');
+    localStorage.removeItem('cal_user');
+    allBk = [];
+    document.getElementById('calSetup').style.display = 'block';
+    document.getElementById('bkSummary').style.display = 'none';
+    document.getElementById('bkToolbar').style.display = 'none';
+    document.getElementById('bkWrap').innerHTML = '';
+    toast('Disconnected', 'success');
   });
 }
 async function fetchBookings(){
@@ -1275,7 +1383,7 @@ async function fetchBookings(){
   document.getElementById('calLoading').style.display='block';
   document.getElementById('bkWrap').innerHTML='';
   try{
-    const r=await fetch(`https://api.cal.com/v1/bookings?apiKey=${encodeURIComponent(key)}&take=100`,{headers:{'Content-Type':'application/json'}});
+const r = await fetch(`${API}/cal/bookings`);
     if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}
     const data=await r.json();allBk=data.bookings||data||[];
     document.getElementById('calSetup').style.display='none';
