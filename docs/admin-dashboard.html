@@ -551,10 +551,34 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
           <div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div>
         </div>
 <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
-  <div class="field-grp"><label>Sale Price (USD)</label><input type="text" id="ebPrice" placeholder="$47"></div>
-  <div class="field-grp"><label>Sale Price (INR)</label><input type="text" id="ebPriceInr" placeholder="₹3,999"></div>
-  <div class="field-grp"><label>Original Price (USD)</label><input type="text" id="ebOrig" placeholder="$67"></div>
-  <div class="field-grp"><label>Original Price (INR)</label><input type="text" id="ebOrigInr" placeholder="₹5,999"></div>
+  <div class="field-grp">
+    <label>Sale Price (USD)</label>
+    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
+      <input type="text" id="ebPrice" placeholder="47" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+    </div>
+  </div>
+  <div class="field-grp">
+    <label>Sale Price (INR)</label>
+    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
+      <input type="text" id="ebPriceInr" placeholder="3,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+    </div>
+  </div>
+  <div class="field-grp">
+    <label>Original Price (USD)</label>
+    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
+      <input type="text" id="ebOrig" placeholder="67" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+    </div>
+  </div>
+  <div class="field-grp">
+    <label>Original Price (INR)</label>
+    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
+      <input type="text" id="ebOrigInr" placeholder="5,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+    </div>
+  </div>
   <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
 </div>
         <div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div>
@@ -1103,13 +1127,13 @@ function clearEbookForm(){
 async function saveEbook(){
   const id = document.getElementById('editEbookIdx').value;
 
-  const eb={
-    title:v('ebTitle'),
-    tag:v('ebTag'),
-    price:v('ebPrice'),
-    priceInr:v('ebPriceInr'),
-    orig:v('ebOrig'),
-    origInr:v('ebOrigInr'),
+const eb={
+  title:v('ebTitle'),
+  tag:v('ebTag'),
+  price: v('ebPrice') ? '$'+v('ebPrice') : '',
+  priceInr: v('ebPriceInr') ? '₹'+v('ebPriceInr') : '',
+  orig: v('ebOrig') ? '$'+v('ebOrig') : '',
+  origInr: v('ebOrigInr') ? '₹'+v('ebOrigInr') : '',
     desc:v('ebDesc'),
     features:v('ebFeatures').split('\n').filter(Boolean),
     badge:v('ebBadge'),
@@ -1148,7 +1172,10 @@ async function saveEbook(){
 }
 function editEbook(i){
   const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
-sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',eb.price);sv('ebPriceInr',eb.priceInr||'');sv('ebOrig',eb.orig);sv('ebOrigInr',eb.origInr||'');sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
+sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',(eb.price||'').replace(/[$₹,]/g,''));
+sv('ebPriceInr',(eb.priceInr||'').replace(/[$₹,]/g,''));
+sv('ebOrig',(eb.orig||'').replace(/[$₹,]/g,''));
+sv('ebOrigInr',(eb.origInr||'').replace(/[$₹,]/g,''));;sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
   if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}
   if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';sv('ebPdfUrl',eb.pdfUrl);ePdfName=eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}
   scrollToAdd('ebAdd');

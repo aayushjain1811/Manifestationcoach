@@ -225,15 +225,20 @@ function renderEbooks(){
   const grid=document.getElementById('ebooksGrid');
   grid.innerHTML=ebookData.map((b,i)=>{
     const saving=calcSaving(b.orig,b.price);
-    const bg=gradients[b.icon]||'linear-gradient(135deg,#0f1020,#1a1535)';
-    return`<div class="ebc rv d${(i%3)+1}">
-      <div class="ebc-spine"></div>
-      <div class="ecv">
-        <div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>
-        <div class="ecv-overlay"></div>
-        <div class="ecover-icon-wrap"><span class="ecover-icon">${b.icon||'📘'}</span><span class="ecover-title-preview">${b.title}</span></div>
-        ${b.badge?`<div class="ebadge ${b.badge}">${b.badgeText||b.badge}</div>`:''}
-      </div>
+const bg=gradients[b.icon]||'linear-gradient(135deg,#0f1020,#1a1535)';
+return`<div class="ebc rv d${(i%3)+1}">
+  <div class="ebc-spine"></div>
+  <div class="ecv">
+    ${b.img
+      ? `<img src="${b.img}" alt="${b.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">`
+      : `<div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>`
+    }
+    <div class="ecv-overlay"></div>
+    <div class="ecover-icon-wrap">
+      ${!b.img ? `<span class="ecover-icon">${b.icon||'📘'}</span><span class="ecover-title-preview">${b.title}</span>` : ''}
+    </div>
+    ${b.badge?`<div class="ebadge ${b.badge}">${b.badgeText||b.badge}</div>`:''}
+  </div>
       <div class="ebb">
         <span class="etag">${b.tag||''}</span>
         <h3>${b.title}</h3>
