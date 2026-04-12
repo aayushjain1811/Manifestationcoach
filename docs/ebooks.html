@@ -243,7 +243,7 @@ return`<div class="ebc rv d${(i%3)+1}">
         <span class="etag">${b.tag||''}</span>
         <h3>${b.title}</h3>
         <div class="e-stars">${[1,2,3,4,5].map(()=>'<span class="e-star">★</span>').join('')}<span class="e-reviews">(${(b.reviews||0).toLocaleString()})</span></div>
-        <p>${b.desc}</p>
+        <p style="white-space:pre-line;">${b.desc}</p>
         <ul class="efl">${(b.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
         <div class="efr">
 <div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
