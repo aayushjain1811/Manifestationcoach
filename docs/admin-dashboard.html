@@ -1378,7 +1378,7 @@ function disconnectCal() {
   });
 }
 async function fetchBookings(){
-  const key=localStorage.getItem('cal_key');if(!key)return;
+  const connected=localStorage.getItem('cal_connected');if(!connected)return;
   document.getElementById('calError').style.display='none';
   document.getElementById('calLoading').style.display='block';
   document.getElementById('bkWrap').innerHTML='';
