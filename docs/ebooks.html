@@ -75,9 +75,6 @@ section{padding:5rem 5%;}
 .ebc h3{font-size:1.05rem;color:#fff;font-weight:500;margin-bottom:.5rem;line-height:1.35;}
 .ebc p{font-size:.8rem;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:1rem;flex:1;
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
-.e-stars{display:flex;align-items:center;gap:.25rem;margin-bottom:.8rem;}
-.e-star{color:var(--gold);font-size:.75rem;}
-.e-reviews{font-size:.68rem;color:var(--muted);margin-left:.3rem;}
 .efl{list-style:none;margin-bottom:1.3rem;}
 .efl li{font-size:.76rem;color:var(--muted);padding:.3rem 0 .3rem 1.1rem;border-bottom:1px solid var(--border);position:relative;font-weight:300;}
 .efl li:last-child{border-bottom:none;}
@@ -328,7 +325,6 @@ function renderEbooks() {
   <div class="ebb">
     <span class="etag">${b.tag || ''}</span>
     <h3>${b.title}</h3>
-    <div class="e-stars">${[1, 2, 3, 4, 5].map(() => '<span class="e-star">★</span>').join('')}<span class="e-reviews">(${(b.reviews || 0).toLocaleString()})</span></div>
     <p style="white-space:pre-line;">${b.desc}</p>
     <ul class="efl">${(b.features || []).slice(0,4).map(f => `<li>${f}</li>`).join('')}</ul>
     <div class="efr">
