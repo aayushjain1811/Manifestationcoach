@@ -9,6 +9,10 @@ const path = require("path");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setTimeout(120000); // 2 minutes
+  next();
+});
 
 // ✅ Serve frontend
 app.use(express.static(path.join(__dirname, "../docs")));
@@ -41,7 +45,10 @@ cloudinary.config({
    ✅ Multer Setup
 =========================== */
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
 
 app.post("/upload-image", upload.single("file"), async (req, res) => {
   try {
@@ -74,7 +81,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       {
         resource_type: "raw",
         folder: "admin_uploads/pdfs",
-        timeout: 60000 // ⏱ increase timeout (60s)
+        timeout: 120000 // ⏱ increase timeout (60s)
       }
     );
 
