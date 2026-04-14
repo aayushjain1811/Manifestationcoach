@@ -231,14 +231,15 @@ async function openBuy(title, priceUsd, priceInr, ebookId) {
     const order = await res.json();
     if (!order.orderId) throw new Error(order.error || 'Order creation failed');
 
-    const options = {
-      key: RAZORPAY_KEY,
-      amount: order.amount,
-      currency: order.currency,
-      name: 'Akshita Dayma Goel',
-      description: title,
-      image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
-      order_id: order.orderId,
+const cleanTitle = title.replace(/[^\x00-\x7F]/g, '').trim() || 'eBook Purchase';
+const options = {
+  key: RAZORPAY_KEY,
+  amount: order.amount,
+  currency: order.currency,
+  name: 'Akshita Dayma Goel',
+  description: cleanTitle,
+  image: 'universecrets.com/images/logo.png',
+  order_id: order.orderId,
       handler: async function (response) {
         const verify = await fetch(`${API_BASE}/razorpay/verify`, {
           method: 'POST',
