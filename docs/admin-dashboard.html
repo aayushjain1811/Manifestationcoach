@@ -640,36 +640,86 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
     <div class="panel" id="panel-journal">
       <div class="section-title">Journal Posts <button class="adm-btn gold sm" onclick="clearJrnForm();scrollToAdd('jrnAdd')">+ Add New</button></div>
       <div class="adm-form" id="jrnAdd">
-        <div class="form-title" id="jrnFormTitle">Add Journal Entry</div>
-        <input type="hidden" id="editJrnIdx" value="-1">
-        <div class="form-row">
-          <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
-          <div class="field-grp"><label>Category</label>
-            <select id="jrnCat"><option value="mindset">🧠 Mindset</option><option value="love">💞 Love</option><option value="manifestation">✨ Manifestation</option><option value="career">💼 Career</option><option value="personal">🌸 Personal</option><option value="spiritual">🕊️ Spiritual</option></select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
-          <div class="field-grp"><label>Mood / Vibe</label>
-            <select id="jrnMood"><option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option><option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option><option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option><option value="🌙">🌙 Calm</option></select>
-          </div>
-        </div>
-        <div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div>
-        <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div>
-        <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
-        <div class="field-grp">
-          <label>Cover Image — cropped to 3:2</label>
-          <!-- Journal cover: 3:2 -->
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div>
-          <img id="jrnImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
-        <div class="btn-group"><button class="adm-btn gold" onclick="saveJournal()">Save Entry</button><button class="adm-btn outline" onclick="clearJrnForm()">Clear</button></div>
-      </div>
-      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="jrnCount">0</span> entries total</div>
-      <div class="journal-list" id="admJrnList"></div>
+  <div class="form-title" id="jrnFormTitle">Add Journal Entry</div>
+  <input type="hidden" id="editJrnIdx" value="-1">
+ 
+  <div class="form-row">
+    <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
+    <div class="field-grp"><label>Category</label>
+      <select id="jrnCat">
+        <option value="mindset">🧠 Mindset</option>
+        <option value="love">💞 Love</option>
+        <option value="manifestation">✨ Manifestation</option>
+        <option value="career">💼 Career</option>
+        <option value="personal">🌸 Personal</option>
+        <option value="spiritual">🕊️ Spiritual</option>
+      </select>
     </div>
+  </div>
+ 
+  <div class="form-row">
+    <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
+    <div class="field-grp"><label>Mood / Vibe</label>
+      <select id="jrnMood">
+        <option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option>
+        <option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option>
+        <option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option>
+        <option value="🌙">🌙 Calm</option>
+      </select>
+    </div>
+  </div>
+ 
+  <!-- ✅ NEW: Publication / Press fields -->
+  <div class="form-row three">
+    <div class="field-grp">
+      <label>Publication / Source Name</label>
+      <input type="text" id="jrnSource" placeholder="e.g. CEO India Magazine, DailyHunt, Republic TV">
+    </div>
+    <div class="field-grp">
+      <label>Platform (badge colour)</label>
+      <select id="jrnPlatform">
+        <option value="default">Default (Gold)</option>
+        <option value="republic">Republic TV (Red)</option>
+        <option value="dailyhunt">DailyHunt (Orange)</option>
+        <option value="ceo">CEO India Magazine (Gold)</option>
+        <option value="success">Success India Magazine (Blue)</option>
+        <option value="india">The Indian Bulletin (Saffron)</option>
+        <option value="mindset">Mindset (Blue)</option>
+        <option value="love">Love & SP (Pink)</option>
+        <option value="manifestation">Manifestation (Purple)</option>
+        <option value="career">Career (Gold)</option>
+        <option value="personal">Personal (Green)</option>
+        <option value="spiritual">Spiritual (Lavender)</option>
+      </select>
+    </div>
+    <div class="field-grp">
+      <label>Article Link (URL)</label>
+      <input type="url" id="jrnLink" placeholder="https://ceoindia.com/article...">
+    </div>
+  </div>
+  <!-- END NEW -->
+ 
+  <div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div>
+  <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div>
+  <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
+ 
+  <div class="field-grp">
+    <label>Cover Image — cropped to 3:2</label>
+    <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div>
+    <img id="jrnImgPreview" class="preview-img" alt="">
+  </div>
+  <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
+ 
+  <div class="btn-group">
+    <button class="adm-btn gold" onclick="saveJournal()">Save Entry</button>
+    <button class="adm-btn outline" onclick="clearJrnForm()">Clear</button>
+  </div>
+  <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;">
+  <span id="jrnCount">0</span> journal entries total
+</div>
 
+<div class="journal-list" id="admJrnList"></div>
+</div>
     <!-- BOOKINGS -->
     <div class="panel" id="panel-bookings">
       <div class="section-title">Cal.com Bookings</div>
@@ -1292,14 +1342,20 @@ function renderAch(){
 let jImg='',jImgId='';
 function previewJrnUrl(u){if(u){jImg=u;jImgId='';showPrev('jrnImgPreview',u);}}
 function clearJrnForm(){
-  document.getElementById('editJrnIdx').value=-1;document.getElementById('jrnFormTitle').textContent='Add Journal Entry';
-  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('editJrnIdx').value=-1;
+  document.getElementById('jrnFormTitle').textContent='Add Journal Entry';
+  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl','jrnSource','jrnLink'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  const dateEl=document.getElementById('jrnDate');
+  if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  const platEl=document.getElementById('jrnPlatform');
+  if(platEl)platEl.value='default';
   hidePrev('jrnImgPreview');jImg='';jImgId='';
 }
-async function saveJournal(){
-  const id = document.getElementById('editJrnIdx').value;
 
+async function saveJournal(){
+  const id=document.getElementById('editJrnIdx').value;
   const jr={
     title:v('jrnTitle'),
     cat:v('jrnCat'),
@@ -1309,32 +1365,35 @@ async function saveJournal(){
     content:v('jrnContent'),
     tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
     img:jImg||v('jrnImgUrl'),
-    imgPublicId:jImgId
+    imgPublicId:jImgId,
+    source:v('jrnSource'),          /* ✅ NEW */
+    platform:v('jrnPlatform'),      /* ✅ NEW */
+    link:v('jrnLink')               /* ✅ NEW */
   };
-
-  if(id != -1){
-    await fetch(API+"/update-journal/"+journal[id]._id,{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(jr)
-    });
-    toast("✅ Updated","success");
-  }else{
-    await fetch(API+"/add-journal",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(jr)
-    });
-    toast("✅ Added","success");
-  }
-
-  clearJrnForm();
-  await loadJournal();
-  updateDash();
+  try{
+    if(id!=-1){
+      await fetch(API+"/update-journal/"+journal[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});
+      toast("✅ Updated","success");
+    }else{
+      await fetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});
+      toast("✅ Added","success");
+    }
+    clearJrnForm();await loadJournal();updateDash();
+  }catch{toast("❌ Failed","error");}
 }
+ 
 function editJrn(i){
-  const jr=journal[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';
-  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);sv('jrnMood',jr.mood);sv('jrnExcerpt',jr.excerpt||'');sv('jrnContent',jr.content||'');sv('jrnTags',(jr.tags||[]).join(', '));sv('jrnImgUrl',jr.img||'');
+  const jr=journal[i];
+  document.getElementById('editJrnIdx').value=i;
+  document.getElementById('jrnFormTitle').textContent='Edit Entry';
+  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);
+  sv('jrnMood',jr.mood);sv('jrnExcerpt',jr.excerpt||'');
+  sv('jrnContent',jr.content||'');sv('jrnTags',(jr.tags||[]).join(', '));
+  sv('jrnImgUrl',jr.img||'');
+  /* ✅ NEW fields */
+  sv('jrnSource',jr.source||'');
+  sv('jrnPlatform',jr.platform||'default');
+  sv('jrnLink',jr.link||'');
   if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}
   scrollToAdd('jrnAdd');
 }

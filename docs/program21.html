@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 :root{
   --dark:#070a1a;--dark2:#0c1030;--purple:#150e35;
@@ -194,6 +195,22 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;}
 .manifestation-card .cta-btn{background:transparent;border:1px dashed rgba(126,200,227,.45);color:var(--diamond-light);}
 .manifestation-card:hover .cta-btn,.manifestation-card.sel .cta-btn{background:var(--diamond);color:var(--dark);border-color:var(--diamond);}
 
+/* PAY GATE */
+.pay-gate{background:linear-gradient(160deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid var(--gold-border);border-radius:3px;padding:1.8rem;margin-bottom:1.4rem;text-align:center;}
+.pay-gate h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold-light);font-weight:400;margin-bottom:.5rem;}
+.pay-gate p{font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:1.2rem;}
+.pay-gate-details{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-bottom:1.4rem;flex-wrap:wrap;}
+.pgd-item{text-align:center;}
+.pgd-label{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:.2rem;}
+.pgd-val{font-size:1rem;color:var(--gold-light);font-weight:500;}
+.pay-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 2.2rem;background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:var(--dark);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .35s;}
+.pay-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(201,168,76,.4);}
+.pay-btn.loading{opacity:.7;pointer-events:none;}
+.pay-note{font-size:.68rem;color:rgba(142,136,171,.5);margin-top:.8rem;letter-spacing:.05em;}
+.pay-success{background:rgba(93,204,122,.06);border:1px solid rgba(93,204,122,.25);border-radius:3px;padding:1.5rem;margin-bottom:1.4rem;text-align:center;}
+.pay-success h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#5dcc7a;margin-bottom:.4rem;}
+.pay-success p{font-size:.8rem;color:var(--muted);margin-bottom:.8rem;line-height:1.7;}
+.pay-success .pid{font-size:.7rem;color:rgba(93,204,122,.6);letter-spacing:.08em;font-family:monospace;}
 .cal-wrap{border:1px solid var(--border);border-radius:2px;overflow:hidden;background:var(--glass);position:relative;min-height:650px;}
 .cal-wrap iframe{width:100%;min-height:650px;border:none;display:none;}
 .cal-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:var(--glass);}
@@ -383,22 +400,35 @@ footer span{color:var(--gold);}
         </div>
       </div>
 
-      <!-- Panel 2: Calendar -->
-      <div class="p21-panel" id="p21sp2">
-        <div class="bk-breadcrumb" id="p21BC"></div>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;">Pick your preferred date and time for your 21-Day Program.</p>
-        <div class="cal-wrap">
-          <div class="cal-loading" id="p21Load">
-            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
-            <p>Loading your calendar…</p>
-          </div>
-          <iframe id="p21Frame" src="" title="21-Day Program booking"></iframe>
-        </div>
-        <div class="bknav">
-          <button class="bkback" onclick="p21GoStep(1)">← Back to Programs</button>
-          <a id="p21Link" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn-o">Open in new tab ↗</a>
-        </div>
+<!-- Panel 2: Pay + Calendar -->
+<div class="p21-panel" id="p21sp2">
+  <div class="bk-breadcrumb" id="p21BC"></div>
+
+  <!-- PAY GATE -->
+  <div id="p21PayGate"></div>
+
+  <!-- CAL SECTION (shows after payment) -->
+  <div id="p21CalSection" style="display:none;">
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;">
+      ✅ Payment confirmed — now pick your date & time below.
+    </p>
+    <div class="cal-wrap">
+      <div class="cal-loading" id="p21Load">
+        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+        <p>Loading your calendar…</p>
       </div>
+      <iframe id="p21Frame" src="" title="21-Day Program booking"></iframe>
+    </div>
+    <div class="bknav">
+      <button class="bkback" onclick="p21GoStep(1)">← Back to Programs</button>
+      <a id="p21Link" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn-o">Open in new tab ↗</a>
+    </div>
+  </div>
+
+  <div class="bknav" style="margin-top:1rem;">
+    <button class="bkback" onclick="p21GoStep(1)">← Back to Programs</button>
+  </div>
+</div>
 
       <div class="bk-warning rv" style="margin-top:2rem;">
         <strong>🚨 Important:</strong> This program is for people who are serious about results — ready to commit fully for 21 days. I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em>
@@ -413,82 +443,221 @@ footer span{color:var(--gold);}
 <div class="toast" id="toast"></div>
 
 <script>
-const CAL_USER='manifestuniversecrets';
-const CAL_21_URLS={
-  'sp-21day':`https://cal.com/${CAL_USER}/sp-21day`,
-  'career-21day':`https://cal.com/${CAL_USER}/career-21day`,
-  'manifestation-21day':`https://cal.com/${CAL_USER}/manifestation-21day`
-};
-let p21Slug='',p21Name='';
+const API_BASE = "https://adg-backend-sm2p.onrender.com";
+const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax"; 
 
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
-document.querySelectorAll('a,button,.prog-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+const CAL_USER = 'manifestuniversecrets';
+const CAL_21_URLS = {
+  'sp-21day': `https://cal.com/${CAL_USER}/sp-21day`,
+  'career-21day': `https://cal.com/${CAL_USER}/career-21day`,
+  'manifestation-21day': `https://cal.com/${CAL_USER}/manifestation-21day`
+};
+
+const PROGRAM_AMOUNT = 70000; // ₹70,000 for all 21-day programs
+
+let p21Slug = '', p21Name = '', p21PaymentDone = false;
+
+// Cursor
+const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+(function a() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(a); })();
+document.querySelectorAll('a,button,.prog-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
 });
 
-const scEl=document.getElementById('sc'),ctx=scEl.getContext('2d');
-let stars=[],t=0;
-function rsz(){scEl.width=innerWidth;scEl.height=innerHeight;}
-function iStars(){stars=[];for(let i=0;i<120;i++)stars.push({x:Math.random()*scEl.width,y:Math.random()*scEl.height,r:Math.random()*1.1+.15,sp:Math.random()*.002+.0005,ph:Math.random()*Math.PI*2});}
-function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=>{const a=.2+.4*Math.sin(t*s.sp*100+s.ph);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();});requestAnimationFrame(drw);}
-window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
+// Stars
+const scEl = document.getElementById('sc'), ctx = scEl.getContext('2d');
+let stars = [], t = 0;
+function rsz() { scEl.width = innerWidth; scEl.height = innerHeight; }
+function iStars() { stars = []; for (let i = 0; i < 120; i++) stars.push({ x: Math.random() * scEl.width, y: Math.random() * scEl.height, r: Math.random() * 1.1 + .15, sp: Math.random() * .002 + .0005, ph: Math.random() * Math.PI * 2 }); }
+function drw() { ctx.clearRect(0, 0, scEl.width, scEl.height); t += .01; stars.forEach(s => { const a = .2 + .4 * Math.sin(t * s.sp * 100 + s.ph); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.fill(); }); requestAnimationFrame(drw); }
+window.addEventListener('resize', () => { rsz(); iStars(); }); rsz(); iStars(); drw();
 
-(function(){
-  const c=document.getElementById('progParticles');if(!c)return;
-  const colors=['rgba(201,168,76,.7)','rgba(232,213,163,.5)','rgba(224,201,240,.4)','rgba(126,200,227,.4)'];
-  for(let i=0;i<28;i++){const p=document.createElement('div');p.className='prog-particle';p.style.left=Math.random()*100+'%';p.style.bottom=-(Math.random()*20)+'%';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.setProperty('--dur',(7+Math.random()*10)+'s');p.style.setProperty('--delay',(Math.random()*12)+'s');p.style.width=p.style.height=(1+Math.random()*3)+'px';c.appendChild(p);}
+// Particles
+(function () {
+  const c = document.getElementById('progParticles'); if (!c) return;
+  const colors = ['rgba(201,168,76,.7)', 'rgba(232,213,163,.5)', 'rgba(224,201,240,.4)', 'rgba(126,200,227,.4)'];
+  for (let i = 0; i < 28; i++) { const p = document.createElement('div'); p.className = 'prog-particle'; p.style.left = Math.random() * 100 + '%'; p.style.bottom = -(Math.random() * 20) + '%'; p.style.background = colors[Math.floor(Math.random() * colors.length)]; p.style.setProperty('--dur', (7 + Math.random() * 10) + 's'); p.style.setProperty('--delay', (Math.random() * 12) + 's'); p.style.width = p.style.height = (1 + Math.random() * 3) + 'px'; c.appendChild(p); }
 })();
 
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
-document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+// Reveal
+const ro = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: .1 });
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
 
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
 
-function p21Pick(el,slug,name){
-  document.querySelectorAll('.prog-card').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');p21Slug=slug;p21Name=name;
-  showToast('✦ '+name+' selected — loading your calendar…');
-  setTimeout(()=>p21GoStep(2),300);
+function p21Pick(el, slug, name) {
+  document.querySelectorAll('.prog-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  p21Slug = slug;
+  p21Name = name;
+  p21PaymentDone = false;
+  showToast('✦ ' + name + ' selected — proceed to payment');
+  setTimeout(() => p21GoStep(2), 300);
 }
 
-function p21GoStep(n){
-  [1,2].forEach(i=>{
-    const s=document.getElementById('p21sc'+i),sl=document.getElementById('p21sl'+i);
-    s.classList.remove('active','done');sl.classList.remove('active');
-    if(i<n){s.classList.add('done');s.textContent='✓';}
-    else if(i===n){s.classList.add('active');s.textContent=i;sl.classList.add('active');}
-    else s.textContent=i;
-    if(i<2)document.getElementById('p21sln'+i).classList.toggle('done',i<n);
-  });
-  document.querySelectorAll('.p21-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p21sp'+n).classList.add('active');
+// ── RAZORPAY ──────────────────────────────────────────────────────
+async function p21StartPayment() {
+  const btn = document.getElementById('p21PayBtn');
+  btn.classList.add('loading');
+  btn.textContent = '⏳ Opening payment…';
 
-  if(n===2){
-    const bc=document.getElementById('p21BC');
-    if(bc)bc.innerHTML=`<div class="bk-chip"><span>Program</span>${p21Name}</div><div class="bk-arrow">›</div><div class="bk-chip"><span>Duration</span>21 Days · 3 Sessions</div>`;
-    const frame=document.getElementById('p21Frame');
-    const loading=document.getElementById('p21Load');
-    const link=document.getElementById('p21Link');
-    const url=CAL_21_URLS[p21Slug];
-    if(url){
-      const fullUrl=url+'?theme=dark&brandColor=c9a84c';
-      if(frame.getAttribute('data-loaded')!==fullUrl){
-        frame.setAttribute('data-loaded',fullUrl);frame.src=fullUrl;
-        loading.style.display='flex';frame.style.display='none';
-        frame.addEventListener('load',function onL(){frame.removeEventListener('load',onL);loading.style.display='none';frame.style.display='block';});
-      }else{loading.style.display='none';frame.style.display='block';}
-      if(link)link.href=url;
-    }else{
-      loading.innerHTML=`<p style="color:var(--muted);font-size:.85rem;text-align:center;line-height:1.75;max-width:360px;">Please <a href="https://cal.com/${CAL_USER}" target="_blank" style="color:var(--gold);">open Cal.com</a> to book your <strong style="color:var(--gold-light);">${p21Name}</strong>.</p>`;
-      loading.style.display='flex';frame.style.display='none';
-    }
-    document.getElementById('p21sp2').scrollIntoView({behavior:'smooth',block:'start'});
+  try {
+    const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: PROGRAM_AMOUNT,
+        currency: 'INR',
+        category: p21Name,
+        tier: p21Slug,
+        tierName: '21-Day Program'
+      })
+    });
+
+    const order = await res.json();
+    if (!order.orderId) throw new Error(order.error || 'Could not create order');
+
+    const calUrl = CAL_21_URLS[p21Slug] || `https://cal.com/${CAL_USER}`;
+
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Akshita Dayma Goel',
+      description: p21Name + ' · 21 Days · 3 Sessions',
+      image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
+      order_id: order.orderId,
+      handler: async function (response) {
+        const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...response, calUrl })
+        });
+        const result = await verify.json();
+        if (result.success) {
+          p21PaymentDone = true;
+          p21ShowSuccess(response.razorpay_payment_id, calUrl);
+        } else {
+          showToast('⚠️ Payment verification failed. Contact support.');
+          p21ResetBtn();
+        }
+      },
+      prefill: { name: '', email: '', contact: '' },
+      theme: { color: '#c9a84c' },
+      modal: {
+        ondismiss: function () {
+          showToast('Payment cancelled.');
+          p21ResetBtn();
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      showToast('Payment failed: ' + response.error.description);
+      p21ResetBtn();
+    });
+    rzp.open();
+
+  } catch (e) {
+    showToast('Error: ' + e.message);
+    p21ResetBtn();
   }
-  if(n===1){document.querySelectorAll('.prog-card').forEach(c=>c.classList.remove('sel'));}
+}
+
+function p21ResetBtn() {
+  const btn = document.getElementById('p21PayBtn');
+  if (btn) { btn.classList.remove('loading'); btn.textContent = '🔒 Pay ₹70,000 & Book Program'; }
+}
+
+function p21ShowSuccess(paymentId, calUrl) {
+  const gate = document.getElementById('p21PayGate');
+  gate.innerHTML = `
+    <div class="pay-success">
+      <h3>✅ Payment Successful!</h3>
+      <p>Your payment of <strong style="color:#5dcc7a;">₹70,000</strong> is confirmed.<br>
+      Now complete your booking by selecting your preferred date & time below.</p>
+      <div class="pid">Payment ID: ${paymentId}</div>
+    </div>`;
+  p21LoadCal(calUrl);
+}
+
+function p21LoadCal(url) {
+  const frame = document.getElementById('p21Frame');
+  const loading = document.getElementById('p21Load');
+  const link = document.getElementById('p21Link');
+  const calSection = document.getElementById('p21CalSection');
+
+  calSection.style.display = 'block';
+  const fullUrl = url + '?theme=dark&brandColor=c9a84c';
+  frame.src = fullUrl;
+  if (link) link.href = url;
+  loading.style.display = 'flex';
+  frame.style.display = 'none';
+  frame.onload = function () { loading.style.display = 'none'; frame.style.display = 'block'; };
+}
+
+function p21RenderPayGate() {
+  const gate = document.getElementById('p21PayGate');
+  const calSection = document.getElementById('p21CalSection');
+  p21PaymentDone = false;
+  calSection.style.display = 'none';
+
+  gate.innerHTML = `
+    <div class="pay-gate">
+      <h3>🔒 Confirm & Pay to Book</h3>
+      <p>Your slot will be confirmed after payment.<br>
+      Once paid, you'll be redirected to select your preferred date & time.</p>
+      <div class="pay-gate-details">
+        <div class="pgd-item">
+          <span class="pgd-label">Program</span>
+          <span class="pgd-val">${p21Name}</span>
+        </div>
+        <div class="pgd-item">
+          <span class="pgd-label">Duration</span>
+          <span class="pgd-val">21 Days · 3 Sessions</span>
+        </div>
+        <div class="pgd-item">
+          <span class="pgd-label">Amount</span>
+          <span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">₹70,000</span>
+          <div style="font-size:.68rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ $769.99 USD</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:2px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.75;text-align:left;">
+        🌍 <strong style="color:var(--gold-light);">International clients:</strong>
+        Your card will be charged in INR. Your bank automatically converts to your local currency at the live exchange rate.
+      </div>
+      <button class="pay-btn" id="p21PayBtn" onclick="p21StartPayment()">
+        🔒 Pay ₹70,000 & Book Program
+      </button>
+      <div class="pay-note">Secured by Razorpay · UPI, Cards, Net Banking, Wallets · International cards accepted</div>
+    </div>`;
+}
+
+function p21GoStep(n) {
+  [1, 2].forEach(i => {
+    const s = document.getElementById('p21sc' + i), sl = document.getElementById('p21sl' + i);
+    s.classList.remove('active', 'done'); sl.classList.remove('active');
+    if (i < n) { s.classList.add('done'); s.textContent = '✓'; }
+    else if (i === n) { s.classList.add('active'); s.textContent = i; sl.classList.add('active'); }
+    else s.textContent = i;
+    if (i < 2) document.getElementById('p21sln' + i).classList.toggle('done', i < n);
+  });
+
+  document.querySelectorAll('.p21-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('p21sp' + n).classList.add('active');
+
+  if (n === 2) {
+    const bc = document.getElementById('p21BC');
+    if (bc) bc.innerHTML = `<div class="bk-chip"><span>Program</span>${p21Name}</div><div class="bk-arrow">›</div><div class="bk-chip"><span>Duration</span>21 Days · 3 Sessions</div>`;
+    p21RenderPayGate();
+    document.getElementById('p21sp2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  if (n === 1) { document.querySelectorAll('.prog-card').forEach(c => c.classList.remove('sel')); }
 }
 </script>
 </body>

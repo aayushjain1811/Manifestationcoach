@@ -20,21 +20,18 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;font-size:15px;line-height:1.6;cursor:none;}
-
 #cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
 #cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
 body.ch #cur{width:14px;height:14px;background:var(--gold-light);}
 body.ch #cur-ring{width:44px;height:44px;border-color:var(--gold);}
 body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 @media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
-
 .admin-corner{position:fixed;bottom:0;right:0;width:44px;height:44px;z-index:8999;cursor:pointer;display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;}
 .admin-corner::before{content:'';position:absolute;bottom:10px;right:0;width:16px;height:1px;background:rgba(201,168,76,.12);transition:background .4s;}
 .admin-corner::after{content:'';position:absolute;bottom:0;right:10px;width:1px;height:16px;background:rgba(201,168,76,.12);transition:background .4s;}
 .admin-corner:hover::before,.admin-corner:hover::after{background:rgba(201,168,76,.35);}
 .admin-corner .adm-sigil{font-size:.52rem;color:rgba(201,168,76,.1);line-height:1;transition:color .4s,transform .4s;pointer-events:none;user-select:none;}
 .admin-corner:hover .adm-sigil{color:rgba(201,168,76,.4);transform:scale(1.2);}
-
 #loader{position:fixed;inset:0;background:var(--dark);z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,visibility .7s ease;}
 #loader.hide{opacity:0;visibility:hidden;}
 .ld-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);margin-bottom:1.8rem;animation:ldPulse 1.5s ease-in-out infinite;}
@@ -45,10 +42,8 @@ body.cc #cur{transform:translate(-50%,-50%) scale(.7);}
 .ld-dot:nth-child(2){animation-delay:.2s;}.ld-dot:nth-child(3){animation-delay:.4s;}
 @keyframes ldFill{to{width:100%;}}@keyframes ldPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
 @keyframes ldDot{0%,100%{opacity:.3;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
-
 .bg-grad{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 55%,rgba(21,14,53,.9) 0%,transparent 55%),radial-gradient(ellipse at 85% 20%,rgba(12,16,48,.7) 0%,transparent 50%),linear-gradient(165deg,var(--dark) 0%,var(--dark2) 55%,var(--purple) 100%);}
 #sc{position:fixed;inset:0;z-index:-1;pointer-events:none;}
-
 nav{position:fixed;top:0;width:100%;z-index:800;padding:1.1rem 5%;transition:all .4s cubic-bezier(.16,1,.3,1);}
 nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
 .nw{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
@@ -71,7 +66,6 @@ nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(
 .mnav a:hover{color:var(--gold);}
 .mnav .mncta{font-size:.9rem!important;font-family:'DM Sans',sans-serif!important;padding:.7rem 2rem;border:1px solid var(--gold);color:var(--gold)!important;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem;}
 .mnav .mncta:hover{background:var(--gold);color:var(--dark)!important;}
-
 section{padding:5.5rem 5%;position:relative;}
 .container{max-width:1280px;margin:0 auto;}
 .sl{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:.6rem;}
@@ -122,23 +116,10 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .hf-badge .bl2{font-size:.6rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:3px;display:block;}
 
 /* ── CHOOSE PATH ── */
-#choose-path-top,#choose-path-bottom{
-  padding:4.5rem 5%;
-  position:relative;
-}
-#choose-path-top{
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(170deg,rgba(21,14,53,.2) 0%,rgba(7,10,26,.8) 100%);
-}
-#choose-path-bottom{
-  background:linear-gradient(170deg,rgba(21,14,53,.45) 0%,rgba(7,10,26,1) 100%);
-}
-#choose-path-bottom::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.08) 0%,transparent 65%);
-  pointer-events:none;
-}
+#choose-path-top,#choose-path-bottom{padding:4.5rem 5%;position:relative;}
+#choose-path-top{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(170deg,rgba(21,14,53,.2) 0%,rgba(7,10,26,.8) 100%);}
+#choose-path-bottom{background:linear-gradient(170deg,rgba(21,14,53,.45) 0%,rgba(7,10,26,1) 100%);}
+#choose-path-bottom::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.08) 0%,transparent 65%);pointer-events:none;}
 .cp-wrap{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
 .cp-ticker-row{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1rem;}
 .cp-tick-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:cpBlink 1.4s ease-in-out infinite;}
@@ -148,17 +129,8 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .cp-heading{font-family:'Cormorant Garamond',serif;font-size:2.1rem;color:#fff;font-weight:400;text-align:center;line-height:1.2;margin-bottom:.4rem;}
 .cp-sub{font-size:.82rem;color:var(--muted);text-align:center;margin-bottom:2.5rem;font-weight:300;}
 .cp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.2rem;}
-.cp-card{
-  position:relative;border:1px solid var(--border);border-radius:6px;
-  padding:1.8rem 1.6rem 1.5rem;background:rgba(255,255,255,.03);
-  overflow:hidden;text-decoration:none;display:block;cursor:pointer;
-  transition:border-color .4s cubic-bezier(.16,1,.3,1),transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;
-}
-.cp-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .5s cubic-bezier(.16,1,.3,1);
-}
+.cp-card{position:relative;border:1px solid var(--border);border-radius:6px;padding:1.8rem 1.6rem 1.5rem;background:rgba(255,255,255,.03);overflow:hidden;text-decoration:none;display:block;cursor:pointer;transition:border-color .4s cubic-bezier(.16,1,.3,1),transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;}
+.cp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1);}
 .cp-card.cp-active::before,.cp-card:hover::before{transform:scaleX(1);}
 .cp-card.cp-active,.cp-card:hover{transform:translateY(-5px);}
 .cp-card.gold-path::before{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));}
@@ -167,11 +139,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .cp-card.gold-path.cp-active,.cp-card.gold-path:hover{border-color:rgba(201,168,76,.55);box-shadow:0 20px 50px rgba(201,168,76,.14),0 0 0 1px rgba(201,168,76,.1);}
 .cp-card.blue-path.cp-active,.cp-card.blue-path:hover{border-color:rgba(126,200,227,.5);box-shadow:0 20px 50px rgba(126,200,227,.12),0 0 0 1px rgba(126,200,227,.08);}
 .cp-card.purple-path.cp-active,.cp-card.purple-path:hover{border-color:rgba(224,201,240,.5);box-shadow:0 20px 50px rgba(224,201,240,.1),0 0 0 1px rgba(224,201,240,.07);}
-.cp-pulse-ring{
-  position:absolute;top:1.1rem;right:1.1rem;
-  width:9px;height:9px;border-radius:50%;
-  opacity:0;transition:opacity .35s;
-}
+.cp-pulse-ring{position:absolute;top:1.1rem;right:1.1rem;width:9px;height:9px;border-radius:50%;opacity:0;transition:opacity .35s;}
 .cp-card.cp-active .cp-pulse-ring{opacity:1;animation:cpPulse 1.3s ease-in-out infinite;}
 .cp-card.gold-path .cp-pulse-ring{background:var(--gold);}
 .cp-card.blue-path .cp-pulse-ring{background:var(--diamond);}
@@ -192,11 +160,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .cp-card.gold-path .cp-cta-text{color:var(--gold);}
 .cp-card.blue-path .cp-cta-text{color:var(--diamond);}
 .cp-card.purple-path .cp-cta-text{color:var(--platinum);}
-.cp-cta-arrow{
-  width:28px;height:28px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.9rem;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s;
-}
+.cp-cta-arrow{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:transform .35s cubic-bezier(.16,1,.3,1),background .3s;}
 .cp-card.gold-path .cp-cta-arrow{border:1px solid rgba(201,168,76,.35);color:var(--gold);}
 .cp-card.blue-path .cp-cta-arrow{border:1px solid rgba(126,200,227,.35);color:var(--diamond);}
 .cp-card.purple-path .cp-cta-arrow{border:1px solid rgba(224,201,240,.35);color:var(--platinum);}
@@ -207,8 +171,6 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .cp-hint{text-align:center;font-size:.74rem;color:var(--muted);font-weight:300;}
 .cp-hint a{color:var(--gold);text-decoration:none;}
 .cp-hint a:hover{color:var(--gold-light);}
-
-/* click flash */
 @keyframes cpClick{0%{transform:translateY(-5px) scale(1);}35%{transform:translateY(-5px) scale(1.045);}100%{transform:translateY(-5px) scale(1);}}
 .cp-card.cp-clicked{animation:cpClick .35s cubic-bezier(.16,1,.3,1);}
 
@@ -241,8 +203,8 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .wide-inner{display:grid;grid-template-columns:1fr auto;gap:2.5rem;align-items:center;}
 .wide-right{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem;flex-shrink:0;}
 .wide-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);line-height:1;}
-.wide-price-orig{font-size:.98rem;color:var(--muted);text-decoration:line-through;text-align:right;}
-.wide-price-sub{font-size:.98rem;color:var(--muted);text-align:right;}
+.wide-price-orig{font-size:.78rem;color:var(--muted);text-decoration:line-through;text-align:right;opacity:.6;}
+.wide-price-sub{font-size:.78rem;color:var(--muted);text-align:right;}
 .wide-highlight{display:flex;align-items:center;gap:.4rem;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.3rem .9rem;background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);border-radius:2px;white-space:nowrap;}
 .sov-card.wide-card p{max-width:600px;}
 
@@ -273,24 +235,103 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .sn{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);display:block;line-height:1;margin-bottom:.25rem;}
 .slb{font-size:.68rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;}
 
-/* ── ACHIEVEMENTS ── */
-.awg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
-.awc{background:var(--glass);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;cursor:default;}
-.awc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
-.awc:hover{border-color:var(--gold-border);transform:translateY(-5px);background:rgba(201,168,76,.05);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+/* ═══════════════════════════════════
+   ── ACHIEVEMENTS — FIXED FRAMES ──
+   All cards same height, images fill 
+   frame properly regardless of aspect
+   ═══════════════════════════════════ */
+.awg{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.4rem;
+  align-items:start; /* each card sizes to its own content */
+}
+.awc{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+  position:relative;
+  cursor:default;
+  display:flex;
+  flex-direction:column;
+}
+.awc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.awc:hover{
+  border-color:rgba(201,168,76,.45);
+  transform:translateY(-6px);
+  background:rgba(201,168,76,.04);
+  box-shadow:0 20px 40px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.1);
+}
 .awc:hover::before{opacity:1;}
-.aw-photo-area{width:100%;height:160px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--dark2),var(--purple));}
-.aw-photo-area img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .6s ease;}
-.awc:hover .aw-photo-area img{transform:scale(1.05);}
-.aw-photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(7,10,26,.9) 100%);}
-.aw-photo-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;}
-.aw-year-badge{position:absolute;top:10px;right:10px;background:rgba(201,168,76,.9);color:var(--dark);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:1px;}
-.aw-body{padding:1.2rem 1.2rem 1.4rem;}
-.awi{font-size:1.3rem;display:block;margin-bottom:.5rem;}
-.awc h3{font-size:.88rem;color:var(--gold-light);font-weight:500;margin-bottom:.3rem;line-height:1.4;}
-.awc p{font-size:.73rem;color:var(--muted);line-height:1.5;}
-.aw-ribbon{display:inline-flex;align-items:center;gap:.3rem;margin-top:.6rem;padding:.22rem .65rem;border:1px solid rgba(201,168,76,.25);border-radius:1px;font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+
+/* ── IMAGE FRAME ── fixed 4:3 ratio so all photos fill uniformly */
+.aw-photo-area{
+  width:100%;
+  aspect-ratio:4/3; /* consistent frame regardless of uploaded image orientation */
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(160deg,var(--dark2),var(--purple));
+  flex-shrink:0;
+}
+.aw-photo-area img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;       /* fill the frame, crop edges */
+  object-position:center top; /* focus on top-center (face / award) */
+  display:block;
+  transition:transform .6s ease;
+}
+.awc:hover .aw-photo-area img{transform:scale(1.06);}
+.aw-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 45%,rgba(7,10,26,.75) 100%);
+}
+.aw-photo-empty{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:.4rem;
+}
+.aw-year-badge{
+  position:absolute;top:10px;right:10px;
+  background:rgba(201,168,76,.92);color:var(--dark);
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.25rem .65rem;border-radius:2px;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+
+/* ── CARD BODY ── */
+.aw-body{
+  padding:1.1rem 1.2rem 1.3rem;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.awi{font-size:1.2rem;display:block;margin-bottom:.45rem;}
+.awc h3{
+  font-size:.9rem;color:var(--gold-light);font-weight:500;
+  margin-bottom:.25rem;line-height:1.35;
+}
+.awc .aw-org{
+  font-size:.72rem;color:var(--muted);line-height:1.45;
+  margin-bottom:.6rem;flex:1;
+}
+.aw-ribbon{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.22rem .65rem;border:1px solid rgba(201,168,76,.25);
+  border-radius:2px;font-size:.6rem;color:var(--gold);
+  letter-spacing:.1em;text-transform:uppercase;
+  align-self:flex-start;margin-top:auto;
+}
 .aw-ribbon::before{content:'🏅';font-size:.7rem;}
+
 .mb{margin-top:2rem;padding:1.3rem 2rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;text-align:center;}
 .mb p{font-size:.82rem;color:var(--muted);line-height:1.9;}
 
@@ -306,12 +347,18 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .jrnl-card:hover .jrnl-img img{transform:scale(1.05);}
 .jrnl-img-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
 .jrnl-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,10,26,.6) 100%);}
-.jrnl-platform{position:absolute;top:10px;left:10px;padding:.22rem .7rem;border-radius:1px;font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;}
+.jrnl-platform{position:absolute;top:10px;left:10px;padding:.22rem .7rem;border-radius:1px;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:rgba(201,168,76,.9);color:var(--dark);}
 .jrnl-platform.republic{background:rgba(255,80,80,.9);color:#fff;}
 .jrnl-platform.dailyhunt{background:rgba(255,160,0,.9);color:#000;}
 .jrnl-platform.ceo{background:rgba(201,168,76,.9);color:var(--dark);}
 .jrnl-platform.success{background:rgba(126,200,227,.9);color:var(--dark);}
 .jrnl-platform.india{background:rgba(255,153,51,.9);color:#fff;}
+.jrnl-platform.mindset{background:rgba(126,200,227,.9);color:var(--dark);}
+.jrnl-platform.love{background:rgba(255,80,130,.88);color:#fff;}
+.jrnl-platform.manifestation{background:rgba(224,201,240,.88);color:var(--dark);}
+.jrnl-platform.career{background:rgba(201,168,76,.9);color:var(--dark);}
+.jrnl-platform.personal{background:rgba(93,204,122,.85);color:var(--dark);}
+.jrnl-platform.spiritual{background:rgba(201,176,224,.88);color:var(--dark);}
 .jrnl-platform.default{background:rgba(168,181,200,.9);color:var(--dark);}
 .jrnl-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;}
 .jrnl-date{font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;display:block;}
@@ -480,7 +527,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 <body>
 <div id="cur"></div><div id="cur-ring"></div>
 <div class="admin-corner" id="adminCorner"><span class="adm-sigil">✦</span></div>
-
 <div id="loader">
   <div class="ld-name">Akshita Dayma Goel</div>
   <div class="ld-bar-w"><div class="ld-bar"></div></div>
@@ -493,7 +539,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     <a href="#hero" class="logo">Akshita Dayma Goel</a>
     <ul class="nl">
       <li><a href="#hero">Home</a></li>
-      <li><a href="#services-overview">Offerings</a></li>      
+      <li><a href="#services-overview">Offerings</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#achievements">Achievements</a></li>
       <li><a href="#journal">Journal</a></li>
@@ -506,14 +552,14 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </nav>
 <div class="mnav" id="mnav">
-  <a href="#hero">Home</a><a href="#about">About</a><a href="#achievements">Achievements</a>
-  <a href="#journal">Journal</a><a href="#methodology">Methodology</a>
-  <a href="#services-overview">Offerings</a><a href="#testimonials">Testimonials</a>
+  <a href="#hero">Home</a><a href="#services-overview">Offerings</a><a href="#about">About</a>
+  <a href="#achievements">Achievements</a><a href="#journal">Journal</a>
+  <a href="#methodology">Methodology</a><a href="#testimonials">Testimonials</a>
   <a href="#contact">Contact</a>
   <a href="sessions.html" class="mncta">Book Session</a>
 </div>
 
-<!-- ═══ HERO ═══ -->
+<!-- HERO -->
 <section id="hero">
   <div class="hg">
     <div class="ht">
@@ -540,49 +586,73 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ SERVICES OVERVIEW ═══ -->
+<!-- CHOOSE PATH TOP -->
+<div id="choose-path-top">
+  <div class="cp-wrap">
+    <div class="cp-ticker-row">
+      <div class="cp-tick-dot"></div>
+      <span class="cp-ticker-text">Where would you like to begin?</span>
+      <div class="cp-tick-dot"></div><div class="cp-tick-dot"></div>
+    </div>
+    <h2 class="cp-heading rv">What are you here to transform?</h2>
+    <p class="cp-sub rv d1">Pick what resonates — you'll go straight to the right page.</p>
+    <div class="cp-grid" id="cpGridTop">
+      <a href="ebooks.html" class="cp-card gold-path rv d1">
+        <div class="cp-pulse-ring"></div>
+        <span class="cp-badge badge-gold">Self-paced</span><span class="cp-icon">📘</span>
+        <h3>I want to learn &amp; study</h3>
+        <p>Start with the eBooks. Proven frameworks you can apply at your own pace — subconscious rewiring, wealth activation, love magnetism.</p>
+        <div class="cp-pills"><span class="cp-pill">25,000+ sold</span><span class="cp-pill">6 guides</span><span class="cp-pill">From $37</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Explore eBooks</span><span class="cp-cta-arrow">→</span></div>
+      </a>
+      <a href="sessions.html" class="cp-card blue-path rv d2">
+        <div class="cp-pulse-ring"></div>
+        <span class="cp-badge badge-blue">1:1 live</span><span class="cp-icon">🎯</span>
+        <h3>I want personal coaching</h3>
+        <p>Book a private session tailored to your exact situation — SP, Career or full Manifestation Mastery. Three tiers, instant Zoom booking.</p>
+        <div class="cp-pills"><span class="cp-pill">Gold · Diamond · Platinum</span><span class="cp-pill">EN &amp; HI</span><span class="cp-pill">Instant booking</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Book a session</span><span class="cp-cta-arrow">→</span></div>
+      </a>
+      <a href="program21.html" class="cp-card purple-path rv d3">
+        <div class="cp-pulse-ring"></div>
+        <span class="cp-badge badge-purple">Most complete</span><span class="cp-icon">✨</span>
+        <h3>I'm ready for full transformation</h3>
+        <p>The 21-day program — 3 Platinum sessions, daily guidance, priority access and VIP support. Pay for 2, get 3.</p>
+        <div class="cp-pills"><span class="cp-pill">3 sessions, pay for 2</span><span class="cp-pill">₹70,000</span><span class="cp-pill">3 slots left</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Join the program</span><span class="cp-cta-arrow">→</span></div>
+      </a>
+    </div>
+    <p class="cp-hint rv">Not sure where to start? <a href="ebooks.html">Begin with the eBooks</a> — you can always upgrade.</p>
+  </div>
+</div>
+
+<!-- SERVICES OVERVIEW -->
 <section id="services-overview">
   <span class="sov-label rv">Offerings</span>
   <h2 class="sov-title rv d1">Ways to Work Together</h2>
   <div class="sov-divider rv d2"></div>
   <div class="sov-grid">
     <a href="ebooks.html" class="sov-card rv d1">
-      <span class="sov-top-badge badge-gold">Learn &amp; Transform</span>
-      <span class="sov-icon">📘</span>
+      <span class="sov-top-badge badge-gold">Learn &amp; Transform</span><span class="sov-icon">📘</span>
       <h3>eBooks &amp; Guides</h3>
       <p>Deep-dive into proven manifestation frameworks. From subconscious reprogramming to wealth activation — all at your own pace.</p>
-      <div class="sov-stats">
-        <span class="sov-stat">25,000+ copies sold</span>
-        <span class="sov-stat">6 guides available</span>
-        <span class="sov-stat">From $37</span>
-      </div>
+      <div class="sov-stats"><span class="sov-stat">25,000+ copies sold</span><span class="sov-stat">6 guides available</span><span class="sov-stat">From $37</span></div>
       <span class="sov-cta">Explore eBooks <span class="sov-cta-arrow">→</span></span>
     </a>
     <a href="sessions.html" class="sov-card rv d2">
-      <span class="sov-top-badge badge-blue">1:1 Guidance</span>
-      <span class="sov-icon">🎯</span>
+      <span class="sov-top-badge badge-blue">1:1 Guidance</span><span class="sov-icon">🎯</span>
       <h3>Private Sessions</h3>
       <p>Personalised coaching for Specific Person, Career, and Manifestation goals. Three tiers — Gold, Diamond &amp; Platinum — book instantly.</p>
-      <div class="sov-stats">
-        <span class="sov-stat">3 focus areas</span>
-        <span class="sov-stat">Gold · Diamond · Platinum</span>
-        <span class="sov-stat">Zoom · EN &amp; HI</span>
-      </div>
+      <div class="sov-stats"><span class="sov-stat">3 focus areas</span><span class="sov-stat">Gold · Diamond · Platinum</span><span class="sov-stat">Zoom · EN &amp; HI</span></div>
       <span class="sov-cta">Book a Session <span class="sov-cta-arrow">→</span></span>
     </a>
     <a href="program21.html" class="sov-card wide-card rv d3">
       <div class="wide-inner">
         <div>
-          <span class="sov-top-badge badge-purple">Full Transformation</span>
-          <span class="sov-icon">✨</span>
+          <span class="sov-top-badge badge-purple">Full Transformation</span><span class="sov-icon">✨</span>
           <h3>21-Day Program</h3>
-          <p>3 Platinum sessions at the price of 2, plus daily check-ins and priority booking for 21 days. The most complete transformation experience — choose SP, Career, or full-life Manifestation.</p>
-          <div class="sov-stats">
-            <span class="sov-stat">3 sessions, pay for 2</span>
-            <span class="sov-stat">Daily guidance</span>
-            <span class="sov-stat">Priority slots</span>
-            <span class="sov-stat">VIP access</span>
-          </div>
+          <p>3 Platinum sessions at the price of 2, plus daily check-ins and priority booking for 21 days. Choose SP, Career, or full-life Manifestation.</p>
+          <div class="sov-stats"><span class="sov-stat">3 sessions, pay for 2</span><span class="sov-stat">Daily guidance</span><span class="sov-stat">Priority slots</span><span class="sov-stat">VIP access</span></div>
           <span class="sov-cta">Join the Program <span class="sov-cta-arrow">→</span></span>
         </div>
         <div class="wide-right">
@@ -596,7 +666,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ ABOUT ═══ -->
+<!-- ABOUT -->
 <section id="about" style="background:linear-gradient(160deg,rgba(21,14,53,.15) 0%,transparent 60%);">
   <div class="container">
     <p class="sl rv">About</p>
@@ -604,8 +674,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     <div class="dv rv d2"></div>
     <div class="ag">
       <div class="about-frame-wrap rv-l">
-        <div class="about-ring-outer"></div>
-        <div class="about-ring-spin"></div>
+        <div class="about-ring-outer"></div><div class="about-ring-spin"></div>
         <div class="about-photo-card">
           <img src="images/about.jpg" alt="Akshita" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="about-photo-placeholder" style="display:none;width:100%;height:100%;"></div>
@@ -617,7 +686,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
         <h3 class="rv d1">A Decade of Transforming Lives Globally</h3>
         <p class="rv d1">Akshita Dayma Goel is an internationally recognised Manifestation Coach, bestselling author, and spiritual guide, known for helping individuals transform their inner world and manifest tangible breakthroughs in love, career, relationships, finances, and emotional well-being.</p>
         <p class="rv d2">Her work bridges the gap between science and spirituality — combining subconscious reprogramming, neuroscience, and energetic alignment to create manifestation that is not just inspirational, but deeply practical and results-driven. With a powerful global presence, Akshita has guided over 100,000+ clients worldwide.</p>
-        <span class="jt rv">It started with one Question</span>
+        <span class="jt rv">It started with one question</span>
         <p class="rv d1">My journey with manifestation began over a decade ago from a place of deep curiosity. I often asked: Why do some people naturally attract success, abundance, and fulfilling relationships… while others remain stuck in repetitive patterns? That question changed everything.</p>
         <p class="ji rv d1">Subconscious programming &amp; rewiring</p>
         <p class="ji rv d2">Manifestation psychology</p>
@@ -637,7 +706,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ ACHIEVEMENTS ═══ -->
+<!-- ACHIEVEMENTS -->
 <section id="achievements" style="background:linear-gradient(160deg,rgba(201,168,76,.03) 0%,transparent 60%);">
   <div class="container">
     <p class="sl rv">Recognition</p>
@@ -648,7 +717,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ JOURNAL ═══ -->
+<!-- JOURNAL -->
 <section id="journal">
   <div class="container">
     <p class="sl rv">Press &amp; Media</p>
@@ -658,7 +727,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ METHODOLOGY ═══ -->
+<!-- METHODOLOGY -->
 <section id="methodology">
   <div class="container">
     <p class="sl rv">The Approach</p>
@@ -676,7 +745,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ TESTIMONIALS ═══ -->
+<!-- TESTIMONIALS -->
 <section id="testimonials" style="background:linear-gradient(160deg,rgba(21,14,53,.15) 0%,transparent 60%);">
   <div class="container">
     <p class="sl rv">Client Stories</p>
@@ -710,71 +779,48 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
   <div class="lb-counter" id="lbCounter">1 / 1</div>
 </div>
-<!-- ═══ CHOOSE PATH — BOTTOM ═══ -->
+
+<!-- CHOOSE PATH BOTTOM -->
 <div id="choose-path-bottom">
   <div class="cp-wrap">
     <div class="cp-ticker-row rv">
       <div class="cp-tick-dot"></div>
       <span class="cp-ticker-text">Ready to take the next step?</span>
-      <div class="cp-tick-dot"></div>
-      <div class="cp-tick-dot"></div>
+      <div class="cp-tick-dot"></div><div class="cp-tick-dot"></div>
     </div>
     <h2 class="cp-heading rv d1">Still deciding? Let this guide you.</h2>
     <p class="cp-sub rv d2">100,000+ lives transformed. Yours could be next.</p>
     <div class="cp-grid" id="cpGridBottom">
       <a href="ebooks.html" class="cp-card gold-path rv d1">
         <div class="cp-pulse-ring"></div>
-        <span class="cp-badge badge-gold">Self-paced</span>
-        <span class="cp-icon">📘</span>
+        <span class="cp-badge badge-gold">Self-paced</span><span class="cp-icon">📘</span>
         <h3>Start with an eBook</h3>
         <p>Powerful transformation frameworks at an accessible price. Begin today, apply immediately, see results fast.</p>
-        <div class="cp-pills">
-          <span class="cp-pill">Instant download</span>
-          <span class="cp-pill">From $37</span>
-          <span class="cp-pill">25K+ sold</span>
-        </div>
-        <div class="cp-cta-row">
-          <span class="cp-cta-text">Browse eBooks</span>
-          <span class="cp-cta-arrow">→</span>
-        </div>
+        <div class="cp-pills"><span class="cp-pill">Instant download</span><span class="cp-pill">From $37</span><span class="cp-pill">25K+ sold</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Browse eBooks</span><span class="cp-cta-arrow">→</span></div>
       </a>
       <a href="sessions.html" class="cp-card blue-path rv d2">
         <div class="cp-pulse-ring"></div>
-        <span class="cp-badge badge-blue">1:1 live</span>
-        <span class="cp-icon">🎯</span>
+        <span class="cp-badge badge-blue">1:1 live</span><span class="cp-icon">🎯</span>
         <h3>Book your session now</h3>
         <p>Live, personalised guidance for your exact situation. Pick your tier and book instantly — slots fill fast.</p>
-        <div class="cp-pills">
-          <span class="cp-pill">SP · Career · Manifestation</span>
-          <span class="cp-pill">From ₹21,000</span>
-        </div>
-        <div class="cp-cta-row">
-          <span class="cp-cta-text">Choose your session</span>
-          <span class="cp-cta-arrow">→</span>
-        </div>
+        <div class="cp-pills"><span class="cp-pill">SP · Career · Manifestation</span><span class="cp-pill">From ₹21,000</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Choose your session</span><span class="cp-cta-arrow">→</span></div>
       </a>
       <a href="program21.html" class="cp-card purple-path rv d3">
         <div class="cp-pulse-ring"></div>
-        <span class="cp-badge badge-purple">Best value</span>
-        <span class="cp-icon">✨</span>
+        <span class="cp-badge badge-purple">Best value</span><span class="cp-icon">✨</span>
         <h3>Commit to 21 days</h3>
         <p>The deepest, most supported experience. 3 sessions, daily guidance, priority slots — only 3 slots remaining this month.</p>
-        <div class="cp-pills">
-          <span class="cp-pill">3 slots left</span>
-          <span class="cp-pill">₹70,000</span>
-          <span class="cp-pill">Save ₹35,000</span>
-        </div>
-        <div class="cp-cta-row">
-          <span class="cp-cta-text">Claim your slot</span>
-          <span class="cp-cta-arrow">→</span>
-        </div>
+        <div class="cp-pills"><span class="cp-pill">3 slots left</span><span class="cp-pill">₹70,000</span><span class="cp-pill">Save ₹35,000</span></div>
+        <div class="cp-cta-row"><span class="cp-cta-text">Claim your slot</span><span class="cp-cta-arrow">→</span></div>
       </a>
     </div>
     <p class="cp-hint rv">Questions? <a href="#contact">Send a message</a> — we respond within 24 hours.</p>
   </div>
 </div>
 
-<!-- ═══ CONTACT ═══ -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="container">
     <p class="sl rv">Get in Touch</p>
@@ -801,7 +847,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
+<!-- FOOTER -->
 <footer>
   <div class="fg2">
     <div>
@@ -889,124 +935,126 @@ function initChoosePath(gridId){
   const cards=[...document.querySelectorAll('#'+gridId+' .cp-card')];
   if(!cards.length)return;
   let idx=0,intervalId=null,paused=false;
-
-  function setActive(i){
-    cards.forEach((c,j)=>c.classList.toggle('cp-active',j===i));
-  }
+  function setActive(i){cards.forEach((c,j)=>c.classList.toggle('cp-active',j===i));}
   function clearActive(){cards.forEach(c=>c.classList.remove('cp-active'));}
-
-  function startCycle(){
-    if(intervalId)return;
-    intervalId=setInterval(()=>{
-      if(paused)return;
-      idx=(idx+1)%cards.length;
-      setActive(idx);
-    },2200);
-  }
+  function startCycle(){if(intervalId)return;intervalId=setInterval(()=>{if(paused)return;idx=(idx+1)%cards.length;setActive(idx);},2200);}
   function stopCycle(){clearInterval(intervalId);intervalId=null;}
-
   cards.forEach((c,i)=>{
-    c.addEventListener('mouseenter',()=>{
-      paused=true;stopCycle();clearActive();c.classList.add('cp-active');
-    });
-    c.addEventListener('mouseleave',()=>{
-      paused=false;clearActive();idx=i;startCycle();
-    });
-    c.addEventListener('click',e=>{
-      e.preventDefault();
-      stopCycle();
-      clearActive();
-      c.classList.add('cp-active','cp-clicked');
-      setTimeout(()=>{window.location.href=c.getAttribute('href');},340);
-    });
+    c.addEventListener('mouseenter',()=>{paused=true;stopCycle();clearActive();c.classList.add('cp-active');});
+    c.addEventListener('mouseleave',()=>{paused=false;clearActive();idx=i;startCycle();});
+    c.addEventListener('click',e=>{e.preventDefault();stopCycle();clearActive();c.classList.add('cp-active','cp-clicked');setTimeout(()=>{window.location.href=c.getAttribute('href');},340);});
   });
-
-  /* Activate only when section is in view */
   const section=document.getElementById(gridId).closest('#choose-path-top,#choose-path-bottom');
   const obs=new IntersectionObserver(entries=>{
-    entries.forEach(en=>{
-      if(en.isIntersecting){setActive(idx);startCycle();}
-      else{stopCycle();clearActive();}
-    });
+    entries.forEach(en=>{if(en.isIntersecting){setActive(idx);startCycle();}else{stopCycle();clearActive();}});
   },{threshold:.2});
-  if(section)obs.observe(section);
-  else{setActive(0);startCycle();}
+  if(section)obs.observe(section);else{setActive(0);startCycle();}
 }
 
 /* ── TOAST ── */
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
 /* ── ACHIEVEMENTS ── */
+/*
+  Supports both legacy static data (icon/year/desc fields) 
+  and new admin data (title/org/date/type fields from MongoDB)
+*/
 const DEFAULT_ACHIEVEMENTS=[
-  {id:1,title:'Life Coach of the Year 2025',desc:'Awarded by Ameesha Patel',icon:'🏆',year:'2025',img:''},
-  {id:2,title:'Most Celebrated Global Manifestation Coach',desc:'Awarded by Amrita Rao',icon:'🏆',year:'2025',img:''},
-  {id:3,title:'Nari Shakti Award',desc:'Women Empowerment Recognition',icon:'🏆',year:'2024',img:''},
-  {id:4,title:'International Brilliance Award',desc:'Global Impact Recognition',icon:'🏆',year:'2024',img:''},
-  {id:5,title:'Icons of Bharat Award',desc:'National Honour',icon:'🏆',year:'2023',img:''},
-  {id:6,title:'Global Impact Coach Recognition',desc:'20+ National & International Honours',icon:'🏆',year:'2023',img:''},
-  {id:7,title:'Top 50 Powerful Personalities',desc:'Leadership Recognition',icon:'🏆',year:'2022',img:''},
-  {id:8,title:'Mentors of Impact',desc:"India's Top Coach 2026",icon:'🏆',year:'2026',img:''}
+  {title:'Life Coach of the Year 2025',desc:'Awarded by Ameesha Patel',icon:'🏆',year:'2025',img:''},
+  {title:'Most Celebrated Global Manifestation Coach',desc:'Awarded by Amrita Rao',icon:'🏆',year:'2025',img:''},
+  {title:'Nari Shakti Award',desc:'Women Empowerment Recognition',icon:'🏆',year:'2024',img:''},
+  {title:'International Brilliance Award',desc:'Global Impact Recognition',icon:'🏆',year:'2024',img:''},
+  {title:'Icons of Bharat Award',desc:'National Honour',icon:'🏆',year:'2023',img:''},
+  {title:'Global Impact Coach Recognition',desc:'20+ National & International Honours',icon:'🏆',year:'2023',img:''},
+  {title:'Top 50 Powerful Personalities',desc:'Leadership Recognition',icon:'🏆',year:'2022',img:''},
+  {title:'Mentors of Impact',desc:"India's Top Coach 2026",icon:'🏆',year:'2026',img:''}
 ];
 let achievementsData=DEFAULT_ACHIEVEMENTS;
+
 function renderAchievements(){
   const grid=document.getElementById('achievementsGrid');if(!grid)return;
-  grid.innerHTML=achievementsData.map((a,i)=>`
+  grid.innerHTML=achievementsData.map((a,i)=>{
+    /* support both admin schema (org, date, type) and legacy (desc, year, icon) */
+    const title = a.title||'';
+    const org   = a.org || a.desc || '';
+    const year  = a.date || a.year || '';
+    const icon  = a.icon || (a.type==='award'?'🏆':a.type==='milestone'?'🎯':a.type==='feature'?'📰':'📜');
+    const img   = a.img || '';
+    return `
     <div class="awc rv d${(i%4)+1}">
       <div class="aw-photo-area">
-        ${a.img?`<img src="${a.img}" alt="${a.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
-        <div class="aw-photo-empty" ${a.img?'style="display:none"':''}>
-          <span style="font-size:2.5rem;">${a.icon||'🏆'}</span>
-          <span style="font-size:.6rem;color:rgba(201,168,76,.4);letter-spacing:.1em;text-transform:uppercase;">Award Photo</span>
+        ${img
+          ?`<img src="${img}" alt="${title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          :''
+        }
+        <div class="aw-photo-empty" ${img?'style="display:none"':''}>
+          <span style="font-size:2.8rem;">${icon}</span>
+          <span style="font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;">Photo</span>
         </div>
         <div class="aw-photo-overlay"></div>
-        ${a.year?`<div class="aw-year-badge">${a.year}</div>`:''}
+        ${year?`<div class="aw-year-badge">${year}</div>`:''}
       </div>
       <div class="aw-body">
-        <span class="awi">${a.icon||'🏆'}</span>
-        <h3>${a.title}</h3><p>${a.desc}</p>
+        <span class="awi">${icon}</span>
+        <h3>${title}</h3>
+        ${org?`<div class="aw-org">${org}</div>`:''}
         <div class="aw-ribbon">Recognised</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.querySelectorAll('.awc').forEach(el=>ro.observe(el));
 }
+
 async function fetchAchievements(){
   try{const res=await fetch(`${API_BASE}/achievements`);if(res.ok)achievementsData=await res.json();}catch(e){}
   renderAchievements();
 }
 
 /* ── JOURNAL ── */
+const catToPlatform={mindset:'mindset',love:'love',manifestation:'manifestation',career:'career',personal:'personal',spiritual:'spiritual'};
+const catToLabel={mindset:'Mindset',love:'Love & SP',manifestation:'Manifestation',career:'Career',personal:'Personal',spiritual:'Spiritual'};
 const DEFAULT_JOURNAL=[
-  {id:1,title:'Akshita Dayma Goel Named Life Coach of the Year 2025',excerpt:'International Manifestation Coach recognised for transformational impact on over 100,000 clients across 70+ countries.',date:'March 2025',source:'Republic TV',platform:'republic',link:'#',img:''},
-  {id:2,title:'How Akshita Is Changing Lives Through Manifestation Science',excerpt:'An in-depth feature on the science and spirituality behind her unique coaching methodology.',date:'Feb 2025',source:'CEO India Magazine',platform:'ceo',link:'#',img:''},
-  {id:3,title:'Top 50 Powerful Personalities in India',excerpt:'Recognised among India\'s most influential voices in personal development and spiritual coaching.',date:'Jan 2025',source:'Success India Magazine',platform:'success',link:'#',img:''},
-  {id:4,title:'Nari Shakti: Women Leading the World Transformation',excerpt:'Featured as a leader in women empowerment and global consciousness transformation.',date:'Dec 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''},
-  {id:5,title:'The DailyHunt Interview: Manifesting Your Richest Timeline',excerpt:'A candid conversation about breaking limiting beliefs, the science of manifestation, and how to attract your dream life.',date:'Nov 2024',source:'DailyHunt',platform:'dailyhunt',link:'#',img:''},
-  {id:6,title:'Icons of Bharat: Coaches Changing India From Within',excerpt:'Celebrated as one of India\'s most impactful coaches whose work spans 70+ countries.',date:'Oct 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''}
+  {title:'Akshita Dayma Goel Named Life Coach of the Year 2025',excerpt:'International Manifestation Coach recognised for transformational impact on over 100,000 clients across 70+ countries.',date:'March 2025',source:'Republic TV',platform:'republic',link:'#',img:''},
+  {title:'How Akshita Is Changing Lives Through Manifestation Science',excerpt:'An in-depth feature on the science and spirituality behind her unique coaching methodology.',date:'Feb 2025',source:'CEO India Magazine',platform:'ceo',link:'#',img:''},
+  {title:'Top 50 Powerful Personalities in India',excerpt:'Recognised among India\'s most influential voices in personal development and spiritual coaching.',date:'Jan 2025',source:'Success India Magazine',platform:'success',link:'#',img:''},
+  {title:'Nari Shakti: Women Leading the World Transformation',excerpt:'Featured as a leader in women empowerment and global consciousness transformation.',date:'Dec 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''},
+  {title:'The DailyHunt Interview: Manifesting Your Richest Timeline',excerpt:'A candid conversation about breaking limiting beliefs, the science of manifestation, and how to attract your dream life.',date:'Nov 2024',source:'DailyHunt',platform:'dailyhunt',link:'#',img:''},
+  {title:'Icons of Bharat: Coaches Changing India From Within',excerpt:'Celebrated as one of India\'s most impactful coaches whose work spans 70+ countries.',date:'Oct 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''}
 ];
 let journalData=DEFAULT_JOURNAL;
+
 function renderJournal(){
   const grid=document.getElementById('journalGrid');if(!grid)return;
-  grid.innerHTML=journalData.map((j,i)=>`
+  if(!journalData.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:.88rem;">No journal entries yet.</div>`;return;}
+  grid.innerHTML=journalData.map((j,i)=>{
+    const source  = j.source||j.org||'';
+    const platform= (j.platform||'').toLowerCase()||catToPlatform[j.cat]||'default';
+    const label   = source||catToLabel[j.cat]||'Publication';
+    const link    = j.link||'#';
+    const dateStr = j.date||'';
+    const excerpt = j.excerpt||(j.content?j.content.slice(0,180)+'…':'');
+    return `
     <div class="jrnl-card rv d${(i%3)+1}">
       <div class="jrnl-img">
-        ${j.img?`<img src="${j.img}" alt="${j.title}" onerror="this.parentElement.innerHTML='<div class=jrnl-img-empty>📰</div>'">`:`<div class="jrnl-img-empty">📰</div>`}
+        ${j.img?`<img src="${j.img}" alt="${j.title||''}" onerror="this.parentElement.innerHTML='<div class=jrnl-img-empty>📰</div>'">`:`<div class="jrnl-img-empty">📰</div>`}
         <div class="jrnl-img-overlay"></div>
-        <div class="jrnl-platform ${j.platform||'default'}">${j.source}</div>
+        <div class="jrnl-platform ${platform}">${label}</div>
       </div>
       <div class="jrnl-body">
-        <span class="jrnl-date">${j.date||''}</span>
-        <h3>${j.title}</h3>
-        <p class="jrnl-excerpt">${j.excerpt}</p>
+        <span class="jrnl-date">${dateStr}</span>
+        <h3>${j.title||''}</h3>
+        <p class="jrnl-excerpt">${excerpt}</p>
         <div class="jrnl-footer">
-          <span class="jrnl-source">${j.source}</span>
-          <a href="${j.link||'#'}" target="_blank" class="jrnl-link">Read Article<svg viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+          <span class="jrnl-source">${label}</span>
+          ${link&&link!=='#'?`<a href="${link}" target="_blank" rel="noopener" class="jrnl-link">Read Article<svg viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>`:`<span class="jrnl-link" style="opacity:.35;cursor:default;">No link</span>`}
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.querySelectorAll('.jrnl-card').forEach(el=>ro.observe(el));
 }
 async function fetchJournal(){
-  try{const res=await fetch(`${API_BASE}/journal`);if(res.ok)journalData=await res.json();}catch(e){}
+  try{const res=await fetch(`${API_BASE}/journal`);if(res.ok){const data=await res.json();if(data&&data.length)journalData=data;}}catch(e){}
   renderJournal();
 }
 
@@ -1014,18 +1062,14 @@ async function fetchJournal(){
 const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day'};
 const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program'};
 let currentFilter='all',testimonials=[];
-function filterTests(cat,btn){
-  currentFilter=cat;
-  document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');renderTestimonials();
-}
+function filterTests(cat,btn){currentFilter=cat;document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTestimonials();}
 function renderTestimonials(){
   const container=document.getElementById('testScroll');
   let data=testimonials||[];
   if(currentFilter!=='all')data=data.filter(t=>t.cat===currentFilter);
   if(!data.length){container.innerHTML=`<div style="padding:3rem 2rem;color:var(--muted);font-size:.88rem;text-align:center;min-width:340px;line-height:1.8;">No testimonials yet for this category</div>`;return;}
   container.innerHTML=data.map(t=>`
-    <div class="test-card" onclick="openLBById(${t.id})">
+    <div class="test-card" onclick="openLBById('${t._id||t.id}')">
       <div class="test-cat-tag ${catTagClass[t.cat]||''}">${catLabels[t.cat]||'Result'}</div>
       <div class="test-img-wrap">
         ${t.img?`<img src="${t.img}" alt="${t.label||'Testimonial'}" loading="lazy">`:`<div class="test-img-empty"><div class="empty-icon">✨</div><span>Client result screenshot</span></div>`}
@@ -1047,7 +1091,7 @@ function scrollTests(dir){document.getElementById('testScroll').scrollLeft+=dir*
 let lbIdx=0,lbData=[];
 function openLBById(id){
   const filtered=currentFilter==='all'?testimonials:testimonials.filter(t=>t.cat===currentFilter);
-  const idx=filtered.findIndex(t=>t.id===id);
+  const idx=filtered.findIndex(t=>(t._id||t.id)==id);
   lbData=filtered;lbIdx=idx>=0?idx:0;showLB();
 }
 function showLB(){
@@ -1056,8 +1100,7 @@ function showLB(){
   document.getElementById('lbLabel').textContent=item.label||'';
   box.innerHTML=item.img?`<img src="${item.img}" alt="${item.label||''}" onerror="this.parentElement.innerHTML='<div class=lb-no-img><span>🖼️</span><p>Could not load</p></div>'">`:`<div class="lb-no-img"><span>💬</span><p>${item.label||'Client testimonial'}</p></div>`;
   document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+lbData.length;
-  document.getElementById('lb').classList.add('open');
-  document.body.style.overflow='hidden';
+  document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden';
 }
 function closeLB(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
 function lbNav(d){if(!lbData.length)return;lbIdx=(lbIdx+d+lbData.length)%lbData.length;showLB();}
@@ -1071,17 +1114,10 @@ document.addEventListener('keydown',e=>{
 function openM(id){document.getElementById(id).classList.add('active');document.body.style.overflow='hidden';}
 function closeM(id){document.getElementById(id).classList.remove('active');document.body.style.overflow='';}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m.id);}));
-function openBuy(t,p){document.getElementById('mTitle').textContent=t;document.getElementById('mPrice').textContent=p;openM('buyModal');}
-
 async function submitForm(e){
   e.preventDefault();
   const form=e.target;
-  const data={
-    firstName:form.querySelectorAll("input")[0].value,
-    lastName:form.querySelectorAll("input")[1].value,
-    email:form.querySelector("input[type='email']").value,
-    message:form.querySelector("textarea").value
-  };
+  const data={firstName:form.querySelectorAll("input")[0].value,lastName:form.querySelectorAll("input")[1].value,email:form.querySelector("input[type='email']").value,message:form.querySelector("textarea").value};
   try{
     const res=await fetch(`${API_BASE}/contact`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
     if(res.ok){openM('contactModal');form.reset();}
@@ -1089,11 +1125,12 @@ async function submitForm(e){
   }catch(err){showToast("⚠️ Server error");}
 }
 
-// INIT
+/* ── INIT ── */
 fetchAchievements();
 fetchJournal();
-fetchEbooks();
 fetchTestimonials();
+initChoosePath('cpGridTop');
+initChoosePath('cpGridBottom');
 </script>
 </body>
 </html>

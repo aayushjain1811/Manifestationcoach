@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 :root{
   --green:#5dcc7a;
@@ -173,100 +174,188 @@ footer span{color:var(--gold);}
 <div class="toast" id="toast"></div>
 
 <script>
-const API_BASE="https://adg-backend-sm2p.onrender.com";
+const API_BASE = "https://adg-backend-sm2p.onrender.com";
+const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax"; // ← swap to live key when ready
 
 // Cursor
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
-document.querySelectorAll('a,button,.ebc').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+(function a() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(a); })();
+document.querySelectorAll('a,button,.ebc').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
 });
 
 // Stars
-const scEl=document.getElementById('sc'),ctx=scEl.getContext('2d');
-let stars=[],t=0;
-function rsz(){scEl.width=innerWidth;scEl.height=innerHeight;}
-function iStars(){stars=[];for(let i=0;i<120;i++)stars.push({x:Math.random()*scEl.width,y:Math.random()*scEl.height,r:Math.random()*1.1+.15,sp:Math.random()*.002+.0005,ph:Math.random()*Math.PI*2});}
-function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=>{const a=.2+.4*Math.sin(t*s.sp*100+s.ph);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+a+')';ctx.fill();});requestAnimationFrame(drw);}
-window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
+const scEl = document.getElementById('sc'), ctx = scEl.getContext('2d');
+let stars = [], t = 0;
+function rsz() { scEl.width = innerWidth; scEl.height = innerHeight; }
+function iStars() { stars = []; for (let i = 0; i < 120; i++) stars.push({ x: Math.random() * scEl.width, y: Math.random() * scEl.height, r: Math.random() * 1.1 + .15, sp: Math.random() * .002 + .0005, ph: Math.random() * Math.PI * 2 }); }
+function drw() { ctx.clearRect(0, 0, scEl.width, scEl.height); t += .01; stars.forEach(s => { const a = .2 + .4 * Math.sin(t * s.sp * 100 + s.ph); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.fill(); }); requestAnimationFrame(drw); }
+window.addEventListener('resize', () => { rsz(); iStars(); }); rsz(); iStars(); drw();
 
 // Reveal
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+const ro = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
 
 // Modal
-function closeM(id){document.getElementById(id).classList.remove('active');document.body.style.overflow='';}
-document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m.id);}));
-function openBuy(t,p){document.getElementById('mTitle').textContent=t;document.getElementById('mPrice').textContent=p;document.getElementById('buyModal').classList.add('active');document.body.style.overflow='hidden';}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+function closeM(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
+
+// ── RAZORPAY ──────────────────────────────────────────────────────
+async function openBuy(title, priceUsd, priceInr, ebookId) {
+  const amountInr = parseFloat((priceInr || '').replace(/[₹,\s]/g, ''));
+
+  // If no INR price set → fallback to old simple modal
+  if (!priceInr || isNaN(amountInr)) {
+    document.getElementById('mTitle').textContent = title;
+    document.getElementById('mPrice').textContent = priceUsd;
+    document.getElementById('buyModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
+
+  showToast('Opening payment…');
+
+  try {
+    const res = await fetch(`${API_BASE}/razorpay/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: amountInr,
+        currency: 'INR',
+        ebookId: ebookId || title,
+        ebookTitle: title
+      })
+    });
+    const order = await res.json();
+    if (!order.orderId) throw new Error(order.error || 'Order creation failed');
+
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Akshita Dayma Goel',
+      description: title,
+      image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
+      order_id: order.orderId,
+      handler: async function (response) {
+        const verify = await fetch(`${API_BASE}/razorpay/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(response)
+        });
+        const result = await verify.json();
+        if (result.success) {
+          // Show success modal
+          document.getElementById('mTitle').textContent = title;
+          document.getElementById('mPrice').textContent =
+            `₹${amountInr.toLocaleString('en-IN')} · Payment ID: ${response.razorpay_payment_id}`;
+          document.getElementById('buyModal').classList.add('active');
+          document.body.style.overflow = 'hidden';
+        } else {
+          showToast('⚠️ Payment verification failed. Contact support.');
+        }
+      },
+      prefill: { name: '', email: '', contact: '' },
+      theme: { color: '#c9a84c' },
+modal: {
+  ondismiss: function () {
+    document.body.style.cursor = "none"; // restore
+    showToast('Payment cancelled.');
+  }
+}
+    };
+
+const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      showToast('Payment failed: ' + response.error.description);
+    });
+    rzp.open();
+    setTimeout(() => {
+      document.body.style.cursor = "auto";
+      document.body.style.overflow = "auto";
+    }, 500);
+
+  } catch (e) {
+    showToast('Error: ' + e.message);
+  }
+}
 
 // Ebooks data + render
-const DEFAULT_EBOOKS=[
-  {id:1,title:'The Subconscious Shift Formula',tag:'Manifestation',price:'$47',orig:'$67',desc:'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.',features:['Subconscious reprogramming techniques','Step-by-step belief transformation','Practical daily rituals','Instant digital download'],badge:'bestseller',badgeText:'Bestseller',icon:'📖',reviews:1240,rating:5},
-  {id:2,title:'Manifest Your Soulmate',tag:'Love & Relationships',price:'$37',orig:'$57',desc:'Heal relationship patterns and align yourself with deep, fulfilling love.',features:['Healing past relationship trauma','Energetic alignment for love','Attract meaningful partnerships','Instant digital download'],badge:'popular',badgeText:'Popular',icon:'💫',reviews:982,rating:5},
-  {id:3,title:'Money Mindset Mastery',tag:'Wealth & Abundance',price:'$47',orig:'$67',desc:'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.',features:['Identify & dissolve money blocks','Build an abundance frequency','Manifestation + strategic action','Instant digital download'],badge:'',icon:'💰',reviews:756,rating:5},
-  {id:4,title:'Aligned Career Manifestation',tag:'Career & Purpose',price:'$37',orig:'$57',desc:"Align your purpose with your profession — manifest your dream career.",features:["Clarity on your soul's purpose",'Energetic alignment with success','Overcome imposter syndrome','Instant digital download'],badge:'',icon:'🎯',reviews:621,rating:5},
-  {id:5,title:'Neuroplasticity Manifestation Guide',tag:'Mindset & Reprogramming',price:'$57',orig:'$77',desc:'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.',features:['Brain science made accessible','Neural pathway rewiring exercises','30-day transformation plan','Instant digital download'],badge:'new',badgeText:'New',icon:'🧠',reviews:412,rating:5},
-  {id:6,title:'Full eBook Bundle — All 5 Guides',tag:'Complete Collection',price:'$97',orig:'$225',desc:'Get all 5 transformation guides at a massive discount.',features:['All 5 eBooks included','Save over 50% vs buying separately','Bonus: Guided meditation audio','Lifetime access & free updates'],badge:'value',badgeText:'Best Value',icon:'🎁',reviews:2100,rating:5}
+const DEFAULT_EBOOKS = [
+  { id: 1, title: 'The Subconscious Shift Formula', tag: 'Manifestation', price: '$47', orig: '$67', desc: 'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.', features: ['Subconscious reprogramming techniques', 'Step-by-step belief transformation', 'Practical daily rituals', 'Instant digital download'], badge: 'bestseller', badgeText: 'Bestseller', icon: '📖', reviews: 1240, rating: 5 },
+  { id: 2, title: 'Manifest Your Soulmate', tag: 'Love & Relationships', price: '$37', orig: '$57', desc: 'Heal relationship patterns and align yourself with deep, fulfilling love.', features: ['Healing past relationship trauma', 'Energetic alignment for love', 'Attract meaningful partnerships', 'Instant digital download'], badge: 'popular', badgeText: 'Popular', icon: '💫', reviews: 982, rating: 5 },
+  { id: 3, title: 'Money Mindset Mastery', tag: 'Wealth & Abundance', price: '$47', orig: '$67', desc: 'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.', features: ['Identify & dissolve money blocks', 'Build an abundance frequency', 'Manifestation + strategic action', 'Instant digital download'], badge: '', icon: '💰', reviews: 756, rating: 5 },
+  { id: 4, title: 'Aligned Career Manifestation', tag: 'Career & Purpose', price: '$37', orig: '$57', desc: "Align your purpose with your profession — manifest your dream career.", features: ["Clarity on your soul's purpose", 'Energetic alignment with success', 'Overcome imposter syndrome', 'Instant digital download'], badge: '', icon: '🎯', reviews: 621, rating: 5 },
+  { id: 5, title: 'Neuroplasticity Manifestation Guide', tag: 'Mindset & Reprogramming', price: '$57', orig: '$77', desc: 'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.', features: ['Brain science made accessible', 'Neural pathway rewiring exercises', '30-day transformation plan', 'Instant digital download'], badge: 'new', badgeText: 'New', icon: '🧠', reviews: 412, rating: 5 },
+  { id: 6, title: 'Full eBook Bundle — All 5 Guides', tag: 'Complete Collection', price: '$97', orig: '$225', desc: 'Get all 5 transformation guides at a massive discount.', features: ['All 5 eBooks included', 'Save over 50% vs buying separately', 'Bonus: Guided meditation audio', 'Lifetime access & free updates'], badge: 'value', badgeText: 'Best Value', icon: '🎁', reviews: 2100, rating: 5 }
 ];
-let ebookData=DEFAULT_EBOOKS;
+let ebookData = DEFAULT_EBOOKS;
 
-function calcSaving(orig,price){
-  const o=parseFloat((orig||'').replace(/[^0-9.]/g,''));
-  const p=parseFloat((price||'').replace(/[^0-9.]/g,''));
-  if(o&&p&&o>p)return`Save ${Math.round((1-p/o)*100)}%`;return'';
+function calcSaving(orig, price) {
+  const o = parseFloat((orig || '').replace(/[^0-9.]/g, ''));
+  const p = parseFloat((price || '').replace(/[^0-9.]/g, ''));
+  if (o && p && o > p) return `Save ${Math.round((1 - p / o) * 100)}%`;
+  return '';
 }
-const gradients={'📖':'linear-gradient(135deg,#1a1530,#2d1e4a,#1a1030)','💫':'linear-gradient(135deg,#1a1020,#3d1a2a,#1a0f1e)','💰':'linear-gradient(135deg,#0f1820,#1a3020,#0a1215)','🎯':'linear-gradient(135deg,#101520,#1a2035,#0a1020)','🧠':'linear-gradient(135deg,#0f1520,#152535,#0a1020)','🎁':'linear-gradient(135deg,#1a1020,#2a1a35,#1a0f28)'};
 
-function renderEbooks(){
-  const grid=document.getElementById('ebooksGrid');
-  grid.innerHTML=ebookData.map((b,i)=>{
-    const saving=calcSaving(b.orig,b.price);
-const bg=gradients[b.icon]||'linear-gradient(135deg,#0f1020,#1a1535)';
-return`<div class="ebc rv d${(i%3)+1}">
+const gradients = { '📖': 'linear-gradient(135deg,#1a1530,#2d1e4a,#1a1030)', '💫': 'linear-gradient(135deg,#1a1020,#3d1a2a,#1a0f1e)', '💰': 'linear-gradient(135deg,#0f1820,#1a3020,#0a1215)', '🎯': 'linear-gradient(135deg,#101520,#1a2035,#0a1020)', '🧠': 'linear-gradient(135deg,#0f1520,#152535,#0a1020)', '🎁': 'linear-gradient(135deg,#1a1020,#2a1a35,#1a0f28)' };
+
+function renderEbooks() {
+  const grid = document.getElementById('ebooksGrid');
+  grid.innerHTML = ebookData.map((b, i) => {
+    const saving = calcSaving(b.orig, b.price);
+    const bg = gradients[b.icon] || 'linear-gradient(135deg,#0f1020,#1a1535)';
+    // Safely escape title for onclick attribute
+    const safeTitle = (b.title || '').replace(/'/g, "\\'");
+    return `<div class="ebc rv d${(i % 3) + 1}">
   <div class="ebc-spine"></div>
   <div class="ecv">
     ${b.img
-      ? `<img src="${b.img}" alt="${b.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">`
-      : `<div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>`
-    }
+        ? `<img src="${b.img}" alt="${b.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">`
+        : `<div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>`
+      }
     <div class="ecv-overlay"></div>
     <div class="ecover-icon-wrap">
-      ${!b.img ? `<span class="ecover-icon">${b.icon||'📘'}</span><span class="ecover-title-preview">${b.title}</span>` : ''}
+      ${!b.img ? `<span class="ecover-icon">${b.icon || '📘'}</span><span class="ecover-title-preview">${b.title}</span>` : ''}
     </div>
-    ${b.badge?`<div class="ebadge ${b.badge}">${b.badgeText||b.badge}</div>`:''}
+    ${b.badge ? `<div class="ebadge ${b.badge}">${b.badgeText || b.badge}</div>` : ''}
   </div>
-      <div class="ebb">
-        <span class="etag">${b.tag||''}</span>
-        <h3>${b.title}</h3>
-        <div class="e-stars">${[1,2,3,4,5].map(()=>'<span class="e-star">★</span>').join('')}<span class="e-reviews">(${(b.reviews||0).toLocaleString()})</span></div>
-        <p style="white-space:pre-line;">${b.desc}</p>
-        <ul class="efl">${(b.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
-        <div class="efr">
-<div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
-  <div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
-    ${b.orig?`<span class="ep-orig">${b.orig}</span>`:''}
-    <span class="ep-price">${b.price}</span>
-    ${saving?`<span class="ep-save">${saving}</span>`:''}
-  </div>
-  ${b.priceInr?`<div style="display:flex;align-items:baseline;gap:.4rem;">
-    ${b.origInr?`<span style="font-size:.75rem;color:var(--muted);text-decoration:line-through;">${b.origInr}</span>`:''}
-    <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--green,#5dcc7a);line-height:1;">${b.priceInr}</span>
-  </div>`:''}
-</div>
-          <button class="ebuy-btn" onclick="openBuy('${b.title}','${b.price}')">Buy Now ↗</button>
+  <div class="ebb">
+    <span class="etag">${b.tag || ''}</span>
+    <h3>${b.title}</h3>
+    <div class="e-stars">${[1, 2, 3, 4, 5].map(() => '<span class="e-star">★</span>').join('')}<span class="e-reviews">(${(b.reviews || 0).toLocaleString()})</span></div>
+    <p style="white-space:pre-line;">${b.desc}</p>
+    <ul class="efl">${(b.features || []).map(f => `<li>${f}</li>`).join('')}</ul>
+    <div class="efr">
+      <div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
+        <div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
+          ${b.orig ? `<span class="ep-orig">${b.orig}</span>` : ''}
+          <span class="ep-price">${b.price}</span>
+          ${saving ? `<span class="ep-save">${saving}</span>` : ''}
         </div>
+        ${b.priceInr ? `<div style="display:flex;align-items:baseline;gap:.4rem;">
+          ${b.origInr ? `<span style="font-size:.75rem;color:var(--muted);text-decoration:line-through;">${b.origInr}</span>` : ''}
+          <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--green,#5dcc7a);line-height:1;">${b.priceInr}</span>
+        </div>` : ''}
       </div>
-    </div>`;
+      <button class="ebuy-btn" onclick="openBuy('${safeTitle}','${b.price}','${b.priceInr || ''}','${b._id || b.id || ''}')">Buy Now ↗</button>
+    </div>
+  </div>
+</div>`;
   }).join('');
-  document.querySelectorAll('.ebc').forEach(el=>{ro.observe(el);el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));});
+  document.querySelectorAll('.ebc').forEach(el => {
+    ro.observe(el);
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
 }
 
-async function fetchEbooks(){
-  try{const res=await fetch(`${API_BASE}/ebooks`);if(res.ok)ebookData=await res.json();}catch(e){}
+async function fetchEbooks() {
+  try { const res = await fetch(`${API_BASE}/ebooks`); if (res.ok) ebookData = await res.json(); } catch (e) { }
   renderEbooks();
 }
 fetchEbooks();
