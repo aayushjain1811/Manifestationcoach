@@ -43,11 +43,12 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-/* ===========================
-   ✅ Upload Image
-=========================== */
 app.post("/upload-image", upload.single("file"), async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
     const stream = cloudinary.uploader.upload_stream(
       { resource_type: "image", folder: "admin_uploads/images" },
       (error, result) => {
@@ -55,26 +56,35 @@ app.post("/upload-image", upload.single("file"), async (req, res) => {
         res.json({ url: result.secure_url, public_id: result.public_id });
       }
     );
+
     stream.end(req.file.buffer);
   } catch (err) {
+    console.error("IMAGE UPLOAD ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
-
-/* ===========================
-   ✅ Upload PDF
-=========================== */
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
-    const stream = cloudinary.uploader.upload_stream(
-      { resource_type: "raw", folder: "admin_uploads/pdfs" },
-      (error, result) => {
-        if (error) return res.status(500).json({ error });
-        res.json({ url: result.secure_url, public_id: result.public_id });
+    if (!req.file) {
+      return res.status(400).json({ error: "No PDF uploaded" });
+    }
+
+    const result = await cloudinary.uploader.upload(
+      `data:application/pdf;base64,${req.file.buffer.toString("base64")}`,
+      {
+        resource_type: "raw",
+        folder: "admin_uploads/pdfs",
+        timeout: 60000 // ⏱ increase timeout (60s)
       }
     );
-    stream.end(req.file.buffer);
+
+    res.json({
+      url: result.secure_url,
+      public_id: result.public_id
+    });
+
   } catch (err) {
+    console.error("PDF UPLOAD ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -83,21 +93,32 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
    ✅ Cloudinary Fetch
 =========================== */
 app.get("/get-images", async (req, res) => {
-  const result = await cloudinary.search
-    .expression("folder:admin_uploads/images")
-    .sort_by("created_at", "desc")
-    .max_results(50)
-    .execute();
-  res.json(result.resources);
-});
+  try {
+    const result = await cloudinary.api.resources({
+      type: "upload",
+      prefix: "admin_uploads/images",
+      max_results: 50,
+      resource_type: "image"
+    });
 
+    res.json(result.resources);
+  } catch (err) {
+    console.error("GET IMAGES ERROR:", err); // 👈 ADD THIS
+    res.status(500).json({ error: err.message });
+  }
+});
 app.get("/get-pdfs", async (req, res) => {
-  const result = await cloudinary.search
-    .expression("folder:admin_uploads/pdfs")
-    .sort_by("created_at", "desc")
-    .max_results(50)
-    .execute();
-  res.json(result.resources);
+  try {
+    const result = await cloudinary.api.resources({
+      type: "upload",
+      prefix: "admin_uploads/pdfs",
+      max_results: 50,
+      resource_type: "raw"
+    });
+    res.json(result.resources);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /* ===========================
@@ -199,6 +220,124 @@ app.post("/cal/cancel/:bookingId", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+/* ===========================
+   ✅ RAZORPAY
+=========================== */
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+
+// Create session order
+app.post("/razorpay/create-session-order", async (req, res) => {
+  try {
+    const { amount, currency = "INR", category, tier, tierName } = req.body;
+    const order = await razorpay.orders.create({
+      amount: Math.round(amount * 100), // convert to paise
+      currency,
+      receipt: `sess_${Date.now()}`.slice(0, 40),
+      notes: { category, tier, tierName }
+    });
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
+    });
+  } catch (e) {
+    console.error("❌ Razorpay order error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Verify session payment
+app.post("/razorpay/verify-session", async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      calUrl
+    } = req.body;
+
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expected = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+
+    if (expected === razorpay_signature) {
+      console.log("✅ Payment verified:", razorpay_payment_id);
+      res.json({
+        success: true,
+        paymentId: razorpay_payment_id,
+        calUrl
+      });
+    } else {
+      console.error("❌ Signature mismatch");
+      res.status(400).json({ success: false, error: "Invalid signature" });
+    }
+  } catch (e) {
+    console.error("❌ Verify error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Create ebook order
+app.post("/razorpay/create-order", async (req, res) => {
+  try {
+    const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
+
+    const cleanText = (text) =>
+      (text || "").replace(/[^\x00-\x7F]/g, ""); // remove bad characters
+
+    const order = await razorpay.orders.create({
+      amount: Math.round(amount * 100),
+      currency,
+      receipt: `eb_${Date.now()}`.slice(0, 40),
+      notes: {
+        ebookTitle: cleanText(ebookTitle)   // ✅ FIXED
+      }
+    });
+
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
+    });
+
+  } catch (e) {
+    console.error("❌ Razorpay ebook order error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Verify ebook payment
+app.post("/razorpay/verify", async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    } = req.body;
+
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expected = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+
+    if (expected === razorpay_signature) {
+      res.json({ success: true, paymentId: razorpay_payment_id });
+    } else {
+      res.status(400).json({ success: false, error: "Invalid signature" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 /* ===========================
    ✅ TESTIMONIAL APIs
@@ -232,7 +371,7 @@ app.get("/ebooks", async (req, res) => {
 });
 
 app.put("/update-ebook/:id", async (req, res) => {
-  const data = await Ebook.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const data = await Ebook.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
   res.json(data);
 });
 
@@ -255,7 +394,7 @@ app.post("/add-achievement", async (req, res) => {
 });
 
 app.put("/update-achievement/:id", async (req, res) => {
-  const data = await Achievement.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const data = await Achievement.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
   res.json(data);
 });
 
@@ -278,7 +417,7 @@ app.post("/add-journal", async (req, res) => {
 });
 
 app.put("/update-journal/:id", async (req, res) => {
-  const data = await Journal.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const data = await Journal.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
   res.json(data);
 });
 
