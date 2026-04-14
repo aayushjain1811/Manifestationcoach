@@ -240,24 +240,38 @@ const options = {
   description: cleanTitle,
   image: 'universecrets.com/images/logo.png',
   order_id: order.orderId,
-      handler: async function (response) {
-        const verify = await fetch(`${API_BASE}/razorpay/verify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(response)
-        });
-        const result = await verify.json();
-        if (result.success) {
-          // Show success modal
-          document.getElementById('mTitle').textContent = title;
-          document.getElementById('mPrice').textContent =
-            `₹${amountInr.toLocaleString('en-IN')} · Payment ID: ${response.razorpay_payment_id}`;
-          document.getElementById('buyModal').classList.add('active');
-          document.body.style.overflow = 'hidden';
-        } else {
-          showToast('⚠️ Payment verification failed. Contact support.');
-        }
-      },
+handler: async function (response) {
+  const verify = await fetch(`${API_BASE}/razorpay/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(response)
+  });
+  const result = await verify.json();
+  if (result.success) {
+    // Find the ebook's PDF URL
+    const ebook = ebookData.find(e => String(e._id || e.id) === String(ebookId));
+    const pdfUrl = ebook?.pdfUrl || '';
+
+    document.getElementById('mTitle').textContent = title;
+    document.getElementById('mPrice').textContent =
+      `₹${amountInr.toLocaleString('en-IN')} · Payment ID: ${response.razorpay_payment_id}`;
+
+    // Add download button if PDF exists
+    if (pdfUrl) {
+      document.getElementById('mPrice').innerHTML += `
+        <br><br>
+        <a href="${pdfUrl}" target="_blank" download
+           style="display:inline-block;margin-top:.8rem;padding:.75rem 1.8rem;background:var(--gold);color:var(--dark);border-radius:2px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;">
+          ⬇ Download Your eBook
+        </a>`;
+    }
+
+    document.getElementById('buyModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  } else {
+    showToast('⚠️ Payment verification failed. Contact support.');
+  }
+},
       prefill: { name: '', email: '', contact: '' },
       theme: { color: '#c9a84c' },
 modal: {
