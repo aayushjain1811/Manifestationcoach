@@ -13,7 +13,6 @@
   --green:#5dcc7a;
   --dark:#070a1a;--dark2:#0c1030;--purple:#150e35;
   --gold:#c9a84c;--gold-light:#e8d5a3;--gold-dark:#9a7c30;
-  --silver:#a8b5c8;--silver-light:#d4dde8;
   --diamond:#7ec8e3;--diamond-light:#b8e6f5;
   --platinum:#e0c9f0;--platinum-light:#f0e4ff;
   --text:#eceaf6;--muted:#8e88ab;
@@ -53,43 +52,164 @@ nav{position:fixed;top:0;width:100%;z-index:800;padding:.7rem 5%;background:rgba
 .container{max-width:1280px;margin:0 auto;}
 section{padding:5rem 5%;}
 
-/* EBOOKS GRID */
-.ebg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
-.ebc{background:var(--glass);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;display:flex;flex-direction:column;}
-.ebc:hover{transform:translateY(-8px);border-color:var(--gold-border);box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.15);}
-.ecv{width:100%;height:380px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+/* ═══════════════════════════
+   EBOOKS GRID — fixed layout
+   ═══════════════════════════ */
+.ebg{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.8rem;
+  align-items:start; /* cards don't stretch to match tallest — each is its own height */
+}
+.ebc{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+  transition:all .45s cubic-bezier(.16,1,.3,1);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+.ebc:hover{
+  transform:translateY(-8px);
+  border-color:var(--gold-border);
+  box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.15);
+}
+
+/* ── Cover image area ── */
+.ecv{
+  width:100%;
+  /* Use aspect-ratio so covers are always proportional regardless of image */
+  aspect-ratio:3/4;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+/* When an actual image is uploaded, show it properly */
+.ecv-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;    /* fill the frame */
+  object-position:center top;
+  display:block;
+}
+/* Fallback gradient bg when no image */
 .ecv-bg{position:absolute;inset:0;}
-.ecv-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(7,10,26,.85) 100%);}
-.ecover-icon-wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.ecv-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,rgba(7,10,26,.7) 100%);
+}
+.ecover-icon-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
 .ecover-icon{font-size:3.2rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
-.ecover-title-preview{font-family:'Cormorant Garamond',serif;font-size:.85rem;color:rgba(232,213,163,.8);text-align:center;max-width:140px;line-height:1.3;font-style:italic;}
-.ebc-spine{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold));opacity:.6;transition:opacity .4s;}
+.ecover-title-preview{
+  font-family:'Cormorant Garamond',serif;font-size:.85rem;
+  color:rgba(232,213,163,.8);text-align:center;max-width:140px;
+  line-height:1.3;font-style:italic;
+}
+.ebc-spine{
+  position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold));
+  opacity:.6;transition:opacity .4s;z-index:3;
+}
 .ebc:hover .ebc-spine{opacity:1;}
-.ebadge{position:absolute;top:12px;right:12px;z-index:3;padding:.28rem .75rem;border-radius:2px;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(8px);}
+.ebadge{
+  position:absolute;top:12px;right:12px;z-index:4;
+  padding:.28rem .75rem;border-radius:2px;
+  font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  backdrop-filter:blur(8px);
+}
 .ebadge.bestseller{background:rgba(201,168,76,.9);color:var(--dark);}
 .ebadge.popular{background:rgba(126,200,227,.85);color:var(--dark);}
 .ebadge.new{background:rgba(224,201,240,.85);color:var(--dark);}
 .ebadge.value{background:rgba(255,180,60,.9);color:var(--dark);}
-.ebb{padding:1.5rem 1.5rem 1.7rem;flex:1;display:flex;flex-direction:column;position:relative;}
-.etag{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:block;}
+
+/* ── Card body ── */
+.ebb{
+  padding:1.5rem 1.5rem 1.7rem;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.etag{
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.4rem;display:block;
+}
 .ebc h3{font-size:1.05rem;color:#fff;font-weight:500;margin-bottom:.5rem;line-height:1.35;}
-.ebc p{font-size:.8rem;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:1rem;flex:1;
-  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;}
+.ebc p.edesc{
+  font-size:.8rem;color:var(--muted);line-height:1.75;font-weight:300;
+  margin-bottom:1rem;flex:1;
+}
 .efl{list-style:none;margin-bottom:1.3rem;}
-.efl li{font-size:.76rem;color:var(--muted);padding:.3rem 0 .3rem 1.1rem;border-bottom:1px solid var(--border);position:relative;font-weight:300;}
+.efl li{
+  font-size:.76rem;color:var(--muted);
+  padding:.3rem 0 .3rem 1.1rem;
+  border-bottom:1px solid var(--border);
+  position:relative;font-weight:300;
+}
 .efl li:last-child{border-bottom:none;}
 .efl li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-size:.7rem;font-weight:600;top:4px;}
-.efr{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid var(--border);margin-top:auto;}
-.ep{display:flex;align-items:baseline;gap:.4rem;}
+
+/* ── Price + buy row ── */
+.efr{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:1rem;
+  border-top:1px solid var(--border);
+  margin-top:auto;
+  gap:.8rem;
+  flex-wrap:wrap;
+}
+.ep{
+  display:flex;
+  align-items:baseline;
+  gap:.4rem;
+  flex-wrap:wrap;
+}
 .ep-price{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--gold);line-height:1;}
+.ep-price.inr{color:var(--green);}
 .ep-orig{font-size:.8rem;color:var(--muted);text-decoration:line-through;}
-.ep-save{font-size:.63rem;color:#7ec8e3;letter-spacing:.06em;padding:.15rem .5rem;background:rgba(126,200,227,.1);border-radius:1px;margin-left:.2rem;}
-.ebuy-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.4rem;background:var(--gold);color:var(--dark);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
-.ebuy-btn:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,168,76,.35);}
+.ep-save{
+  font-size:.63rem;color:#7ec8e3;letter-spacing:.06em;
+  padding:.15rem .5rem;background:rgba(126,200,227,.1);border-radius:1px;
+}
+.ebuy-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.6rem 1.4rem;
+  background:var(--gold);color:var(--dark);
+  border:none;border-radius:2px;
+  font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+  white-space:nowrap;flex-shrink:0;
+}
+.ebuy-btn:hover{
+  background:var(--gold-light);
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(201,168,76,.35);
+}
 
 /* QUOTE BAND */
-.quote-band{padding:3.5rem 5%;background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(201,168,76,.03));border-top:1px solid var(--gold-border);border-bottom:1px solid var(--gold-border);text-align:center;}
-.quote-band blockquote{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--gold-light);line-height:1.5;margin-bottom:.7rem;}
+.quote-band{
+  padding:3.5rem 5%;
+  background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(201,168,76,.03));
+  border-top:1px solid var(--gold-border);
+  border-bottom:1px solid var(--gold-border);
+  text-align:center;
+}
+.quote-band blockquote{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;
+  font-style:italic;color:var(--gold-light);line-height:1.5;margin-bottom:.7rem;
+}
 .quote-band cite{font-size:.73rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
 
 /* MODAL */
@@ -104,6 +224,7 @@ section{padding:5rem 5%;}
 .micon{font-size:2.2rem;display:block;margin-bottom:1rem;}
 .btn-p{display:inline-block;padding:.82rem 1.9rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;background:var(--gold);color:var(--dark);border:none;cursor:pointer;transition:all .3s;}
 .btn-p:hover{background:var(--gold-light);}
+
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:rgba(7,10,26,.95);border:1px solid var(--gold);border-radius:2px;padding:.8rem 1.4rem;font-size:.8rem;color:var(--gold-light);z-index:20000;transform:translateY(20px);opacity:0;transition:all .35s;pointer-events:none;}
 .toast.show{transform:translateY(0);opacity:1;}
 
@@ -117,9 +238,16 @@ footer span{color:var(--gold);}
 .rv.vis{opacity:1;transform:none;}
 .d1{transition-delay:.1s!important;}.d2{transition-delay:.2s!important;}.d3{transition-delay:.3s!important;}
 
+/* RESPONSIVE */
 @media(max-width:1100px){.ebg{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:720px){.ebg{grid-template-columns:1fr;}.ph-title{font-size:2.2rem;}}
-@media(max-width:480px){.efr{flex-direction:column;align-items:flex-start;gap:.7rem;}.efr .ebuy-btn{width:100%;justify-content:center;}}
+@media(max-width:720px){
+  .ebg{grid-template-columns:1fr;}
+  .ph-title{font-size:2.2rem;}
+}
+@media(max-width:480px){
+  .efr{flex-direction:column;align-items:flex-start;}
+  .efr .ebuy-btn{width:100%;justify-content:center;}
+}
 </style>
 </head>
 <body>
@@ -135,8 +263,8 @@ footer span{color:var(--gold);}
 
 <div class="page-hero">
   <div class="ph-inner">
-    <span class="ph-label">Learn & Transform</span>
-    <h1 class="ph-title">eBooks & <em>Guides</em></h1>
+    <span class="ph-label">Learn &amp; Transform</span>
+    <h1 class="ph-title">eBooks &amp; <em>Guides</em></h1>
     <p class="ph-sub">25,000+ copies sold globally. Deep-dive into proven manifestation frameworks — from subconscious reprogramming to wealth activation.</p>
   </div>
 </div>
@@ -156,16 +284,16 @@ footer span{color:var(--gold);}
   <p>&copy; 2026 Akshita Dayma Goel. All rights reserved. &nbsp;<span>✦</span>&nbsp; International Manifestation Coach</p>
 </footer>
 
-<!-- BUY MODAL -->
+<!-- BUY SUCCESS MODAL -->
 <div class="modal" id="buyModal">
   <div class="mbox">
     <button class="mcl" onclick="closeM('buyModal')">&times;</button>
     <span class="micon">🎉</span>
     <h3 id="mTitle">eBook</h3>
     <p>Thank you! You'll receive an email with your download link within minutes.</p>
-    <p style="margin-top:.8rem;padding:.9rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;font-size:.82rem;color:var(--muted);">
-      <strong style="color:var(--gold-light);">Amount:</strong> <span id="mPrice">0</span>
-    </p>
+    <div id="mPriceWrap" style="margin-top:.8rem;padding:.9rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;font-size:.82rem;color:var(--muted);">
+      <strong style="color:var(--gold-light);">Amount:</strong> <span id="mPrice"></span>
+    </div>
     <button class="btn-p" style="width:100%;margin-top:1.3rem;" onclick="closeM('buyModal')">Continue</button>
   </div>
 </div>
@@ -175,26 +303,21 @@ footer span{color:var(--gold);}
 const API_BASE = "https://adg-backend-sm2p.onrender.com";
 const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax";
 
-// Detect user country
+/* ── Country detection ── */
 let userCountry = 'IN';
 fetch('https://ipapi.co/json/')
   .then(r => r.json())
-  .then(d => { userCountry = d.country_code || 'IN'; })
+  .then(d => { userCountry = d.country_code || 'IN'; renderEbooks(); })
   .catch(() => {});
-
 function isIndian() { return userCountry === 'IN'; }
 
-// Cursor
+/* ── Cursor ── */
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
 (function a() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(a); })();
-document.querySelectorAll('a,button,.ebc').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
-});
 
-// Stars
+/* ── Stars ── */
 const scEl = document.getElementById('sc'), ctx = scEl.getContext('2d');
 let stars = [], t = 0;
 function rsz() { scEl.width = innerWidth; scEl.height = innerHeight; }
@@ -202,214 +325,87 @@ function iStars() { stars = []; for (let i = 0; i < 120; i++) stars.push({ x: Ma
 function drw() { ctx.clearRect(0, 0, scEl.width, scEl.height); t += .01; stars.forEach(s => { const a = .2 + .4 * Math.sin(t * s.sp * 100 + s.ph); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.fill(); }); requestAnimationFrame(drw); }
 window.addEventListener('resize', () => { rsz(); iStars(); }); rsz(); iStars(); drw();
 
-// Reveal
+/* ── Reveal ── */
 const ro = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.rv').forEach(el => ro.observe(el));
 
-// Modal
+/* ── Modal ── */
 function closeM(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
 
+/* ── Buy flow ── */
 async function openBuy(title, priceUsd, priceInr, ebookId) {
   const amountInr = parseFloat((priceInr || '').replace(/[₹,\s]/g, ''));
-  const amountUsd = parseFloat((priceUsd || '').replace(/[^0-9.]/g, ''));
+  const indian = isIndian();
 
-  // Foreign users — show USD payment note
-  if (!isIndian()) {
-    const customerEmail = prompt('📧 Enter your email to receive the download link:');
-    if (!customerEmail || !customerEmail.includes('@')) {
-      showToast('Please enter a valid email to continue.');
-      return;
-    }
-    const customerName = prompt('👤 Your name (optional):') || '';
-
-    showToast('Opening payment…');
-    await fetch(`${API_BASE}/ebooks`).catch(() => {});
-
-    try {
-      const res = await fetch(`${API_BASE}/razorpay/create-order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: amountInr, // Razorpay always processes in INR
-          currency: 'INR',
-          ebookId: ebookId || title,
-          ebookTitle: title
-        })
-      });
-      const order = await res.json();
-      if (!order.orderId) throw new Error(order.error || 'Order creation failed');
-
-      const cleanTitle = title.replace(/[^\x00-\x7F]/g, '').trim() || 'eBook Purchase';
-      const options = {
-        key: RAZORPAY_KEY,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Akshita Dayma Goel',
-        description: cleanTitle + ` (${priceUsd})`,
-        image: 'universecrets.com/images/logo.png',
-        order_id: order.orderId,
-        handler: async function(response) {
-          const ebook = ebookData.find(e => String(e._id||e.id) === String(ebookId));
-          const verify = await fetch(`${API_BASE}/razorpay/verify`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...response,
-              ebookTitle: title,
-              pdfUrl: ebook?.pdfUrl || '',
-              customerEmail,
-              customerName
-            })
-          });
-          const result = await verify.json();
-          if (result.success) {
-            const pdfUrl = ebook?.pdfUrl || '';
-            document.getElementById('mTitle').textContent = title;
-            document.getElementById('mPrice').innerHTML =
-              `${priceUsd} · Payment ID: ${response.razorpay_payment_id}
-              <br><small style="color:var(--muted);">Your card was charged in INR equivalent. Download link sent to ${customerEmail}</small>
-              ${pdfUrl ? `<br><br><a href="${pdfUrl}" target="_blank" download
-                style="display:inline-block;margin-top:.8rem;padding:.75rem 1.8rem;
-                background:var(--gold);color:var(--dark);border-radius:2px;
-                font-size:.78rem;font-weight:600;letter-spacing:.08em;
-                text-transform:uppercase;text-decoration:none;">
-                ⬇ Download Your eBook</a>` : ''}`;
-            document.getElementById('buyModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-          } else {
-            showToast('⚠️ Payment verification failed. Contact support.');
-          }
-        },
-        prefill: { name: customerName, email: customerEmail, contact: '' },
-        theme: { color: '#c9a84c' },
-        modal: { ondismiss: function() { document.body.style.cursor = 'none'; showToast('Payment cancelled.'); } }
-      };
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', r => showToast('Payment failed: ' + r.error.description));
-      rzp.open();
-      setTimeout(() => { document.body.style.cursor = 'auto'; document.body.style.overflow = 'auto'; }, 500);
-    } catch(e) { showToast('Error: ' + e.message); }
-    return;
-  }
-
-  // Indian users
-  if (!priceInr || isNaN(amountInr)) {
-    document.getElementById('mTitle').textContent = title;
-    document.getElementById('mPrice').textContent = priceUsd;
-    document.getElementById('buyModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    return;
-  }
-
- // Ask for email before opening payment
   const customerEmail = prompt('📧 Enter your email to receive the download link:');
-  if (!customerEmail || !customerEmail.includes('@')) {
-    showToast('Please enter a valid email to continue.');
-    return;
-  }
+  if (!customerEmail || !customerEmail.includes('@')) { showToast('Please enter a valid email to continue.'); return; }
   const customerName = prompt('👤 Your name (optional):') || '';
 
   showToast('Opening payment…');
-
-  // Wake up Render server
-  await fetch(`${API_BASE}/ebooks`).catch(() => {});
+  await fetch(`${API_BASE}/ebooks`).catch(() => {}); // wake server
 
   try {
+    const chargeAmount = (!isNaN(amountInr) && amountInr > 0) ? amountInr : parseFloat((priceUsd || '').replace(/[^0-9.]/g, '')) * 85;
     const res = await fetch(`${API_BASE}/razorpay/create-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: amountInr,
-        currency: 'INR',
-        ebookId: ebookId || title,
-        ebookTitle: title
-      })
+      body: JSON.stringify({ amount: chargeAmount, currency: 'INR', ebookId: ebookId || title, ebookTitle: title })
     });
     const order = await res.json();
     if (!order.orderId) throw new Error(order.error || 'Order creation failed');
 
-const cleanTitle = title.replace(/[^\x00-\x7F]/g, '').trim() || 'eBook Purchase';
-const options = {
-  key: RAZORPAY_KEY,
-  amount: order.amount,
-  currency: order.currency,
-  name: 'Akshita Dayma Goel',
-  description: cleanTitle,
-  image: 'universecrets.com/images/logo.png',
-  order_id: order.orderId,
-handler: async function (response) {
-  const verify = await fetch(`${API_BASE}/razorpay/verify`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ...response,
-      ebookTitle: title,
-      pdfUrl: ebookData.find(e => String(e._id||e.id) === String(ebookId))?.pdfUrl || '',
-      customerEmail: customerEmail,
-      customerName: customerName
-    })
-  });
-  const result = await verify.json();
-  if (result.success) {
-    // Find the ebook's PDF URL
-    const ebook = ebookData.find(e => String(e._id || e.id) === String(ebookId));
-    const pdfUrl = ebook?.pdfUrl || '';
+    const cleanTitle = (title || '').replace(/[^\x00-\x7F]/g, '').trim() || 'eBook Purchase';
+    const displayPrice = indian ? (priceInr || `₹${chargeAmount.toLocaleString('en-IN')}`) : priceUsd;
 
-    document.getElementById('mTitle').textContent = title;
-    document.getElementById('mPrice').textContent =
-      `₹${amountInr.toLocaleString('en-IN')} · Payment ID: ${response.razorpay_payment_id}`;
-
-    // Add download button if PDF exists
-    if (pdfUrl) {
-      document.getElementById('mPrice').innerHTML += `
-        <br><br>
-        <a href="${pdfUrl}" target="_blank" download
-           style="display:inline-block;margin-top:.8rem;padding:.75rem 1.8rem;background:var(--gold);color:var(--dark);border-radius:2px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;">
-          ⬇ Download Your eBook
-        </a>`;
-    }
-
-    document.getElementById('buyModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  } else {
-    showToast('⚠️ Payment verification failed. Contact support.');
-  }
-},
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Akshita Dayma Goel',
+      description: cleanTitle + (indian ? '' : ` (${priceUsd})`),
+      order_id: order.orderId,
+      handler: async function(response) {
+        const ebook = ebookData.find(e => String(e._id || e.id) === String(ebookId));
+        const pdfUrl = ebook?.pdfUrl || '';
+        const verify = await fetch(`${API_BASE}/razorpay/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...response, ebookTitle: title, pdfUrl, customerEmail, customerName })
+        });
+        const result = await verify.json();
+        if (result.success) {
+          document.getElementById('mTitle').textContent = title;
+          const priceDisplay = indian ? `₹${chargeAmount.toLocaleString('en-IN')}` : priceUsd;
+          let html = `${priceDisplay} · Payment ID: ${response.razorpay_payment_id}`;
+          if (!indian) html += `<br><small style="color:var(--muted);">Charged in INR equivalent. Download link sent to ${customerEmail}.</small>`;
+          if (pdfUrl) html += `<br><br><a href="${pdfUrl}" target="_blank" download style="display:inline-block;margin-top:.5rem;padding:.7rem 1.6rem;background:var(--gold);color:var(--dark);border-radius:2px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;">⬇ Download Your eBook</a>`;
+          document.getElementById('mPrice').innerHTML = html;
+          document.getElementById('buyModal').classList.add('active');
+          document.body.style.overflow = 'hidden';
+        } else {
+          showToast('⚠️ Payment verification failed. Contact support.');
+        }
+      },
       prefill: { name: customerName, email: customerEmail, contact: '' },
       theme: { color: '#c9a84c' },
-modal: {
-  ondismiss: function () {
-    document.body.style.cursor = "none"; // restore
-    showToast('Payment cancelled.');
-  }
-}
+      modal: { ondismiss: function() { document.body.style.cursor = 'none'; showToast('Payment cancelled.'); } }
     };
-
-const rzp = new Razorpay(options);
-    rzp.on('payment.failed', function (response) {
-      showToast('Payment failed: ' + response.error.description);
-    });
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', r => showToast('Payment failed: ' + r.error.description));
     rzp.open();
-    setTimeout(() => {
-      document.body.style.cursor = "auto";
-      document.body.style.overflow = "auto";
-    }, 500);
-
-  } catch (e) {
-    showToast('Error: ' + e.message);
-  }
+    setTimeout(() => { document.body.style.cursor = 'auto'; document.body.style.overflow = 'auto'; }, 500);
+  } catch (e) { showToast('Error: ' + e.message); }
 }
 
-// Ebooks data + render
+/* ── Ebook data ── */
 const DEFAULT_EBOOKS = [
-  { id: 1, title: 'The Subconscious Shift Formula', tag: 'Manifestation', price: '$47', orig: '$67', desc: 'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.', features: ['Subconscious reprogramming techniques', 'Step-by-step belief transformation', 'Practical daily rituals', 'Instant digital download'], badge: 'bestseller', badgeText: 'Bestseller', icon: '📖', reviews: 1240, rating: 5 },
-  { id: 2, title: 'Manifest Your Soulmate', tag: 'Love & Relationships', price: '$37', orig: '$57', desc: 'Heal relationship patterns and align yourself with deep, fulfilling love.', features: ['Healing past relationship trauma', 'Energetic alignment for love', 'Attract meaningful partnerships', 'Instant digital download'], badge: 'popular', badgeText: 'Popular', icon: '💫', reviews: 982, rating: 5 },
-  { id: 3, title: 'Money Mindset Mastery', tag: 'Wealth & Abundance', price: '$47', orig: '$67', desc: 'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.', features: ['Identify & dissolve money blocks', 'Build an abundance frequency', 'Manifestation + strategic action', 'Instant digital download'], badge: '', icon: '💰', reviews: 756, rating: 5 },
-  { id: 4, title: 'Aligned Career Manifestation', tag: 'Career & Purpose', price: '$37', orig: '$57', desc: "Align your purpose with your profession — manifest your dream career.", features: ["Clarity on your soul's purpose", 'Energetic alignment with success', 'Overcome imposter syndrome', 'Instant digital download'], badge: '', icon: '🎯', reviews: 621, rating: 5 },
-  { id: 5, title: 'Neuroplasticity Manifestation Guide', tag: 'Mindset & Reprogramming', price: '$57', orig: '$77', desc: 'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.', features: ['Brain science made accessible', 'Neural pathway rewiring exercises', '30-day transformation plan', 'Instant digital download'], badge: 'new', badgeText: 'New', icon: '🧠', reviews: 412, rating: 5 },
-  { id: 6, title: 'Full eBook Bundle — All 5 Guides', tag: 'Complete Collection', price: '$97', orig: '$225', desc: 'Get all 5 transformation guides at a massive discount.', features: ['All 5 eBooks included', 'Save over 50% vs buying separately', 'Bonus: Guided meditation audio', 'Lifetime access & free updates'], badge: 'value', badgeText: 'Best Value', icon: '🎁', reviews: 2100, rating: 5 }
+  { id: 1, title: 'The Subconscious Shift Formula', tag: 'Manifestation', price: '$47', priceInr: '₹3,999', orig: '$67', origInr: '₹5,799', desc: 'The complete blueprint for rewiring your subconscious mind and manifesting real, lasting results.', features: ['Subconscious reprogramming techniques', 'Step-by-step belief transformation', 'Practical daily rituals', 'Instant digital download'], badge: 'bestseller', badgeText: 'Bestseller', icon: '📖' },
+  { id: 2, title: 'Manifest Your Soulmate', tag: 'Love & Relationships', price: '$37', priceInr: '₹2,999', orig: '$57', origInr: '₹4,799', desc: 'Heal relationship patterns and align yourself with deep, fulfilling love.', features: ['Healing past relationship trauma', 'Energetic alignment for love', 'Attract meaningful partnerships', 'Instant digital download'], badge: 'popular', badgeText: 'Popular', icon: '💫' },
+  { id: 3, title: 'Money Mindset Mastery', tag: 'Wealth & Abundance', price: '$47', priceInr: '₹3,999', orig: '$67', origInr: '₹5,799', desc: 'Break through deep-rooted money blocks and rewire your subconscious for financial abundance.', features: ['Identify & dissolve money blocks', 'Build an abundance frequency', 'Manifestation + strategic action', 'Instant digital download'], badge: '', icon: '💰' },
+  { id: 4, title: 'Aligned Career Manifestation', tag: 'Career & Purpose', price: '$37', priceInr: '₹2,999', orig: '$57', origInr: '₹4,799', desc: "Align your purpose with your profession — manifest your dream career.", features: ["Clarity on your soul's purpose", 'Energetic alignment with success', 'Overcome imposter syndrome', 'Instant digital download'], badge: '', icon: '🎯' },
+  { id: 5, title: 'Neuroplasticity Manifestation Guide', tag: 'Mindset & Reprogramming', price: '$57', priceInr: '₹4,999', orig: '$77', origInr: '₹6,599', desc: 'Science meets spirituality — use proven neuroplasticity techniques to permanently reprogram your mind.', features: ['Brain science made accessible', 'Neural pathway rewiring exercises', '30-day transformation plan', 'Instant digital download'], badge: 'new', badgeText: 'New', icon: '🧠' },
+  { id: 6, title: 'Full eBook Bundle — All 5 Guides', tag: 'Complete Collection', price: '$97', priceInr: '₹7,999', orig: '$225', origInr: '₹19,199', desc: 'Get all 5 transformation guides at a massive discount.', features: ['All 5 eBooks included', 'Save over 50% vs buying separately', 'Bonus: Guided meditation audio', 'Lifetime access & free updates'], badge: 'value', badgeText: 'Best Value', icon: '🎁' }
 ];
 let ebookData = DEFAULT_EBOOKS;
 
@@ -420,49 +416,83 @@ function calcSaving(orig, price) {
   return '';
 }
 
-const gradients = { '📖': 'linear-gradient(135deg,#1a1530,#2d1e4a,#1a1030)', '💫': 'linear-gradient(135deg,#1a1020,#3d1a2a,#1a0f1e)', '💰': 'linear-gradient(135deg,#0f1820,#1a3020,#0a1215)', '🎯': 'linear-gradient(135deg,#101520,#1a2035,#0a1020)', '🧠': 'linear-gradient(135deg,#0f1520,#152535,#0a1020)', '🎁': 'linear-gradient(135deg,#1a1020,#2a1a35,#1a0f28)' };
+const gradients = {
+  '📖': 'linear-gradient(135deg,#1a1530,#2d1e4a,#1a1030)',
+  '💫': 'linear-gradient(135deg,#1a1020,#3d1a2a,#1a0f1e)',
+  '💰': 'linear-gradient(135deg,#0f1820,#1a3020,#0a1215)',
+  '🎯': 'linear-gradient(135deg,#101520,#1a2035,#0a1020)',
+  '🧠': 'linear-gradient(135deg,#0f1520,#152535,#0a1020)',
+  '🎁': 'linear-gradient(135deg,#1a1020,#2a1a35,#1a0f28)'
+};
 
 function renderEbooks() {
   const grid = document.getElementById('ebooksGrid');
+  if (!grid) return;
+
+  const indian = isIndian();
+
   grid.innerHTML = ebookData.map((b, i) => {
-    const saving = calcSaving(b.orig, b.price);
-    const bg = gradients[b.icon] || 'linear-gradient(135deg,#0f1020,#1a1535)';
-    // Safely escape title for onclick attribute
-    const safeTitle = (b.title || '').replace(/'/g, "\\'");
-    return `<div class="ebc rv d${(i % 3) + 1}">
+    const icon      = b.icon || '📘';
+    const bg        = gradients[icon] || 'linear-gradient(135deg,#0f1020,#1a1535)';
+    const hasImg    = !!b.img;
+
+    /* Prices */
+    const salePrice = indian ? (b.priceInr || b.price) : b.price;
+    const origPrice = indian ? (b.origInr  || b.orig)  : b.orig;
+    const saving    = calcSaving(origPrice, salePrice);
+    const priceClass = indian ? 'ep-price inr' : 'ep-price';
+
+    /* Safe strings for onclick */
+    const safeTitle    = (b.title    || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safePrice    = (b.price    || '').replace(/'/g, "\\'");
+    const safePriceInr = (b.priceInr || '').replace(/'/g, "\\'");
+    const safeId       = String(b._id || b.id || '');
+
+    return `
+<div class="ebc rv d${(i % 3) + 1}">
   <div class="ebc-spine"></div>
+
+  <!-- ── Cover ── -->
   <div class="ecv">
-    ${b.img
-        ? `<img src="${b.img}" alt="${b.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0a0a1a;display:block;">`
-        : `<div class="ecv-bg" style="background:${bg};width:100%;height:100%;position:absolute;inset:0;"></div>`
-      }
+    ${hasImg
+      ? `<img class="ecv-img" src="${b.img}" alt="${b.title || ''}" onerror="this.style.display='none'">`
+      : `<div class="ecv-bg" style="background:${bg};"></div>`
+    }
     <div class="ecv-overlay"></div>
+    ${!hasImg ? `
     <div class="ecover-icon-wrap">
-      ${!b.img ? `<span class="ecover-icon">${b.icon || '📘'}</span><span class="ecover-title-preview">${b.title}</span>` : ''}
-    </div>
+      <span class="ecover-icon">${icon}</span>
+      <span class="ecover-title-preview">${b.title || ''}</span>
+    </div>` : ''}
     ${b.badge ? `<div class="ebadge ${b.badge}">${b.badgeText || b.badge}</div>` : ''}
   </div>
+
+  <!-- ── Body ── -->
   <div class="ebb">
     <span class="etag">${b.tag || ''}</span>
-    <h3>${b.title}</h3>
-    <p style="white-space:pre-line;">${b.desc}</p>
-    <ul class="efl">${(b.features || []).slice(0,4).map(f => `<li>${f}</li>`).join('')}</ul>
+    <h3>${b.title || ''}</h3>
+    <p class="edesc">${b.desc || ''}</p>
+    <ul class="efl">
+      ${(b.features || []).slice(0, 4).map(f => `<li>${f}</li>`).join('')}
+    </ul>
+
+    <!-- ── Price + Buy ── -->
     <div class="efr">
-      <div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
-<div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
-  ${isIndian() 
-    ? `${b.origInr ? `<span class="ep-orig">${b.origInr}</span>` : (b.orig ? `<span class="ep-orig">${b.orig}</span>` : '')}
-       <span class="ep-price" style="color:var(--green);">${b.priceInr || b.price}</span>`
-    : `${b.orig ? `<span class="ep-orig">${b.orig}</span>` : ''}
-       <span class="ep-price">${b.price}</span>`
-  }
-  ${saving ? `<span class="ep-save">${saving}</span>` : ''}
-</div>
-      <button class="ebuy-btn" onclick="openBuy('${safeTitle}','${b.price}','${b.priceInr || ''}','${b._id || b.id || ''}')">Buy Now ↗</button>
+      <div class="ep">
+        ${origPrice ? `<span class="ep-orig">${origPrice}</span>` : ''}
+        <span class="${priceClass}">${salePrice}</span>
+        ${saving ? `<span class="ep-save">${saving}</span>` : ''}
+      </div>
+      <button class="ebuy-btn"
+        onclick="openBuy('${safeTitle}','${safePrice}','${safePriceInr}','${safeId}')">
+        Buy Now ↗
+      </button>
     </div>
   </div>
 </div>`;
   }).join('');
+
+  /* Re-observe for reveal animation */
   document.querySelectorAll('.ebc').forEach(el => {
     ro.observe(el);
     el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
@@ -471,7 +501,13 @@ function renderEbooks() {
 }
 
 async function fetchEbooks() {
-  try { const res = await fetch(`${API_BASE}/ebooks`); if (res.ok) ebookData = await res.json(); } catch (e) { }
+  try {
+    const res = await fetch(`${API_BASE}/ebooks`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.length) ebookData = data;
+    }
+  } catch (e) {}
   renderEbooks();
 }
 fetchEbooks();
