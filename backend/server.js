@@ -85,19 +85,25 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "No PDF uploaded" });
     }
 
-    const result = await cloudinary.uploader.upload(
-      `data:application/pdf;base64,${req.file.buffer.toString("base64")}`,
+    const stream = cloudinary.uploader.upload_stream(
       {
         resource_type: "raw",
         folder: "admin_uploads/pdfs",
-        timeout: 120000 // ⏱ increase timeout (60s)
+      },
+      (error, result) => {
+        if (error) {
+          console.error("PDF UPLOAD ERROR:", error);
+          return res.status(500).json({ error });
+        }
+
+        res.json({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
       }
     );
 
-    res.json({
-      url: result.secure_url,
-      public_id: result.public_id
-    });
+    stream.end(req.file.buffer);
 
   } catch (err) {
     console.error("PDF UPLOAD ERROR:", err);
