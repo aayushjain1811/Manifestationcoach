@@ -453,9 +453,20 @@ const CAL_21_URLS = {
   'manifestation-21day': `https://cal.com/${CAL_USER}/manifestation-21day`
 };
 
-const PROGRAM_AMOUNT = 70000; // ₹70,000 for all 21-day programs
+const PROGRAM_AMOUNT = 70000;
+const PROGRAM_AMOUNT_USD = 769.99;
 
 let p21Slug = '', p21Name = '', p21PaymentDone = false;
+let p21CustomerEmail = '', p21CustomerName = '';
+
+// Detect user country
+let userCountry = 'IN';
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(d => { userCountry = d.country_code || 'IN'; })
+  .catch(() => {});
+
+function isIndian() { return userCountry === 'IN'; }
 
 // Cursor
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
@@ -498,11 +509,23 @@ function p21Pick(el, slug, name) {
   setTimeout(() => p21GoStep(2), 300);
 }
 
-// ── RAZORPAY ──────────────────────────────────────────────────────
 async function p21StartPayment() {
+  // Collect email first
+  const email = prompt('📧 Enter your email to receive booking confirmation:');
+  if (!email || !email.includes('@')) {
+    showToast('Please enter a valid email to continue.');
+    return;
+  }
+  const name = prompt('👤 Your name (optional):') || '';
+  p21CustomerEmail = email;
+  p21CustomerName = name;
+
   const btn = document.getElementById('p21PayBtn');
   btn.classList.add('loading');
   btn.textContent = '⏳ Opening payment…';
+
+  // Wake up Render server
+  await fetch(`${API_BASE}/ebooks`).catch(() => {});
 
   try {
     const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
@@ -530,11 +553,18 @@ async function p21StartPayment() {
       description: p21Name + ' · 21 Days · 3 Sessions',
       image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
       order_id: order.orderId,
-      handler: async function (response) {
+handler: async function (response) {
         const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...response, calUrl })
+          body: JSON.stringify({
+            ...response,
+            calUrl,
+            customerEmail: p21CustomerEmail,
+            customerName: p21CustomerName,
+            programName: p21Name,
+            amount: isIndian() ? '₹70,000' : '$769.99 USD'
+          })
         });
         const result = await verify.json();
         if (result.success) {
@@ -545,7 +575,7 @@ async function p21StartPayment() {
           p21ResetBtn();
         }
       },
-      prefill: { name: '', email: '', contact: '' },
+      prefill: { name: p21CustomerName, email: p21CustomerEmail, contact: '' },
       theme: { color: '#c9a84c' },
       modal: {
         ondismiss: function () {
@@ -578,7 +608,8 @@ function p21ShowSuccess(paymentId, calUrl) {
   gate.innerHTML = `
     <div class="pay-success">
       <h3>✅ Payment Successful!</h3>
-      <p>Your payment of <strong style="color:#5dcc7a;">₹70,000</strong> is confirmed.<br>
+      <p>Your payment of <strong style="color:#5dcc7a;">${isIndian() ? '₹70,000' : '$769.99 USD'}</strong> is confirmed.<br>
+      Confirmation sent to <strong style="color:#5dcc7a;">${p21CustomerEmail}</strong><br>
       Now complete your booking by selecting your preferred date & time below.</p>
       <div class="pid">Payment ID: ${paymentId}</div>
     </div>`;
@@ -606,7 +637,7 @@ function p21RenderPayGate() {
   p21PaymentDone = false;
   calSection.style.display = 'none';
 
-  gate.innerHTML = `
+gate.innerHTML = `
     <div class="pay-gate">
       <h3>🔒 Confirm & Pay to Book</h3>
       <p>Your slot will be confirmed after payment.<br>
@@ -622,16 +653,28 @@ function p21RenderPayGate() {
         </div>
         <div class="pgd-item">
           <span class="pgd-label">Amount</span>
-          <span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">₹70,000</span>
-          <div style="font-size:.68rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ $769.99 USD</div>
+          ${isIndian()
+            ? `<span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">₹70,000</span>
+               <div style="font-size:.68rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ $769.99 USD</div>`
+            : `<span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">$769.99 USD</span>
+               <div style="font-size:.68rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ₹70,000 INR</div>`
+          }
         </div>
       </div>
       <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:2px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.75;text-align:left;">
         🌍 <strong style="color:var(--gold-light);">International clients:</strong>
-        Your card will be charged in INR. Your bank automatically converts to your local currency at the live exchange rate.
+        Your card will be charged in INR equivalent. Your bank automatically converts at the live exchange rate.
       </div>
+      
+      <!-- NO REFUND POLICY -->
+      <div style="background:rgba(255,100,100,.04);border:1px solid rgba(255,100,100,.2);border-radius:2px;padding:.9rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.8;text-align:left;">
+        <strong style="color:#ff8080;">⚠️ No Refund Policy:</strong> All payments are final and non-refundable. 
+        By proceeding, you agree that this is a commitment to your transformation journey. 
+        Sessions are non-transferable. Please ensure you are ready to fully commit before purchasing.
+      </div>
+
       <button class="pay-btn" id="p21PayBtn" onclick="p21StartPayment()">
-        🔒 Pay ₹70,000 & Book Program
+        🔒 Pay ${isIndian() ? '₹70,000' : '$769.99 USD'} & Book Program
       </button>
       <div class="pay-note">Secured by Razorpay · UPI, Cards, Net Banking, Wallets · International cards accepted</div>
     </div>`;

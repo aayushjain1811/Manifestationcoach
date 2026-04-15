@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
+const nodemailer = require('nodemailer');
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -16,6 +17,14 @@ app.use((req, res, next) => {
 
 // ✅ Serve frontend
 app.use(express.static(path.join(__dirname, "../docs")));
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASS
+  }
+});
 
 /* ===========================
    ✅ MongoDB Connection
@@ -275,13 +284,50 @@ app.post("/razorpay/verify-session", async (req, res) => {
       .update(sign)
       .digest("hex");
 
-    if (expected === razorpay_signature) {
-      console.log("✅ Payment verified:", razorpay_payment_id);
-      res.json({
-        success: true,
-        paymentId: razorpay_payment_id,
-        calUrl
+if (expected === razorpay_signature) {
+  console.log("✅ Payment verified:", razorpay_payment_id);
+
+  const { customerEmail, customerName, programName, amount } = req.body;
+
+  if (customerEmail) {
+    try {
+      await transporter.sendMail({
+        from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+        to: customerEmail,
+        subject: `Your 21-Day Program Booking Confirmed ✨`,
+        html: `
+          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+            <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
+            <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || '21-Day Program'}</strong> is confirmed.</p>
+            <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
+              <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
+              <p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+            </div>
+            <p style="color:#8e88ab;line-height:1.7;">Please use the calendar link to book your first session at your preferred time.</p>
+            <div style="text-align:center;margin:2rem 0;">
+              <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;border-radius:4px;text-decoration:none;font-weight:600;font-size:1rem;display:inline-block;">
+                📅 Book Your Session
+              </a>
+            </div>
+            <div style="background:rgba(255,100,100,.06);border:1px solid rgba(255,100,100,.2);border-radius:4px;padding:1rem;margin-top:1.5rem;">
+              <p style="color:#ff8080;font-size:.82rem;margin:0;"><strong>⚠️ Reminder:</strong> All payments are final and non-refundable as per our policy.</p>
+            </div>
+            <hr style="border-color:#1a1f40;margin:2rem 0;">
+            <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong><br>International Manifestation Coach</p>
+          </div>
+        `
       });
+      console.log('✅ Confirmation email sent to:', customerEmail);
+    } catch(emailErr) {
+      console.error('❌ Email error:', emailErr.message);
+    }
+  }
+
+  res.json({
+    success: true,
+    paymentId: razorpay_payment_id,
+    calUrl
+  });
     } else {
       console.error("❌ Signature mismatch");
       res.status(400).json({ success: false, error: "Invalid signature" });
@@ -433,6 +479,39 @@ app.delete("/delete-journal/:id", async (req, res) => {
   res.json({ success: true });
 });
 
+/* ===========================
+   ✅ CONTACT FORM API
+=========================== */
+app.post("/contact", async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "All fields required" });
+    }
+
+    await transporter.sendMail({
+      from: `"Website Contact" <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER, // 👈 you receive email
+      subject: `New Contact Form Submission`,
+      html: `
+        <div style="font-family:sans-serif;">
+          <h2>New Contact Message</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        </div>
+      `
+    });
+
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error("CONTACT ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 /* ===========================
    ✅ START SERVER
 =========================== */

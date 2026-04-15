@@ -299,9 +299,19 @@ const TIER_DATA = {
 };
 
 let bCat = { name: '', slug: '' };
-let bTier = { name: '', price: '', slug: '', amount: 0 };
+let bTier = { name: '', price: '', slug: '', amount: 0, usd: '' };
 let paymentDone = false;
 let currentCalUrl = '';
+let sessionCustomerEmail = '', sessionCustomerName = '';
+
+// Detect user country
+let userCountry = 'IN';
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(d => { userCountry = d.country_code || 'IN'; })
+  .catch(() => {});
+
+function isIndian() { return userCountry === 'IN'; }
 
 // Cursor
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
@@ -336,10 +346,10 @@ function pickCat(el, name, slug) {
   setTimeout(() => goStep(2), 220);
 }
 
-function pickTier(el, tierSlug, tierName, price, amount) {
+function pickTier(el, tierSlug, tierName, price, amount, usd) {
   document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  bTier = { name: tierName, price, slug: tierSlug, amount };
+  bTier = { name: tierName, price, slug: tierSlug, amount, usd };
   paymentDone = false;
   showToast('✦ ' + tierName + ' selected — proceed to payment');
   setTimeout(() => goStep(3), 480);
@@ -350,7 +360,7 @@ function renderTiers(catSlug) {
   document.getElementById('tierSection').innerHTML = `
     <div class="tier-grid">
       ${tiers.map(t => `
-        <div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}',${t.amount})">
+        <div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}',${t.amount},'${t.usd}')">
           <div class="tier-popular">${t.popular}</div>
           <div class="tier-header">
             <span class="tier-gem">${t.gem}</span>
@@ -389,9 +399,22 @@ function buildBC(cid) {
 
 // ── RAZORPAY PAYMENT ──────────────────────────────────────────────
 async function startPayment() {
+  // Collect email first
+  const email = prompt('📧 Enter your email to receive booking confirmation:');
+  if (!email || !email.includes('@')) {
+    showToast('Please enter a valid email to continue.');
+    return;
+  }
+  const name = prompt('👤 Your name (optional):') || '';
+  sessionCustomerEmail = email;
+  sessionCustomerName = name;
+
   const btn = document.getElementById('payBtn');
   btn.classList.add('loading');
   btn.textContent = '⏳ Opening payment…';
+
+  // Wake up Render server
+  await fetch(`${API_BASE}/ebooks`).catch(() => {});
 
   try {
     const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
@@ -416,13 +439,19 @@ async function startPayment() {
       description: `${bCat.name} — ${bTier.name} Session (${bTier.price})`,
       image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
       order_id: order.orderId,
-      handler: async function (response) {
-        // Verify on backend
+handler: async function (response) {
         const calUrl = (CAL_URLS[bCat.slug] || {})[bTier.slug] || `https://cal.com/${CAL_USER}`;
         const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...response, calUrl })
+          body: JSON.stringify({
+            ...response,
+            calUrl,
+            customerEmail: sessionCustomerEmail,
+            customerName: sessionCustomerName,
+            programName: `${bCat.name} — ${bTier.name} Session`,
+            amount: isIndian() ? bTier.price : bTier.usd
+          })
         });
         const result = await verify.json();
         if (result.success) {
@@ -434,7 +463,7 @@ async function startPayment() {
           resetPayBtn();
         }
       },
-      prefill: { name: '', email: '', contact: '' },
+      prefill: { name: sessionCustomerName, email: sessionCustomerEmail, contact: '' },
       theme: { color: '#c9a84c' },
       modal: {
         ondismiss: function () {
@@ -464,10 +493,12 @@ function resetPayBtn() {
 
 function showPaymentSuccess(paymentId, calUrl) {
   const gate = document.getElementById('payGate');
+  const displayPrice = isIndian() ? bTier.price : bTier.usd;
   gate.innerHTML = `
     <div class="pay-success">
       <h3>✅ Payment Successful!</h3>
-      <p>Your payment of <strong style="color:#5dcc7a;">${bTier.price}</strong> is confirmed.<br>
+      <p>Your payment of <strong style="color:#5dcc7a;">${displayPrice}</strong> is confirmed.<br>
+      Confirmation sent to <strong style="color:#5dcc7a;">${sessionCustomerEmail}</strong><br>
       Now complete your booking by selecting your preferred date & time below.</p>
       <div class="pid">Payment ID: ${paymentId}</div>
     </div>`;
@@ -511,22 +542,10 @@ async function renderPayGate() {
   paymentDone = false;
   calSection.style.display = 'none';
 
-  // Fetch live exchange rate
-  let usdRate = null;
-  let rateText = '';
-  try {
-    const r = await fetch('https://open.er-api.com/v6/latest/INR');
-    const data = await r.json();
-    if (data.rates && data.rates.USD) {
-      usdRate = data.rates.USD;
-      const usdEquiv = (bTier.amount * usdRate).toFixed(0);
-      rateText = `<div style="font-size:.90rem;color:rgba(142,136,171,.6);margin-top:.3rem;">
-        ≈ $${usdEquiv} USD at today's rate
-      </div>`;
-    }
-  } catch(e) {
-    // silently fail — rate display is optional
-  }
+  const displayPrice = isIndian() ? bTier.price : bTier.usd;
+  const secondaryPrice = isIndian()
+    ? `<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ${bTier.usd} USD</div>`
+    : `<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ${bTier.price} INR</div>`;
 
   gate.innerHTML = `
     <div class="pay-gate">
@@ -540,24 +559,33 @@ async function renderPayGate() {
         </div>
         <div class="pgd-item">
           <span class="pgd-label">Session</span>
-          <span class="pgd-val">${bTier.name} · ${bTier.duration}</span>
+          <span class="pgd-val">${bTier.name} · ${bTier.duration || ''}</span>
         </div>
         <div class="pgd-item">
           <span class="pgd-label">Amount</span>
-          <span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">${bTier.price}</span>
-          ${rateText}
+          <span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">${displayPrice}</span>
+          ${secondaryPrice}
         </div>
       </div>
       <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:2px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.75;text-align:left;">
-        🌍 <strong style="color:var(--gold-light);">International clients:</strong> 
-        Your card will be charged in INR. Your bank automatically converts to your local currency at the live exchange rate. No extra steps needed.
+        🌍 <strong style="color:var(--gold-light);">International clients:</strong>
+        Your card will be charged in INR equivalent. Your bank automatically converts at the live exchange rate.
       </div>
+
+      <!-- NO REFUND POLICY -->
+      <div style="background:rgba(255,100,100,.04);border:1px solid rgba(255,100,100,.2);border-radius:2px;padding:.9rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.8;text-align:left;">
+        <strong style="color:#ff8080;">⚠️ No Refund Policy:</strong> All payments are final and non-refundable.
+        By proceeding, you agree that this is a commitment to your transformation journey.
+        Sessions are non-transferable. Please ensure you are ready to fully commit before purchasing.
+      </div>
+
       <button class="pay-btn" id="payBtn" onclick="startPayment()">
-        🔒 Pay ${bTier.price} & Book Session
+        🔒 Pay ${displayPrice} & Book Session
       </button>
       <div class="pay-note">Secured by Razorpay · UPI, Cards, Net Banking, Wallets · International cards accepted</div>
     </div>`;
 }
+
 </script>
 </body>
 </html>

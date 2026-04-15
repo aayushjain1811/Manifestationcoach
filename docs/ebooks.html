@@ -173,7 +173,16 @@ footer span{color:var(--gold);}
 
 <script>
 const API_BASE = "https://adg-backend-sm2p.onrender.com";
-const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax"; // ← swap to live key when ready
+const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax";
+
+// Detect user country
+let userCountry = 'IN';
+fetch('https://ipapi.co/json/')
+  .then(r => r.json())
+  .then(d => { userCountry = d.country_code || 'IN'; })
+  .catch(() => {});
+
+function isIndian() { return userCountry === 'IN'; }
 
 // Cursor
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
@@ -202,11 +211,90 @@ function closeM(id) { document.getElementById(id).classList.remove('active'); do
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeM(m.id); }));
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
 
-// ── RAZORPAY ──────────────────────────────────────────────────────
 async function openBuy(title, priceUsd, priceInr, ebookId) {
   const amountInr = parseFloat((priceInr || '').replace(/[₹,\s]/g, ''));
+  const amountUsd = parseFloat((priceUsd || '').replace(/[^0-9.]/g, ''));
 
-  // If no INR price set → fallback to old simple modal
+  // Foreign users — show USD payment note
+  if (!isIndian()) {
+    const customerEmail = prompt('📧 Enter your email to receive the download link:');
+    if (!customerEmail || !customerEmail.includes('@')) {
+      showToast('Please enter a valid email to continue.');
+      return;
+    }
+    const customerName = prompt('👤 Your name (optional):') || '';
+
+    showToast('Opening payment…');
+    await fetch(`${API_BASE}/ebooks`).catch(() => {});
+
+    try {
+      const res = await fetch(`${API_BASE}/razorpay/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: amountInr, // Razorpay always processes in INR
+          currency: 'INR',
+          ebookId: ebookId || title,
+          ebookTitle: title
+        })
+      });
+      const order = await res.json();
+      if (!order.orderId) throw new Error(order.error || 'Order creation failed');
+
+      const cleanTitle = title.replace(/[^\x00-\x7F]/g, '').trim() || 'eBook Purchase';
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Akshita Dayma Goel',
+        description: cleanTitle + ` (${priceUsd})`,
+        image: 'universecrets.com/images/logo.png',
+        order_id: order.orderId,
+        handler: async function(response) {
+          const ebook = ebookData.find(e => String(e._id||e.id) === String(ebookId));
+          const verify = await fetch(`${API_BASE}/razorpay/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ...response,
+              ebookTitle: title,
+              pdfUrl: ebook?.pdfUrl || '',
+              customerEmail,
+              customerName
+            })
+          });
+          const result = await verify.json();
+          if (result.success) {
+            const pdfUrl = ebook?.pdfUrl || '';
+            document.getElementById('mTitle').textContent = title;
+            document.getElementById('mPrice').innerHTML =
+              `${priceUsd} · Payment ID: ${response.razorpay_payment_id}
+              <br><small style="color:var(--muted);">Your card was charged in INR equivalent. Download link sent to ${customerEmail}</small>
+              ${pdfUrl ? `<br><br><a href="${pdfUrl}" target="_blank" download
+                style="display:inline-block;margin-top:.8rem;padding:.75rem 1.8rem;
+                background:var(--gold);color:var(--dark);border-radius:2px;
+                font-size:.78rem;font-weight:600;letter-spacing:.08em;
+                text-transform:uppercase;text-decoration:none;">
+                ⬇ Download Your eBook</a>` : ''}`;
+            document.getElementById('buyModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+          } else {
+            showToast('⚠️ Payment verification failed. Contact support.');
+          }
+        },
+        prefill: { name: customerName, email: customerEmail, contact: '' },
+        theme: { color: '#c9a84c' },
+        modal: { ondismiss: function() { document.body.style.cursor = 'none'; showToast('Payment cancelled.'); } }
+      };
+      const rzp = new Razorpay(options);
+      rzp.on('payment.failed', r => showToast('Payment failed: ' + r.error.description));
+      rzp.open();
+      setTimeout(() => { document.body.style.cursor = 'auto'; document.body.style.overflow = 'auto'; }, 500);
+    } catch(e) { showToast('Error: ' + e.message); }
+    return;
+  }
+
+  // Indian users
   if (!priceInr || isNaN(amountInr)) {
     document.getElementById('mTitle').textContent = title;
     document.getElementById('mPrice').textContent = priceUsd;
@@ -215,7 +303,18 @@ async function openBuy(title, priceUsd, priceInr, ebookId) {
     return;
   }
 
+ // Ask for email before opening payment
+  const customerEmail = prompt('📧 Enter your email to receive the download link:');
+  if (!customerEmail || !customerEmail.includes('@')) {
+    showToast('Please enter a valid email to continue.');
+    return;
+  }
+  const customerName = prompt('👤 Your name (optional):') || '';
+
   showToast('Opening payment…');
+
+  // Wake up Render server
+  await fetch(`${API_BASE}/ebooks`).catch(() => {});
 
   try {
     const res = await fetch(`${API_BASE}/razorpay/create-order`, {
@@ -244,7 +343,13 @@ handler: async function (response) {
   const verify = await fetch(`${API_BASE}/razorpay/verify`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(response)
+    body: JSON.stringify({
+      ...response,
+      ebookTitle: title,
+      pdfUrl: ebookData.find(e => String(e._id||e.id) === String(ebookId))?.pdfUrl || '',
+      customerEmail: customerEmail,
+      customerName: customerName
+    })
   });
   const result = await verify.json();
   if (result.success) {
@@ -272,7 +377,7 @@ handler: async function (response) {
     showToast('⚠️ Payment verification failed. Contact support.');
   }
 },
-      prefill: { name: '', email: '', contact: '' },
+      prefill: { name: customerName, email: customerEmail, contact: '' },
       theme: { color: '#c9a84c' },
 modal: {
   ondismiss: function () {
@@ -346,7 +451,7 @@ function renderEbooks() {
       <div class="ep" style="flex-direction:column;align-items:flex-start;gap:.3rem;">
         <div style="display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;">
           ${b.orig ? `<span class="ep-orig">${b.orig}</span>` : ''}
-          <span class="ep-price">${b.price}</span>
+          <span class="ep-price">${isIndian() ? (b.priceInr || b.price) : b.price}</span>
           ${saving ? `<span class="ep-save">${saving}</span>` : ''}
         </div>
         ${b.priceInr ? `<div style="display:flex;align-items:baseline;gap:.4rem;">
