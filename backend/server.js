@@ -101,9 +101,13 @@ app.post("/upload-image", upload.single("file"), async (req, res) => {
 // Add this to your server.js file - update the upload-pdf endpoint
 
 // Update your /upload-pdf endpoint
+// Replace your entire /upload-pdf endpoint with this:
+
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No PDF uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ error: "No PDF uploaded" });
+    }
     
     const originalName = req.body.originalName || req.file.originalname;
     
@@ -114,6 +118,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
     }
     
     const fileSize = req.file.size;
+    console.log(`📄 Uploading PDF: ${fileName}, Size: ${(fileSize / 1024 / 1024).toFixed(2)}MB`);
     
     // Check file size (max 50MB)
     if (fileSize > 50 * 1024 * 1024) {
@@ -128,78 +133,110 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       .substring(0, 50);
     
     const timestamp = Date.now();
-    const publicId = `pdfs/${cleanName}_${timestamp}`;
+    const publicId = `admin_uploads/pdfs/${cleanName}_${timestamp}`;
     
-    // For files > 10MB, use chunked upload
+    // Convert buffer to base64
+    const base64File = req.file.buffer.toString('base64');
+    const dataUri = `data:application/pdf;base64,${base64File}`;
+    
+    let result;
+    
+    // Use different method based on file size
     if (fileSize > 10 * 1024 * 1024) {
-      console.log(`Large file detected (${(fileSize / 1024 / 1024).toFixed(2)}MB), using chunked upload...`);
-      
-      const base64File = req.file.buffer.toString('base64');
-      
-      const result = await cloudinary.uploader.upload_large(
-        `data:application/pdf;base64,${base64File}`,
-        {
-          resource_type: "raw",
-          folder: "admin_uploads/pdfs",
-          public_id: publicId,
-          chunk_size: 6000000,
-          timeout: 180000,
-          format: "pdf" // Force PDF format
-        }
-      );
-      
-      res.json({ 
-        url: result.secure_url, 
-        public_id: result.public_id,
-        original_name: fileName
+      console.log(`🔄 Using chunked upload for large file...`);
+      result = await cloudinary.uploader.upload_large(dataUri, {
+        resource_type: "auto",
+        folder: "admin_uploads/pdfs",
+        public_id: publicId,
+        chunk_size: 6000000,
+        timeout: 180000,
+        type: "upload",
+        overwrite: true,
+        invalidate: true
       });
     } else {
-      // For smaller files
-      const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { 
-            resource_type: "raw", 
+      console.log(`📤 Uploading small file...`);
+      result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: "auto",
             folder: "admin_uploads/pdfs",
             public_id: publicId,
-            format: "pdf", // Force PDF format
-            use_filename: false,
-            unique_filename: true
+            type: "upload",
+            overwrite: true,
+            invalidate: true
           },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
+          (error, uploadResult) => {
+            if (error) {
+              console.error("Cloudinary upload error:", error);
+              reject(error);
+            } else {
+              resolve(uploadResult);
+            }
           }
         );
-        stream.end(req.file.buffer);
-      });
-      
-      res.json({ 
-        url: result.secure_url, 
-        public_id: result.public_id,
-        original_name: fileName
+        uploadStream.end(req.file.buffer);
       });
     }
     
+    if (!result || !result.secure_url) {
+      throw new Error("Upload failed - no URL returned");
+    }
+    
+    console.log(`✅ PDF uploaded successfully: ${result.secure_url}`);
+    console.log(`📁 Public ID: ${result.public_id}`);
+    
+    res.json({
+      success: true,
+      url: result.secure_url,
+      public_id: result.public_id,
+      original_name: fileName,
+      size: fileSize
+    });
+    
   } catch (err) {
-    console.error("PDF UPLOAD ERROR:", err);
-    res.status(500).json({ error: err.message || "Upload failed" });
+    console.error("❌ PDF UPLOAD ERROR:", err);
+    res.status(500).json({ 
+      error: err.message || "Upload failed",
+      details: err.toString()
+    });
   }
 });
 
-// Add endpoint to serve PDF with correct headers
-app.get("/serve-pdf/:public_id", async (req, res) => {
+// Add this endpoint to verify PDF exists
+app.get("/verify-pdf/:public_id", async (req, res) => {
   try {
     const { public_id } = req.params;
-    const result = await cloudinary.api.resource(public_id, { resource_type: "raw" });
-    
-    // Set proper headers for PDF download
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${result.original_filename || 'document'}.pdf"`);
-    
-    // Redirect to the actual PDF URL
-    res.redirect(result.secure_url);
+    const result = await cloudinary.api.resource(public_id, { resource_type: "auto" });
+    res.json({
+      exists: true,
+      url: result.secure_url,
+      public_id: result.public_id,
+      bytes: result.bytes,
+      format: result.format,
+      resource_type: result.resource_type
+    });
   } catch (err) {
-    res.status(404).json({ error: "PDF not found" });
+    res.status(404).json({ 
+      exists: false, 
+      error: err.message 
+    });
+  }
+});
+
+// Add endpoint to list all PDFs
+app.get("/list-pdfs", async (req, res) => {
+  try {
+    const result = await cloudinary.api.resources({
+      type: "upload",
+      prefix: "admin_uploads/pdfs",
+      max_results: 100,
+      resource_type: "auto"
+    });
+    res.json(result.resources);
+  } catch (err) {
+    console.error("List PDFs error:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
