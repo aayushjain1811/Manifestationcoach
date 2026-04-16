@@ -48,6 +48,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// Helper function to clean notes (remove emojis and special chars)
+function cleanNotes(text) {
+  if (!text) return '';
+  // Remove emojis and special characters, keep only alphanumeric, spaces, and basic punctuation
+  return text.replace(/[^\x00-\x7F]/g, '').replace(/[^a-zA-Z0-9\s\-_]/g, '').trim().slice(0, 40);
+}
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
@@ -192,216 +199,191 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// ============================================
-// 21-DAY PROGRAM SPECIFIC ENDPOINT
-// ============================================
+// PROGRAM ORDER ENDPOINT (Fixed for UTF-8)
 app.post("/razorpay/create-program-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", programName, programType, customerCountry } = req.body;
+    let { amount, currency = "INR", programName, programType } = req.body;
     
-    console.log("📦 Creating PROGRAM order with:", { amount, currency, programName, programType });
+    console.log("Received program order request:", { amount, currency, programName });
     
-    // Validate amount
-    if (!amount || isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
-    }
+    // Clean the program name (remove emojis and special chars)
+    const cleanProgramName = cleanNotes(programName) || "21-Day Program";
+    const cleanProgramType = cleanNotes(programType) || "Program";
     
-    // Convert to smallest currency unit (paise for INR, cents for USD)
-    let amountInSmallestUnit;
-    if (currency === "USD") {
-      amountInSmallestUnit = Math.round(amount * 100);
-    } else {
-      amountInSmallestUnit = Math.round(amount * 100);
-    }
+    // Convert amount to smallest unit (multiply by 100)
+    const amountInSmallestUnit = Math.round(amount * 100);
     
-    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
-    
-    const order = await razorpay.orders.create({
+    const orderOptions = {
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `prog_${Date.now()}`,
-      notes: { 
-        programName: programName || '21-Day Program',
-        programType: programType || '',
-        customerCountry: customerCountry || '',
-        type: '21_day_program'
+      receipt: `program_${Date.now()}`,
+      notes: {
+        programName: cleanProgramName,
+        programType: cleanProgramType
       }
-    });
+    };
     
-    console.log("✅ Program order created:", order.id, "Amount:", order.amount, order.currency);
+    console.log("Creating Razorpay order with:", orderOptions);
     
-    res.json({ 
-      orderId: order.id, 
-      amount: order.amount, 
-      currency: order.currency 
+    const order = await razorpay.orders.create(orderOptions);
+    
+    console.log("Order created successfully:", order.id);
+    
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
     });
-  } catch (e) {
-    console.error("❌ Razorpay program order error:", e);
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    console.error("Razorpay program order error:", error);
+    res.status(500).json({ 
+      error: error.error?.description || error.message 
+    });
   }
 });
 
-// SESSION BOOKING ENDPOINT
+// SESSION ORDER ENDPOINT (Fixed for UTF-8)
 app.post("/razorpay/create-session-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", category, tier, tierName, customerCountry } = req.body;
+    let { amount, currency = "INR", category, tier, tierName } = req.body;
     
-    console.log("📦 Creating SESSION order with:", { amount, currency, category, tier });
+    // Clean the notes (remove emojis and special chars)
+    const cleanCategory = cleanNotes(category);
+    const cleanTier = cleanNotes(tier);
+    const cleanTierName = cleanNotes(tierName);
     
-    if (!amount || isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
+    const amountInSmallestUnit = Math.round(amount * 100);
+    
+    // Validate amount doesn't exceed limits (Razorpay max is 100,000,000 INR)
+    if (amountInSmallestUnit > 1000000000) {
+      return res.status(400).json({ error: "Amount exceeds maximum allowed" });
     }
-    
-    let amountInSmallestUnit;
-    if (currency === "USD") {
-      amountInSmallestUnit = Math.round(amount * 100);
-    } else {
-      amountInSmallestUnit = Math.round(amount * 100);
-    }
-    
-    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
     
     const order = await razorpay.orders.create({
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `sess_${Date.now()}`,
+      receipt: `session_${Date.now()}`,
       notes: { 
-        category: category || '', 
-        tier: tier || '', 
-        tierName: tierName || '',
-        customerCountry: customerCountry || '',
-        type: 'session_booking'
+        category: cleanCategory || 'Session',
+        tier: cleanTier || '',
+        tierName: cleanTierName || ''
       }
     });
     
-    console.log("✅ Session order created:", order.id);
-    
-    res.json({ 
-      orderId: order.id, 
-      amount: order.amount, 
-      currency: order.currency 
-    });
-  } catch (e) {
-    console.error("❌ Razorpay session order error:", e);
-    res.status(500).json({ error: e.message });
+    console.log("Session order created:", order.id);
+    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+  } catch (error) {
+    console.error("Session order error:", error);
+    res.status(500).json({ error: error.error?.description || error.message });
   }
 });
 
-// EBOOK ORDER ENDPOINT
+// EBOOK ORDER ENDPOINT (Fixed for UTF-8)
 app.post("/razorpay/create-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
-    const cleanText = (text) => (text || "").replace(/[^\x00-\x7F]/g, "");
+    let { amount, currency = "INR", ebookId, ebookTitle } = req.body;
     
-    console.log("📦 Creating EBOOK order with:", { amount, currency, ebookId });
-    
-    if (!amount || isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
-    }
-    
-    let amountInSmallestUnit;
-    if (currency === "USD") {
-      amountInSmallestUnit = Math.round(amount * 100);
-    } else {
-      amountInSmallestUnit = Math.round(amount * 100);
-    }
-    
-    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
+    const cleanEbookTitle = cleanNotes(ebookTitle) || "eBook";
+    const amountInSmallestUnit = Math.round(amount * 100);
     
     const order = await razorpay.orders.create({
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `eb_${Date.now()}`,
+      receipt: `ebook_${Date.now()}`,
       notes: { 
-        ebookTitle: cleanText(ebookTitle) || '',
-        type: 'ebook'
+        ebookId: String(ebookId || ''),
+        ebookTitle: cleanEbookTitle
       }
     });
     
     res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
-  } catch (e) {
-    console.error("❌ Razorpay ebook order error:", e);
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    console.error("Ebook order error:", error);
+    res.status(500).json({ error: error.error?.description || error.message });
   }
 });
 
 // VERIFY PROGRAM PAYMENT
 app.post("/razorpay/verify-program", async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl } = req.body;
-    const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount } = req.body;
     
-    if (expected === razorpay_signature) {
-      const { customerEmail, customerName, programName, amount } = req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+    
+    if (expectedSignature === razorpay_signature) {
       if (customerEmail) {
-        try {
-          await transporter.sendMail({
-            from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
-            to: customerEmail,
-            subject: `Your 21-Day Program Booking Confirmed ✨`,
-            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
-              <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
-              <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || '21-Day Program'}</strong> is confirmed.</p>
-              <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
-                <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
-                <p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+        await transporter.sendMail({
+          from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+          to: customerEmail,
+          subject: "Your 21-Day Program Booking Confirmed ✨",
+          html: `
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+              <h2 style="color:#c9a84c;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
+              <p>Your payment for <strong>${programName || '21-Day Program'}</strong> is confirmed.</p>
+              <div style="background:rgba(201,168,76,.08);padding:1.2rem;margin:1.5rem 0;">
+                <p><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
+                <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
               </div>
               <div style="text-align:center;margin:2rem 0;">
-                <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;border-radius:4px;text-decoration:none;font-weight:600;">📅 Book Your Session</a>
+                <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;text-decoration:none;">📅 Book Your Session</a>
               </div>
-              <hr style="border-color:#1a1f40;margin:2rem 0;">
-              <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong></p>
-            </div>`
-          });
-        } catch(emailErr) { console.error('❌ Email error:', emailErr.message); }
+              <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
+            </div>
+          `
+        });
       }
       res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
     } else {
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
 // VERIFY SESSION PAYMENT
 app.post("/razorpay/verify-session", async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl } = req.body;
-    const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount } = req.body;
     
-    if (expected === razorpay_signature) {
-      const { customerEmail, customerName, programName, amount } = req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+    
+    if (expectedSignature === razorpay_signature) {
       if (customerEmail) {
-        try {
-          await transporter.sendMail({
-            from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
-            to: customerEmail,
-            subject: `Your Session Booking Confirmed ✨`,
-            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
-              <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
-              <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || 'Session'}</strong> is confirmed.</p>
-              <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
-                <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || 'Confirmed'}</p>
-                <p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
-              </div>
-              <div style="text-align:center;margin:2rem 0;">
-                <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;border-radius:4px;text-decoration:none;font-weight:600;">📅 Book Your Session</a>
-              </div>
-              <hr style="border-color:#1a1f40;margin:2rem 0;">
-              <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong></p>
-            </div>`
-          });
-        } catch(emailErr) { console.error('❌ Email error:', emailErr.message); }
+        await transporter.sendMail({
+          from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+          to: customerEmail,
+          subject: "Your Session Booking Confirmed ✨",
+          html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+            <h2 style="color:#c9a84c;">Session Confirmed, ${customerName || 'Beautiful Soul'}! 💫</h2>
+            <p>Your payment for <strong>${programName || 'Session'}</strong> is confirmed.</p>
+            <div style="background:rgba(201,168,76,.08);padding:1.2rem;margin:1.5rem 0;">
+              <p><strong>Amount Paid:</strong> ${amount || 'Confirmed'}</p>
+              <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+            </div>
+            <div style="text-align:center;margin:2rem 0;">
+              <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;text-decoration:none;">📅 Book Your Session</a>
+            </div>
+            <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
+          </div>`
+        });
       }
       res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
     } else {
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -410,35 +392,36 @@ app.post("/razorpay/verify", async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
-    const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
     
-    if (expected === razorpay_signature) {
+    if (expectedSignature === razorpay_signature) {
       const { customerEmail, customerName, ebookTitle, pdfUrl } = req.body;
       if (customerEmail) {
-        try {
-          await transporter.sendMail({
-            from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
-            to: customerEmail,
-            subject: `Your eBook Download Link ✨`,
-            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
-              <h2 style="color:#c9a84c;font-family:serif;">Thank you, ${customerName || 'Beautiful Soul'}! 💫</h2>
-              <p style="color:#8e88ab;line-height:1.7;">Your purchase of <strong style="color:#e8d5a3;">${ebookTitle || 'eBook'}</strong> is confirmed.</p>
-              <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
-                <p style="color:#e8d5a3;margin:0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
-                ${pdfUrl ? `<p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Download Link:</strong> <a href="${pdfUrl}" style="color:#c9a84c;">Click here</a></p>` : ''}
-              </div>
-              <hr style="border-color:#1a1f40;margin:2rem 0;">
-              <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong></p>
-            </div>`
-          });
-        } catch(emailErr) { console.error('❌ Email error:', emailErr.message); }
+        await transporter.sendMail({
+          from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+          to: customerEmail,
+          subject: "Your eBook Download Link ✨",
+          html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+            <h2 style="color:#c9a84c;">Thank you, ${customerName || 'Beautiful Soul'}! 💫</h2>
+            <p>Your purchase of <strong>${ebookTitle || 'eBook'}</strong> is confirmed.</p>
+            <div style="background:rgba(201,168,76,.08);padding:1.2rem;margin:1.5rem 0;">
+              <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+              ${pdfUrl ? `<p><strong>Download Link:</strong> <a href="${pdfUrl}" style="color:#c9a84c;">Click here</a></p>` : ''}
+            </div>
+            <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
+          </div>`
+        });
       }
       res.json({ success: true, paymentId: razorpay_payment_id });
     } else {
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+  } catch (error) {
+    console.error("Verification error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -557,7 +540,7 @@ app.post("/contact", async (req, res) => {
       from: `"Website Contact" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
       subject: `New Contact Form Submission`,
-      html: `<div style="font-family:sans-serif;"><h2>New Contact Message</h2><p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p></div>`
+      html: `<div><h2>New Contact Message</h2><p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p></div>`
     });
     res.json({ success: true });
   } catch (err) {
@@ -570,4 +553,5 @@ app.post("/contact", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`✅ Razorpay key loaded: ${process.env.RAZORPAY_KEY_ID ? "Yes" : "No"}`);
 });
