@@ -81,7 +81,7 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }
 });
 
-// ========== PDF UPLOAD ENDPOINT (FIXED) ==========
+// ========== FIXED PDF UPLOAD ENDPOINT ==========
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -103,7 +103,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
     
-    // Clean filename for Cloudinary
+    // Clean filename for Cloudinary - remove special characters
     const cleanName = originalName
       .replace(/\.pdf$/i, '')
       .replace(/[^\w\s-]/g, '')
@@ -111,19 +111,22 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       .substring(0, 50);
     
     const timestamp = Date.now();
-    const publicId = `ebooks/${cleanName}_${timestamp}`;
+    // Use a single folder structure - NO duplication
+    const publicId = `admin_uploads/pdfs/${cleanName}_${timestamp}`;
+    
+    console.log(`📁 Public ID: ${publicId}`);
     
     // Upload to Cloudinary with public access
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "raw",
-          folder: "ebooks",
           public_id: publicId,
           access_mode: "public",
           type: "upload",
           overwrite: true,
-          format: "pdf"
+          use_filename: false,
+          unique_filename: true
         },
         (error, uploadResult) => {
           if (error) {
@@ -141,10 +144,12 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // Ensure URL ends with .pdf
+    // The URL should be correct from Cloudinary
     let pdfUrl = result.secure_url;
-    if (!pdfUrl.endsWith('.pdf')) {
-      pdfUrl = pdfUrl + '.pdf';
+    
+    // Ensure URL has correct format
+    if (!pdfUrl.includes('/raw/upload/')) {
+      pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
     }
     
     console.log(`✅ PDF uploaded successfully: ${pdfUrl}`);
