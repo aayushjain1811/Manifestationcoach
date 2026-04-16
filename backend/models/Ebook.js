@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ebookSchema = new mongoose.Schema({
-  title: String,
+  title: { type: String, required: true },
   tag: String,
   price: String,
   priceInr: String,
