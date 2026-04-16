@@ -98,14 +98,40 @@ app.post("/upload-image", upload.single("file"), async (req, res) => {
   }
 });
 
+// Add this to your server.js file - update the upload-pdf endpoint
+
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No PDF uploaded" });
+    
+    // Get original filename from the request
+    const originalName = req.body.originalName || req.file.originalname;
+    // Clean filename for Cloudinary (remove special chars but preserve .pdf)
+    const cleanName = originalName
+      .replace(/[^\w\s.-]/g, '')
+      .replace(/\s+/g, '_')
+      .toLowerCase();
+    const baseName = cleanName.replace(/\.pdf$/i, '');
+    
     const stream = cloudinary.uploader.upload_stream(
-      { resource_type: "raw", folder: "admin_uploads/pdfs" },
+      { 
+        resource_type: "raw", 
+        folder: "admin_uploads/pdfs",
+        public_id: `${baseName}_${Date.now()}`,
+        use_filename: true,
+        unique_filename: false
+      },
       (error, result) => {
-        if (error) { console.error("PDF UPLOAD ERROR:", error); return res.status(500).json({ error }); }
-        res.json({ url: result.secure_url, public_id: result.public_id });
+        if (error) { 
+          console.error("PDF UPLOAD ERROR:", error); 
+          return res.status(500).json({ error }); 
+        }
+        // Return both URL and original filename
+        res.json({ 
+          url: result.secure_url, 
+          public_id: result.public_id,
+          original_name: originalName
+        });
       }
     );
     stream.end(req.file.buffer);
