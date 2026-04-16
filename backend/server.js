@@ -209,10 +209,8 @@ app.post("/razorpay/create-program-order", async (req, res) => {
     // Convert to smallest currency unit (paise for INR, cents for USD)
     let amountInSmallestUnit;
     if (currency === "USD") {
-      // For USD, convert dollars to cents (multiply by 100)
       amountInSmallestUnit = Math.round(amount * 100);
     } else {
-      // For INR, convert rupees to paise (multiply by 100)
       amountInSmallestUnit = Math.round(amount * 100);
     }
     
@@ -221,7 +219,7 @@ app.post("/razorpay/create-program-order", async (req, res) => {
     const order = await razorpay.orders.create({
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `prog_${Date.now()}`.slice(0, 40),
+      receipt: `prog_${Date.now()}`,
       notes: { 
         programName: programName || '21-Day Program',
         programType: programType || '',
@@ -250,12 +248,10 @@ app.post("/razorpay/create-session-order", async (req, res) => {
     
     console.log("📦 Creating SESSION order with:", { amount, currency, category, tier });
     
-    // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
     
-    // Convert to smallest currency unit
     let amountInSmallestUnit;
     if (currency === "USD") {
       amountInSmallestUnit = Math.round(amount * 100);
@@ -268,7 +264,7 @@ app.post("/razorpay/create-session-order", async (req, res) => {
     const order = await razorpay.orders.create({
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `sess_${Date.now()}`.slice(0, 40),
+      receipt: `sess_${Date.now()}`,
       notes: { 
         category: category || '', 
         tier: tier || '', 
@@ -303,7 +299,6 @@ app.post("/razorpay/create-order", async (req, res) => {
       return res.status(400).json({ error: "Invalid amount" });
     }
     
-    // Convert to smallest currency unit
     let amountInSmallestUnit;
     if (currency === "USD") {
       amountInSmallestUnit = Math.round(amount * 100);
@@ -316,7 +311,7 @@ app.post("/razorpay/create-order", async (req, res) => {
     const order = await razorpay.orders.create({
       amount: amountInSmallestUnit,
       currency: currency,
-      receipt: `eb_${Date.now()}`.slice(0, 40),
+      receipt: `eb_${Date.now()}`,
       notes: { 
         ebookTitle: cleanText(ebookTitle) || '',
         type: 'ebook'
