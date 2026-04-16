@@ -8,11 +8,29 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const app = express();
+
+const allowedOrigins = [
+  "https://www.universecrets.com",
+  "https://aayushjain1811.github.io",
+  "http://localhost:3000",
+  "http://localhost:5500",
+  "http://127.0.0.1:8080",   // add this for local testing
+  "http://127.0.0.1:5500"    // add this too
+];
+
 app.use(cors({
-  origin: ["https://www.universecrets.com"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+app.options(/.*/, cors());  // ← the fix from before
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
