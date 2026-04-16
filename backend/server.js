@@ -81,7 +81,7 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }
 });
 
-// ========== PDF UPLOAD ENDPOINT (FIXED PATH ONLY) ==========
+// ========== PDF UPLOAD ENDPOINT (WITH .pdf EXTENSION FIXED) ==========
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -103,27 +103,30 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
     
-    // Clean filename for Cloudinary
-    const cleanName = originalName
-      .replace(/\.pdf$/i, '')
+    // Clean filename for Cloudinary - KEEP the .pdf extension
+    const baseName = originalName
+      .replace(/\.pdf$/i, '')  // Remove .pdf temporarily
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '_')
       .substring(0, 50);
     
     const timestamp = Date.now();
-    // FIXED: Use correct path - admin_uploads/pdfs/ (matches your Cloudinary folder)
-    const publicId = `admin_uploads/pdfs/${cleanName}_${timestamp}`;
+    // FIXED: Add .pdf extension to the public ID
+    const publicIdWithExt = `admin_uploads/pdfs/${baseName}_${timestamp}.pdf`;
+    const publicIdWithoutExt = `admin_uploads/pdfs/${baseName}_${timestamp}`;
     
     // Upload to Cloudinary with public access
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "raw",
-          folder: "admin_uploads/pdfs",  // FIXED: Correct folder path
-          public_id: `${cleanName}_${timestamp}`,
+          folder: "admin_uploads/pdfs",
+          public_id: `${baseName}_${timestamp}.pdf`,  // FIXED: Include .pdf extension
           access_mode: "public",
           type: "upload",
-          overwrite: true
+          overwrite: true,
+          use_filename: false,
+          unique_filename: false
         },
         (error, uploadResult) => {
           if (error) {
@@ -141,29 +144,28 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // Ensure URL has correct format
+    // The URL from Cloudinary
     let pdfUrl = result.secure_url;
     
-    // Fix URL if it has double folder path
-    if (pdfUrl.includes('/ebooks/ebooks/')) {
-      pdfUrl = pdfUrl.replace('/ebooks/ebooks/', '/admin_uploads/pdfs/');
-    }
-    if (pdfUrl.includes('/pdfs/pdfs/')) {
-      pdfUrl = pdfUrl.replace('/pdfs/pdfs/', '/admin_uploads/pdfs/');
-    }
-    
-    // Ensure .pdf extension
+    // Ensure URL ends with .pdf
     if (!pdfUrl.endsWith('.pdf')) {
       pdfUrl = pdfUrl + '.pdf';
     }
     
+    // Also ensure public_id has .pdf extension
+    let publicId = result.public_id;
+    if (!publicId.endsWith('.pdf')) {
+      publicId = publicId + '.pdf';
+    }
+    
     console.log(`✅ PDF uploaded successfully: ${pdfUrl}`);
-    console.log(`📁 Public ID: ${result.public_id}`);
+    console.log(`📁 Public ID: ${publicId}`);
+    console.log(`📄 Original Name: ${originalName}`);
     
     res.json({
       success: true,
       url: pdfUrl,
-      public_id: result.public_id,
+      public_id: publicId,
       original_name: originalName,
       size: fileSize
     });
