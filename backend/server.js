@@ -81,7 +81,7 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }
 });
 
-// ========== FIXED PDF UPLOAD ENDPOINT ==========
+// ========== PDF UPLOAD ENDPOINT (FIXED PATH ONLY) ==========
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -103,7 +103,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
     
-    // Clean filename for Cloudinary - remove special characters
+    // Clean filename for Cloudinary
     const cleanName = originalName
       .replace(/\.pdf$/i, '')
       .replace(/[^\w\s-]/g, '')
@@ -111,22 +111,19 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       .substring(0, 50);
     
     const timestamp = Date.now();
-    // Use a single folder structure - NO duplication
+    // FIXED: Use correct path - admin_uploads/pdfs/ (matches your Cloudinary folder)
     const publicId = `admin_uploads/pdfs/${cleanName}_${timestamp}`;
-    
-    console.log(`📁 Public ID: ${publicId}`);
     
     // Upload to Cloudinary with public access
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "raw",
-          public_id: publicId,
+          folder: "admin_uploads/pdfs",  // FIXED: Correct folder path
+          public_id: `${cleanName}_${timestamp}`,
           access_mode: "public",
           type: "upload",
-          overwrite: true,
-          use_filename: false,
-          unique_filename: true
+          overwrite: true
         },
         (error, uploadResult) => {
           if (error) {
@@ -144,12 +141,20 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // The URL should be correct from Cloudinary
+    // Ensure URL has correct format
     let pdfUrl = result.secure_url;
     
-    // Ensure URL has correct format
-    if (!pdfUrl.includes('/raw/upload/')) {
-      pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
+    // Fix URL if it has double folder path
+    if (pdfUrl.includes('/ebooks/ebooks/')) {
+      pdfUrl = pdfUrl.replace('/ebooks/ebooks/', '/admin_uploads/pdfs/');
+    }
+    if (pdfUrl.includes('/pdfs/pdfs/')) {
+      pdfUrl = pdfUrl.replace('/pdfs/pdfs/', '/admin_uploads/pdfs/');
+    }
+    
+    // Ensure .pdf extension
+    if (!pdfUrl.endsWith('.pdf')) {
+      pdfUrl = pdfUrl + '.pdf';
     }
     
     console.log(`✅ PDF uploaded successfully: ${pdfUrl}`);
