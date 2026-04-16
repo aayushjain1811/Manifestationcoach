@@ -16,6 +16,8 @@
   --sidebar:200px;
   --red:#ff6464;--green:#5dcc7a;--blue:#7ec8e3;--lavender:#c9b0e0;
   --surface:rgba(12,16,48,.6);
+  --diamond:#7ec8e3;--diamond-light:#b8e6f5;
+  --platinum:#e0c9f0;--platinum-light:#f0e4ff;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -144,6 +146,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .form-title::before{content:'';display:block;width:3px;height:14px;background:var(--gold);border-radius:2px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0;}
 .form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.form-row.four{grid-template-columns:1fr 1fr 1fr 1fr;}
 .field-grp{margin-bottom:1rem;}
 .field-grp label{display:block;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(142,136,171,.6);margin-bottom:.45rem;}
 .field-grp input,.field-grp select,.field-grp textarea{width:100%;padding:.75rem 1rem;border-radius:3px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:all .3s;}
@@ -216,6 +219,25 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .test-label{padding:0 .7rem .5rem;font-size:.62rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mini-sel{font-size:.59rem;padding:.18rem .35rem;background:var(--glass);border:1px solid var(--border);color:var(--muted);border-radius:2px;cursor:pointer;outline:none;width:100%;transition:border-color .2s;}
 .mini-sel:focus{border-color:rgba(201,168,76,.3);}
+
+/* ── CELEBRITIES ── */
+.celeb-adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:1.5rem;}
+.celeb-adm-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;animation:cardIn .4s ease-out both;}
+.celeb-adm-card:hover{border-color:var(--gold-border);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.1);}
+.celeb-adm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .35s;}
+.celeb-adm-card:hover::before{opacity:1;}
+.celeb-adm-photo{width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;background:linear-gradient(160deg,var(--dark2),var(--purple));}
+.celeb-adm-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .55s ease;}
+.celeb-adm-card:hover .celeb-adm-photo img{transform:scale(1.06);}
+.celeb-adm-photo-empty{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:rgba(201,168,76,.25);font-size:.65rem;}
+.celeb-adm-photo-empty span:first-child{font-size:2.5rem;}
+.celeb-adm-overlay{position:absolute;bottom:0;left:0;right:0;padding:.7rem .9rem;background:linear-gradient(to top,rgba(7,10,26,.97) 0%,rgba(7,10,26,.4) 100%);}
+.celeb-adm-name{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#fff;font-weight:500;margin-bottom:.15rem;}
+.celeb-adm-desc{font-size:.65rem;color:var(--muted);line-height:1.4;}
+.celeb-cat-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.55rem;padding:.15rem .55rem;background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.3);border-radius:2px;color:var(--gold);margin-top:.35rem;text-transform:uppercase;letter-spacing:.1em;}
+.celeb-adm-footer{padding:.6rem .9rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);}
+.celeb-year{font-size:.62rem;color:var(--muted);}
+.celeb-adm-actions{display:flex;gap:.3rem;}
 
 /* ── Ebooks ── */
 .ebook-list{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.5rem;}
@@ -356,7 +378,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .crop-drag-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
 .crop-drag-hint span{background:rgba(201,168,76,.85);color:var(--dark);font-size:.65rem;padding:.35rem .85rem;border-radius:20px;font-weight:600;letter-spacing:.06em;opacity:0;animation:hintFade 3s ease-out forwards;}
 @keyframes hintFade{0%{opacity:0;}20%{opacity:1;}80%{opacity:1;}100%{opacity:0;}}
-.crop-overlay-box{position:absolute;border:2px solid var(--gold);box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none;}
 .crop-preview-row{display:flex;align-items:center;gap:1.5rem;}
 .crop-preview{border:1px solid var(--gold-border);border-radius:3px;overflow:hidden;background:var(--dark2);}
 .crop-preview canvas{display:block;}
@@ -365,6 +386,10 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 
 /* ── Preview Image ── */
 .preview-img{width:100%;max-height:180px;object-fit:contain;border-radius:3px;margin-top:.85rem;display:none;border:1px solid var(--border);background:rgba(0,0,0,.3);}
+
+/* ── Reorder hint ── */
+.reorder-hint{font-size:.7rem;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.reorder-hint::before{content:'↕';color:var(--gold);font-size:.9rem;}
 
 /* Responsive */
 @media(max-width:900px){
@@ -377,11 +402,12 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 }
 @media(max-width:600px){
   .stats-grid,.bk-summary{grid-template-columns:1fr;}
-  .form-row,.form-row.three{grid-template-columns:1fr;}
+  .form-row,.form-row.three,.form-row.four{grid-template-columns:1fr;}
   .content{padding:1.2rem;}
   .ach-grid{grid-template-columns:1fr 1fr;}
   .ebook-row{grid-template-columns:48px 1fr;}
   .ebook-actions{flex-direction:row;grid-column:1/-1;}
+  .celeb-adm-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
@@ -437,7 +463,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
       <div class="sb-gem">✦</div>
       <div>
         <span class="sb-logo">ADG Admin</span>
-        <span class="sb-version">v3.0 · 2026</span>
+        <span class="sb-version">v3.1 · 2026</span>
       </div>
     </div>
     <div class="sb-top-deco"></div>
@@ -447,6 +473,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
     <button class="sb-item active" onclick="showPanel('dashboard',this)"><span class="sb-icon">📊</span><span class="sb-label">Dashboard</span></button>
     <div class="sb-section">Content</div>
     <button class="sb-item" onclick="showPanel('testimonials',this)"><span class="sb-icon">📸</span><span class="sb-label">Testimonials</span><span class="sb-badge" id="testBadge">0</span></button>
+    <button class="sb-item" onclick="showPanel('celebrities',this)"><span class="sb-icon">🌟</span><span class="sb-label">Celebrities</span><span class="sb-badge" id="celebBadge">0</span></button>
     <button class="sb-item" onclick="showPanel('ebooks',this)"><span class="sb-icon">📚</span><span class="sb-label">eBooks</span><span class="sb-badge" id="ebBadge">0</span></button>
     <button class="sb-item" onclick="showPanel('achievements',this)"><span class="sb-icon">🏆</span><span class="sb-label">Achievements</span><span class="sb-badge" id="achBadge">0</span></button>
     <button class="sb-item" onclick="showPanel('journal',this)"><span class="sb-icon">📓</span><span class="sb-label">Journal</span><span class="sb-badge" id="jrnBadge">0</span></button>
@@ -485,9 +512,9 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
     <div class="panel active" id="panel-dashboard">
       <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon">📸</span><span class="stat-val" id="ds-tests">0</span><span class="stat-label">Testimonials</span><div class="stat-delta up">Live on site</div></div>
+        <div class="stat-card"><span class="stat-icon">🌟</span><span class="stat-val" id="ds-celebs">0</span><span class="stat-label">Celebrities</span><div class="stat-delta up">Showcased</div></div>
         <div class="stat-card"><span class="stat-icon">📚</span><span class="stat-val" id="ds-ebooks">0</span><span class="stat-label">eBooks</span><div class="stat-delta up">Published</div></div>
         <div class="stat-card"><span class="stat-icon">🏆</span><span class="stat-val" id="ds-ach">0</span><span class="stat-label">Achievements</span><div class="stat-delta up">Showcased</div></div>
-        <div class="stat-card"><span class="stat-icon">📓</span><span class="stat-val" id="ds-jrn">0</span><span class="stat-label">Journal Posts</span><div class="stat-delta up">Published</div></div>
       </div>
       <div class="two-col">
         <div class="card">
@@ -498,9 +525,9 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
           <div class="card-title">Quick Stats</div>
           <div>
             <div class="mini-stat"><span class="ms-label">SP Testimonials</span><span class="ms-val" id="qs-sp">0</span></div>
+            <div class="mini-stat"><span class="ms-label">Bollywood Celebs</span><span class="ms-val" id="qs-bollywood">0</span></div>
             <div class="mini-stat"><span class="ms-label">eBooks with PDF</span><span class="ms-val" id="qs-ebwpdf">0</span></div>
             <div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-achievements">0</span></div>
-            <div class="mini-stat"><span class="ms-label">Certifications</span><span class="ms-val" id="qs-certs">0</span></div>
             <div class="mini-stat"><span class="ms-label">Journal entries</span><span class="ms-val" id="qs-jrns">0</span></div>
           </div>
         </div>
@@ -529,7 +556,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
         </div>
         <div class="field-grp">
           <label>Upload Screenshot</label>
-          <!-- Aspect: 9/16 portrait for testimonials -->
           <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'test','9:16','Portrait (9:16)')"><span class="u-icon">📷</span><p>Click or drag to upload</p><small>JPG, PNG, WEBP · max 5MB · Will be cropped to 9:16</small></div>
           <img id="testImgPreview" class="preview-img" alt="">
         </div>
@@ -538,6 +564,77 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
       </div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="testCount">0</span> screenshots total</div>
       <div class="test-grid" id="admTestGrid"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         CELEBRITIES PANEL
+         ══════════════════════════════════════ -->
+    <div class="panel" id="panel-celebrities">
+      <div class="section-title">
+        Celebrity Photos
+        <button class="adm-btn gold sm" onclick="clearCelebForm();scrollToAdd('celebAdd')">+ Add New</button>
+      </div>
+
+      <!-- ADD / EDIT FORM -->
+      <div class="adm-form" id="celebAdd">
+        <div class="form-title" id="celebFormTitle">Add Celebrity Photo</div>
+        <input type="hidden" id="editCelebIdx" value="-1">
+
+        <div class="form-row">
+          <div class="field-grp">
+            <label>Celebrity Name</label>
+            <input type="text" id="celebName" placeholder="e.g. Ameesha Patel">
+          </div>
+          <div class="field-grp">
+            <label>Category</label>
+            <select id="celebCat">
+              <option value="bollywood">🎬 Bollywood</option>
+              <option value="tv">📺 TV & OTT</option>
+              <option value="music">🎵 Music</option>
+              <option value="business">💼 Business</option>
+              <option value="sport">🏆 Sports</option>
+              <option value="other">⭐ Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-grp">
+            <label>Description / Context</label>
+            <input type="text" id="celebDesc" placeholder="e.g. Bollywood Actress · Awarded Life Coach of the Year">
+          </div>
+          <div class="field-grp">
+            <label>Year</label>
+            <input type="text" id="celebYear" placeholder="e.g. 2025">
+          </div>
+        </div>
+
+        <div class="field-grp">
+          <label>Custom Tag Label (optional — overrides category)</label>
+          <input type="text" id="celebTag" placeholder="e.g. Bollywood Icon (leave blank to auto-use category)">
+        </div>
+
+        <div class="field-grp">
+          <label>Photo — cropped to 3:4 portrait</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'celeb','3:4','Portrait (3:4)')"><span class="u-icon">🌟</span><p>Click or drag celebrity photo</p><small>JPG, PNG, WEBP · max 5MB · Cropped to 3:4</small></div>
+          <img id="celebImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp">
+          <label>Or paste image URL</label>
+          <input type="url" id="celebImgUrl" placeholder="https://..." oninput="previewCelebUrl(this.value)">
+        </div>
+
+        <div class="btn-group">
+          <button class="adm-btn gold" onclick="saveCeleb()">Save Celebrity</button>
+          <button class="adm-btn outline" onclick="clearCelebForm()">Clear</button>
+        </div>
+      </div>
+
+      <!-- COUNT -->
+      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="celebCount">0</span> celebrities total</div>
+
+      <!-- GRID -->
+      <div class="celeb-adm-grid" id="admCelebGrid"></div>
     </div>
 
     <!-- EBOOKS -->
@@ -550,42 +647,41 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
           <div class="field-grp"><label>Title</label><input type="text" id="ebTitle" placeholder="eBook title"></div>
           <div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div>
         </div>
-<div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
-  <div class="field-grp">
-    <label>Sale Price (USD)</label>
-    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
-      <input type="text" id="ebPrice" placeholder="47" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-    </div>
-  </div>
-  <div class="field-grp">
-    <label>Sale Price (INR)</label>
-    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
-      <input type="text" id="ebPriceInr" placeholder="3,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-    </div>
-  </div>
-  <div class="field-grp">
-    <label>Original Price (USD)</label>
-    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
-      <input type="text" id="ebOrig" placeholder="67" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-    </div>
-  </div>
-  <div class="field-grp">
-    <label>Original Price (INR)</label>
-    <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;transition:all .3s;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)';this.style.boxShadow='0 0 0 3px rgba(201,168,76,.06)'" onfocusout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
-      <input type="text" id="ebOrigInr" placeholder="5,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-    </div>
-  </div>
-  <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
-</div>
+        <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+          <div class="field-grp">
+            <label>Sale Price (USD)</label>
+            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
+              <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
+              <input type="text" id="ebPrice" placeholder="47" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+            </div>
+          </div>
+          <div class="field-grp">
+            <label>Sale Price (INR)</label>
+            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
+              <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
+              <input type="text" id="ebPriceInr" placeholder="3,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+            </div>
+          </div>
+          <div class="field-grp">
+            <label>Original Price (USD)</label>
+            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
+              <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
+              <input type="text" id="ebOrig" placeholder="67" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+            </div>
+          </div>
+          <div class="field-grp">
+            <label>Original Price (INR)</label>
+            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
+              <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
+              <input type="text" id="ebOrigInr" placeholder="5,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
+            </div>
+          </div>
+          <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
+        </div>
         <div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div>
         <div class="field-grp"><label>Features (one per line)</label><textarea id="ebFeatures" placeholder="Feature 1&#10;Feature 2" style="min-height:80px;"></textarea></div>
         <div class="field-grp">
           <label>Cover Image — will be cropped to 1:1 (square)</label>
-          <!-- eBook cover: square 1:1 -->
           <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ebook','1:1','Square (1:1)')"><span class="u-icon">📚</span><p>Click or drag cover</p><small>JPG, PNG, WEBP · Cropped to square</small></div>
           <img id="ebImgPreview" class="preview-img" alt="">
         </div>
@@ -624,7 +720,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
         <div class="field-grp"><label>Description</label><textarea id="achDesc" placeholder="What is this achievement about?"></textarea></div>
         <div class="field-grp">
           <label>Image — cropped to 4:3 (landscape)</label>
-          <!-- Achievement: 4:3 landscape -->
           <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ach','4:3','Landscape (4:3)')"><span class="u-icon">🏆</span><p>Click or drag image</p><small>JPG, PNG, WEBP · Cropped to 4:3</small></div>
           <img id="achImgPreview" class="preview-img" alt="">
         </div>
@@ -640,86 +735,70 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
     <div class="panel" id="panel-journal">
       <div class="section-title">Journal Posts <button class="adm-btn gold sm" onclick="clearJrnForm();scrollToAdd('jrnAdd')">+ Add New</button></div>
       <div class="adm-form" id="jrnAdd">
-  <div class="form-title" id="jrnFormTitle">Add Journal Entry</div>
-  <input type="hidden" id="editJrnIdx" value="-1">
- 
-  <div class="form-row">
-    <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
-    <div class="field-grp"><label>Category</label>
-      <select id="jrnCat">
-        <option value="mindset">🧠 Mindset</option>
-        <option value="love">💞 Love</option>
-        <option value="manifestation">✨ Manifestation</option>
-        <option value="career">💼 Career</option>
-        <option value="personal">🌸 Personal</option>
-        <option value="spiritual">🕊️ Spiritual</option>
-      </select>
+        <div class="form-title" id="jrnFormTitle">Add Journal Entry</div>
+        <input type="hidden" id="editJrnIdx" value="-1">
+        <div class="form-row">
+          <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
+          <div class="field-grp"><label>Category</label>
+            <select id="jrnCat">
+              <option value="mindset">🧠 Mindset</option>
+              <option value="love">💞 Love</option>
+              <option value="manifestation">✨ Manifestation</option>
+              <option value="career">💼 Career</option>
+              <option value="personal">🌸 Personal</option>
+              <option value="spiritual">🕊️ Spiritual</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
+          <div class="field-grp"><label>Mood / Vibe</label>
+            <select id="jrnMood">
+              <option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option>
+              <option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option>
+              <option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option>
+              <option value="🌙">🌙 Calm</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field-grp"><label>Publication / Source Name</label><input type="text" id="jrnSource" placeholder="e.g. CEO India Magazine"></div>
+          <div class="field-grp"><label>Platform (badge colour)</label>
+            <select id="jrnPlatform">
+              <option value="default">Default (Gold)</option>
+              <option value="republic">Republic TV (Red)</option>
+              <option value="dailyhunt">DailyHunt (Orange)</option>
+              <option value="ceo">CEO India Magazine (Gold)</option>
+              <option value="success">Success India Magazine (Blue)</option>
+              <option value="india">The Indian Bulletin (Saffron)</option>
+              <option value="mindset">Mindset (Blue)</option>
+              <option value="love">Love & SP (Pink)</option>
+              <option value="manifestation">Manifestation (Purple)</option>
+              <option value="career">Career (Gold)</option>
+              <option value="personal">Personal (Green)</option>
+              <option value="spiritual">Spiritual (Lavender)</option>
+            </select>
+          </div>
+          <div class="field-grp"><label>Article Link (URL)</label><input type="url" id="jrnLink" placeholder="https://ceoindia.com/article..."></div>
+        </div>
+        <div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div>
+        <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div>
+        <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
+        <div class="field-grp">
+          <label>Cover Image — cropped to 3:2</label>
+          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div>
+          <img id="jrnImgPreview" class="preview-img" alt="">
+        </div>
+        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
+        <div class="btn-group">
+          <button class="adm-btn gold" onclick="saveJournal()">Save Entry</button>
+          <button class="adm-btn outline" onclick="clearJrnForm()">Clear</button>
+        </div>
+      </div>
+      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="jrnCount">0</span> journal entries total</div>
+      <div class="journal-list" id="admJrnList"></div>
     </div>
-  </div>
- 
-  <div class="form-row">
-    <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
-    <div class="field-grp"><label>Mood / Vibe</label>
-      <select id="jrnMood">
-        <option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option>
-        <option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option>
-        <option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option>
-        <option value="🌙">🌙 Calm</option>
-      </select>
-    </div>
-  </div>
- 
-  <!-- ✅ NEW: Publication / Press fields -->
-  <div class="form-row three">
-    <div class="field-grp">
-      <label>Publication / Source Name</label>
-      <input type="text" id="jrnSource" placeholder="e.g. CEO India Magazine, DailyHunt, Republic TV">
-    </div>
-    <div class="field-grp">
-      <label>Platform (badge colour)</label>
-      <select id="jrnPlatform">
-        <option value="default">Default (Gold)</option>
-        <option value="republic">Republic TV (Red)</option>
-        <option value="dailyhunt">DailyHunt (Orange)</option>
-        <option value="ceo">CEO India Magazine (Gold)</option>
-        <option value="success">Success India Magazine (Blue)</option>
-        <option value="india">The Indian Bulletin (Saffron)</option>
-        <option value="mindset">Mindset (Blue)</option>
-        <option value="love">Love & SP (Pink)</option>
-        <option value="manifestation">Manifestation (Purple)</option>
-        <option value="career">Career (Gold)</option>
-        <option value="personal">Personal (Green)</option>
-        <option value="spiritual">Spiritual (Lavender)</option>
-      </select>
-    </div>
-    <div class="field-grp">
-      <label>Article Link (URL)</label>
-      <input type="url" id="jrnLink" placeholder="https://ceoindia.com/article...">
-    </div>
-  </div>
-  <!-- END NEW -->
- 
-  <div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div>
-  <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div>
-  <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
- 
-  <div class="field-grp">
-    <label>Cover Image — cropped to 3:2</label>
-    <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div>
-    <img id="jrnImgPreview" class="preview-img" alt="">
-  </div>
-  <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
- 
-  <div class="btn-group">
-    <button class="adm-btn gold" onclick="saveJournal()">Save Entry</button>
-    <button class="adm-btn outline" onclick="clearJrnForm()">Clear</button>
-  </div>
-  <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;">
-  <span id="jrnCount">0</span> journal entries total
-</div>
 
-<div class="journal-list" id="admJrnList"></div>
-</div>
     <!-- BOOKINGS -->
     <div class="panel" id="panel-bookings">
       <div class="section-title">Cal.com Bookings</div>
@@ -758,10 +837,10 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
         <div class="setting-card">
           <h3>Site Visibility</h3>
           <div class="toggle-row"><span class="toggle-label">Testimonials</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="toggle-row"><span class="toggle-label">Celebrities</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
           <div class="toggle-row"><span class="toggle-label">eBooks</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
           <div class="toggle-row"><span class="toggle-label">Achievements</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
           <div class="toggle-row"><span class="toggle-label">Journal / Blog</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Booking Section</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
         </div>
         <div class="setting-card">
           <h3>Notifications</h3>
@@ -796,7 +875,7 @@ const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring'
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
 (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
-document.addEventListener('mouseover',e=>{if(e.target.matches('a,button,input,select,textarea,.ach-card,.journal-card,.ebook-row,.stat-card,.test-card,.crop-tab'))document.body.classList.add('ch');});
+document.addEventListener('mouseover',e=>{if(e.target.matches('a,button,input,select,textarea,.ach-card,.journal-card,.ebook-row,.stat-card,.test-card,.crop-tab,.celeb-adm-card'))document.body.classList.add('ch');});
 document.addEventListener('mouseout',()=>document.body.classList.remove('ch'));
 
 // ── AUTH ───────────────────────────────────────────────────────────────────
@@ -813,7 +892,16 @@ function toast(msg,type=''){
 }
 
 // ── PANELS ─────────────────────────────────────────────────────────────────
-const PM={dashboard:{t:'Dashboard',s:'Overview'},testimonials:{t:'Testimonials',s:'Manage Screenshots'},ebooks:{t:'eBooks',s:'Manage eBooks'},achievements:{t:'Achievements',s:'Achievements & Milestones'},journal:{t:'Journal',s:'Blog & Journal Posts'},bookings:{t:'Cal.com Bookings',s:'Booking Management'},settings:{t:'Settings',s:'System Settings'}};
+const PM={
+  dashboard:{t:'Dashboard',s:'Overview'},
+  testimonials:{t:'Testimonials',s:'Manage Screenshots'},
+  celebrities:{t:'Celebrities',s:'Manage Celebrity Photos'},
+  ebooks:{t:'eBooks',s:'Manage eBooks'},
+  achievements:{t:'Achievements',s:'Achievements & Milestones'},
+  journal:{t:'Journal',s:'Blog & Journal Posts'},
+  bookings:{t:'Cal.com Bookings',s:'Booking Management'},
+  settings:{t:'Settings',s:'System Settings'}
+};
 function showPanel(n,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
@@ -829,15 +917,16 @@ function scrollToAdd(id){document.getElementById(id)?.scrollIntoView({behavior:'
 
 // ── API & DATA ──────────────────────────────────────────────────────────────
 const API="https://adg-backend-sm2p.onrender.com";
-let testimonials=[],ebooks=[],achievements=[],journal=[];
+let testimonials=[],ebooks=[],achievements=[],journal=[],celebrities=[];
 
 async function loadTestimonials(){try{const r=await fetch(API+"/testimonials");testimonials=await r.json();}catch{testimonials=[];}renderTests();}
 async function loadEbooks(){try{const r=await fetch(API+"/ebooks");ebooks=await r.json();}catch{ebooks=[];}renderEbooks();}
 async function loadAchievements(){try{const r=await fetch(API+"/achievements");achievements=await r.json();}catch{achievements=[];}renderAch();}
 async function loadJournal(){try{const r=await fetch(API+"/journal");journal=await r.json();}catch{journal=[];}renderJrn();}
+async function loadCelebrities(){try{const r=await fetch(API+"/celebrities");celebrities=await r.json();}catch{celebrities=[];}renderCelebs();}
 
 async function initData(){
-  await Promise.all([loadTestimonials(),loadEbooks(),loadAchievements(),loadJournal()]);
+  await Promise.all([loadTestimonials(),loadEbooks(),loadAchievements(),loadJournal(),loadCelebrities()]);
   updateDash();
 }
 
@@ -854,21 +943,29 @@ async function loadCloudImages(){
     const r=await fetch(API+'/get-images');const data=await r.json();
     if(!data.length){el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">No images in Cloudinary yet.</div>';return;}
     el.innerHTML=`<div class="cloud-grid">${data.map(i=>`<img src="${i.secure_url}" class="cloud-img-thumb" title="${i.public_id}">`).join('')}</div><div style="font-size:.62rem;color:var(--muted);margin-top:.5rem;">${data.length} image${data.length!==1?'s':''} stored</div>`;
-  }catch{el.innerHTML='<div style="font-size:.75rem;color:var(--red);">Could not load — is the server running on port 5000?</div>';}
+  }catch{el.innerHTML='<div style="font-size:.75rem;color:var(--red);">Could not load — is the server running?</div>';}
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────
 function updateDash(){
   const set=(id,v)=>{const el=document.getElementById(id);if(el){el.textContent=v;if(v>0&&el.classList.contains('sb-badge'))el.classList.add('has');}};
-  set('ds-tests',testimonials.length);set('ds-ebooks',ebooks.length);set('ds-ach',achievements.length);set('ds-jrn',journal.length);
-  set('testBadge',testimonials.length);set('ebBadge',ebooks.length);set('achBadge',achievements.length);set('jrnBadge',journal.length);
+  set('ds-tests',testimonials.length);
+  set('ds-celebs',celebrities.length);
+  set('ds-ebooks',ebooks.length);
+  set('ds-ach',achievements.length);
+  set('testBadge',testimonials.length);
+  set('celebBadge',celebrities.length);
+  set('ebBadge',ebooks.length);
+  set('achBadge',achievements.length);
+  set('jrnBadge',journal.length);
   set('qs-sp',testimonials.filter(t=>t.cat==='sp').length);
+  set('qs-bollywood',celebrities.filter(c=>c.cat==='bollywood').length);
   set('qs-ebwpdf',ebooks.filter(e=>e.pdfUrl).length);
   set('qs-achievements',achievements.filter(a=>a.type==='award').length);
-  set('qs-certs',achievements.filter(a=>a.type==='certification').length);
   set('qs-jrns',journal.length);
   const acts=[
     {c:'gold',t:`<strong>${testimonials.length}</strong> testimonials active`,d:'Live'},
+    {c:'rose',t:`<strong>${celebrities.length}</strong> celebrities showcased`,d:'Live'},
     {c:'blue',t:`<strong>${ebooks.length}</strong> eBooks · <strong>${ebooks.filter(e=>e.pdfUrl).length}</strong> with PDF`,d:'Live'},
     {c:'gold',t:`<strong>${achievements.length}</strong> achievements showcased`,d:'Live'},
     {c:'purple',t:`<strong>${journal.length}</strong> journal entries published`,d:'Live'},
@@ -884,17 +981,17 @@ function updateDash(){
 let cropState={
   img:null,scale:1,offsetX:0,offsetY:0,
   aspect:9/16,aspectStr:'9:16',
-  field:'test',// 'test'|'ebook'|'ach'|'jrn'
+  field:'test',
   dragging:false,lastX:0,lastY:0,
   callback:null
 };
 
-// Aspect presets per field type — matches card dimensions on index.html
 const CROP_ASPECTS={
   test:[{label:'9:16 Portrait',ratio:9/16},{label:'4:5',ratio:4/5},{label:'1:1 Square',ratio:1}],
   ebook:[{label:'1:1 Square',ratio:1},{label:'3:4 Book',ratio:3/4},{label:'2:3',ratio:2/3}],
   ach:[{label:'4:3 Landscape',ratio:4/3},{label:'16:9 Wide',ratio:16/9},{label:'1:1 Square',ratio:1}],
   jrn:[{label:'3:2 Landscape',ratio:3/2},{label:'16:9 Wide',ratio:16/9},{label:'1:1 Square',ratio:1}],
+  celeb:[{label:'3:4 Portrait',ratio:3/4},{label:'4:5 Portrait',ratio:4/5},{label:'1:1 Square',ratio:1}],
   hero:[{label:'4:5 Portrait',ratio:4/5},{label:'3:4',ratio:3/4},{label:'1:1',ratio:1}],
   about:[{label:'3:4 Portrait',ratio:3/4},{label:'2:3',ratio:2/3},{label:'1:1',ratio:1}]
 };
@@ -902,16 +999,18 @@ const CROP_TITLES={
   test:'Crop Testimonial Screenshot',
   ebook:'Crop eBook Cover',
   ach:'Crop Achievement Image',
-  jrn:'Crop Journal Cover'
+  jrn:'Crop Journal Cover',
+  celeb:'Crop Celebrity Photo'
 };
 const CROP_DESC={
   test:'Portrait screenshot — will appear as a tall card (9:16)',
   ebook:'Square cover — shown in eBook cards',
   ach:'Landscape photo — shown in achievement cards (4:3)',
-  jrn:'Landscape cover — shown in journal cards (3:2)'
+  jrn:'Landscape cover — shown in journal cards (3:2)',
+  celeb:'Portrait photo — shown in celebrity grid (3:4)'
 };
 
-function openCropForField(event, field, aspectHint, labelHint){
+function openCropForField(event,field,aspectHint,labelHint){
   const f=event.target.files?.[0];if(!f)return;
   const url=URL.createObjectURL(f);
   const img=new Image();
@@ -928,7 +1027,6 @@ function openCropForField(event, field, aspectHint, labelHint){
     document.getElementById('cropOverlay').classList.add('open');
   };
   img.src=url;
-  // Reset file input so same file can be re-chosen
   event.target.value='';
 }
 
@@ -948,11 +1046,9 @@ function setCropAspect(ratio,btn,label){
 
 function initCropCanvas(){
   const canvas=document.getElementById('cropCanvas');
-  const wrap=document.getElementById('cropCanvasWrap');
   const img=cropState.img;
   const maxW=Math.min(480,window.innerWidth*0.85);
   const maxH=Math.min(window.innerHeight*0.5,480);
-  // Scale image to fit canvas
   let cw=maxW,ch=img.height*(maxW/img.width);
   if(ch>maxH){ch=maxH;cw=img.width*(maxH/img.height);}
   canvas.width=cw;canvas.height=ch;
@@ -961,7 +1057,6 @@ function initCropCanvas(){
   resetCropOffset();
   drawCropCanvas();
   updatePreview();
-  // Events
   canvas.onmousedown=cropMouseDown;
   canvas.onmousemove=cropMouseMove;
   canvas.onmouseup=cropMouseUp;
@@ -973,11 +1068,9 @@ function initCropCanvas(){
 
 function resetCropOffset(){
   const canvas=document.getElementById('cropCanvas');
-  const img=cropState.img;
   const cw=canvas.width,ch=canvas.height;
   const cropW=cropState.aspect>=1?cw:ch*cropState.aspect;
   const cropH=cropState.aspect>=1?cw/cropState.aspect:ch;
-  // Center the crop box
   cropState.offsetX=(cw-cropW)/2;
   cropState.offsetY=(ch-cropH)/2;
 }
@@ -988,31 +1081,24 @@ function drawCropCanvas(){
   const img=cropState.img;
   const cw=canvas.width,ch=canvas.height;
   ctx.clearRect(0,0,cw,ch);
-  // Draw image
   ctx.drawImage(img,0,0,cw,ch);
-  // Crop box dimensions
-  const cropW=Math.min(cw, cropState.aspect>=1?cw:ch*cropState.aspect);
-  const cropH=Math.min(ch, cropState.aspect>=1?cw/cropState.aspect:ch);
+  const cropW=Math.min(cw,cropState.aspect>=1?cw:ch*cropState.aspect);
+  const cropH=Math.min(ch,cropState.aspect>=1?cw/cropState.aspect:ch);
   const cx=cropState.offsetX,cy=cropState.offsetY;
-  // Darken outside
   ctx.fillStyle='rgba(0,0,0,.55)';
-  ctx.fillRect(0,0,cw,cy);// top
-  ctx.fillRect(0,cy+cropH,cw,ch-cy-cropH);// bottom
-  ctx.fillRect(0,cy,cx,cropH);// left
-  ctx.fillRect(cx+cropW,cy,cw-cx-cropW,cropH);// right
-  // Crop border
+  ctx.fillRect(0,0,cw,cy);
+  ctx.fillRect(0,cy+cropH,cw,ch-cy-cropH);
+  ctx.fillRect(0,cy,cx,cropH);
+  ctx.fillRect(cx+cropW,cy,cw-cx-cropW,cropH);
   ctx.strokeStyle='rgba(201,168,76,.9)';ctx.lineWidth=1.5;
   ctx.strokeRect(cx,cy,cropW,cropH);
-  // Grid lines
   ctx.strokeStyle='rgba(201,168,76,.25)';ctx.lineWidth=.8;
   for(let i=1;i<3;i++){
     ctx.beginPath();ctx.moveTo(cx+cropW*i/3,cy);ctx.lineTo(cx+cropW*i/3,cy+cropH);ctx.stroke();
     ctx.beginPath();ctx.moveTo(cx,cy+cropH*i/3);ctx.lineTo(cx+cropW,cy+cropH*i/3);ctx.stroke();
   }
-  // Corner handles
   const hs=8;ctx.fillStyle='var(--gold)';
   [[cx,cy],[cx+cropW-hs,cy],[cx,cy+cropH-hs],[cx+cropW-hs,cy+cropH-hs]].forEach(([x,y])=>ctx.fillRect(x,y,hs,hs));
-  // Store crop box for hit testing
   cropState.box={x:cx,y:cy,w:cropW,h:cropH};
   updatePreview();
 }
@@ -1030,7 +1116,6 @@ function updatePreview(){
   const sx=box.x*scaleX,sy=box.y*scaleY,sw=box.w*scaleX,sh=box.h*scaleY;
   const ctx=prev.getContext('2d');
   ctx.drawImage(img,sx,sy,sw,sh,0,0,pw,ph);
-  // Border
   ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=1;ctx.strokeRect(0,0,pw,ph);
 }
 
@@ -1063,7 +1148,6 @@ function cropTouchStart(e){e.preventDefault();const t=e.touches[0];const rect=e.
 function cropTouchMove(e){e.preventDefault();const t=e.touches[0];const rect=e.target.getBoundingClientRect();cropMouseMove({clientX:t.clientX,clientY:t.clientY,target:{getBoundingClientRect:()=>rect}});}
 function cropWheel(e){
   e.preventDefault();
-  // Wheel: shift crop box
   const canvas=document.getElementById('cropCanvas');
   const box=getCropBox();
   const dy=e.deltaY*.5;
@@ -1084,7 +1168,6 @@ function applyCrop(){
   out.toBlob(async blob=>{
     const field=cropState.field;
     closeCrop();
-    // Upload to server
     let uploadedUrl='',uploadedId='';
     try{
       const fd=new FormData();fd.append('file',blob,'crop.jpg');
@@ -1094,11 +1177,11 @@ function applyCrop(){
     }catch{
       uploadedUrl=URL.createObjectURL(blob);uploadedId='';
     }
-    // Apply to the right field
     if(field==='test'){tImg=uploadedUrl;tImgId=uploadedId;showPrev('testImgPreview',uploadedUrl);}
     else if(field==='ebook'){eImg=uploadedUrl;eImgId=uploadedId;showPrev('ebImgPreview',uploadedUrl);}
     else if(field==='ach'){aImg=uploadedUrl;aImgId=uploadedId;showPrev('achImgPreview',uploadedUrl);}
     else if(field==='jrn'){jImg=uploadedUrl;jImgId=uploadedId;showPrev('jrnImgPreview',uploadedUrl);}
+    else if(field==='celeb'){cImg=uploadedUrl;cImgId=uploadedId;showPrev('celebImgPreview',uploadedUrl);}
     toast('✓ Image cropped & ready','success');
   },'image/jpeg',0.93);
 }
@@ -1116,7 +1199,6 @@ async function addTestimonial(){
     clearTestForm();await loadTestimonials();updateDash();toast("✅ Testimonial saved","success");
   }catch{toast("❌ Failed to save","error");}
 }
-function updateTestCat(id,cat){testimonials=testimonials.map(t=>t.id===id?{...t,cat}:t);}
 async function delTest(id){
   confirm2('Delete Screenshot','Remove this testimonial?',async()=>{
     const item=testimonials.find(t=>t._id===id);
@@ -1145,6 +1227,121 @@ function renderTests(){
     </div>
   </div>`).join('');
 }
+function updateTestCat(id,cat){testimonials=testimonials.map(t=>t.id===id?{...t,cat}:t);}
+
+// ══════════════════════════════════════════════════════
+// CELEBRITIES
+// ══════════════════════════════════════════════════════
+let cImg='',cImgId='';
+
+const CAT_LABELS_ADM={bollywood:'Bollywood',tv:'TV & OTT',music:'Music',business:'Business',sport:'Sports',other:'Other'};
+const CAT_COLORS={
+  bollywood:'rgba(201,168,76,.18)',
+  tv:'rgba(126,200,227,.15)',
+  music:'rgba(224,201,240,.15)',
+  business:'rgba(93,204,122,.12)',
+  sport:'rgba(255,140,80,.12)',
+  other:'rgba(255,255,255,.06)'
+};
+
+function previewCelebUrl(u){if(u){cImg=u;cImgId='';showPrev('celebImgPreview',u);}}
+
+function clearCelebForm(){
+  document.getElementById('editCelebIdx').value=-1;
+  document.getElementById('celebFormTitle').textContent='Add Celebrity Photo';
+  ['celebName','celebDesc','celebYear','celebTag','celebImgUrl'].forEach(id=>document.getElementById(id).value='');
+  hidePrev('celebImgPreview');
+  cImg='';cImgId='';
+}
+
+async function saveCeleb(){
+  const idx=document.getElementById('editCelebIdx').value;
+  const item={
+    name:v('celebName'),
+    cat:v('celebCat'),
+    desc:v('celebDesc'),
+    year:v('celebYear'),
+    tag:v('celebTag'),
+    img:cImg||v('celebImgUrl'),
+    imgPublicId:cImgId
+  };
+  if(!item.name){toast('Please enter celebrity name','error');return;}
+  try{
+    if(idx!=-1){
+      await fetch(API+"/update-celebrity/"+celebrities[idx]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});
+      toast("✅ Celebrity updated","success");
+    }else{
+      await fetch(API+"/add-celebrity",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});
+      toast("✅ Celebrity added","success");
+    }
+    clearCelebForm();
+    await loadCelebrities();
+    updateDash();
+  }catch{toast("❌ Failed to save","error");}
+}
+
+function editCeleb(i){
+  const c=celebrities[i];
+  document.getElementById('editCelebIdx').value=i;
+  document.getElementById('celebFormTitle').textContent='Edit Celebrity';
+  sv('celebName',c.name);
+  sv('celebCat',c.cat||'bollywood');
+  sv('celebDesc',c.desc||'');
+  sv('celebYear',c.year||'');
+  sv('celebTag',c.tag||'');
+  sv('celebImgUrl',c.img||'');
+  if(c.img){cImg=c.img;cImgId=c.imgPublicId||'';showPrev('celebImgPreview',c.img);}
+  scrollToAdd('celebAdd');
+}
+
+async function delCeleb(i){
+  confirm2('Delete Celebrity','Remove this celebrity photo permanently?',async()=>{
+    const c=celebrities[i];
+    if(c?.imgPublicId)await deleteFromCloudinary(c.imgPublicId,'image');
+    await fetch(API+"/delete-celebrity/"+c._id,{method:"DELETE"});
+    await loadCelebrities();
+    updateDash();
+    toast('Deleted','success');
+  });
+}
+
+function renderCelebs(){
+  document.getElementById('celebCount').textContent=celebrities.length;
+  document.getElementById('celebBadge').textContent=celebrities.length;
+  const g=document.getElementById('admCelebGrid');
+  if(!celebrities.length){
+    g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🌟</span><p>No celebrity photos yet.<br>Add your first one above!</p></div>`;
+    return;
+  }
+  g.innerHTML=celebrities.map((c,i)=>{
+    const catLabel=CAT_LABELS_ADM[c.cat]||c.cat||'Star';
+    const catColor=CAT_COLORS[c.cat]||CAT_COLORS.other;
+    return `<div class="celeb-adm-card" style="animation-delay:${i*.04}s">
+      <div class="celeb-adm-photo">
+        ${c.img
+          ?`<img src="${c.img}" alt="${c.name||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          :''
+        }
+        <div class="celeb-adm-photo-empty" ${c.img?'style="display:none"':''}>
+          <span>🌟</span>
+          <span>No photo</span>
+        </div>
+        <div class="celeb-adm-overlay">
+          <div class="celeb-adm-name">${c.name||'Unknown'}</div>
+          <div class="celeb-adm-desc">${c.desc||''}</div>
+          <span class="celeb-cat-badge" style="background:${catColor}">✦ ${catLabel}</span>
+        </div>
+      </div>
+      <div class="celeb-adm-footer">
+        <span class="celeb-year">${c.year||'—'}</span>
+        <div class="celeb-adm-actions">
+          <button class="icon-btn edit" onclick="editCeleb(${i})" title="Edit">✏️</button>
+          <button class="icon-btn del" onclick="delCeleb(${i})" title="Delete">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 // ── EBOOKS ──────────────────────────────────────────────────────────────────
 let eImg='',eImgId='',ePdf='',ePdfId='',ePdfName='',ePdfSize=0;
@@ -1171,61 +1368,33 @@ function removePdf(){ePdf='';ePdfId='';ePdfName='';ePdfSize=0;document.getElemen
 function fmtBytes(b){if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
 function clearEbookForm(){
   document.getElementById('editEbookIdx').value=-1;document.getElementById('ebFormTitle').textContent='Add eBook';
-['ebTitle','ebTag','ebPrice','ebPriceInr','ebOrig','ebOrigInr','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
+  ['ebTitle','ebTag','ebPrice','ebPriceInr','ebOrig','ebOrigInr','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
   hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();
 }
 async function saveEbook(){
-  const id = document.getElementById('editEbookIdx').value;
-
-const eb={
-  title:v('ebTitle'),
-  tag:v('ebTag'),
-  price: v('ebPrice') ? '$'+v('ebPrice') : '',
-  priceInr: v('ebPriceInr') ? '₹'+v('ebPriceInr') : '',
-  orig: v('ebOrig') ? '$'+v('ebOrig') : '',
-  origInr: v('ebOrigInr') ? '₹'+v('ebOrigInr') : '',
-    desc:v('ebDesc'),
-    features:v('ebFeatures').split('\n').filter(Boolean),
-    badge:v('ebBadge'),
-    img:eImg||v('ebImgUrl'),
-    imgPublicId:eImgId,
-    pdfUrl:ePdf||v('ebPdfUrl'),
-    pdfPublicId:ePdfId
+  const id=document.getElementById('editEbookIdx').value;
+  const eb={
+    title:v('ebTitle'),tag:v('ebTag'),
+    price:v('ebPrice')?'$'+v('ebPrice'):'',
+    priceInr:v('ebPriceInr')?'₹'+v('ebPriceInr'):'',
+    orig:v('ebOrig')?'$'+v('ebOrig'):'',
+    origInr:v('ebOrigInr')?'₹'+v('ebOrigInr'):'',
+    desc:v('ebDesc'),features:v('ebFeatures').split('\n').filter(Boolean),
+    badge:v('ebBadge'),img:eImg||v('ebImgUrl'),imgPublicId:eImgId,
+    pdfUrl:ePdf||v('ebPdfUrl'),pdfPublicId:ePdfId
   };
-
   try{
-    if(id != -1){
-      // 🔥 UPDATE
-      await fetch(API+"/update-ebook/"+ebooks[id]._id,{
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(eb)
-      });
-      toast("✅ eBook updated","success");
-    }else{
-      // ADD
-      await fetch(API+"/add-ebook",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(eb)
-      });
-      toast("✅ eBook added","success");
-    }
-
-    clearEbookForm();
-    await loadEbooks();
-    updateDash();
-
-  }catch{
-    toast("❌ Failed","error");
-  }
+    if(id!=-1){await fetch(API+"/update-ebook/"+ebooks[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook updated","success");}
+    else{await fetch(API+"/add-ebook",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook added","success");}
+    clearEbookForm();await loadEbooks();updateDash();
+  }catch{toast("❌ Failed","error");}
 }
 function editEbook(i){
   const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
-sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',(eb.price||'').replace(/[$₹,]/g,''));
-sv('ebPriceInr',(eb.priceInr||'').replace(/[$₹,]/g,''));
-sv('ebOrig',(eb.orig||'').replace(/[$₹,]/g,''));
-sv('ebOrigInr',(eb.origInr||'').replace(/[$₹,]/g,''));;sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
+  sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',(eb.price||'').replace(/[$₹,]/g,''));
+  sv('ebPriceInr',(eb.priceInr||'').replace(/[$₹,]/g,''));sv('ebOrig',(eb.orig||'').replace(/[$₹,]/g,''));
+  sv('ebOrigInr',(eb.origInr||'').replace(/[$₹,]/g,''));sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));
+  sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
   if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}
   if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';sv('ebPdfUrl',eb.pdfUrl);ePdfName=eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}
   scrollToAdd('ebAdd');
@@ -1271,38 +1440,11 @@ function clearAchForm(){
   hidePrev('achImgPreview');aImg='';aImgId='';
 }
 async function saveAchievement(){
-  const id = document.getElementById('editAchIdx').value;
-
-  const ac={
-    title:v('achTitle'),
-    type:v('achType'),
-    org:v('achOrg'),
-    date:v('achDate'),
-    desc:v('achDesc'),
-    img:aImg||v('achImgUrl'),
-    imgPublicId:aImgId,
-    link:v('achLink')
-  };
-
-  if(id != -1){
-    await fetch(API+"/update-achievement/"+achievements[id]._id,{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(ac)
-    });
-    toast("✅ Updated","success");
-  }else{
-    await fetch(API+"/add-achievement",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(ac)
-    });
-    toast("✅ Added","success");
-  }
-
-  clearAchForm();
-  await loadAchievements();
-  updateDash();
+  const id=document.getElementById('editAchIdx').value;
+  const ac={title:v('achTitle'),type:v('achType'),org:v('achOrg'),date:v('achDate'),desc:v('achDesc'),img:aImg||v('achImgUrl'),imgPublicId:aImgId,link:v('achLink')};
+  if(id!=-1){await fetch(API+"/update-achievement/"+achievements[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Updated","success");}
+  else{await fetch(API+"/add-achievement",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Added","success");}
+  clearAchForm();await loadAchievements();updateDash();
 }
 function editAch(i){
   const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';
@@ -1344,56 +1486,33 @@ function previewJrnUrl(u){if(u){jImg=u;jImgId='';showPrev('jrnImgPreview',u);}}
 function clearJrnForm(){
   document.getElementById('editJrnIdx').value=-1;
   document.getElementById('jrnFormTitle').textContent='Add Journal Entry';
-  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl','jrnSource','jrnLink'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  const dateEl=document.getElementById('jrnDate');
-  if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
-  const platEl=document.getElementById('jrnPlatform');
-  if(platEl)platEl.value='default';
+  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl','jrnSource','jrnLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const dateEl=document.getElementById('jrnDate');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  const platEl=document.getElementById('jrnPlatform');if(platEl)platEl.value='default';
   hidePrev('jrnImgPreview');jImg='';jImgId='';
 }
-
 async function saveJournal(){
   const id=document.getElementById('editJrnIdx').value;
   const jr={
-    title:v('jrnTitle'),
-    cat:v('jrnCat'),
-    date:v('jrnDate'),
-    mood:v('jrnMood'),
-    excerpt:v('jrnExcerpt'),
-    content:v('jrnContent'),
+    title:v('jrnTitle'),cat:v('jrnCat'),date:v('jrnDate'),mood:v('jrnMood'),
+    excerpt:v('jrnExcerpt'),content:v('jrnContent'),
     tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
-    img:jImg||v('jrnImgUrl'),
-    imgPublicId:jImgId,
-    source:v('jrnSource'),          /* ✅ NEW */
-    platform:v('jrnPlatform'),      /* ✅ NEW */
-    link:v('jrnLink')               /* ✅ NEW */
+    img:jImg||v('jrnImgUrl'),imgPublicId:jImgId,
+    source:v('jrnSource'),platform:v('jrnPlatform'),link:v('jrnLink')
   };
   try{
-    if(id!=-1){
-      await fetch(API+"/update-journal/"+journal[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});
-      toast("✅ Updated","success");
-    }else{
-      await fetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});
-      toast("✅ Added","success");
-    }
+    if(id!=-1){await fetch(API+"/update-journal/"+journal[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Updated","success");}
+    else{await fetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Added","success");}
     clearJrnForm();await loadJournal();updateDash();
   }catch{toast("❌ Failed","error");}
 }
- 
 function editJrn(i){
   const jr=journal[i];
   document.getElementById('editJrnIdx').value=i;
   document.getElementById('jrnFormTitle').textContent='Edit Entry';
-  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);
-  sv('jrnMood',jr.mood);sv('jrnExcerpt',jr.excerpt||'');
-  sv('jrnContent',jr.content||'');sv('jrnTags',(jr.tags||[]).join(', '));
-  sv('jrnImgUrl',jr.img||'');
-  /* ✅ NEW fields */
-  sv('jrnSource',jr.source||'');
-  sv('jrnPlatform',jr.platform||'default');
-  sv('jrnLink',jr.link||'');
+  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);sv('jrnMood',jr.mood);
+  sv('jrnExcerpt',jr.excerpt||'');sv('jrnContent',jr.content||'');sv('jrnTags',(jr.tags||[]).join(', '));
+  sv('jrnImgUrl',jr.img||'');sv('jrnSource',jr.source||'');sv('jrnPlatform',jr.platform||'default');sv('jrnLink',jr.link||'');
   if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}
   scrollToAdd('jrnAdd');
 }
@@ -1433,34 +1552,23 @@ function renderJrn(){
 
 // ── CAL.COM ─────────────────────────────────────────────────────────────────
 let allBk=[],bkFilter='all';
-function initBookings() {
-  const connected = localStorage.getItem('cal_connected');
-  if (connected) {
-    document.getElementById('calSetup').style.display = 'none';
-    fetchBookings();
-  }
-}
-async function connectCal(silent = false) {
-  const key = document.getElementById('calApiKey').value.trim();
-  if (!key) { toast('Please enter your Cal.com API key', 'error'); return; }
-
-  // Only store a flag — never the key itself
-  localStorage.setItem('cal_connected', 'true');
-  localStorage.setItem('cal_user', document.getElementById('calUsername').value.trim());
-
-  if (!silent) toast('Connecting…', 'info');
+function initBookings(){const connected=localStorage.getItem('cal_connected');if(connected){document.getElementById('calSetup').style.display='none';fetchBookings();}}
+async function connectCal(silent=false){
+  const key=document.getElementById('calApiKey').value.trim();
+  if(!key){toast('Please enter your Cal.com API key','error');return;}
+  localStorage.setItem('cal_connected','true');
+  localStorage.setItem('cal_user',document.getElementById('calUsername').value.trim());
+  if(!silent)toast('Connecting…','info');
   await fetchBookings();
 }
-function disconnectCal() {
-  confirm2('Disconnect Cal.com', 'This removes your Cal.com connection.', () => {
-    localStorage.removeItem('cal_connected');
-    localStorage.removeItem('cal_user');
-    allBk = [];
-    document.getElementById('calSetup').style.display = 'block';
-    document.getElementById('bkSummary').style.display = 'none';
-    document.getElementById('bkToolbar').style.display = 'none';
-    document.getElementById('bkWrap').innerHTML = '';
-    toast('Disconnected', 'success');
+function disconnectCal(){
+  confirm2('Disconnect Cal.com','This removes your Cal.com connection.',()=>{
+    localStorage.removeItem('cal_connected');localStorage.removeItem('cal_user');allBk=[];
+    document.getElementById('calSetup').style.display='block';
+    document.getElementById('bkSummary').style.display='none';
+    document.getElementById('bkToolbar').style.display='none';
+    document.getElementById('bkWrap').innerHTML='';
+    toast('Disconnected','success');
   });
 }
 async function fetchBookings(){
@@ -1469,16 +1577,11 @@ async function fetchBookings(){
   document.getElementById('calLoading').style.display='block';
   document.getElementById('bkWrap').innerHTML='';
   try{
-const username = localStorage.getItem('cal_user');
-
-if (!username) {
-  toast("Username missing. Reconnect Cal.com", "error");
-  return;
-}
-
-const r = await fetch(`${API}/cal/bookings?username=${username}`);
+    const username=localStorage.getItem('cal_user');
+    if(!username){toast("Username missing. Reconnect Cal.com","error");return;}
+    const r=await fetch(`${API}/cal/bookings?username=${username}`);
     if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}
-    const data=await r.json();allBk = data?.data?.bookings || [];
+    const data=await r.json();allBk=data?.data?.bookings||[];
     document.getElementById('calSetup').style.display='none';
     document.getElementById('bkSummary').style.display='grid';
     document.getElementById('bkToolbar').style.display='flex';
@@ -1527,14 +1630,14 @@ function changePwd(){
   toast('✓ Password updated','success');['curPwd','newPwd','confPwd'].forEach(id=>sv(id,''));
 }
 function exportData(){
-  const d={testimonials,ebooks,achievements,journal,exportedAt:new Date().toISOString()};
+  const d={testimonials,celebrities,ebooks,achievements,journal,exportedAt:new Date().toISOString()};
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='adg-export.json';a.click();
   toast('✓ Data exported','success');
 }
 function confirmReset(){
   confirm2('Reset All Data','This will delete ALL content. Cannot be undone.',()=>{
-    testimonials=[];ebooks=[];achievements=[];journal=[];
-    renderTests();renderEbooks();renderAch();renderJrn();updateDash();
+    testimonials=[];celebrities=[];ebooks=[];achievements=[];journal=[];
+    renderTests();renderCelebs();renderEbooks();renderAch();renderJrn();updateDash();
     toast('Data reset','success');
   });
 }

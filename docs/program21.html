@@ -313,9 +313,8 @@ footer span{color:var(--gold);}
               <div class="sessions-bar"><div class="sessions-dot"></div><span>21 Days · 3 × 60-min Sessions + Daily Guidance</span></div>
               <div class="price-block">
                 <div class="scarcity-badge">🔥 Only 3 slots left</div>
-                <span class="sale-price">₹70,000</span>
-                <span class="per-program">/ $769.99 per program</span>
-                <span class="orig-price-line">₹1,05,000 / $1127.93 value</span>
+<span class="sale-price price-main">₹70,000</span>
+<span class="orig-price-line price-original">₹1,05,000</span>
               </div>
               <div class="focus-tag">Attract &amp; Secure Your Person</div>
               <span class="section-title">This is for you if…</span>
@@ -344,9 +343,8 @@ footer span{color:var(--gold);}
               <div class="sessions-bar"><div class="sessions-dot"></div><span>21 Days · 3 × 60-min Sessions + Daily Guidance</span></div>
               <div class="price-block">
                 <div class="scarcity-badge">🔥 Only 3 slots left</div>
-                <span class="sale-price">₹70,000</span>
-                <span class="per-program">/ $769.99 per program</span>
-                <span class="orig-price-line">₹1,05,000 / $1127.93 value</span>
+<span class="sale-price price-main">₹70,000</span>
+<span class="orig-price-line price-original">₹1,05,000</span>
               </div>
               <div class="focus-tag">Richest Career Timeline</div>
               <span class="section-title">This is for you if…</span>
@@ -375,9 +373,8 @@ footer span{color:var(--gold);}
               <div class="sessions-bar"><div class="sessions-dot"></div><span>21 Days · 3 × 60-min Sessions + Daily Guidance</span></div>
               <div class="price-block">
                 <div class="scarcity-badge">🔥 Only 3 slots left</div>
-                <span class="sale-price">₹70,000</span>
-                <span class="per-program">/ $769.99 per program</span>
-                <span class="orig-price-line">₹1,05,000 / $1127.93 value</span>
+<span class="sale-price price-main">₹70,000</span>
+<span class="orig-price-line price-original">₹1,05,000</span>
               </div>
               <div class="focus-tag">Complete Life Transformation</div>
               <span class="section-title">This is for you if…</span>
@@ -463,10 +460,42 @@ let p21CustomerEmail = '', p21CustomerName = '';
 let userCountry = 'IN';
 fetch('https://ipapi.co/json/')
   .then(r => r.json())
-  .then(d => { userCountry = d.country_code || 'IN'; })
-  .catch(() => {});
+  .then(d => {
+    userCountry = d.country_code || 'IN';
+    updatePrices(); // 🔥 ADD THIS
+  })
+  .catch(() => {
+    updatePrices(); // fallback
+  });
 
 function isIndian() { return userCountry === 'IN'; }
+const PRICE_DATA = {
+  inr: {
+    main: "₹70,000",
+    original: "₹1,05,000"
+  },
+  usd: {
+    main: "$769.99",
+    original: "$1127.93"
+  }
+};
+
+function updatePrices() {
+  const mains = document.querySelectorAll(".price-main");
+  const originals = document.querySelectorAll(".price-original");
+
+  mains.forEach(el => {
+    el.textContent = isIndian() 
+      ? PRICE_DATA.inr.main 
+      : PRICE_DATA.usd.main;
+  });
+
+  originals.forEach(el => {
+    el.textContent = isIndian() 
+      ? PRICE_DATA.inr.original 
+      : PRICE_DATA.usd.original;
+  });
+}
 
 // Cursor
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
@@ -528,20 +557,30 @@ async function p21StartPayment() {
   await fetch(`${API_BASE}/ebooks`).catch(() => {});
 
   try {
-    const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: PROGRAM_AMOUNT,
-        currency: 'INR',
-        category: p21Name,
-        tier: p21Slug,
-        tierName: '21-Day Program'
-      })
-    });
+const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    amount: Number(PROGRAM_AMOUNT), // 🔥 FIX
+    currency: 'INR',
+    category: p21Name || '21-Day Program', // 🔥 FIX
+    tier: p21Slug || 'default', // 🔥 FIX
+    tierName: '21-Day Program'
+  })
+});
 
-    const order = await res.json();
-    if (!order.orderId) throw new Error(order.error || 'Could not create order');
+const text = await res.text(); // 🔥 DEBUG
+let order;
+
+try {
+  order = JSON.parse(text);
+} catch {
+  throw new Error("Server error: " + text);
+}
+
+if (!order.orderId) {
+  throw new Error(order.error || 'Order creation failed');
+}
 
     const calUrl = CAL_21_URLS[p21Slug] || `https://cal.com/${CAL_USER}`;
 
@@ -600,7 +639,7 @@ handler: async function (response) {
 
 function p21ResetBtn() {
   const btn = document.getElementById('p21PayBtn');
-  if (btn) { btn.classList.remove('loading'); btn.textContent = '🔒 Pay ₹70,000 & Book Program'; }
+  if (btn) { btn.classList.remove('loading');btn.textContent = `🔒 Pay ${isIndian() ? '₹70,000' : '$769.99 USD'} & Book Program`; }
 }
 
 function p21ShowSuccess(paymentId, calUrl) {

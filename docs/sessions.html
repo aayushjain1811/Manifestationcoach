@@ -312,6 +312,11 @@ fetch('https://ipapi.co/json/')
   .catch(() => {});
 
 function isIndian() { return userCountry === 'IN'; }
+const PRICE_MAP = {
+  gold: { inr: "₹21,000", usd: "$250" },
+  diamond: { inr: "₹27,000", usd: "$320" },
+  platinum: { inr: "₹35,000", usd: "$386" }
+};
 
 // Cursor
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
@@ -366,7 +371,11 @@ function renderTiers(catSlug) {
             <span class="tier-gem">${t.gem}</span>
             <span class="tier-name">${t.name}</span>
             <span class="tier-duration">⏱ ${t.duration}</span>
-            <div class="tier-price-row"><span class="tier-price-inr">${t.inr}</span><span class="tier-price-usd">/ ${t.usd}</span></div>
+            <div class="tier-price-row">
+  <span class="tier-price-inr">
+    ${isIndian() ? t.inr : t.usd}
+  </span>
+</div>
             <span class="tier-focus">Focus: ${t.focus}</span>
           </div>
           <span class="tier-includes">What's Included</span>
@@ -430,48 +439,82 @@ async function startPayment() {
     });
     const order = await res.json();
     if (!order.orderId) throw new Error(order.error || 'Could not create order');
+const options = {
+  key: RAZORPAY_KEY,
+  amount: order.amount,
+  currency: order.currency,
+  name: 'Akshita Dayma Goel',
+  description: `${bCat.name} — ${bTier.name} Session (${bTier.price})`,
+  image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
+  order_id: order.orderId,
 
-    const options = {
-      key: RAZORPAY_KEY,
-      amount: order.amount,
-      currency: order.currency,
-      name: 'Akshita Dayma Goel',
-      description: `${bCat.name} — ${bTier.name} Session (${bTier.price})`,
-      image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
-      order_id: order.orderId,
-handler: async function (response) {
-        const calUrl = (CAL_URLS[bCat.slug] || {})[bTier.slug] || `https://cal.com/${CAL_USER}`;
-        const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...response,
-            calUrl,
-            customerEmail: sessionCustomerEmail,
-            customerName: sessionCustomerName,
-            programName: `${bCat.name} — ${bTier.name} Session`,
-            amount: isIndian() ? bTier.price : bTier.usd
-          })
-        });
-        const result = await verify.json();
-        if (result.success) {
-          paymentDone = true;
-          currentCalUrl = calUrl;
-          showPaymentSuccess(response.razorpay_payment_id, calUrl);
-        } else {
-          showToast('⚠️ Payment verification failed. Contact support.');
-          resetPayBtn();
+  handler: async function (response) {
+    const calUrl = (CAL_URLS[bCat.slug] || {})[bTier.slug] || `https://cal.com/${CAL_USER}`;
+
+    const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...response,
+        calUrl,
+        customerEmail: sessionCustomerEmail,
+        customerName: sessionCustomerName,
+        programName: `${bCat.name} — ${bTier.name} Session`,
+        amount: isIndian() ? bTier.price : bTier.usd
+      })
+    });
+
+    const result = await verify.json();
+
+    if (result.success) {
+      paymentDone = true;
+      currentCalUrl = calUrl;
+      showPaymentSuccess(response.razorpay_payment_id, calUrl);
+    } else {
+      showToast('⚠️ Payment verification failed.');
+      resetPayBtn();
+    }
+  },
+
+  prefill: {
+    name: sessionCustomerName,
+    email: sessionCustomerEmail
+  },
+
+  theme: { color: '#c9a84c' },
+
+  modal: {
+    ondismiss: function () {
+      showToast('Payment cancelled.');
+      resetPayBtn();
+    }
+  },
+
+  // 🔥 THIS IS THE MAIN FEATURE
+  config: {
+    display: {
+     blocks: {
+  banks: {
+          name: "Payment Options",
+          instruments: isIndian()
+            ? [
+                { method: "upi" },
+                { method: "card" },
+                { method: "netbanking" },
+                { method: "wallet" }
+              ]
+            : [
+                { method: "card" } // 🌍 ONLY CARD FOR INTERNATIONAL
+              ]
         }
       },
-      prefill: { name: sessionCustomerName, email: sessionCustomerEmail, contact: '' },
-      theme: { color: '#c9a84c' },
-      modal: {
-        ondismiss: function () {
-          showToast('Payment cancelled.');
-          resetPayBtn();
-        }
+      sequence: ["block.banks"],
+      preferences: {
+        show_default_blocks: false
       }
-    };
+    }
+  }
+};
 
     const rzp = new Razorpay(options);
     rzp.on('payment.failed', function (response) {
@@ -559,7 +602,7 @@ async function renderPayGate() {
         </div>
         <div class="pgd-item">
           <span class="pgd-label">Session</span>
-          <span class="pgd-val">${bTier.name} · ${bTier.duration || ''}</span>
+          <span class="pgd-val">${bTier.name}</span>
         </div>
         <div class="pgd-item">
           <span class="pgd-label">Amount</span>
@@ -578,11 +621,26 @@ async function renderPayGate() {
         By proceeding, you agree that this is a commitment to your transformation journey.
         Sessions are non-transferable. Please ensure you are ready to fully commit before purchasing.
       </div>
-
+      ${!isIndian() ? `
+  <div style="background:rgba(126,200,227,.08);
+              border:1px solid rgba(126,200,227,.3);
+              padding:.8rem;
+              margin-bottom:1rem;
+              font-size:.75rem;
+              color:#b8e6f5;">
+    🌍 International Payments: Only card payments are supported.
+  </div>
+` : ''}
       <button class="pay-btn" id="payBtn" onclick="startPayment()">
         🔒 Pay ${displayPrice} & Book Session
       </button>
-      <div class="pay-note">Secured by Razorpay · UPI, Cards, Net Banking, Wallets · International cards accepted</div>
+      <div class="pay-note">
+  ${
+    isIndian()
+      ? "UPI · Cards · Net Banking · Wallets available"
+      : "International cards only (Visa / Mastercard / Amex)"
+  }
+</div>
     </div>`;
 }
 

@@ -48,7 +48,7 @@ nav{position:fixed;top:0;width:100%;z-index:800;padding:1.1rem 5%;transition:all
 nav.scrolled{padding:.7rem 5%;background:rgba(7,10,26,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
 .nw{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);text-decoration:none;}
-.nl{display:flex;gap:1.6rem;list-style:none;align-items:center;}
+.nl{display:flex;gap:1.4rem;list-style:none;align-items:center;}
 .nl a{color:var(--muted);text-decoration:none;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;transition:color .3s;position:relative;}
 .nl a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s;}
 .nl a:hover{color:var(--gold-light);}.nl a:hover::after{width:100%;}
@@ -233,105 +233,200 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .sn{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);display:block;line-height:1;margin-bottom:.25rem;}
 .slb{font-size:.68rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;}
 
-/* ═══════════════════════════════════
-   ── ACHIEVEMENTS — FIXED FRAMES ──
-   All cards same height, images fill 
-   frame properly regardless of aspect
-   ═══════════════════════════════════ */
-.awg{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1.4rem;
-  align-items:start; /* each card sizes to its own content */
-}
-.awc{
-  background:var(--glass);
-  border:1px solid var(--border);
-  border-radius:6px;
-  overflow:hidden;
-  transition:all .4s cubic-bezier(.16,1,.3,1);
-  position:relative;
-  cursor:default;
-  display:flex;
-  flex-direction:column;
-}
-.awc::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:0;transition:opacity .4s;
-}
-.awc:hover{
-  border-color:rgba(201,168,76,.45);
-  transform:translateY(-6px);
-  background:rgba(201,168,76,.04);
-  box-shadow:0 20px 40px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.1);
-}
+/* ── ACHIEVEMENTS ── */
+.awg{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;align-items:start;}
+.awc{background:var(--glass);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;cursor:default;display:flex;flex-direction:column;}
+.awc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
+.awc:hover{border-color:rgba(201,168,76,.45);transform:translateY(-6px);background:rgba(201,168,76,.04);box-shadow:0 20px 40px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.1);}
 .awc:hover::before{opacity:1;}
-
-/* ── IMAGE FRAME ── fixed 4:3 ratio so all photos fill uniformly */
-.aw-photo-area{
-  width:100%;
-  aspect-ratio:4/3; /* consistent frame regardless of uploaded image orientation */
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(160deg,var(--dark2),var(--purple));
-  flex-shrink:0;
-}
-.aw-photo-area img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;       /* fill the frame, crop edges */
-  object-position:center top; /* focus on top-center (face / award) */
-  display:block;
-  transition:transform .6s ease;
-}
+.aw-photo-area{width:100%;aspect-ratio:4/3;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--dark2),var(--purple));flex-shrink:0;}
+.aw-photo-area img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .6s ease;}
 .awc:hover .aw-photo-area img{transform:scale(1.06);}
-.aw-photo-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 45%,rgba(7,10,26,.75) 100%);
-}
-.aw-photo-empty{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:.4rem;
-}
-.aw-year-badge{
-  position:absolute;top:10px;right:10px;
-  background:rgba(201,168,76,.92);color:var(--dark);
-  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  padding:.25rem .65rem;border-radius:2px;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-
-/* ── CARD BODY ── */
-.aw-body{
-  padding:1.1rem 1.2rem 1.3rem;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
+.aw-photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(7,10,26,.75) 100%);}
+.aw-photo-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;}
+.aw-year-badge{position:absolute;top:10px;right:10px;background:rgba(201,168,76,.92);color:var(--dark);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .65rem;border-radius:2px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.aw-body{padding:1.1rem 1.2rem 1.3rem;flex:1;display:flex;flex-direction:column;}
 .awi{font-size:1.2rem;display:block;margin-bottom:.45rem;}
-.awc h3{
-  font-size:.9rem;color:var(--gold-light);font-weight:500;
-  margin-bottom:.25rem;line-height:1.35;
-}
-.awc .aw-org{
-  font-size:.72rem;color:var(--muted);line-height:1.45;
-  margin-bottom:.6rem;flex:1;
-}
-.aw-ribbon{
-  display:inline-flex;align-items:center;gap:.3rem;
-  padding:.22rem .65rem;border:1px solid rgba(201,168,76,.25);
-  border-radius:2px;font-size:.6rem;color:var(--gold);
-  letter-spacing:.1em;text-transform:uppercase;
-  align-self:flex-start;margin-top:auto;
-}
+.awc h3{font-size:.9rem;color:var(--gold-light);font-weight:500;margin-bottom:.25rem;line-height:1.35;}
+.awc .aw-org{font-size:.72rem;color:var(--muted);line-height:1.45;margin-bottom:.6rem;flex:1;}
+.aw-ribbon{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .65rem;border:1px solid rgba(201,168,76,.25);border-radius:2px;font-size:.6rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;align-self:flex-start;margin-top:auto;}
 .aw-ribbon::before{content:'🏅';font-size:.7rem;}
-
 .mb{margin-top:2rem;padding:1.3rem 2rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;text-align:center;}
 .mb p{font-size:.82rem;color:var(--muted);line-height:1.9;}
+
+/* ══════════════════════════════════════
+   ── CELEBRITIES SECTION (NEW) ──
+   ══════════════════════════════════════ */
+#celebrities{
+  padding:5.5rem 5%;
+  position:relative;
+  background:linear-gradient(170deg,rgba(21,14,53,.35) 0%,rgba(7,10,26,1) 50%,rgba(21,14,53,.2) 100%);
+}
+#celebrities::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* masonry-inspired asymmetric grid */
+.celeb-grid{
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.2rem;
+}
+/* featured (bigger) cells */
+.celeb-grid .celeb-card:nth-child(1){grid-column:span 2;grid-row:span 2;}
+.celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
+
+.celeb-card{
+  position:relative;
+  border-radius:6px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:linear-gradient(160deg,var(--dark2),var(--purple));
+  cursor:pointer;
+  transition:all .45s cubic-bezier(.16,1,.3,1);
+  display:flex;
+  flex-direction:column;
+}
+.celeb-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(7,10,26,.95) 0%,rgba(7,10,26,.45) 45%,transparent 70%);
+  z-index:2;transition:opacity .4s;
+}
+.celeb-card:hover{
+  border-color:rgba(201,168,76,.55);
+  transform:translateY(-6px) scale(1.015);
+  box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.18),0 0 40px rgba(201,168,76,.08);
+}
+.celeb-card:hover::before{background:linear-gradient(to top,rgba(7,10,26,.98) 0%,rgba(7,10,26,.55) 45%,transparent 75%);}
+
+/* photo */
+.celeb-photo-wrap{
+  width:100%;
+  /* standard cells: 3:4, featured spans keep proportion via aspect-ratio on inner */
+  aspect-ratio:3/4;
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.celeb-card:nth-child(1) .celeb-photo-wrap,
+.celeb-card:nth-child(5) .celeb-photo-wrap{
+  aspect-ratio:16/10;
+}
+.celeb-photo-wrap img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+  transition:transform .7s cubic-bezier(.16,1,.3,1);
+}
+.celeb-card:hover .celeb-photo-wrap img{transform:scale(1.07);}
+.celeb-photo-empty{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:.5rem;
+}
+.celeb-photo-empty .ce-icon{font-size:3rem;}
+.celeb-photo-empty .ce-hint{font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-transform:uppercase;}
+
+/* animated shimmer border on hover */
+.celeb-card::after{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:6px;
+  background:conic-gradient(from var(--celeb-angle,0deg),transparent 70%,rgba(201,168,76,.6) 80%,transparent 90%);
+  opacity:0;z-index:1;
+  transition:opacity .4s;
+  pointer-events:none;
+}
+.celeb-card:hover::after{opacity:1;animation:celShimmer 2.5s linear infinite;}
+@keyframes celShimmer{to{--celeb-angle:360deg;}}
+/* CSS custom property animation support fallback */
+@property --celeb-angle{syntax:'<angle>';inherits:false;initial-value:0deg;}
+
+/* overlay content */
+.celeb-info{
+  position:absolute;bottom:0;left:0;right:0;
+  z-index:3;padding:1.2rem 1.4rem 1.3rem;
+}
+.celeb-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;color:#fff;font-weight:500;
+  margin-bottom:.2rem;line-height:1.2;
+}
+.celeb-card:nth-child(1) .celeb-name,
+.celeb-card:nth-child(5) .celeb-name{font-size:1.55rem;}
+.celeb-desc{font-size:.72rem;color:var(--muted);margin-bottom:.65rem;line-height:1.5;}
+.celeb-tag{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;
+  padding:.22rem .7rem;
+  background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.35);
+  border-radius:2px;color:var(--gold);font-weight:600;
+}
+
+/* view overlay */
+.celeb-view-btn{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.8);
+  z-index:4;
+  background:rgba(7,10,26,.9);
+  border:1px solid rgba(201,168,76,.6);
+  border-radius:50%;
+  width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  color:var(--gold);
+  opacity:0;
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+.celeb-card:hover .celeb-view-btn{opacity:1;transform:translate(-50%,-50%) scale(1);}
+
+/* top accent line */
+.celeb-card .celeb-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  z-index:3;opacity:0;transition:opacity .4s;
+}
+.celeb-card:hover .celeb-accent{opacity:1;}
+
+/* celeb-filters removed */
+
+/* count badge */
+.celeb-count-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.35rem 1rem;
+  background:rgba(201,168,76,.1);border:1px solid var(--gold-border);
+  border-radius:20px;font-size:.68rem;color:var(--gold);
+  margin-bottom:1.5rem;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* lightbox extra */
+.celeb-lb-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;color:var(--gold-light);
+  text-align:center;margin-top:.5rem;
+}
+.celeb-lb-desc{font-size:.75rem;color:var(--muted);text-align:center;}
+
+@media(max-width:1100px){
+  .celeb-grid{grid-template-columns:repeat(2,1fr);}
+  .celeb-grid .celeb-card:nth-child(1){grid-column:span 2;grid-row:span 1;}
+  .celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
+  .celeb-card:nth-child(1) .celeb-photo-wrap,
+  .celeb-card:nth-child(5) .celeb-photo-wrap{aspect-ratio:16/9;}
+}
+@media(max-width:600px){
+  .celeb-grid{grid-template-columns:1fr 1fr;}
+  .celeb-grid .celeb-card:nth-child(1){grid-column:span 2;}
+  .celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
+}
 
 /* ── JOURNAL ── */
 #journal{background:linear-gradient(160deg,rgba(21,14,53,.25) 0%,transparent 60%);}
@@ -414,13 +509,13 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .test-arrow{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;background:var(--glass);color:var(--muted);font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
 .test-arrow:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08);}
 
-/* ── LIGHTBOX ── */
+/* ── LIGHTBOX (shared) ── */
 .lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);backdrop-filter:blur(24px);z-index:3000;align-items:center;justify-content:center;padding:1rem;}
 .lb.open{display:flex;animation:lbFadeIn .25s ease;}
 @keyframes lbFadeIn{from{opacity:0;}to{opacity:1;}}
 .lb-inner{position:relative;display:flex;flex-direction:column;align-items:center;max-height:95vh;width:min(520px,90vw);animation:lbIn .3s cubic-bezier(.16,1,.3,1);}
 @keyframes lbIn{from{opacity:0;transform:scale(.88);}to{opacity:1;transform:scale(1);}}
-.lb-img-box{width:100%;border-radius:14px;overflow:hidden;background:#0a0e1a;border:1px solid rgba(201,168,76,.3);box-shadow:0 0 0 1px rgba(201,168,76,.08),0 40px 120px rgba(0,0,0,.9);max-height:calc(95vh - 100px);overflow-y:auto;scrollbar-width:none;}
+.lb-img-box{width:100%;border-radius:14px;overflow:hidden;background:#0a0e1a;border:1px solid rgba(201,168,76,.3);box-shadow:0 0 0 1px rgba(201,168,76,.08),0 40px 120px rgba(0,0,0,.9);max-height:calc(95vh - 120px);overflow-y:auto;scrollbar-width:none;}
 .lb-img-box::-webkit-scrollbar{display:none;}
 .lb-img-box img{width:100%;height:auto;display:block;object-fit:contain;}
 .lb-no-img{padding:5rem 2rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem;min-height:300px;}
@@ -428,7 +523,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .lb-no-img p{font-size:.88rem;color:var(--muted);}
 .lb-close{position:fixed;top:1.2rem;right:1.2rem;background:rgba(10,14,28,.92);border:1px solid rgba(201,168,76,.5);color:var(--gold);width:40px;height:40px;border-radius:50%;font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 4px 20px rgba(0,0,0,.5);}
 .lb-close:hover{background:var(--gold);color:var(--dark);transform:scale(1.1);}
-.lb-label-bar{margin-top:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lb-label-bar{margin-top:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;flex-direction:column;gap:.3rem;}
 .lb-label-text{font-size:.75rem;color:var(--muted);letter-spacing:.07em;padding:.3rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;}
 .lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:rgba(10,14,28,.9);border:1px solid rgba(201,168,76,.4);color:var(--gold);width:48px;height:48px;border-radius:50%;cursor:pointer;transition:all .3s;font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.5);}
 .lb-prev{left:1rem;}.lb-next{right:1rem;}
@@ -499,7 +594,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 }
 @media(max-width:768px){
   body{font-size:14px;}
-  section,#choose-path-top,#choose-path-bottom{padding:3.5rem 4%;}
+  section,#choose-path-bottom{padding:3.5rem 4%;}
   nav{padding:.9rem 4%;}
   .ht h1{font-size:2.1rem;}.st{font-size:1.7rem;}.ss{font-size:.82rem;}
   .hbtns{gap:.7rem;}.btn{padding:.75rem 1.5rem;font-size:.75rem;}
@@ -514,7 +609,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   .cp-grid{grid-template-columns:1fr;}
 }
 @media(max-width:480px){
-  section,#choose-path-top,#choose-path-bottom{padding:3rem 4%;}
+  section,#choose-path-bottom{padding:3rem 4%;}
   .ht h1{font-size:1.8rem;}.awg{grid-template-columns:1fr;}
   .hero-frame-wrap{width:185px;height:235px;}.lb-prev,.lb-next{display:none;}.lb-inner{width:min(380px,94vw);}
   .mnav a{font-size:1.5rem;}.sr{grid-template-columns:repeat(2,1fr);gap:.8rem;}.sn{font-size:1.5rem;}
@@ -540,6 +635,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       <li><a href="#services-overview">Offerings</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#celebrities">Celebrities</a></li>
       <li><a href="#journal">Journal</a></li>
       <li><a href="#methodology">Methodology</a></li>
       <li><a href="#testimonials">Testimonials</a></li>
@@ -551,7 +647,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 </nav>
 <div class="mnav" id="mnav">
   <a href="#hero">Home</a><a href="#services-overview">Offerings</a><a href="#about">About</a>
-  <a href="#achievements">Achievements</a><a href="#journal">Journal</a>
+  <a href="#achievements">Achievements</a><a href="#celebrities">Celebrities</a><a href="#journal">Journal</a>
   <a href="#methodology">Methodology</a><a href="#testimonials">Testimonials</a>
   <a href="#contact">Contact</a>
   <a href="sessions.html" class="mncta">Book Session</a>
@@ -675,6 +771,44 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
+<!-- ═══════════════════════════════════
+     CELEBRITIES SECTION (NEW)
+     ═══════════════════════════════════ -->
+<section id="celebrities">
+  <div class="container">
+    <p class="sl rv">Star Connections</p>
+    <h2 class="st rv d1">With Celebrities &amp; Icons</h2>
+    <p class="ss rv d2">Trusted by Bollywood stars, industry leaders &amp; iconic personalities across India</p>
+
+    <!-- masonry grid — rendered by JS -->
+    <div class="celeb-grid" id="celebGrid"></div>
+
+    <!-- upload hint bar (visible to admin, helpful to users) -->
+    <div class="mb rv" style="margin-top:2rem;">
+      <p style="color:var(--muted);font-size:.82rem;line-height:1.9;">
+        ✦ &nbsp;Photos are managed via the admin panel. &nbsp;
+        <strong style="color:var(--gold-light);">Upload · Caption · Categorise</strong>
+        &nbsp;— your gallery updates instantly.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CELEBRITIES LIGHTBOX (separate from testimonials) -->
+<div class="lb" id="celebLB" onclick="celebLBBgClick(event)">
+  <button class="lb-close" onclick="closeCelebLB()">✕</button>
+  <button class="lb-prev" onclick="celebLBNav(-1)">‹</button>
+  <button class="lb-next" onclick="celebLBNav(1)">›</button>
+  <div class="lb-inner" style="width:min(600px,92vw);">
+    <div class="lb-img-box" id="celebLBImgBox" style="max-height:calc(95vh - 140px);border-radius:10px;"></div>
+    <div class="lb-label-bar" style="margin-top:.75rem;">
+      <div class="celeb-lb-name" id="celebLBName"></div>
+      <div class="celeb-lb-desc" id="celebLBDesc" style="margin-top:.2rem;"></div>
+    </div>
+  </div>
+  <div class="lb-counter" id="celebLBCounter">1 / 1</div>
+</div>
+
 <!-- JOURNAL -->
 <section id="journal">
   <div class="container">
@@ -715,6 +849,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
       <button class="test-cat-btn" onclick="filterTests('career',this)">💼 Career</button>
       <button class="test-cat-btn" onclick="filterTests('manifestation',this)">✨ Manifestation</button>
       <button class="test-cat-btn" onclick="filterTests('program',this)">🗓️ 21-Day Program</button>
+      <button class="test-cat-btn" onclick="filterTests('ebook',this)">📘 eBook</button>
     </div>
     <div class="test-scroll-wrap rv">
       <div class="test-scroll-track" id="testScroll"></div>
@@ -726,7 +861,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
   </div>
 </section>
 
-<!-- LIGHTBOX -->
+<!-- TESTIMONIALS LIGHTBOX -->
 <div class="lb" id="lb" onclick="lbBgClick(event)">
   <button class="lb-close" onclick="closeLB()">✕</button>
   <button class="lb-prev" onclick="lbNav(-1)">‹</button>
@@ -739,7 +874,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
 </div>
 
 <!-- CHOOSE PATH BOTTOM -->
-<div id="choose-path-bottom">
+<div id="choose-path-bottom" style="padding:5.5rem 5%;position:relative;">
   <div class="cp-wrap">
     <div class="cp-ticker-row rv">
       <div class="cp-tick-dot"></div>
@@ -817,6 +952,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:3.5rem 
     </div>
     <div class="fc"><h4>Navigate</h4><ul class="fll">
       <li><a href="#about">About</a></li><li><a href="#achievements">Achievements</a></li>
+      <li><a href="#celebrities">Celebrities</a></li>
       <li><a href="#journal">Journal</a></li><li><a href="#methodology">Methodology</a></li>
       <li><a href="#services-overview">Offerings</a></li><li><a href="#testimonials">Testimonials</a></li>
     </ul></div>
@@ -849,7 +985,7 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.le
 (function tick(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
 document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
 document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
-document.querySelectorAll('a,button,.awc,.mc,.sa,.coc,.test-card,.test-arrow,.test-cat-btn,.jrnl-card,.sov-card,.cp-card').forEach(el=>{
+document.querySelectorAll('a,button,.awc,.mc,.sa,.coc,.test-card,.test-arrow,.test-cat-btn,.jrnl-card,.sov-card,.cp-card,.celeb-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
 });
@@ -902,7 +1038,7 @@ function initChoosePath(gridId){
     c.addEventListener('mouseleave',()=>{paused=false;clearActive();idx=i;startCycle();});
     c.addEventListener('click',e=>{e.preventDefault();stopCycle();clearActive();c.classList.add('cp-active','cp-clicked');setTimeout(()=>{window.location.href=c.getAttribute('href');},340);});
   });
-  const section=document.getElementById(gridId).closest('#choose-path-top,#choose-path-bottom');
+  const section=document.getElementById(gridId)?.closest('#choose-path-bottom');
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(en=>{if(en.isIntersecting){setActive(idx);startCycle();}else{stopCycle();clearActive();}});
   },{threshold:.2});
@@ -913,10 +1049,6 @@ function initChoosePath(gridId){
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
 /* ── ACHIEVEMENTS ── */
-/*
-  Supports both legacy static data (icon/year/desc fields) 
-  and new admin data (title/org/date/type fields from MongoDB)
-*/
 const DEFAULT_ACHIEVEMENTS=[
   {title:'Life Coach of the Year 2025',desc:'Awarded by Ameesha Patel',icon:'🏆',year:'2025',img:''},
   {title:'Most Celebrated Global Manifestation Coach',desc:'Awarded by Amrita Rao',icon:'🏆',year:'2025',img:''},
@@ -932,19 +1064,15 @@ let achievementsData=DEFAULT_ACHIEVEMENTS;
 function renderAchievements(){
   const grid=document.getElementById('achievementsGrid');if(!grid)return;
   grid.innerHTML=achievementsData.map((a,i)=>{
-    /* support both admin schema (org, date, type) and legacy (desc, year, icon) */
-    const title = a.title||'';
-    const org   = a.org || a.desc || '';
-    const year  = a.date || a.year || '';
-    const icon  = a.icon || (a.type==='award'?'🏆':a.type==='milestone'?'🎯':a.type==='feature'?'📰':'📜');
-    const img   = a.img || '';
+    const title=a.title||'';
+    const org=a.org||a.desc||'';
+    const year=a.date||a.year||'';
+    const icon=a.icon||(a.type==='award'?'🏆':a.type==='milestone'?'🎯':a.type==='feature'?'📰':'📜');
+    const img=a.img||'';
     return `
     <div class="awc rv d${(i%4)+1}">
       <div class="aw-photo-area">
-        ${img
-          ?`<img src="${img}" alt="${title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-          :''
-        }
+        ${img?`<img src="${img}" alt="${title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''  }
         <div class="aw-photo-empty" ${img?'style="display:none"':''}>
           <span style="font-size:2.8rem;">${icon}</span>
           <span style="font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;">Photo</span>
@@ -962,10 +1090,114 @@ function renderAchievements(){
   }).join('');
   document.querySelectorAll('.awc').forEach(el=>ro.observe(el));
 }
-
 async function fetchAchievements(){
   try{const res=await fetch(`${API_BASE}/achievements`);if(res.ok)achievementsData=await res.json();}catch(e){}
   renderAchievements();
+}
+
+/* ════════════════════════════════════════
+   ── CELEBRITIES (NEW) ──
+   ════════════════════════════════════════ */
+
+/*
+  Default celebrity data — replace with your real photos & details.
+  When backend /celebrities endpoint exists, live data will override this.
+
+  Fields:
+    name    : Celebrity's name
+    desc    : Short description / context (e.g. "Bollywood Actress")
+    cat     : 'bollywood' | 'tv' | 'music' | 'business' | 'sport'
+    img     : path to photo (e.g. "images/celeb-ameesha.jpg")
+    tag     : optional override tag label (defaults to category label)
+    year    : optional year of the meeting
+*/
+const CAT_LABELS={bollywood:'Bollywood',tv:'TV & OTT',music:'Music',business:'Business',sport:'Sports'};
+
+const DEFAULT_CELEBS=[
+  {name:'Ameesha Patel',       desc:'Bollywood Actress · Awarded Life Coach of the Year',  cat:'bollywood', img:'images/celeb-ameesha.jpg',   year:'2025'},
+  {name:'Amrita Rao',          desc:'Bollywood Actress · Global Manifestation Award',      cat:'bollywood', img:'images/celeb-amrita.jpg',    year:'2025'},
+  {name:'Celebrity 3',         desc:'Bollywood Actor',                                     cat:'bollywood', img:'',                           year:'2024'},
+  {name:'Celebrity 4',         desc:'TV & OTT Star',                                       cat:'tv',        img:'',                           year:'2024'},
+  {name:'Celebrity 5',         desc:'Music Artist',                                        cat:'music',     img:'',                           year:'2023'},
+  {name:'Celebrity 6',         desc:'Business Leader',                                     cat:'business',  img:'',                           year:'2023'},
+  {name:'Celebrity 7',         desc:'Sports Icon',                                         cat:'sport',     img:'',                           year:'2023'},
+  {name:'Celebrity 8',         desc:'Bollywood Actress',                                   cat:'bollywood', img:'',                           year:'2022'},
+];
+
+let celebsData=DEFAULT_CELEBS;
+let celebLBIdx=0,celebLBData=[];
+
+function getFilteredCelebs(){
+  return celebsData;
+}
+
+function renderCelebs(){
+  const grid=document.getElementById('celebGrid');if(!grid)return;
+  const data=getFilteredCelebs();
+  if(!data.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted);font-size:.88rem;">No photos in this category yet.</div>`;
+    return;
+  }
+  grid.innerHTML=data.map((c,i)=>{
+    const catLabel=c.tag||CAT_LABELS[c.cat]||'Star';
+    const yearBadge=c.year?`<span style="position:absolute;top:10px;right:10px;z-index:5;background:rgba(201,168,76,.9);color:#070a1a;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.22rem .6rem;border-radius:2px;">${c.year}</span>`:'';
+    const photoContent=c.img
+      ?`<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="celeb-photo-empty" style="display:none"><div class="ce-icon">🌟</div><div class="ce-hint">photo</div></div>`
+      :`<div class="celeb-photo-empty"><div class="ce-icon">🌟</div><div class="ce-hint">Add photo via admin</div></div>`;
+    return `
+    <div class="celeb-card rv d${(i%4)+1}" onclick="openCelebLB(${i})">
+      <div class="celeb-accent"></div>
+      <div class="celeb-photo-wrap">
+        ${photoContent}
+        ${yearBadge}
+      </div>
+      <div class="celeb-view-btn">👁</div>
+      <div class="celeb-info">
+        <div class="celeb-name">${c.name}</div>
+        <div class="celeb-desc">${c.desc||''}</div>
+        <span class="celeb-tag">✦ ${catLabel}</span>
+      </div>
+    </div>`;
+  }).join('');
+  /* re-observe for reveal animations */
+  grid.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+  /* re-bind cursor hover */
+  grid.querySelectorAll('.celeb-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  });
+}
+
+/* Celebrities Lightbox */
+function openCelebLB(localIdx){
+  celebLBData=getFilteredCelebs();
+  celebLBIdx=localIdx;
+  showCelebLB();
+}
+function showCelebLB(){
+  const item=celebLBData[celebLBIdx];if(!item)return;
+  const box=document.getElementById('celebLBImgBox');
+  document.getElementById('celebLBName').textContent=item.name||'';
+  document.getElementById('celebLBDesc').textContent=item.desc||'';
+  document.getElementById('celebLBCounter').textContent=(celebLBIdx+1)+' / '+celebLBData.length;
+  if(item.img){
+    box.innerHTML=`<img src="${item.img}" alt="${item.name||''}" style="width:100%;height:auto;display:block;" onerror="this.parentElement.innerHTML='<div class=lb-no-img><span>🌟</span><p>${item.name||''}</p></div>'">`;
+  }else{
+    box.innerHTML=`<div class="lb-no-img"><span>🌟</span><p style="font-family:Cormorant Garamond,serif;font-size:1.3rem;color:var(--gold-light);margin-bottom:.5rem;">${item.name||''}</p><p>${item.desc||'Add photo via admin panel'}</p></div>`;
+  }
+  document.getElementById('celebLB').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCelebLB(){document.getElementById('celebLB').classList.remove('open');document.body.style.overflow='';}
+function celebLBNav(d){if(!celebLBData.length)return;celebLBIdx=(celebLBIdx+d+celebLBData.length)%celebLBData.length;showCelebLB();}
+function celebLBBgClick(e){if(e.target===document.getElementById('celebLB'))closeCelebLB();}
+
+async function fetchCelebs(){
+  try{
+    const res=await fetch(`${API_BASE}/celebrities`);
+    if(res.ok){const data=await res.json();if(data&&data.length)celebsData=data;}
+  }catch(e){}
+  renderCelebs();
 }
 
 /* ── JOURNAL ── */
@@ -974,10 +1206,10 @@ const catToLabel={mindset:'Mindset',love:'Love & SP',manifestation:'Manifestatio
 const DEFAULT_JOURNAL=[
   {title:'Akshita Dayma Goel Named Life Coach of the Year 2025',excerpt:'International Manifestation Coach recognised for transformational impact on over 100,000 clients across 70+ countries.',date:'March 2025',source:'Republic TV',platform:'republic',link:'#',img:''},
   {title:'How Akshita Is Changing Lives Through Manifestation Science',excerpt:'An in-depth feature on the science and spirituality behind her unique coaching methodology.',date:'Feb 2025',source:'CEO India Magazine',platform:'ceo',link:'#',img:''},
-  {title:'Top 50 Powerful Personalities in India',excerpt:'Recognised among India\'s most influential voices in personal development and spiritual coaching.',date:'Jan 2025',source:'Success India Magazine',platform:'success',link:'#',img:''},
+  {title:'Top 50 Powerful Personalities in India',excerpt:"Recognised among India's most influential voices in personal development and spiritual coaching.",date:'Jan 2025',source:'Success India Magazine',platform:'success',link:'#',img:''},
   {title:'Nari Shakti: Women Leading the World Transformation',excerpt:'Featured as a leader in women empowerment and global consciousness transformation.',date:'Dec 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''},
   {title:'The DailyHunt Interview: Manifesting Your Richest Timeline',excerpt:'A candid conversation about breaking limiting beliefs, the science of manifestation, and how to attract your dream life.',date:'Nov 2024',source:'DailyHunt',platform:'dailyhunt',link:'#',img:''},
-  {title:'Icons of Bharat: Coaches Changing India From Within',excerpt:'Celebrated as one of India\'s most impactful coaches whose work spans 70+ countries.',date:'Oct 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''}
+  {title:'Icons of Bharat: Coaches Changing India From Within',excerpt:"Celebrated as one of India's most impactful coaches whose work spans 70+ countries.",date:'Oct 2024',source:'The Indian Bulletin',platform:'india',link:'#',img:''}
 ];
 let journalData=DEFAULT_JOURNAL;
 
@@ -985,12 +1217,12 @@ function renderJournal(){
   const grid=document.getElementById('journalGrid');if(!grid)return;
   if(!journalData.length){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:.88rem;">No journal entries yet.</div>`;return;}
   grid.innerHTML=journalData.map((j,i)=>{
-    const source  = j.source||j.org||'';
-    const platform= (j.platform||'').toLowerCase()||catToPlatform[j.cat]||'default';
-    const label   = source||catToLabel[j.cat]||'Publication';
-    const link    = j.link||'#';
-    const dateStr = j.date||'';
-    const excerpt = j.excerpt||(j.content?j.content.slice(0,180)+'…':'');
+    const source=j.source||j.org||'';
+    const platform=(j.platform||'').toLowerCase()||catToPlatform[j.cat]||'default';
+    const label=source||catToLabel[j.cat]||'Publication';
+    const link=j.link||'#';
+    const dateStr=j.date||'';
+    const excerpt=j.excerpt||(j.content?j.content.slice(0,180)+'…':'');
     return `
     <div class="jrnl-card rv d${(i%3)+1}">
       <div class="jrnl-img">
@@ -1017,8 +1249,8 @@ async function fetchJournal(){
 }
 
 /* ── TESTIMONIALS ── */
-const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day'};
-const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program'};
+const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day',ebook:'eBook'};
+const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program',ebook:'career'};
 let currentFilter='all',testimonials=[];
 function filterTests(cat,btn){currentFilter=cat;document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTestimonials();}
 function renderTestimonials(){
@@ -1045,7 +1277,7 @@ async function fetchTestimonials(){
 }
 function scrollTests(dir){document.getElementById('testScroll').scrollLeft+=dir*260;}
 
-/* ── LIGHTBOX ── */
+/* ── TESTIMONIALS LIGHTBOX ── */
 let lbIdx=0,lbData=[];
 function openLBById(id){
   const filtered=currentFilter==='all'?testimonials:testimonials.filter(t=>t.cat===currentFilter);
@@ -1064,8 +1296,17 @@ function closeLB(){document.getElementById('lb').classList.remove('open');docume
 function lbNav(d){if(!lbData.length)return;lbIdx=(lbIdx+d+lbData.length)%lbData.length;showLB();}
 function lbBgClick(e){if(e.target===document.getElementById('lb'))closeLB();}
 document.addEventListener('keydown',e=>{
-  if(!document.getElementById('lb').classList.contains('open'))return;
-  if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);if(e.key==='Escape')closeLB();
+  /* celebrities LB */
+  if(document.getElementById('celebLB').classList.contains('open')){
+    if(e.key==='ArrowLeft')celebLBNav(-1);
+    if(e.key==='ArrowRight')celebLBNav(1);
+    if(e.key==='Escape')closeCelebLB();
+    return;
+  }
+  /* testimonials LB */
+  if(document.getElementById('lb').classList.contains('open')){
+    if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);if(e.key==='Escape')closeLB();
+  }
 });
 
 /* ── MODALS ── */
@@ -1085,9 +1326,9 @@ async function submitForm(e){
 
 /* ── INIT ── */
 fetchAchievements();
+fetchCelebs();
 fetchJournal();
 fetchTestimonials();
-initChoosePath('cpGridTop');
 initChoosePath('cpGridBottom');
 </script>
 </body>
