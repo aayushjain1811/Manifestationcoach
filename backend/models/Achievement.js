@@ -8,7 +8,8 @@ const achievementSchema = new mongoose.Schema({
   desc: String,
   img: String,
   imgPublicId: String,
-  link: String
+  link: String,
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Achievement", achievementSchema);

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const journalchema = new mongoose.Schema({
+const journalSchema = new mongoose.Schema({
   title: String,
   cat: String,
   date: String,
@@ -12,7 +12,8 @@ const journalchema = new mongoose.Schema({
   imgPublicId: String,
   source: String,
   platform: String,
-  link: String
+  link: String,
+  createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Journal", journalchema);
+module.exports = mongoose.model("Journal", journalSchema);

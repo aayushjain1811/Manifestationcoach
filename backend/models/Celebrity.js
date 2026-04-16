@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const CelebritySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  cat: { type: String, default: "bollywood" },   // bollywood | tv | music | business | sport | other
+  cat: { type: String, default: "bollywood" },
   desc: { type: String, default: "" },
   year: { type: String, default: "" },
-  tag: { type: String, default: "" },             // custom tag label (optional override)
+  tag: { type: String, default: "" },
   img: { type: String, default: "" },
-  imgPublicId: { type: String, default: "" },     // Cloudinary public_id for deletion
+  imgPublicId: { type: String, default: "" },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Celebrity", CelebritySchema);

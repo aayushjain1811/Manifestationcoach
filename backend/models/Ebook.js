@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const EbookSchema = new mongoose.Schema({
+const ebookSchema = new mongoose.Schema({
   title: String,
   tag: String,
   price: String,
@@ -14,7 +14,7 @@ const EbookSchema = new mongoose.Schema({
   imgPublicId: String,
   pdfUrl: String,
   pdfPublicId: String,
-  pdfOriginalName: String, // Add this field
+  pdfOriginalName: String,
   createdAt: { type: Date, default: Date.now }
 });
 
