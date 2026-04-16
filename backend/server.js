@@ -121,7 +121,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
         {
           resource_type: "raw",
           folder: "admin_uploads/pdfs",
-          public_id: `${baseName}_${timestamp}.pdf`,  // FIXED: Include .pdf extension
+          public_id: `${baseName}_${timestamp}`,  // FIXED: Include .pdf extension
           access_mode: "public",
           type: "upload",
           overwrite: true,
