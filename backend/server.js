@@ -100,44 +100,106 @@ app.post("/upload-image", upload.single("file"), async (req, res) => {
 
 // Add this to your server.js file - update the upload-pdf endpoint
 
+// Update your /upload-pdf endpoint
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No PDF uploaded" });
     
-    // Get original filename from the request
     const originalName = req.body.originalName || req.file.originalname;
-    // Clean filename for Cloudinary (remove special chars but preserve .pdf)
-    const cleanName = originalName
-      .replace(/[^\w\s.-]/g, '')
-      .replace(/\s+/g, '_')
-      .toLowerCase();
-    const baseName = cleanName.replace(/\.pdf$/i, '');
     
-    const stream = cloudinary.uploader.upload_stream(
-      { 
-        resource_type: "raw", 
-        folder: "admin_uploads/pdfs",
-        public_id: `${baseName}_${Date.now()}`,
-        use_filename: true,
-        unique_filename: false
-      },
-      (error, result) => {
-        if (error) { 
-          console.error("PDF UPLOAD ERROR:", error); 
-          return res.status(500).json({ error }); 
+    // Ensure .pdf extension
+    let fileName = originalName;
+    if (!fileName.toLowerCase().endsWith('.pdf')) {
+      fileName = fileName + '.pdf';
+    }
+    
+    const fileSize = req.file.size;
+    
+    // Check file size (max 50MB)
+    if (fileSize > 50 * 1024 * 1024) {
+      return res.status(400).json({ error: "File size exceeds 50MB limit" });
+    }
+    
+    // Clean filename for Cloudinary
+    const cleanName = fileName
+      .replace(/\.pdf$/i, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '_')
+      .substring(0, 50);
+    
+    const timestamp = Date.now();
+    const publicId = `pdfs/${cleanName}_${timestamp}`;
+    
+    // For files > 10MB, use chunked upload
+    if (fileSize > 10 * 1024 * 1024) {
+      console.log(`Large file detected (${(fileSize / 1024 / 1024).toFixed(2)}MB), using chunked upload...`);
+      
+      const base64File = req.file.buffer.toString('base64');
+      
+      const result = await cloudinary.uploader.upload_large(
+        `data:application/pdf;base64,${base64File}`,
+        {
+          resource_type: "raw",
+          folder: "admin_uploads/pdfs",
+          public_id: publicId,
+          chunk_size: 6000000,
+          timeout: 180000,
+          format: "pdf" // Force PDF format
         }
-        // Return both URL and original filename
-        res.json({ 
-          url: result.secure_url, 
-          public_id: result.public_id,
-          original_name: originalName
-        });
-      }
-    );
-    stream.end(req.file.buffer);
+      );
+      
+      res.json({ 
+        url: result.secure_url, 
+        public_id: result.public_id,
+        original_name: fileName
+      });
+    } else {
+      // For smaller files
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { 
+            resource_type: "raw", 
+            folder: "admin_uploads/pdfs",
+            public_id: publicId,
+            format: "pdf", // Force PDF format
+            use_filename: false,
+            unique_filename: true
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        stream.end(req.file.buffer);
+      });
+      
+      res.json({ 
+        url: result.secure_url, 
+        public_id: result.public_id,
+        original_name: fileName
+      });
+    }
+    
   } catch (err) {
     console.error("PDF UPLOAD ERROR:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message || "Upload failed" });
+  }
+});
+
+// Add endpoint to serve PDF with correct headers
+app.get("/serve-pdf/:public_id", async (req, res) => {
+  try {
+    const { public_id } = req.params;
+    const result = await cloudinary.api.resource(public_id, { resource_type: "raw" });
+    
+    // Set proper headers for PDF download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${result.original_filename || 'document'}.pdf"`);
+    
+    // Redirect to the actual PDF URL
+    res.redirect(result.secure_url);
+  } catch (err) {
+    res.status(404).json({ error: "PDF not found" });
   }
 });
 
