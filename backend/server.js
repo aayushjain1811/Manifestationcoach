@@ -8,11 +8,26 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const app = express();
+const allowedOrigins = [
+  "https://www.universecrets.com",
+  "https://aayushjain1811.github.io",
+  "http://localhost:3000",
+  "http://localhost:5500"
+];
+
 app.use(cors({
-  origin: ["https://www.universecrets.com"],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+
+app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -196,13 +211,22 @@ const razorpay = new Razorpay({
 app.post("/razorpay/create-session-order", async (req, res) => {
   try {
     const { amount, currency = "INR", category, tier, tierName } = req.body;
+
+    const finalAmount = Math.round(amount * 100); // works for INR + USD
+
     const order = await razorpay.orders.create({
-      amount: Math.round(amount * 100),
+      amount: finalAmount,
       currency,
       receipt: `sess_${Date.now()}`.slice(0, 40),
       notes: { category, tier, tierName }
     });
-    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
+    });
+
   } catch (e) {
     console.error("❌ Razorpay session order error:", e);
     res.status(500).json({ error: e.message });
@@ -250,14 +274,24 @@ app.post("/razorpay/verify-session", async (req, res) => {
 app.post("/razorpay/create-order", async (req, res) => {
   try {
     const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
-    const cleanText = (text) => (text || "").replace(/[^\x00-\x7F]/g, "");
+
+    const finalAmount = Math.round(amount * 100);
+
     const order = await razorpay.orders.create({
-      amount: Math.round(amount * 100),
+      amount: finalAmount,
       currency,
       receipt: `eb_${Date.now()}`.slice(0, 40),
-      notes: { ebookTitle: cleanText(ebookTitle) }
+      notes: {
+        ebookTitle: (ebookTitle || "").replace(/[^\x00-\x7F]/g, "")
+      }
     });
-    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
+    });
+
   } catch (e) {
     console.error("❌ Razorpay ebook order error:", e);
     res.status(500).json({ error: e.message });

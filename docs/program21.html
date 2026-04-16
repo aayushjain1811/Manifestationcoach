@@ -557,14 +557,19 @@ async function p21StartPayment() {
   await fetch(`${API_BASE}/ebooks`).catch(() => {});
 
   try {
+const isIntl = !isIndian();
+
+const currency = isIntl ? "USD" : "INR";
+const amount = isIntl ? PROGRAM_AMOUNT_USD : PROGRAM_AMOUNT;
+
 const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    amount: Number(PROGRAM_AMOUNT), // 🔥 FIX
-    currency: 'INR',
-    category: p21Name || '21-Day Program', // 🔥 FIX
-    tier: p21Slug || 'default', // 🔥 FIX
+    amount: amount,
+    currency: currency,
+    category: p21Name || '21-Day Program',
+    tier: p21Slug || 'default',
     tierName: '21-Day Program'
   })
 });
