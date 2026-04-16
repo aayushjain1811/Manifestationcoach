@@ -80,7 +80,7 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }
 });
 
-// ========== PDF UPLOAD ENDPOINT (FIXED - PUBLIC ACCESS) ==========
+// ========== PDF UPLOAD ENDPOINT (FIXED - WITH .pdf EXTENSION) ==========
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -89,6 +89,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
     
     const originalName = req.body.originalName || req.file.originalname;
     
+    // Validate file type
     if (req.file.mimetype !== 'application/pdf' && !originalName.toLowerCase().endsWith('.pdf')) {
       return res.status(400).json({ error: "File must be a PDF" });
     }
@@ -100,25 +101,31 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
     
-    const cleanName = originalName
-      .replace(/\.pdf$/i, '')
+    // Clean filename for Cloudinary - PRESERVE .pdf extension
+    const baseName = originalName
+      .replace(/\.pdf$/i, '')  // Remove existing .pdf temporarily
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '_')
       .substring(0, 50);
     
     const timestamp = Date.now();
-    const publicId = `${cleanName}_${timestamp}`;
+    // CRITICAL: Add .pdf extension to the public ID
+    const publicIdWithExt = `admin_uploads/pdfs/${baseName}_${timestamp}.pdf`;
     
-    // Upload with PUBLIC access
+    console.log(`📁 Uploading with public ID: ${publicIdWithExt}`);
+    
+    // Upload to Cloudinary with public access
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "raw",
           folder: "admin_uploads/pdfs",
-          public_id: publicId,
+          public_id: `${baseName}_${timestamp}.pdf`,  // MUST include .pdf extension
           access_mode: "public",
           type: "upload",
           overwrite: true,
+          use_filename: false,
+          unique_filename: false,
           invalidate: true
         },
         (error, uploadResult) => {
@@ -137,16 +144,33 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // Construct correct URL with /raw/upload/
-    const pdfUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/admin_uploads/pdfs/${publicId}.pdf`;
+    // Construct the correct URL with /raw/upload/ and .pdf extension
+    let pdfUrl = result.secure_url;
+    
+    // Ensure URL uses /raw/upload/ instead of /upload/
+    if (pdfUrl.includes('/upload/') && !pdfUrl.includes('/raw/upload/')) {
+      pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
+    }
+    
+    // Ensure URL ends with .pdf
+    if (!pdfUrl.endsWith('.pdf')) {
+      pdfUrl = pdfUrl + '.pdf';
+    }
+    
+    // Ensure public_id has .pdf extension
+    let publicId = result.public_id;
+    if (!publicId.endsWith('.pdf')) {
+      publicId = publicId + '.pdf';
+    }
     
     console.log(`✅ PDF uploaded successfully: ${pdfUrl}`);
-    console.log(`📁 Public ID: ${result.public_id}`);
+    console.log(`📁 Public ID: ${publicId}`);
+    console.log(`📄 Original Name: ${originalName}`);
     
     res.json({
       success: true,
       url: pdfUrl,
-      public_id: result.public_id,
+      public_id: publicId,
       original_name: originalName,
       size: fileSize
     });
