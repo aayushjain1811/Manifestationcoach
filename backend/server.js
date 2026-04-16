@@ -192,34 +192,93 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-// FIXED: Don't multiply amount again - frontend already sends in smallest currency unit
-app.post("/razorpay/create-session-order", async (req, res) => {
+// ============================================
+// 21-DAY PROGRAM SPECIFIC ENDPOINT
+// ============================================
+app.post("/razorpay/create-program-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", category, tier, tierName, customerCountry } = req.body;
+    const { amount, currency = "INR", programName, programType, customerCountry } = req.body;
     
-    console.log("📦 Creating order with:", { amount, currency, category, tier });
+    console.log("📦 Creating PROGRAM order with:", { amount, currency, programName, programType });
     
     // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
     
-    // amount is already in smallest currency unit (paise for INR, cents for USD)
-    const orderAmount = Math.round(amount);
+    // Convert to smallest currency unit (paise for INR, cents for USD)
+    let amountInSmallestUnit;
+    if (currency === "USD") {
+      // For USD, convert dollars to cents (multiply by 100)
+      amountInSmallestUnit = Math.round(amount * 100);
+    } else {
+      // For INR, convert rupees to paise (multiply by 100)
+      amountInSmallestUnit = Math.round(amount * 100);
+    }
+    
+    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
     
     const order = await razorpay.orders.create({
-      amount: orderAmount,
+      amount: amountInSmallestUnit,
+      currency: currency,
+      receipt: `prog_${Date.now()}`.slice(0, 40),
+      notes: { 
+        programName: programName || '21-Day Program',
+        programType: programType || '',
+        customerCountry: customerCountry || '',
+        type: '21_day_program'
+      }
+    });
+    
+    console.log("✅ Program order created:", order.id, "Amount:", order.amount, order.currency);
+    
+    res.json({ 
+      orderId: order.id, 
+      amount: order.amount, 
+      currency: order.currency 
+    });
+  } catch (e) {
+    console.error("❌ Razorpay program order error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// SESSION BOOKING ENDPOINT
+app.post("/razorpay/create-session-order", async (req, res) => {
+  try {
+    const { amount, currency = "INR", category, tier, tierName, customerCountry } = req.body;
+    
+    console.log("📦 Creating SESSION order with:", { amount, currency, category, tier });
+    
+    // Validate amount
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+    
+    // Convert to smallest currency unit
+    let amountInSmallestUnit;
+    if (currency === "USD") {
+      amountInSmallestUnit = Math.round(amount * 100);
+    } else {
+      amountInSmallestUnit = Math.round(amount * 100);
+    }
+    
+    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
+    
+    const order = await razorpay.orders.create({
+      amount: amountInSmallestUnit,
       currency: currency,
       receipt: `sess_${Date.now()}`.slice(0, 40),
       notes: { 
         category: category || '', 
         tier: tier || '', 
         tierName: tierName || '',
-        customerCountry: customerCountry || ''
+        customerCountry: customerCountry || '',
+        type: 'session_booking'
       }
     });
     
-    console.log("✅ Order created:", order.id);
+    console.log("✅ Session order created:", order.id);
     
     res.json({ 
       orderId: order.id, 
@@ -232,11 +291,52 @@ app.post("/razorpay/create-session-order", async (req, res) => {
   }
 });
 
-app.post("/razorpay/verify-session", async (req, res) => {
+// EBOOK ORDER ENDPOINT
+app.post("/razorpay/create-order", async (req, res) => {
+  try {
+    const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
+    const cleanText = (text) => (text || "").replace(/[^\x00-\x7F]/g, "");
+    
+    console.log("📦 Creating EBOOK order with:", { amount, currency, ebookId });
+    
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+    
+    // Convert to smallest currency unit
+    let amountInSmallestUnit;
+    if (currency === "USD") {
+      amountInSmallestUnit = Math.round(amount * 100);
+    } else {
+      amountInSmallestUnit = Math.round(amount * 100);
+    }
+    
+    console.log(`Converting ${amount} ${currency} to ${amountInSmallestUnit} ${currency === 'USD' ? 'cents' : 'paise'}`);
+    
+    const order = await razorpay.orders.create({
+      amount: amountInSmallestUnit,
+      currency: currency,
+      receipt: `eb_${Date.now()}`.slice(0, 40),
+      notes: { 
+        ebookTitle: cleanText(ebookTitle) || '',
+        type: 'ebook'
+      }
+    });
+    
+    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+  } catch (e) {
+    console.error("❌ Razorpay ebook order error:", e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// VERIFY PROGRAM PAYMENT
+app.post("/razorpay/verify-program", async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    
     if (expected === razorpay_signature) {
       const { customerEmail, customerName, programName, amount } = req.body;
       if (customerEmail) {
@@ -244,7 +344,47 @@ app.post("/razorpay/verify-session", async (req, res) => {
           await transporter.sendMail({
             from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
             to: customerEmail,
-            subject: `Your Booking Confirmed ✨`,
+            subject: `Your 21-Day Program Booking Confirmed ✨`,
+            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+              <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
+              <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || '21-Day Program'}</strong> is confirmed.</p>
+              <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
+                <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
+                <p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+              </div>
+              <div style="text-align:center;margin:2rem 0;">
+                <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;border-radius:4px;text-decoration:none;font-weight:600;">📅 Book Your Session</a>
+              </div>
+              <hr style="border-color:#1a1f40;margin:2rem 0;">
+              <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong></p>
+            </div>`
+          });
+        } catch(emailErr) { console.error('❌ Email error:', emailErr.message); }
+      }
+      res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
+    } else {
+      res.status(400).json({ success: false, error: "Invalid signature" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// VERIFY SESSION PAYMENT
+app.post("/razorpay/verify-session", async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl } = req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    
+    if (expected === razorpay_signature) {
+      const { customerEmail, customerName, programName, amount } = req.body;
+      if (customerEmail) {
+        try {
+          await transporter.sendMail({
+            from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+            to: customerEmail,
+            subject: `Your Session Booking Confirmed ✨`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
               <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
               <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || 'Session'}</strong> is confirmed.</p>
@@ -270,42 +410,14 @@ app.post("/razorpay/verify-session", async (req, res) => {
   }
 });
 
-// FIXED: Don't multiply amount again for ebooks
-app.post("/razorpay/create-order", async (req, res) => {
-  try {
-    const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
-    const cleanText = (text) => (text || "").replace(/[^\x00-\x7F]/g, "");
-    
-    console.log("📦 Creating ebook order with:", { amount, currency, ebookId });
-    
-    if (!amount || isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
-    }
-    
-    // amount is already in smallest currency unit
-    const orderAmount = Math.round(amount);
-    
-    const order = await razorpay.orders.create({
-      amount: orderAmount,
-      currency,
-      receipt: `eb_${Date.now()}`.slice(0, 40),
-      notes: { ebookTitle: cleanText(ebookTitle) || '' }
-    });
-    
-    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
-  } catch (e) {
-    console.error("❌ Razorpay ebook order error:", e);
-    res.status(500).json({ error: e.message });
-  }
-});
-
+// VERIFY EBOOK PAYMENT
 app.post("/razorpay/verify", async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
+    
     if (expected === razorpay_signature) {
-      // Send email for ebook purchase
       const { customerEmail, customerName, ebookTitle, pdfUrl } = req.body;
       if (customerEmail) {
         try {
