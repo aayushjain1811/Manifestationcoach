@@ -14,8 +14,8 @@ const allowedOrigins = [
   "https://aayushjain1811.github.io",
   "http://localhost:3000",
   "http://localhost:5500",
-  "http://127.0.0.1:8080",   // add this for local testing
-  "http://127.0.0.1:5500"    // add this too
+  "http://127.0.0.1:8080",
+  "http://127.0.0.1:5500"
 ];
 
 app.use(cors({
@@ -30,7 +30,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.options(/.*/, cors());  // ← the fix from before
+app.options(/.*/, cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -38,7 +38,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Serve frontend
 app.use(express.static(path.join(__dirname, "../docs")));
 
 const transporter = nodemailer.createTransport({
@@ -49,34 +48,26 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-/* ===========================
-   ✅ MongoDB Connection
-=========================== */
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch(err => console.log("❌ Mongo Error:", err));
 
-/* ===========================
-   ✅ Models
-=========================== */
+// Models
 const Testimonial = require("./models/Testimonial");
 const Ebook = require("./models/Ebook");
 const Achievement = require("./models/Achievement");
 const Journal = require("./models/Journal");
-const Celebrity = require("./models/Celebrity"); // ✅ NEW
+const Celebrity = require("./models/Celebrity");
 
-/* ===========================
-   ✅ Cloudinary Config
-=========================== */
+// Cloudinary Config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-/* ===========================
-   ✅ Multer Setup
-=========================== */
+// Multer Setup
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage,
@@ -117,9 +108,6 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   }
 });
 
-/* ===========================
-   ✅ Cloudinary Fetch
-=========================== */
 app.get("/get-images", async (req, res) => {
   try {
     const result = await cloudinary.api.resources({
@@ -149,9 +137,6 @@ app.get("/get-pdfs", async (req, res) => {
   }
 });
 
-/* ===========================
-   ✅ Delete File
-=========================== */
 app.post("/delete-file", async (req, res) => {
   try {
     const { public_id, resource_type } = req.body;
@@ -162,9 +147,7 @@ app.post("/delete-file", async (req, res) => {
   }
 });
 
-/* ===========================
-   🔥 CAL.COM
-=========================== */
+// CAL.COM
 app.get("/cal/bookings", async (req, res) => {
   const key = process.env.CAL_API_KEY;
   const username = process.env.CAL_USERNAME;
@@ -200,9 +183,7 @@ app.post("/cal/cancel/:bookingId", async (req, res) => {
   }
 });
 
-/* ===========================
-   ✅ RAZORPAY
-=========================== */
+// RAZORPAY
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
@@ -211,16 +192,40 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
+// FIXED: Don't multiply amount again - frontend already sends in smallest currency unit
 app.post("/razorpay/create-session-order", async (req, res) => {
   try {
-    const { amount, currency = "INR", category, tier, tierName } = req.body;
+    const { amount, currency = "INR", category, tier, tierName, customerCountry } = req.body;
+    
+    console.log("📦 Creating order with:", { amount, currency, category, tier });
+    
+    // Validate amount
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+    
+    // amount is already in smallest currency unit (paise for INR, cents for USD)
+    const orderAmount = Math.round(amount);
+    
     const order = await razorpay.orders.create({
-      amount: Math.round(amount * 100),
-      currency,
+      amount: orderAmount,
+      currency: currency,
       receipt: `sess_${Date.now()}`.slice(0, 40),
-      notes: { category, tier, tierName }
+      notes: { 
+        category: category || '', 
+        tier: tier || '', 
+        tierName: tierName || '',
+        customerCountry: customerCountry || ''
+      }
     });
-    res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+    
+    console.log("✅ Order created:", order.id);
+    
+    res.json({ 
+      orderId: order.id, 
+      amount: order.amount, 
+      currency: order.currency 
+    });
   } catch (e) {
     console.error("❌ Razorpay session order error:", e);
     res.status(500).json({ error: e.message });
@@ -239,12 +244,12 @@ app.post("/razorpay/verify-session", async (req, res) => {
           await transporter.sendMail({
             from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
             to: customerEmail,
-            subject: `Your 21-Day Program Booking Confirmed ✨`,
+            subject: `Your Booking Confirmed ✨`,
             html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
               <h2 style="color:#c9a84c;font-family:serif;">You're in, ${customerName || 'Beautiful Soul'}! 💫</h2>
-              <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || '21-Day Program'}</strong> is confirmed.</p>
+              <p style="color:#8e88ab;line-height:1.7;">Your payment for <strong style="color:#e8d5a3;">${programName || 'Session'}</strong> is confirmed.</p>
               <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
-                <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
+                <p style="color:#e8d5a3;margin:0;"><strong>Amount Paid:</strong> ${amount || 'Confirmed'}</p>
                 <p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
               </div>
               <div style="text-align:center;margin:2rem 0;">
@@ -265,16 +270,28 @@ app.post("/razorpay/verify-session", async (req, res) => {
   }
 });
 
+// FIXED: Don't multiply amount again for ebooks
 app.post("/razorpay/create-order", async (req, res) => {
   try {
     const { amount, currency = "INR", ebookId, ebookTitle } = req.body;
     const cleanText = (text) => (text || "").replace(/[^\x00-\x7F]/g, "");
+    
+    console.log("📦 Creating ebook order with:", { amount, currency, ebookId });
+    
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+    
+    // amount is already in smallest currency unit
+    const orderAmount = Math.round(amount);
+    
     const order = await razorpay.orders.create({
-      amount: Math.round(amount * 100),
+      amount: orderAmount,
       currency,
       receipt: `eb_${Date.now()}`.slice(0, 40),
-      notes: { ebookTitle: cleanText(ebookTitle) }
+      notes: { ebookTitle: cleanText(ebookTitle) || '' }
     });
+    
     res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
   } catch (e) {
     console.error("❌ Razorpay ebook order error:", e);
@@ -287,16 +304,38 @@ app.post("/razorpay/verify", async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest("hex");
-    if (expected === razorpay_signature) res.json({ success: true, paymentId: razorpay_payment_id });
-    else res.status(400).json({ success: false, error: "Invalid signature" });
+    if (expected === razorpay_signature) {
+      // Send email for ebook purchase
+      const { customerEmail, customerName, ebookTitle, pdfUrl } = req.body;
+      if (customerEmail) {
+        try {
+          await transporter.sendMail({
+            from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
+            to: customerEmail,
+            subject: `Your eBook Download Link ✨`,
+            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
+              <h2 style="color:#c9a84c;font-family:serif;">Thank you, ${customerName || 'Beautiful Soul'}! 💫</h2>
+              <p style="color:#8e88ab;line-height:1.7;">Your purchase of <strong style="color:#e8d5a3;">${ebookTitle || 'eBook'}</strong> is confirmed.</p>
+              <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:4px;padding:1.2rem;margin:1.5rem 0;">
+                <p style="color:#e8d5a3;margin:0;"><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+                ${pdfUrl ? `<p style="color:#e8d5a3;margin:.5rem 0 0;"><strong>Download Link:</strong> <a href="${pdfUrl}" style="color:#c9a84c;">Click here</a></p>` : ''}
+              </div>
+              <hr style="border-color:#1a1f40;margin:2rem 0;">
+              <p style="color:#8e88ab;font-size:.8rem;">With love & light ✨<br><strong style="color:#e8d5a3;">Akshita Dayma Goel</strong></p>
+            </div>`
+          });
+        } catch(emailErr) { console.error('❌ Email error:', emailErr.message); }
+      }
+      res.json({ success: true, paymentId: razorpay_payment_id });
+    } else {
+      res.status(400).json({ success: false, error: "Invalid signature" });
+    }
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-/* ===========================
-   ✅ TESTIMONIAL APIs
-=========================== */
+// TESTIMONIAL APIs
 app.post("/add-testimonial", async (req, res) => {
   const data = await Testimonial.create(req.body);
   res.json(data);
@@ -310,9 +349,7 @@ app.delete("/delete-testimonial/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-/* ===========================
-   ✅ CELEBRITY APIs  ← NEW
-=========================== */
+// CELEBRITY APIs
 app.get("/celebrities", async (req, res) => {
   try {
     const data = await Celebrity.find().sort({ createdAt: -1 });
@@ -349,9 +386,7 @@ app.delete("/delete-celebrity/:id", async (req, res) => {
   }
 });
 
-/* ===========================
-   ✅ EBOOK APIs
-=========================== */
+// EBOOK APIs
 app.post("/add-ebook", async (req, res) => {
   const data = await Ebook.create(req.body);
   res.json(data);
@@ -369,9 +404,7 @@ app.delete("/delete-ebook/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-/* ===========================
-   ✅ ACHIEVEMENTS APIs
-=========================== */
+// ACHIEVEMENTS APIs
 app.get("/achievements", async (req, res) => {
   const data = await Achievement.find();
   res.json(data);
@@ -389,9 +422,7 @@ app.delete("/delete-achievement/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-/* ===========================
-   ✅ JOURNAL APIs
-=========================== */
+// JOURNAL APIs
 app.get("/journal", async (req, res) => {
   const data = await Journal.find();
   res.json(data);
@@ -409,18 +440,17 @@ app.delete("/delete-journal/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-/* ===========================
-   ✅ CONTACT FORM API
-=========================== */
+// CONTACT FORM API
 app.post("/contact", async (req, res) => {
   try {
-    const { name, email, message } = req.body;
-    if (!name || !email || !message) return res.status(400).json({ error: "All fields required" });
+    const { firstName, lastName, email, message } = req.body;
+    const fullName = `${firstName || ''} ${lastName || ''}`.trim();
+    if (!fullName || !email || !message) return res.status(400).json({ error: "All fields required" });
     await transporter.sendMail({
       from: `"Website Contact" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
       subject: `New Contact Form Submission`,
-      html: `<div style="font-family:sans-serif;"><h2>New Contact Message</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p></div>`
+      html: `<div style="font-family:sans-serif;"><h2>New Contact Message</h2><p><strong>Name:</strong> ${fullName}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p></div>`
     });
     res.json({ success: true });
   } catch (err) {
@@ -429,9 +459,7 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-/* ===========================
-   ✅ START SERVER
-=========================== */
+// START SERVER
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
