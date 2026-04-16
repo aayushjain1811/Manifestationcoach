@@ -116,18 +116,21 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
     const publicIdWithoutExt = `admin_uploads/pdfs/${baseName}_${timestamp}`;
     
     // Upload to Cloudinary with public access
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "raw",
-          folder: "admin_uploads/pdfs",
-          public_id: `${baseName}_${timestamp}`,  // FIXED: Include .pdf extension
-          access_mode: "public",
-          type: "upload",
-          overwrite: true,
-          use_filename: false,
-          unique_filename: false
-        },
+// REPLACE WITH:
+const result = await new Promise((resolve, reject) => {
+  const uploadStream = cloudinary.uploader.upload_stream(
+    {
+      resource_type: "raw",
+      folder: "admin_uploads/pdfs",
+      public_id: `${baseName}_${timestamp}.pdf`,
+      access_mode: "public",
+      type: "upload",
+      overwrite: true,
+      use_filename: false,
+      unique_filename: false,
+      invalidate: true,           // ← ADD: clears CDN cache
+      tags: ["ebook_pdf", "public_access"],  // ← ADD: for tracking
+    },
         (error, uploadResult) => {
           if (error) {
             console.error("Cloudinary upload error:", error);
@@ -144,13 +147,19 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // The URL from Cloudinary
-    let pdfUrl = result.secure_url;
-    
-    // Ensure URL ends with .pdf
-    if (!pdfUrl.endsWith('.pdf')) {
-      pdfUrl = pdfUrl + '.pdf';
-    }
+// REPLACE WITH:
+let pdfUrl = result.secure_url;
+
+// CRITICAL: Cloudinary raw files MUST use /raw/upload/ in the URL path
+// Without this, the CDN serves 401 even for public assets
+if (pdfUrl.includes('/upload/') && !pdfUrl.includes('/raw/upload/')) {
+  pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
+}
+
+// Ensure URL ends with .pdf
+if (!pdfUrl.endsWith('.pdf')) {
+  pdfUrl = pdfUrl + '.pdf';
+}
     
     // Also ensure public_id has .pdf extension
     let publicId = result.public_id;
@@ -362,8 +371,24 @@ app.post("/razorpay/verify", async (req, res) => {
       .update(sign)
       .digest("hex");
     
-    if (expectedSignature === razorpay_signature) {
-      const { customerEmail, customerName, ebookTitle, pdfUrl, ebookId } = req.body;
+// REPLACE WITH:
+if (expectedSignature === razorpay_signature) {
+  const { customerEmail, customerName, ebookTitle, ebookId } = req.body;
+  
+  // Fetch PDF URL directly from DB — never trust what frontend sends
+  let pdfUrl = '';
+  try {
+    const ebookDoc = await Ebook.findById(ebookId);
+    if (ebookDoc?.pdfUrl) {
+      pdfUrl = ebookDoc.pdfUrl;
+      // Ensure correct Cloudinary raw URL format
+      if (pdfUrl.includes('/upload/') && !pdfUrl.includes('/raw/upload/')) {
+        pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
+      }
+    }
+  } catch (e) {
+    console.warn('Could not fetch ebook PDF URL:', e.message);
+  }
       
       console.log(`✅ Payment verified for: ${customerEmail}, eBook: ${ebookTitle}`);
       console.log(`📄 PDF URL: ${pdfUrl}`);
@@ -465,7 +490,37 @@ app.post("/razorpay/verify-program", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+// ADD THIS NEW ENDPOINT anywhere after your ebook routes:
+app.post("/fix-pdf-urls", async (req, res) => {
+  try {
+    const ebooks = await Ebook.find({ pdfUrl: { $exists: true, $ne: '' } });
+    let fixed = 0;
+    for (const ebook of ebooks) {
+      let url = ebook.pdfUrl;
+      let changed = false;
+      
+      // Fix: ensure /raw/upload/ format
+      if (url.includes('/upload/') && !url.includes('/raw/upload/')) {
+        url = url.replace('/upload/', '/raw/upload/');
+        changed = true;
+      }
+      // Fix: ensure .pdf extension
+      if (!url.endsWith('.pdf') && !url.includes('?')) {
+        url = url + '.pdf';
+        changed = true;
+      }
+      
+      if (changed) {
+        await Ebook.findByIdAndUpdate(ebook._id, { pdfUrl: url });
+        fixed++;
+        console.log(`Fixed: ${ebook.title} → ${url}`);
+      }
+    }
+    res.json({ success: true, fixed, total: ebooks.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // Verify Session Payment
 app.post("/razorpay/verify-session", async (req, res) => {
   try {
