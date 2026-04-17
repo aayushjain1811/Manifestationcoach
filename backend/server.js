@@ -439,18 +439,48 @@ app.post("/delete-file",verifyToken, async (req, res) => {
 app.get("/cal/bookings", async (req, res) => {
   const key = process.env.CAL_API_KEY;
   const username = process.env.CAL_USERNAME;
-  if (!key || !username) return res.status(500).json({ error: "Missing CAL_API_KEY or CAL_USERNAME in .env" });
+  
+  if (!key || !username) {
+    console.error("Missing CAL_API_KEY or CAL_USERNAME in .env");
+    return res.status(500).json({ error: "Missing CAL_API_KEY or CAL_USERNAME in .env" });
+  }
+  
   try {
-    const r = await fetch(`https://api.cal.com/v2/bookings?username=${username}`, {
+    console.log(`📅 Fetching bookings for username: ${username}`);
+    console.log(`🔑 Using API key: ${key.substring(0, 10)}...`);
+    
+    const url = `https://api.cal.com/v2/bookings?username=${username}`;
+    const response = await fetch(url, {
       method: "GET",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }
+      headers: { 
+        "Authorization": `Bearer ${key}`, 
+        "Content-Type": "application/json" 
+      }
     });
-    const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: "Cal API error", details: data });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Cal API error: ${response.status} - ${errorText}`);
+      return res.status(response.status).json({ 
+        error: "Cal API error", 
+        status: response.status,
+        details: errorText 
+      });
+    }
+    
+    const data = await response.json();
+    const bookingCount = data?.data?.bookings?.length || 0;
+    console.log(`✅ Successfully fetched ${bookingCount} bookings`);
+    
     res.json(data);
-  } catch (e) {
-    console.error("❌ Cal fetch error:", e);
-    res.status(500).json({ error: e.message });
+    
+  } catch (error) {
+    console.error("❌ Cal fetch error:", error.message);
+    console.error("Error stack:", error.stack);
+    res.status(500).json({ 
+      error: "Failed to fetch bookings", 
+      message: error.message 
+    });
   }
 });
 
