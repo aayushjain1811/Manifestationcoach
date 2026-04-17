@@ -7,6 +7,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const fetch = require("node-fetch");
 
 const app = express();
 
@@ -54,6 +57,50 @@ function cleanNotes(text) {
   return text.replace(/[^\x00-\x7F]/g, '').replace(/[^a-zA-Z0-9\s\-_]/g, '').trim().slice(0, 40);
 }
 
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS_HASH = process.env.ADMIN_PASS_HASH; 
+// LOGIN ROUTE
+app.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (username !== ADMIN_USER) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  const isMatch = await bcrypt.compare(password, ADMIN_PASS_HASH);
+
+  if (!isMatch) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  // Generate JWT
+  const token = jwt.sign(
+    { user: username },
+    process.env.JWT_SECRET,
+    { expiresIn: "2h" }
+  );
+
+  res.json({ token });
+});
+
+
+function verifyToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(403).json({ error: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+}
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
@@ -237,7 +284,7 @@ app.get("/download/:token", async (req, res) => {
 });
 
 // ========== PDF UPLOAD ENDPOINT ==========
-app.post("/upload-pdf", upload.single("file"), async (req, res) => {
+app.post("/upload-pdf", verifyToken, upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No PDF uploaded" });
@@ -328,7 +375,7 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
 });
 
 // ========== UPLOAD IMAGE ==========
-app.post("/upload-image", upload.single("file"), async (req, res) => {
+app.post("/upload-image",verifyToken, upload.single("file"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
     const stream = cloudinary.uploader.upload_stream(
@@ -378,7 +425,7 @@ app.get("/get-images", async (req, res) => {
 });
 
 // ========== DELETE FILE ==========
-app.post("/delete-file", async (req, res) => {
+app.post("/delete-file",verifyToken, async (req, res) => {
   try {
     const { public_id, resource_type } = req.body;
     await cloudinary.uploader.destroy(public_id, { resource_type: resource_type || "image" });
@@ -816,7 +863,7 @@ app.delete("/delete-celebrity/:id", async (req, res) => {
 });
 
 // ========== EBOOK APIs ==========
-app.post("/add-ebook", async (req, res) => {
+app.post("/add-ebook",verifyToken, async (req, res) => {
   const data = await Ebook.create(req.body);
   res.json(data);
 });
