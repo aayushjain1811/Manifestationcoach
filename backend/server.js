@@ -66,23 +66,50 @@ const Achievement = require("./models/Achievement");
 const Journal = require("./models/Journal");
 const Celebrity = require("./models/Celebrity");
 
-// ========== NEW: Download Token Model for Secure Temporary Links ==========
+// ========== Download Token Model for Secure Temporary Links ==========
 const DownloadTokenSchema = new mongoose.Schema({
-  token: { type: String, required: true, unique: true },
-  ebookId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ebook', required: true },
-  customerEmail: { type: String, required: true },
-  customerName: { type: String, default: '' },
-  paymentId: { type: String, required: true },
-  expiresAt: { type: Date, required: true },
-  used: { type: Boolean, default: false },
-  downloadCount: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now }
+  token: { 
+    type: String, 
+    required: true, 
+    unique: true  // ← This creates the unique index
+  },
+  ebookId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Ebook', 
+    required: true 
+  },
+  customerEmail: { 
+    type: String, 
+    required: true 
+  },
+  customerName: { 
+    type: String, 
+    default: '' 
+  },
+  paymentId: { 
+    type: String, 
+    required: true 
+  },
+  expiresAt: { 
+    type: Date, 
+    required: true 
+  },
+  used: { 
+    type: Boolean, 
+    default: false 
+  },
+  downloadCount: { 
+    type: Number, 
+    default: 0 
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  }
 });
 
-// Index for automatic cleanup (TTL index - expires after 30 days)
+// Only TTL index for auto-deletion (no duplicate unique index)
 DownloadTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-DownloadTokenSchema.index({ token: 1 });
-DownloadTokenSchema.index({ customerEmail: 1 });
 
 const DownloadToken = mongoose.model('DownloadToken', DownloadTokenSchema);
 
