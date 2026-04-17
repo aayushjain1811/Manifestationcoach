@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const cors = require("cors");
 const mongoose = require("mongoose");
 const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
 
@@ -65,6 +66,26 @@ const Achievement = require("./models/Achievement");
 const Journal = require("./models/Journal");
 const Celebrity = require("./models/Celebrity");
 
+// ========== NEW: Download Token Model for Secure Temporary Links ==========
+const DownloadTokenSchema = new mongoose.Schema({
+  token: { type: String, required: true, unique: true },
+  ebookId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ebook', required: true },
+  customerEmail: { type: String, required: true },
+  customerName: { type: String, default: '' },
+  paymentId: { type: String, required: true },
+  expiresAt: { type: Date, required: true },
+  used: { type: Boolean, default: false },
+  downloadCount: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now }
+});
+
+// Index for automatic cleanup (TTL index - expires after 30 days)
+DownloadTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+DownloadTokenSchema.index({ token: 1 });
+DownloadTokenSchema.index({ customerEmail: 1 });
+
+const DownloadToken = mongoose.model('DownloadToken', DownloadTokenSchema);
+
 // Cloudinary Config
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -80,7 +101,115 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }
 });
 
-// ========== PDF UPLOAD ENDPOINT (FIXED - WITH .pdf EXTENSION) ==========
+// ========== SECURE DOWNLOAD ENDPOINT ==========
+app.get("/download/:token", async (req, res) => {
+  try {
+    const { token } = req.params;
+    
+    // Find and validate token
+    const tokenDoc = await DownloadToken.findOne({ 
+      token: token,
+      expiresAt: { $gt: new Date() },
+      used: false
+    });
+    
+    if (!tokenDoc) {
+      // Check if expired or used for better error message
+      const existingToken = await DownloadToken.findOne({ token: token });
+      if (existingToken && existingToken.expiresAt <= new Date()) {
+        return res.status(410).send(`
+          <!DOCTYPE html>
+          <html>
+          <head><title>Link Expired</title></head>
+          <body style="font-family: sans-serif; text-align: center; padding: 50px; background: #070a1a; color: #eceaf6;">
+            <h1 style="color: #c9a84c;">🔗 Link Expired</h1>
+            <p>This download link has expired (valid for 24 hours only).</p>
+            <p>Please contact support to get a new link.</p>
+            <a href="/" style="color: #c9a84c;">← Back to Home</a>
+          </body>
+          </html>
+        `);
+      }
+      if (existingToken && existingToken.used) {
+        return res.status(410).send(`
+          <!DOCTYPE html>
+          <html>
+          <head><title>Link Already Used</title></head>
+          <body style="font-family: sans-serif; text-align: center; padding: 50px; background: #070a1a; color: #eceaf6;">
+            <h1 style="color: #c9a84c;">⚠️ Link Already Used</h1>
+            <p>This download link has already been used.</p>
+            <p>Links are valid for one download only to protect your purchase.</p>
+            <a href="/" style="color: #c9a84c;">← Back to Home</a>
+          </body>
+          </html>
+        `);
+      }
+      return res.status(404).send(`
+        <!DOCTYPE html>
+        <html>
+        <head><title>Invalid Link</title></head>
+        <body style="font-family: sans-serif; text-align: center; padding: 50px; background: #070a1a; color: #eceaf6;">
+          <h1 style="color: #c9a84c;">❌ Invalid Download Link</h1>
+          <p>The download link is invalid or has been tampered with.</p>
+          <a href="/" style="color: #c9a84c;">← Back to Home</a>
+        </body>
+        </html>
+      `);
+    }
+    
+    // Get ebook details
+    const ebook = await Ebook.findById(tokenDoc.ebookId);
+    if (!ebook || !ebook.pdfUrl) {
+      console.error(`❌ Ebook not found or has no PDF: ${tokenDoc.ebookId}`);
+      return res.status(404).send('Ebook file not found. Please contact support.');
+    }
+    
+    console.log(`📥 Secure download requested: ${tokenDoc.customerEmail} - ${ebook.title}`);
+    
+    // Mark token as used immediately (one-time use)
+    tokenDoc.used = true;
+    tokenDoc.downloadCount = 1;
+    await tokenDoc.save();
+    
+    // Fetch PDF from Cloudinary and stream to user
+    try {
+      const pdfResponse = await fetch(ebook.pdfUrl);
+      if (!pdfResponse.ok) {
+        throw new Error(`Failed to fetch PDF: ${pdfResponse.status}`);
+      }
+      
+      // Set headers for download
+      const safeFilename = ebook.title.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.pdf';
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"`);
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      
+      // Stream the PDF
+      pdfResponse.body.pipe(res);
+      
+      console.log(`✅ Secure download completed for: ${tokenDoc.customerEmail}`);
+      
+    } catch (streamError) {
+      console.error('❌ Error streaming PDF:', streamError);
+      // If streaming fails, try to redirect to a signed Cloudinary URL as fallback
+      const signedUrl = cloudinary.url(ebook.pdfPublicId, {
+        resource_type: 'raw',
+        secure: true,
+        sign_url: true,
+        expires_at: Math.floor(Date.now() / 1000) + 300 // 5 minutes
+      });
+      res.redirect(signedUrl);
+    }
+    
+  } catch (error) {
+    console.error('❌ Download error:', error);
+    res.status(500).send('Internal server error. Please contact support.');
+  }
+});
+
+// ========== PDF UPLOAD ENDPOINT ==========
 app.post("/upload-pdf", upload.single("file"), async (req, res) => {
   try {
     if (!req.file) {
@@ -89,7 +218,6 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
     
     const originalName = req.body.originalName || req.file.originalname;
     
-    // Validate file type
     if (req.file.mimetype !== 'application/pdf' && !originalName.toLowerCase().endsWith('.pdf')) {
       return res.status(400).json({ error: "File must be a PDF" });
     }
@@ -101,26 +229,20 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
     
-    // Clean filename for Cloudinary - PRESERVE .pdf extension
     const baseName = originalName
-      .replace(/\.pdf$/i, '')  // Remove existing .pdf temporarily
+      .replace(/\.pdf$/i, '')
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '_')
       .substring(0, 50);
     
     const timestamp = Date.now();
-    // CRITICAL: Add .pdf extension to the public ID
-    const publicIdWithExt = `admin_uploads/pdfs/${baseName}_${timestamp}.pdf`;
     
-    console.log(`📁 Uploading with public ID: ${publicIdWithExt}`);
-    
-    // Upload to Cloudinary with public access
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: "raw",
           folder: "admin_uploads/pdfs",
-          public_id: `${baseName}_${timestamp}.pdf`,  // MUST include .pdf extension
+          public_id: `${baseName}_${timestamp}.pdf`,
           access_mode: "public",
           type: "upload",
           overwrite: true,
@@ -144,28 +266,22 @@ app.post("/upload-pdf", upload.single("file"), async (req, res) => {
       throw new Error("Upload failed - no URL returned");
     }
     
-    // Construct the correct URL with /raw/upload/ and .pdf extension
     let pdfUrl = result.secure_url;
     
-    // Ensure URL uses /raw/upload/ instead of /upload/
     if (pdfUrl.includes('/upload/') && !pdfUrl.includes('/raw/upload/')) {
       pdfUrl = pdfUrl.replace('/upload/', '/raw/upload/');
     }
     
-    // Ensure URL ends with .pdf
     if (!pdfUrl.endsWith('.pdf')) {
       pdfUrl = pdfUrl + '.pdf';
     }
     
-    // Ensure public_id has .pdf extension
     let publicId = result.public_id;
     if (!publicId.endsWith('.pdf')) {
       publicId = publicId + '.pdf';
     }
     
     console.log(`✅ PDF uploaded successfully: ${pdfUrl}`);
-    console.log(`📁 Public ID: ${publicId}`);
-    console.log(`📄 Original Name: ${originalName}`);
     
     res.json({
       success: true,
@@ -266,7 +382,6 @@ app.get("/cal/bookings", async (req, res) => {
 
 // ========== RAZORPAY ==========
 const Razorpay = require("razorpay");
-const crypto = require("crypto");
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -357,7 +472,7 @@ app.post("/razorpay/create-order", async (req, res) => {
   }
 });
 
-// ========== VERIFY EBOOK PAYMENT (FIXED) ==========
+// ========== UPDATED: VERIFY EBOOK PAYMENT WITH SECURE TOKEN ==========
 app.post("/razorpay/verify", async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
@@ -370,25 +485,55 @@ app.post("/razorpay/verify", async (req, res) => {
     if (expectedSignature === razorpay_signature) {
       const { customerEmail, customerName, ebookTitle, ebookId } = req.body;
       
-      // Fetch PDF URL directly from database
+      // Fetch ebook details from database
       let pdfUrl = '';
       let pdfPublicId = '';
+      let ebookDoc = null;
+      
       try {
-        const ebookDoc = await Ebook.findById(ebookId);
+        ebookDoc = await Ebook.findById(ebookId);
         if (ebookDoc && ebookDoc.pdfUrl) {
           pdfUrl = ebookDoc.pdfUrl;
           pdfPublicId = ebookDoc.pdfPublicId;
           console.log(`📄 Retrieved PDF URL from DB: ${pdfUrl}`);
+        } else {
+          console.warn(`⚠️ No PDF found for ebook ID: ${ebookId}`);
         }
       } catch (e) {
         console.warn('Could not fetch ebook PDF URL:', e.message);
       }
       
       console.log(`✅ Payment verified for: ${customerEmail}, eBook: ${ebookTitle}`);
-      console.log(`📄 PDF URL: ${pdfUrl}`);
       
-      if (customerEmail && pdfUrl) {
-        // Send email with download link
+      let downloadLink = '';
+      let tempDownloadUrl = '';
+      
+      if (customerEmail && pdfUrl && ebookDoc) {
+        // Generate secure download token
+        const token = crypto.randomBytes(48).toString('hex');
+        const expiresAt = new Date();
+        expiresAt.setHours(expiresAt.getHours() + 24); // 24 hours expiry
+        
+        const tokenDoc = await DownloadToken.create({
+          token: token,
+          ebookId: ebookDoc._id,
+          customerEmail: customerEmail,
+          customerName: customerName || '',
+          paymentId: razorpay_payment_id,
+          expiresAt: expiresAt,
+          used: false
+        });
+        
+        // Create secure download link
+        const baseUrl = process.env.BASE_URL || `https://${req.get('host')}`;
+        downloadLink = `${baseUrl}/download/${token}`;
+        tempDownloadUrl = downloadLink;
+        
+        console.log(`🔐 Secure token created: ${token}`);
+        console.log(`🔗 Download link: ${downloadLink}`);
+        console.log(`⏰ Expires: ${expiresAt.toISOString()}`);
+        
+        // Send email with secure temporary link
         const emailHtml = `
           <div style="font-family:'DM Sans',sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;border:1px solid rgba(201,168,76,.2);border-radius:8px;">
             <div style="text-align:center;margin-bottom:2rem;">
@@ -400,20 +545,26 @@ app.post("/razorpay/verify", async (req, res) => {
               <h3 style="color:#c9a84c;margin-bottom:1rem;">${ebookTitle}</h3>
               <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
               <p><strong>Status:</strong> ✅ Completed</p>
+              <p><strong>Link valid until:</strong> ${expiresAt.toLocaleString()}</p>
             </div>
             
             <div style="text-align:center;margin:2rem 0;">
-              <a href="${pdfUrl}" 
+              <a href="${downloadLink}" 
                  style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;text-decoration:none;border-radius:4px;display:inline-block;font-weight:600;">
                 📥 Download Your eBook Now
               </a>
               <p style="font-size:0.75rem;color:#8e88ab;margin-top:1rem;">
-                If button doesn't work, copy this URL:<br>
-                <a href="${pdfUrl}" style="color:#c9a84c;word-break:break-all;">${pdfUrl}</a>
+                🔒 <strong>Secure one-time link</strong> · Valid for 24 hours only<br>
+                This link can be used only once. After downloading, it will expire immediately.
+              </p>
+              <p style="font-size:0.7rem;color:#8e88ab;margin-top:0.5rem;">
+                If the button doesn't work, copy this URL:<br>
+                <span style="word-break:break-all;color:#c9a84c;">${downloadLink}</span>
               </p>
             </div>
             
             <div style="border-top:1px solid rgba(201,168,76,.2);margin-top:2rem;padding-top:1rem;text-align:center;">
+              <p style="font-size:0.7rem;">⚠️ For security, this link expires in 24 hours and works only once.</p>
               <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
             </div>
           </div>
@@ -422,18 +573,20 @@ app.post("/razorpay/verify", async (req, res) => {
         await transporter.sendMail({
           from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
           to: customerEmail,
-          subject: `Your eBook Download Link: ${ebookTitle} ✨`,
+          subject: `🔐 Your Secure Download Link: ${ebookTitle} ✨`,
           html: emailHtml
         });
         
-        console.log(`✅ Email sent to: ${customerEmail}`);
+        console.log(`✅ Secure link email sent to: ${customerEmail}`);
+      } else {
+        console.error(`❌ Missing required data for token generation. Email: ${customerEmail}, PDF: ${!!pdfUrl}`);
       }
       
       res.json({ 
         success: true, 
         paymentId: razorpay_payment_id,
-        pdfUrl: pdfUrl,
-        message: "Payment verified and email sent"
+        tempDownloadUrl: tempDownloadUrl,
+        message: "Payment verified. Secure download link sent to email."
       });
     } else {
       console.error("❌ Invalid signature for payment");
@@ -523,6 +676,35 @@ app.post("/razorpay/verify-session", async (req, res) => {
     }
   } catch (error) {
     console.error("Verification error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ========== ADMIN: VIEW DOWNLOAD TOKENS ==========
+app.get("/admin/download-tokens", async (req, res) => {
+  try {
+    // In production, add admin authentication here
+    const tokens = await DownloadToken.find()
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .populate('ebookId', 'title');
+    res.json(tokens);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ========== CLEANUP EXPIRED TOKENS (Manual endpoint) ==========
+app.post("/admin/cleanup-tokens", async (req, res) => {
+  try {
+    const result = await DownloadToken.deleteMany({ 
+      expiresAt: { $lt: new Date() } 
+    });
+    res.json({ 
+      success: true, 
+      deletedCount: result.deletedCount 
+    });
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -684,4 +866,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`✅ Razorpay key loaded: ${process.env.RAZORPAY_KEY_ID ? "Yes" : "No"}`);
+  console.log(`✅ Secure download endpoint: /download/:token`);
+  console.log(`✅ Token expiry: 24 hours, one-time use`);
 });
