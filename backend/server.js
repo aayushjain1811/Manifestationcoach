@@ -705,7 +705,17 @@ app.post("/razorpay/verify", async (req, res) => {
 // Verify Program Payment
 app.post("/razorpay/verify-program", async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount } = req.body;
+    const { 
+      razorpay_order_id, 
+      razorpay_payment_id, 
+      razorpay_signature, 
+      calUrl, 
+      customerEmail, 
+      customerName, 
+      programName, 
+      amount,
+      sendEmail = true  // ← ADD THIS LINE
+    } = req.body;
     
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
@@ -714,7 +724,8 @@ app.post("/razorpay/verify-program", async (req, res) => {
       .digest("hex");
     
     if (expectedSignature === razorpay_signature) {
-      if (customerEmail) {
+      // Only send email if sendEmail is true
+      if (customerEmail && sendEmail === true) {
         await transporter.sendMail({
           from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
           to: customerEmail,
@@ -732,9 +743,14 @@ app.post("/razorpay/verify-program", async (req, res) => {
             <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
           </div>`
         });
+        console.log(`✅ Confirmation email sent to: ${customerEmail}`);
+      } else {
+        console.log(`📧 Email skipped for: ${customerEmail} (sendEmail = ${sendEmail})`);
       }
+      
       res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
     } else {
+      console.error("❌ Invalid signature for program payment");
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
   } catch (error) {
@@ -746,7 +762,7 @@ app.post("/razorpay/verify-program", async (req, res) => {
 // Verify Session Payment
 app.post("/razorpay/verify-session", async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount } = req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount, sendEmail = true } = req.body;
     
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
@@ -755,7 +771,7 @@ app.post("/razorpay/verify-session", async (req, res) => {
       .digest("hex");
     
     if (expectedSignature === razorpay_signature) {
-      if (customerEmail) {
+      if (customerEmail && sendEmail === true) {
         await transporter.sendMail({
           from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
           to: customerEmail,
