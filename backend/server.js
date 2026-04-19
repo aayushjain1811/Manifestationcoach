@@ -10,8 +10,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const fetch = require("node-fetch");
-const twilio = require('twilio');
-const cron = require('node-cron');
+
 
 const app = express();
 
@@ -23,10 +22,6 @@ const allowedOrigins = [
   "http://127.0.0.1:8080",
   "http://127.0.0.1:5500"
 ];
-const twilioClient = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -161,21 +156,10 @@ const DownloadTokenSchema = new mongoose.Schema({
   }
 });
 
-
 // Only TTL index for auto-deletion (no duplicate unique index)
 DownloadTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const DownloadToken = mongoose.model('DownloadToken', DownloadTokenSchema);
-const ReminderSchema = new mongoose.Schema({
-  customerPhone:    { type: String, required: true },
-  customerName:     { type: String, default: '' },
-  sessionType:      { type: String, required: true },
-  sessionDateTime:  { type: Date, required: true },
-  paymentId:        { type: String, required: true },
-  reminderSent:     { type: Boolean, default: false },
-  createdAt:        { type: Date, default: Date.now }
-});
-const Reminder = mongoose.model('Reminder', ReminderSchema);
 
 // Cloudinary Config
 cloudinary.config({
@@ -184,58 +168,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true
 });
-// ========== WHATSAPP HELPER ==========
-async function sendWhatsApp(toPhone, message) {
-  try {
-    let phone = toPhone.replace(/[\s\-]/g, '');
-    if (!phone.startsWith('+')) {
-      phone = '+91' + phone.replace(/^0/, '');
-    }
-    const result = await twilioClient.messages.create({
-      from: process.env.TWILIO_WHATSAPP_FROM,
-      to: `whatsapp:${phone}`,
-      body: message
-    });
-    console.log(`✅ WhatsApp sent to ${phone}: ${result.sid}`);
-    return { success: true, sid: result.sid };
-  } catch (err) {
-    console.error(`❌ WhatsApp failed:`, err.message);
-    return { success: false, error: err.message };
-  }
-}
-
-// ========== REMINDER CRON JOB ==========
-// Runs every minute, sends reminder 30 mins before session
-cron.schedule('* * * * *', async () => {
-  try {
-    const now = new Date();
-    const in30 = new Date(now.getTime() + 30 * 60 * 1000);
-    const in31 = new Date(now.getTime() + 31 * 60 * 1000);
-
-    const due = await Reminder.find({
-      reminderSent: false,
-      sessionDateTime: { $gte: in30, $lt: in31 }
-    });
-
-    for (const r of due) {
-      const sessionTime = r.sessionDateTime.toLocaleString('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'full',
-        timeStyle: 'short'
-      });
-
-      const msg = `🔔 *Session Reminder*\n\nHi ${r.customerName || 'Beautiful Soul'}! ✨\n\nYour *${r.sessionType}* starts in *30 minutes*!\n\n📅 *Time:* ${sessionTime} IST\n\n💫 Please be ready with:\n• A quiet, peaceful space\n• Notebook & pen\n• Open heart & mind\n\nWith love & light,\n*Akshita Dayma Goel* 🌟`;
-
-      await sendWhatsApp(r.customerPhone, msg);
-      r.reminderSent = true;
-      await r.save();
-      console.log(`✅ Reminder sent to ${r.customerPhone}`);
-    }
-  } catch (err) {
-    console.error('❌ Cron error:', err.message);
-  }
-});
-console.log('✅ Reminder cron started');
 
 // Multer Setup
 const storage = multer.memoryStorage();
@@ -771,42 +703,29 @@ app.post("/razorpay/verify", async (req, res) => {
   }
 });
 
+// Verify Program Payment
 app.post("/razorpay/verify-program", async (req, res) => {
   try {
-    const {
-      razorpay_order_id, razorpay_payment_id, razorpay_signature,
-      calUrl, customerEmail, customerName, programName, amount,
-      sendEmail = true,
-      customerPhone,
-      sessionDateTime
+    const { 
+      razorpay_order_id, 
+      razorpay_payment_id, 
+      razorpay_signature, 
+      calUrl, 
+      customerEmail, 
+      customerName, 
+      programName, 
+      amount,
+      sendEmail = true  // ← ADD THIS LINE
     } = req.body;
-
+    
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(sign).digest("hex");
-
+      .update(sign)
+      .digest("hex");
+    
     if (expectedSignature === razorpay_signature) {
-
-      // ── WhatsApp confirmation ──
-      if (customerPhone) {
-        const msg = `✅ *Payment Confirmed!*\n\nHi ${customerName || 'Beautiful Soul'}! 💫\n\nYour *${programName || '21-Day Program'}* payment is confirmed.\n\n💳 *Payment ID:* ${razorpay_payment_id}\n💰 *Amount:* ${amount || '₹70,000'}\n\n📅 Please book your session date & time on the booking page.\n\n⚠️ Sessions are non-refundable & non-transferable.\n\nWith love & light,\n*Akshita Dayma Goel* 🌟`;
-        await sendWhatsApp(customerPhone, msg);
-
-        // Save reminder if session time provided
-        if (sessionDateTime) {
-          await Reminder.create({
-            customerPhone,
-            customerName: customerName || '',
-            sessionType: programName || '21-Day Program',
-            sessionDateTime: new Date(sessionDateTime),
-            paymentId: razorpay_payment_id,
-            reminderSent: false
-          });
-        }
-      }
-
-      // ── Email (optional) ──
+      // Only send email if sendEmail is true
       if (customerEmail && sendEmail === true) {
         await transporter.sendMail({
           from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
@@ -819,79 +738,65 @@ app.post("/razorpay/verify-program", async (req, res) => {
               <p><strong>Amount Paid:</strong> ${amount || '₹70,000'}</p>
               <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
             </div>
+            <div style="text-align:center;margin:2rem 0;">
+              <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;text-decoration:none;">📅 Book Your Session</a>
+            </div>
             <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
           </div>`
         });
+        console.log(`✅ Confirmation email sent to: ${customerEmail}`);
+      } else {
+        console.log(`📧 Email skipped for: ${customerEmail} (sendEmail = ${sendEmail})`);
       }
-
+      
       res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
     } else {
+      console.error("❌ Invalid signature for program payment");
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
   } catch (error) {
-    console.error("Verify program error:", error);
+    console.error("Verification error:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
+// Verify Session Payment
 app.post("/razorpay/verify-session", async (req, res) => {
   try {
-    const {
-      razorpay_order_id, razorpay_payment_id, razorpay_signature,
-      calUrl, customerEmail, customerName, programName, amount,
-      sendEmail = true,
-      customerPhone,
-      sessionDateTime
-    } = req.body;
-
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, calUrl, customerEmail, customerName, programName, amount, sendEmail = true } = req.body;
+    
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(sign).digest("hex");
-
+      .update(sign)
+      .digest("hex");
+    
     if (expectedSignature === razorpay_signature) {
-
-      // ── WhatsApp confirmation ──
-      if (customerPhone) {
-        const msg = `✅ *Payment Confirmed!*\n\nHi ${customerName || 'Beautiful Soul'}! 💫\n\nYour *${programName || 'Session'}* payment is confirmed.\n\n💳 *Payment ID:* ${razorpay_payment_id}\n💰 *Amount:* ${amount}\n\n📅 Please select your date & time on the booking page.\n\n⚠️ Sessions are non-refundable & non-transferable.\n\nWith love & light,\n*Akshita Dayma Goel* 🌟`;
-        await sendWhatsApp(customerPhone, msg);
-
-        if (sessionDateTime) {
-          await Reminder.create({
-            customerPhone,
-            customerName: customerName || '',
-            sessionType: programName || 'Session',
-            sessionDateTime: new Date(sessionDateTime),
-            paymentId: razorpay_payment_id,
-            reminderSent: false
-          });
-        }
-      }
-
-      // ── Email (optional) ──
       if (customerEmail && sendEmail === true) {
         await transporter.sendMail({
           from: `"Akshita Dayma Goel" <${process.env.GMAIL_USER}>`,
           to: customerEmail,
           subject: "Your Session Booking Confirmed ✨",
           html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:2rem;background:#070a1a;color:#eceaf6;">
-            <h2 style="color:#c9a84c;">Session Confirmed! 💫</h2>
-            <p>Payment for <strong>${programName || 'Session'}</strong> confirmed.</p>
+            <h2 style="color:#c9a84c;">Session Confirmed, ${customerName || 'Beautiful Soul'}! 💫</h2>
+            <p>Your payment for <strong>${programName || 'Session'}</strong> is confirmed.</p>
             <div style="background:rgba(201,168,76,.08);padding:1.2rem;margin:1.5rem 0;">
-              <p><strong>Amount:</strong> ${amount}</p>
+              <p><strong>Amount Paid:</strong> ${amount || 'Confirmed'}</p>
               <p><strong>Payment ID:</strong> ${razorpay_payment_id}</p>
+            </div>
+            <div style="text-align:center;margin:2rem 0;">
+              <a href="${calUrl}" style="background:#c9a84c;color:#070a1a;padding:1rem 2rem;text-decoration:none;">📅 Book Your Session</a>
             </div>
             <p>With love & light ✨<br><strong>Akshita Dayma Goel</strong></p>
           </div>`
         });
       }
-
       res.json({ success: true, paymentId: razorpay_payment_id, calUrl });
     } else {
       res.status(400).json({ success: false, error: "Invalid signature" });
     }
   } catch (error) {
-    console.error("Verify session error:", error);
+    console.error("Verification error:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -952,57 +857,6 @@ app.post("/fix-pdf-urls", async (req, res) => {
     }
     res.json({ success: true, fixed, total: ebooks.length });
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ========== SEND BOOKING CONFIRMATION WITH DATE ==========
-app.post("/send-booking-whatsapp", async (req, res) => {
-  try {
-    const { customerPhone, customerName, sessionType, sessionDateTime, paymentId } = req.body;
-
-    if (!customerPhone || !sessionDateTime) {
-      return res.status(400).json({ error: "Missing fields" });
-    }
-
-    // Format date nicely
-    const dt = new Date(sessionDateTime);
-    const sessionDate = dt.toLocaleDateString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-    const sessionTime = dt.toLocaleTimeString('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-
-    const msg = `🎉 *Booking Confirmed!*\n\nHi ${customerName || 'Beautiful Soul'}! ✨\n\nYour *${sessionType}* is now officially booked!\n\n📅 *Date:* ${sessionDate}\n⏰ *Time:* ${sessionTime} IST\n\n💫 Please be ready with:\n• A quiet, peaceful space\n• Notebook & pen\n• Open heart & mind\n\n⚠️ Sessions are non-refundable & non-transferable.\n\nSee you soon! 🌟\n*Akshita Dayma Goel*`;
-
-    await sendWhatsApp(customerPhone, msg);
-
-    // Also save reminder for 30 min before
-    if (paymentId) {
-      await Reminder.findOneAndUpdate(
-        { paymentId },
-        {
-          customerPhone,
-          customerName: customerName || '',
-          sessionType,
-          sessionDateTime: dt,
-          reminderSent: false
-        },
-        { upsert: true, new: true }
-      );
-    }
-
-    res.json({ success: true });
-  } catch (err) {
-    console.error('❌ Booking WhatsApp error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
