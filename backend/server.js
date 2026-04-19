@@ -956,20 +956,53 @@ app.post("/fix-pdf-urls", async (req, res) => {
   }
 });
 
-// ========== SAVE REMINDER AFTER CAL.COM BOOKING ==========
-app.post("/save-reminder", async (req, res) => {
+// ========== SEND BOOKING CONFIRMATION WITH DATE ==========
+app.post("/send-booking-whatsapp", async (req, res) => {
   try {
     const { customerPhone, customerName, sessionType, sessionDateTime, paymentId } = req.body;
-    if (!customerPhone || !sessionDateTime || !paymentId) {
+
+    if (!customerPhone || !sessionDateTime) {
       return res.status(400).json({ error: "Missing fields" });
     }
-    await Reminder.findOneAndUpdate(
-      { paymentId },
-      { customerPhone, customerName, sessionType, sessionDateTime: new Date(sessionDateTime), reminderSent: false },
-      { upsert: true, new: true }
-    );
+
+    // Format date nicely
+    const dt = new Date(sessionDateTime);
+    const sessionDate = dt.toLocaleDateString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const sessionTime = dt.toLocaleTimeString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    const msg = `🎉 *Booking Confirmed!*\n\nHi ${customerName || 'Beautiful Soul'}! ✨\n\nYour *${sessionType}* is now officially booked!\n\n📅 *Date:* ${sessionDate}\n⏰ *Time:* ${sessionTime} IST\n\n💫 Please be ready with:\n• A quiet, peaceful space\n• Notebook & pen\n• Open heart & mind\n\n⚠️ Sessions are non-refundable & non-transferable.\n\nSee you soon! 🌟\n*Akshita Dayma Goel*`;
+
+    await sendWhatsApp(customerPhone, msg);
+
+    // Also save reminder for 30 min before
+    if (paymentId) {
+      await Reminder.findOneAndUpdate(
+        { paymentId },
+        {
+          customerPhone,
+          customerName: customerName || '',
+          sessionType,
+          sessionDateTime: dt,
+          reminderSent: false
+        },
+        { upsert: true, new: true }
+      );
+    }
+
     res.json({ success: true });
   } catch (err) {
+    console.error('❌ Booking WhatsApp error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
