@@ -16,21 +16,15 @@
   --sidebar:200px;
   --red:#ff6464;--green:#5dcc7a;--blue:#7ec8e3;--lavender:#c9b0e0;
   --surface:rgba(12,16,48,.6);
-  --diamond:#7ec8e3;--diamond-light:#b8e6f5;
-  --platinum:#e0c9f0;--platinum-light:#f0e4ff;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;overflow:hidden;cursor:none;}
-
-/* ── Custom Cursor ── */
 #cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
 #cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,border-color .28s;}
 body.ch #cur{width:13px;height:13px;background:var(--gold-light);}
 body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 @media(pointer:coarse){#cur,#cur-ring{display:none;}body{cursor:auto;}}
-
-/* ── Animated BG ── */
 .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);
   background-size:48px 48px;
@@ -41,8 +35,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .orb2{width:300px;height:300px;background:rgba(12,16,48,.8);bottom:-80px;right:200px;--d:18s;animation-delay:-6s;}
 .orb3{width:200px;height:200px;background:rgba(201,168,76,.06);top:40%;right:-60px;--d:25s;animation-delay:-12s;}
 @keyframes orbDrift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(40px,30px) scale(1.1);}}
-
-/* ── Sidebar ── */
 .sidebar{width:var(--sidebar);flex-shrink:0;background:rgba(7,10,26,.98);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;z-index:100;backdrop-filter:blur(24px);transition:width .35s cubic-bezier(.16,1,.3,1);}
 .sb-top{padding:1.4rem 1.1rem 1rem;border-bottom:1px solid var(--border);position:relative;}
 .sb-logo-wrap{display:flex;align-items:center;gap:.7rem;}
@@ -73,13 +65,9 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .sb-role{font-size:.57rem;color:var(--muted);}
 .sb-logout{width:100%;padding:.5rem .8rem;border:1px solid var(--border);border-radius:3px;background:none;color:var(--muted);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;font-family:'DM Sans',sans-serif;}
 .sb-logout:hover{border-color:var(--red);color:var(--red);background:rgba(255,100,100,.06);}
-
-/* ── Main Area ── */
 .main{flex:1;height:100vh;overflow-y:auto;display:flex;flex-direction:column;position:relative;z-index:1;}
 .main::-webkit-scrollbar{width:4px;}
 .main::-webkit-scrollbar-thumb{background:rgba(201,168,76,.15);border-radius:2px;}
-
-/* ── Topbar ── */
 .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;background:rgba(7,10,26,.88);border-bottom:1px solid var(--border);backdrop-filter:blur(24px);}
 .topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.2),transparent);}
 .page-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text);font-weight:400;}
@@ -91,14 +79,10 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .tb-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.06);}
 .tb-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:dotPulse 2s ease-in-out infinite;}
 @keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-
-/* ── Content ── */
 .content{flex:1;padding:2rem;}
 .panel{display:none;}
 .panel.active{display:block;animation:panelIn .4s cubic-bezier(.16,1,.3,1);}
 @keyframes panelIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
-/* ── Stat Cards ── */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem;}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.3rem;position:relative;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);cursor:default;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s;}
@@ -112,8 +96,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .stat-delta{font-size:.62rem;margin-top:.5rem;display:flex;align-items:center;gap:.3rem;}
 .stat-delta.up{color:var(--green);}
 .stat-delta::before{content:'▲';font-size:.5rem;}
-
-/* ── Two Col ── */
 .two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4rem;margin-bottom:2rem;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;}
 .card-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;}
@@ -133,33 +115,22 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .mini-stat:last-child{border-bottom:none;}
 .ms-label{font-size:.75rem;color:var(--muted);}
 .ms-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--text);}
-
-/* ── Section Title ── */
 .section-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--gold-light);font-weight:400;margin-bottom:1.6rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:relative;}
 .section-title::after{content:'';position:absolute;bottom:-1px;left:0;width:60px;height:1px;background:var(--gold);opacity:.6;}
-
-/* ── Admin Form ── */
 .adm-form{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.8rem;margin-bottom:1.8rem;position:relative;overflow:hidden;transition:border-color .3s;}
 .adm-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold-dark));background-size:200%;animation:shimBorder 4s linear infinite;}
 @keyframes shimBorder{0%{background-position:0%;}100%{background-position:200%;}}
 .form-title{font-size:.8rem;color:var(--gold-light);font-weight:500;margin-bottom:1.3rem;display:flex;align-items:center;gap:.6rem;}
 .form-title::before{content:'';display:block;width:3px;height:14px;background:var(--gold);border-radius:2px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0;}
-.form-row.three{grid-template-columns:1fr 1fr 1fr;}
-.form-row.four{grid-template-columns:1fr 1fr 1fr 1fr;}
 .field-grp{margin-bottom:1rem;}
 .field-grp label{display:block;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(142,136,171,.6);margin-bottom:.45rem;}
 .field-grp input,.field-grp select,.field-grp textarea{width:100%;padding:.75rem 1rem;border-radius:3px;border:1px solid var(--border);background:rgba(255,255,255,.025);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:all .3s;}
 .field-grp input:focus,.field-grp textarea:focus,.field-grp select:focus{border-color:rgba(201,168,76,.45);background:rgba(201,168,76,.03);box-shadow:0 0 0 3px rgba(201,168,76,.06);}
-.field-grp select{cursor:pointer;}
-.field-grp select option{background:var(--dark2);}
 .field-grp textarea{resize:vertical;min-height:88px;line-height:1.65;}
-.field-grp input::placeholder,.field-grp textarea::placeholder{color:rgba(142,136,171,.28);}
 .form-divider{border:none;border-top:1px solid var(--border);margin:1.4rem 0;}
 .fsec{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem;}
 .fsec::after{content:'';flex:1;height:1px;background:var(--border);}
-
-/* ── Upload Area ── */
 .upload-area{border:1px dashed rgba(201,168,76,.18);border-radius:3px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
 .upload-area::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(201,168,76,.04) 0%,transparent 70%);opacity:0;transition:opacity .3s;}
 .upload-area:hover{border-color:rgba(201,168,76,.45);background:rgba(201,168,76,.03);}
@@ -181,8 +152,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .up-bar{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
 .up-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light));border-radius:2px;width:0%;transition:width .3s;}
 .up-lbl{font-size:.62rem;color:var(--muted);margin-top:.35rem;}
-
-/* ── Buttons ── */
 .btn-group{display:flex;gap:.8rem;margin-top:.6rem;flex-wrap:wrap;}
 .adm-btn{padding:.65rem 1.5rem;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);border:none;position:relative;overflow:hidden;}
 .adm-btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);opacity:0;transition:opacity .2s;}
@@ -197,8 +166,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .adm-btn.blue-btn{background:rgba(126,200,227,.08);border:1px solid rgba(126,200,227,.22);color:var(--blue);}
 .adm-btn.blue-btn:hover{background:rgba(126,200,227,.18);}
 .adm-btn.sm{padding:.38rem .85rem;font-size:.64rem;}
-
-/* ── Testimonials ── */
 .test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem;margin-bottom:1.5rem;}
 .test-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);animation:cardIn .4s ease-out both;}
 @keyframes cardIn{from{opacity:0;transform:scale(.94) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
@@ -212,6 +179,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .tcat.career{background:rgba(201,168,76,.14);color:var(--gold);}
 .tcat.manifestation{background:rgba(126,200,227,.12);color:var(--blue);}
 .tcat.program{background:rgba(224,201,240,.12);color:var(--lavender);}
+.tcat.ebook{background:rgba(126,200,227,.12);color:var(--blue);}
 .test-actions{display:flex;gap:.25rem;}
 .icon-btn{background:none;border:none;cursor:pointer;padding:.28rem;border-radius:3px;font-size:.76rem;transition:all .22s;color:var(--muted);}
 .icon-btn.del:hover{color:var(--red);background:rgba(255,100,100,.1);}
@@ -219,8 +187,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .test-label{padding:0 .7rem .5rem;font-size:.62rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mini-sel{font-size:.59rem;padding:.18rem .35rem;background:var(--glass);border:1px solid var(--border);color:var(--muted);border-radius:2px;cursor:pointer;outline:none;width:100%;transition:border-color .2s;}
 .mini-sel:focus{border-color:rgba(201,168,76,.3);}
-
-/* ── CELEBRITIES ── */
 .celeb-adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:1.5rem;}
 .celeb-adm-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;animation:cardIn .4s ease-out both;}
 .celeb-adm-card:hover{border-color:var(--gold-border);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.1);}
@@ -238,8 +204,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .celeb-adm-footer{padding:.6rem .9rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);}
 .celeb-year{font-size:.62rem;color:var(--muted);}
 .celeb-adm-actions{display:flex;gap:.3rem;}
-
-/* ── Ebooks ── */
 .ebook-list{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.5rem;}
 .ebook-row{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.3rem;display:grid;grid-template-columns:64px 1fr auto;gap:1.1rem;align-items:center;transition:all .35s cubic-bezier(.16,1,.3,1);animation:fadeUp .4s ease-out both;}
 .ebook-row:hover{border-color:var(--gold-border);transform:translateX(3px);box-shadow:4px 0 30px rgba(201,168,76,.06),-4px 0 0 rgba(201,168,76,.15);}
@@ -253,8 +217,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .pdf-badge:hover{background:rgba(126,200,227,.2);}
 .pdf-badge.no-pdf{background:rgba(255,255,255,.03);color:rgba(142,136,171,.35);cursor:default;}
 .ebook-actions{display:flex;gap:.5rem;flex-direction:column;align-items:flex-end;}
-
-/* ── Achievements ── */
 .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:1.5rem;}
 .ach-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;animation:cardIn .45s ease-out both;}
 .ach-card:hover{border-color:var(--gold-border);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.4);}
@@ -273,8 +235,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .ach-type.milestone{background:rgba(93,204,122,.1);color:var(--green);}
 .ach-type.feature{background:rgba(126,200,227,.1);color:var(--blue);}
 .ach-type.certification{background:rgba(201,176,224,.1);color:var(--lavender);}
-
-/* ── Journal ── */
 .journal-list{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;}
 .journal-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;animation:fadeUp .4s ease-out both;}
 .journal-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--lavender),rgba(201,176,224,.15));border-radius:4px 0 0 4px;opacity:0;transition:opacity .3s;}
@@ -289,8 +249,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .jc-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
 .jc-tag{font-size:.57rem;padding:.13rem .45rem;border-radius:10px;background:rgba(201,176,224,.1);color:var(--lavender);}
 .jc-actions{display:flex;gap:.4rem;}
-
-/* ── Bookings ── */
 .cal-setup{background:rgba(126,200,227,.04);border:1px solid rgba(126,200,227,.14);border-radius:4px;padding:1.5rem;margin-bottom:1.5rem;}
 .cal-setup h3{font-size:.72rem;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem;}
 .cal-setup p{font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
@@ -319,8 +277,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .spin{display:inline-block;width:20px;height:20px;border:2px solid rgba(126,200,227,.15);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .cal-error{background:rgba(255,100,100,.05);border:1px solid rgba(255,100,100,.18);border-radius:3px;padding:1rem 1.2rem;font-size:.78rem;color:var(--red);margin-bottom:1rem;line-height:1.6;}
-
-/* ── Settings ── */
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
 .setting-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;transition:border-color .3s;}
 .setting-card:hover{border-color:var(--gold-border);}
@@ -334,25 +290,17 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .toggle-slider::before{content:'';position:absolute;width:13px;height:13px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:.35s;box-shadow:0 1px 4px rgba(0,0,0,.4);}
 .toggle input:checked+.toggle-slider{background:rgba(201,168,76,.35);}
 .toggle input:checked+.toggle-slider::before{transform:translateX(17px);background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.4);}
-
-/* ── Cloud Grid ── */
 .cloud-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.6rem;margin-top:.8rem;}
 .cloud-img-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;border:1px solid var(--border);transition:all .3s;}
 .cloud-img-thumb:hover{border-color:var(--gold-border);transform:scale(1.05);}
-
-/* ── Toast ── */
 .toast{position:fixed;bottom:1.8rem;right:1.8rem;background:rgba(7,10,26,.96);border:1px solid var(--gold);border-radius:3px;padding:.75rem 1.3rem;font-size:.78rem;color:var(--gold-light);z-index:9999;transform:translateY(18px) scale(.96);opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);pointer-events:none;max-width:340px;backdrop-filter:blur(20px);box-shadow:0 12px 40px rgba(0,0,0,.5);}
 .toast.show{transform:translateY(0) scale(1);opacity:1;}
 .toast.success{border-color:var(--green);color:var(--green);}
 .toast.error{border-color:var(--red);color:var(--red);}
 .toast.info{border-color:var(--blue);color:var(--blue);}
-
-/* ── Empty State ── */
 .empty-state{text-align:center;padding:3.5rem 2rem;color:var(--muted);}
 .empty-state .ei{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.3;}
 .empty-state p{font-size:.82rem;line-height:1.7;}
-
-/* ── Confirm Overlay ── */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);z-index:8000;display:none;align-items:center;justify-content:center;}
 .confirm-overlay.open{display:flex;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -361,10 +309,6 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .confirm-box h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--text);font-weight:400;margin-bottom:.6rem;}
 .confirm-box p{font-size:.8rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.65;}
 .confirm-btns{display:flex;gap:.9rem;justify-content:center;}
-
-/* ═══════════════════════════
-   IMAGE CROP MODAL
-   ═══════════════════════════ */
 .crop-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(18px);z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;gap:1.2rem;}
 .crop-overlay.open{display:flex;animation:fadeIn .3s ease;}
 .crop-header{text-align:center;}
@@ -383,15 +327,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 .crop-preview canvas{display:block;}
 .crop-preview-label{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-top:.4rem;}
 .crop-actions{display:flex;gap:.8rem;}
-
-/* ── Preview Image ── */
 .preview-img{width:100%;max-height:180px;object-fit:contain;border-radius:3px;margin-top:.85rem;display:none;border:1px solid var(--border);background:rgba(0,0,0,.3);}
-
-/* ── Reorder hint ── */
-.reorder-hint{font-size:.7rem;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
-.reorder-hint::before{content:'↕';color:var(--gold);font-size:.9rem;}
-
-/* Responsive */
 @media(max-width:900px){
   .sidebar{width:54px;}
   .sb-logo,.sb-version,.sb-role,.sb-uname,.sb-label,.sb-section,.sb-badge{display:none;}
@@ -402,7 +338,7 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 }
 @media(max-width:600px){
   .stats-grid,.bk-summary{grid-template-columns:1fr;}
-  .form-row,.form-row.three,.form-row.four{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
   .content{padding:1.2rem;}
   .ach-grid{grid-template-columns:1fr 1fr;}
   .ebook-row{grid-template-columns:48px 1fr;}
@@ -414,60 +350,14 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
 <body>
 <div id="cur"></div>
 <div id="cur-ring"></div>
-
-<!-- BG -->
 <div class="bg-grid"></div>
 <div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
-
-<!-- CONFIRM -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <h3 id="confirmTitle">Are you sure?</h3>
-    <p id="confirmMsg">This action cannot be undone.</p>
-    <div class="confirm-btns">
-      <button class="adm-btn outline" onclick="confirmNo()">Cancel</button>
-      <button class="adm-btn danger" id="confirmYesBtn">Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- CROP MODAL -->
-<div class="crop-overlay" id="cropOverlay">
-  <div class="crop-header">
-    <h3 id="cropTitle">Crop & Fit Image</h3>
-    <p id="cropDesc">Drag to reposition · Scroll to zoom · Select aspect ratio</p>
-    <div class="crop-aspect-tabs" id="cropTabs"></div>
-  </div>
-  <div class="crop-canvas-wrap" id="cropCanvasWrap">
-    <canvas id="cropCanvas"></canvas>
-    <div class="crop-drag-hint"><span>Drag to reposition</span></div>
-  </div>
-  <div class="crop-preview-row">
-    <div>
-      <canvas id="cropPreview" class="crop-preview"></canvas>
-      <div class="crop-preview-label">Preview</div>
-    </div>
-  </div>
-  <div class="crop-actions">
-    <button class="adm-btn gold" onclick="applyCrop()">✓ Apply Crop</button>
-    <button class="adm-btn outline" onclick="closeCrop()">Cancel</button>
-  </div>
-</div>
-
+<div class="confirm-overlay" id="confirmOverlay"><div class="confirm-box"><h3 id="confirmTitle">Are you sure?</h3><p id="confirmMsg">This action cannot be undone.</p><div class="confirm-btns"><button class="adm-btn outline" onclick="confirmNo()">Cancel</button><button class="adm-btn danger" id="confirmYesBtn">Delete</button></div></div></div>
+<div class="crop-overlay" id="cropOverlay"><div class="crop-header"><h3 id="cropTitle">Crop & Fit Image</h3><p id="cropDesc">Drag to reposition · Scroll to zoom · Select aspect ratio</p><div class="crop-aspect-tabs" id="cropTabs"></div></div><div class="crop-canvas-wrap" id="cropCanvasWrap"><canvas id="cropCanvas"></canvas><div class="crop-drag-hint"><span>Drag to reposition</span></div></div><div class="crop-preview-row"><div><canvas id="cropPreview" class="crop-preview"></canvas><div class="crop-preview-label">Preview</div></div></div><div class="crop-actions"><button class="adm-btn gold" onclick="applyCrop()">✓ Apply Crop</button><button class="adm-btn outline" onclick="closeCrop()">Cancel</button></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sb-top">
-    <div class="sb-logo-wrap">
-      <div class="sb-gem">✦</div>
-      <div>
-        <span class="sb-logo">ADG Admin</span>
-        <span class="sb-version">v3.1 · 2026</span>
-      </div>
-    </div>
-    <div class="sb-top-deco"></div>
-  </div>
+  <div class="sb-top"><div class="sb-logo-wrap"><div class="sb-gem">✦</div><div><span class="sb-logo">ADG Admin</span><span class="sb-version">v3.1 · 2026</span></div></div><div class="sb-top-deco"></div></div>
   <nav class="sb-nav">
     <div class="sb-section">Overview</div>
     <button class="sb-item active" onclick="showPanel('dashboard',this)"><span class="sb-icon">📊</span><span class="sb-label">Dashboard</span></button>
@@ -483,394 +373,90 @@ body.ch #cur-ring{width:42px;height:42px;border-color:var(--gold);}
     <button class="sb-item" onclick="showPanel('settings',this)"><span class="sb-icon">⚙️</span><span class="sb-label">Settings</span></button>
     <a class="sb-item" href="index.html" target="_blank"><span class="sb-icon">🌐</span><span class="sb-label">View Site</span></a>
   </nav>
-  <div class="sb-bottom">
-    <div class="sb-user">
-      <div class="sb-avatar">A</div>
-      <div><div class="sb-uname">akshita</div><div class="sb-role">Super Admin</div></div>
-    </div>
-    <button class="sb-logout" onclick="doLogout()">Sign Out</button>
-  </div>
+  <div class="sb-bottom"><div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-uname">akshita</div><div class="sb-role">Super Admin</div></div></div><button class="sb-logout" onclick="doLogout()">Sign Out</button></div>
 </aside>
 
 <div class="main">
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div>
-      <div class="page-title" id="topTitle">Dashboard</div>
-      <div class="breadcrumb">Admin / <strong id="topSub">Overview</strong></div>
-    </div>
-    <div class="topbar-right">
-      <div class="tb-dot"></div>
-      <div class="tb-time" id="liveClock"></div>
-      <button class="tb-btn" onclick="window.open('index.html','_blank')">View Site ↗</button>
-    </div>
-  </div>
-
+  <div class="topbar"><div><div class="page-title" id="topTitle">Dashboard</div><div class="breadcrumb">Admin / <strong id="topSub">Overview</strong></div></div><div class="topbar-right"><div class="tb-dot"></div><div class="tb-time" id="liveClock"></div><button class="tb-btn" onclick="window.open('index.html','_blank')">View Site ↗</button></div></div>
   <div class="content">
-
-    <!-- DASHBOARD -->
     <div class="panel active" id="panel-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card"><span class="stat-icon">📸</span><span class="stat-val" id="ds-tests">0</span><span class="stat-label">Testimonials</span><div class="stat-delta up">Live on site</div></div>
-        <div class="stat-card"><span class="stat-icon">🌟</span><span class="stat-val" id="ds-celebs">0</span><span class="stat-label">Celebrities</span><div class="stat-delta up">Showcased</div></div>
-        <div class="stat-card"><span class="stat-icon">📚</span><span class="stat-val" id="ds-ebooks">0</span><span class="stat-label">eBooks</span><div class="stat-delta up">Published</div></div>
-        <div class="stat-card"><span class="stat-icon">🏆</span><span class="stat-val" id="ds-ach">0</span><span class="stat-label">Achievements</span><div class="stat-delta up">Showcased</div></div>
-      </div>
-      <div class="two-col">
-        <div class="card">
-          <div class="card-title">Recent Activity</div>
-          <div id="activityFeed"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Quick Stats</div>
-          <div>
-            <div class="mini-stat"><span class="ms-label">SP Testimonials</span><span class="ms-val" id="qs-sp">0</span></div>
-            <div class="mini-stat"><span class="ms-label">Bollywood Celebs</span><span class="ms-val" id="qs-bollywood">0</span></div>
-            <div class="mini-stat"><span class="ms-label">eBooks with PDF</span><span class="ms-val" id="qs-ebwpdf">0</span></div>
-            <div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-achievements">0</span></div>
-            <div class="mini-stat"><span class="ms-label">Journal entries</span><span class="ms-val" id="qs-jrns">0</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Cloudinary Images <button class="adm-btn blue-btn sm" onclick="loadCloudImages()">↻ Refresh</button></div>
-        <div id="cloudImages"><div style="font-size:.75rem;color:var(--muted);">Loading cloud images…</div></div>
-      </div>
+      <div class="stats-grid"><div class="stat-card"><span class="stat-icon">📸</span><span class="stat-val" id="ds-tests">0</span><span class="stat-label">Testimonials</span><div class="stat-delta up">Live on site</div></div><div class="stat-card"><span class="stat-icon">🌟</span><span class="stat-val" id="ds-celebs">0</span><span class="stat-label">Celebrities</span><div class="stat-delta up">Showcased</div></div><div class="stat-card"><span class="stat-icon">📚</span><span class="stat-val" id="ds-ebooks">0</span><span class="stat-label">eBooks</span><div class="stat-delta up">Published</div></div><div class="stat-card"><span class="stat-icon">🏆</span><span class="stat-val" id="ds-ach">0</span><span class="stat-label">Achievements</span><div class="stat-delta up">Showcased</div></div></div>
+      <div class="two-col"><div class="card"><div class="card-title">Recent Activity</div><div id="activityFeed"></div></div><div class="card"><div class="card-title">Quick Stats</div><div><div class="mini-stat"><span class="ms-label">SP Testimonials</span><span class="ms-val" id="qs-sp">0</span></div><div class="mini-stat"><span class="ms-label">Bollywood Celebs</span><span class="ms-val" id="qs-bollywood">0</span></div><div class="mini-stat"><span class="ms-label">eBooks with PDF</span><span class="ms-val" id="qs-ebwpdf">0</span></div><div class="mini-stat"><span class="ms-label">Award achievements</span><span class="ms-val" id="qs-achievements">0</span></div><div class="mini-stat"><span class="ms-label">Journal entries</span><span class="ms-val" id="qs-jrns">0</span></div></div></div></div>
+      <div class="card"><div class="card-title">Cloudinary Images <button class="adm-btn blue-btn sm" onclick="loadCloudImages()">↻ Refresh</button></div><div id="cloudImages"><div style="font-size:.75rem;color:var(--muted);">Loading cloud images…</div></div></div>
     </div>
 
-    <!-- TESTIMONIALS -->
     <div class="panel" id="panel-testimonials">
       <div class="section-title">Testimonials <button class="adm-btn gold sm" onclick="scrollToAdd('testAdd')">+ Add New</button></div>
-      <div class="adm-form" id="testAdd">
-        <div class="form-title">Add Screenshot</div>
-        <div class="form-row">
-          <div class="field-grp"><label>Category</label>
-            <select id="newTestCat">
-              <option value="sp">💞 Specific Person</option>
-              <option value="career">💼 Career</option>
-              <option value="manifestation">✨ Manifestation</option>
-              <option value="program">🗓️ 21-Day Program</option>
-            </select>
-          </div>
-          <div class="field-grp"><label>Label (optional)</label><input type="text" id="newTestLabel" placeholder="e.g. Got him back in 3 days!"></div>
-        </div>
-        <div class="field-grp">
-          <label>Upload Screenshot</label>
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'test','9:16','Portrait (9:16)')"><span class="u-icon">📷</span><p>Click or drag to upload</p><small>JPG, PNG, WEBP · max 5MB · Will be cropped to 9:16</small></div>
-          <img id="testImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="newTestUrl" placeholder="https://..." oninput="previewTestUrl(this.value)"></div>
-        <div class="btn-group"><button class="adm-btn gold" onclick="addTestimonial()">Save Screenshot</button><button class="adm-btn outline" onclick="clearTestForm()">Clear</button></div>
-      </div>
+      <div class="adm-form" id="testAdd"><div class="form-title">Add Screenshot</div><div class="form-row"><div class="field-grp"><label>Category</label><select id="newTestCat"><option value="sp">💞 Specific Person</option><option value="career">💼 Career</option><option value="manifestation">✨ Manifestation</option><option value="program">🗓️ 21-Day Program</option><option value="ebook">📘 eBook</option></select></div><div class="field-grp"><label>Label (optional)</label><input type="text" id="newTestLabel" placeholder="e.g. Got him back in 3 days!"></div></div><div class="field-grp"><label>Upload Screenshot</label><div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'test','9:16','Portrait (9:16)')"><span class="u-icon">📷</span><p>Click or drag to upload</p><small>JPG, PNG, WEBP · max 5MB · Will be cropped to 9:16</small></div><img id="testImgPreview" class="preview-img" alt=""></div><div class="field-grp"><label>Or paste image URL</label><input type="url" id="newTestUrl" placeholder="https://..." oninput="previewTestUrl(this.value)"></div><div class="btn-group"><button class="adm-btn gold" onclick="addTestimonial()">Save Screenshot</button><button class="adm-btn outline" onclick="clearTestForm()">Clear</button></div></div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="testCount">0</span> screenshots total</div>
       <div class="test-grid" id="admTestGrid"></div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         CELEBRITIES PANEL
-         ══════════════════════════════════════ -->
     <div class="panel" id="panel-celebrities">
-      <div class="section-title">
-        Celebrity Photos
-        <button class="adm-btn gold sm" onclick="clearCelebForm();scrollToAdd('celebAdd')">+ Add New</button>
-      </div>
-
-      <!-- ADD / EDIT FORM -->
-      <div class="adm-form" id="celebAdd">
-        <div class="form-title" id="celebFormTitle">Add Celebrity Photo</div>
-        <input type="hidden" id="editCelebIdx" value="-1">
-
-        <div class="form-row">
-          <div class="field-grp">
-            <label>Celebrity Name</label>
-            <input type="text" id="celebName" placeholder="e.g. Ameesha Patel">
-          </div>
-          <div class="field-grp">
-            <label>Category</label>
-            <select id="celebCat">
-              <option value="bollywood">🎬 Bollywood</option>
-              <option value="tv">📺 TV & OTT</option>
-              <option value="music">🎵 Music</option>
-              <option value="business">💼 Business</option>
-              <option value="sport">🏆 Sports</option>
-              <option value="other">⭐ Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field-grp">
-            <label>Description / Context</label>
-            <input type="text" id="celebDesc" placeholder="e.g. Bollywood Actress · Awarded Life Coach of the Year">
-          </div>
-          <div class="field-grp">
-            <label>Year</label>
-            <input type="text" id="celebYear" placeholder="e.g. 2025">
-          </div>
-        </div>
-
-        <div class="field-grp">
-          <label>Custom Tag Label (optional — overrides category)</label>
-          <input type="text" id="celebTag" placeholder="e.g. Bollywood Icon (leave blank to auto-use category)">
-        </div>
-
-        <div class="field-grp">
-          <label>Photo — cropped to 3:4 portrait</label>
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'celeb','3:4','Portrait (3:4)')"><span class="u-icon">🌟</span><p>Click or drag celebrity photo</p><small>JPG, PNG, WEBP · max 5MB · Cropped to 3:4</small></div>
-          <img id="celebImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp">
-          <label>Or paste image URL</label>
-          <input type="url" id="celebImgUrl" placeholder="https://..." oninput="previewCelebUrl(this.value)">
-        </div>
-
-        <div class="btn-group">
-          <button class="adm-btn gold" onclick="saveCeleb()">Save Celebrity</button>
-          <button class="adm-btn outline" onclick="clearCelebForm()">Clear</button>
-        </div>
-      </div>
-
-      <!-- COUNT -->
+      <div class="section-title">Celebrity Photos<button class="adm-btn gold sm" onclick="clearCelebForm();scrollToAdd('celebAdd')">+ Add New</button></div>
+      <div class="adm-form" id="celebAdd"><div class="form-title" id="celebFormTitle">Add Celebrity Photo</div><input type="hidden" id="editCelebIdx" value="-1"><div class="form-row"><div class="field-grp"><label>Celebrity Name</label><input type="text" id="celebName" placeholder="e.g. Ameesha Patel"></div><div class="field-grp"><label>Category</label><select id="celebCat"><option value="bollywood">🎬 Bollywood</option><option value="tv">📺 TV & OTT</option><option value="music">🎵 Music</option><option value="business">💼 Business</option><option value="sport">🏆 Sports</option><option value="other">⭐ Other</option></select></div></div><div class="form-row"><div class="field-grp"><label>Description / Context</label><input type="text" id="celebDesc" placeholder="e.g. Bollywood Actress · Awarded Life Coach of the Year"></div><div class="field-grp"><label>Year</label><input type="text" id="celebYear" placeholder="e.g. 2025"></div></div><div class="field-grp"><label>Custom Tag Label</label><input type="text" id="celebTag" placeholder="e.g. Bollywood Icon"></div><div class="field-grp"><label>Photo — cropped to 3:4 portrait</label><div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'celeb','3:4','Portrait (3:4)')"><span class="u-icon">🌟</span><p>Click or drag celebrity photo</p><small>JPG, PNG, WEBP · max 5MB · Cropped to 3:4</small></div><img id="celebImgPreview" class="preview-img" alt=""></div><div class="field-grp"><label>Or paste image URL</label><input type="url" id="celebImgUrl" placeholder="https://..." oninput="previewCelebUrl(this.value)"></div><div class="btn-group"><button class="adm-btn gold" onclick="saveCeleb()">Save Celebrity</button><button class="adm-btn outline" onclick="clearCelebForm()">Clear</button></div></div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="celebCount">0</span> celebrities total</div>
-
-      <!-- GRID -->
       <div class="celeb-adm-grid" id="admCelebGrid"></div>
     </div>
 
-    <!-- EBOOKS -->
     <div class="panel" id="panel-ebooks">
       <div class="section-title">eBooks <button class="adm-btn gold sm" onclick="clearEbookForm();scrollToAdd('ebAdd')">+ Add New</button></div>
-      <div class="adm-form" id="ebAdd">
-        <div class="form-title" id="ebFormTitle">Add eBook</div>
-        <input type="hidden" id="editEbookIdx" value="-1">
-        <div class="form-row">
-          <div class="field-grp"><label>Title</label><input type="text" id="ebTitle" placeholder="eBook title"></div>
-          <div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div>
-        </div>
-        <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
-          <div class="field-grp">
-            <label>Sale Price (USD)</label>
-            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
-              <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
-              <input type="text" id="ebPrice" placeholder="47" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-            </div>
-          </div>
-          <div class="field-grp">
-            <label>Sale Price (INR)</label>
-            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
-              <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
-              <input type="text" id="ebPriceInr" placeholder="3,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-            </div>
-          </div>
-          <div class="field-grp">
-            <label>Original Price (USD)</label>
-            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
-              <span style="padding:0 .7rem;color:var(--gold);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(201,168,76,.06);align-self:stretch;">$</span>
-              <input type="text" id="ebOrig" placeholder="67" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-            </div>
-          </div>
-          <div class="field-grp">
-            <label>Original Price (INR)</label>
-            <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:3px;background:rgba(255,255,255,.025);overflow:hidden;" onfocusin="this.style.borderColor='rgba(201,168,76,.45)'" onfocusout="this.style.borderColor='var(--border)'">
-              <span style="padding:0 .7rem;color:var(--green);font-size:.9rem;font-weight:600;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:rgba(93,204,122,.06);align-self:stretch;">₹</span>
-              <input type="text" id="ebOrigInr" placeholder="5,999" style="border:none;background:transparent;flex:1;padding:.75rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;">
-            </div>
-          </div>
-          <div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div>
-        </div>
-        <div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div>
-        <div class="field-grp"><label>Features (one per line)</label><textarea id="ebFeatures" placeholder="Feature 1&#10;Feature 2" style="min-height:80px;"></textarea></div>
-        <div class="field-grp">
-          <label>Cover Image — will be cropped to 1:1 (square)</label>
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ebook','1:1','Square (1:1)')"><span class="u-icon">📚</span><p>Click or drag cover</p><small>JPG, PNG, WEBP · Cropped to square</small></div>
-          <img id="ebImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp"><label>Or paste cover URL</label><input type="url" id="ebImgUrl" placeholder="https://..." oninput="previewEbUrl(this.value)"></div>
-        <hr class="form-divider">
-        <div class="fsec">📄 eBook PDF File</div>
-        <div class="field-grp">
-          <label>Upload PDF</label>
-          <div class="upload-area pdf-area"><input type="file" accept="application/pdf,.pdf" id="pdfFileInput" onchange="handleEbPdf(event)"><span class="u-icon">📄</span><p>Click or drag PDF here</p><small>PDF only · max 50MB</small></div>
-          <div class="pdf-status" id="pdfStatus"><span>📄</span><div style="flex:1;min-width:0;"><div class="ps-name" id="pdfStatusName">—</div><div class="ps-size" id="pdfStatusSize">—</div></div><button class="ps-remove" onclick="removePdf()">✕</button></div>
-          <div class="up-prog" id="pdfUploadProgress"><div class="up-bar"><div class="up-fill" id="pdfBarFill"></div></div><div class="up-lbl" id="pdfUploadLabel">Uploading…</div></div>
-        </div>
-        <div class="field-grp"><label>Or paste PDF URL</label><input type="url" id="ebPdfUrl" placeholder="https://example.com/ebook.pdf" oninput="setPdfFromUrl(this.value)"></div>
-        <div class="btn-group"><button class="adm-btn gold" onclick="saveEbook()">Save eBook</button><button class="adm-btn outline" onclick="clearEbookForm()">Clear</button></div>
-      </div>
+      <div class="adm-form" id="ebAdd"><div class="form-title" id="ebFormTitle">Add eBook</div><input type="hidden" id="editEbookIdx" value="-1"><div class="form-row"><div class="field-grp"><label>Title</label><input type="text" id="ebTitle" placeholder="eBook title"></div><div class="field-grp"><label>Category Tag</label><input type="text" id="ebTag" placeholder="Manifestation"></div></div><div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;"><div class="field-grp"><label>Sale Price (USD)</label><input type="text" id="ebPrice" placeholder="47"></div><div class="field-grp"><label>Sale Price (INR)</label><input type="text" id="ebPriceInr" placeholder="3,999"></div><div class="field-grp"><label>Original Price (USD)</label><input type="text" id="ebOrig" placeholder="67"></div><div class="field-grp"><label>Original Price (INR)</label><input type="text" id="ebOrigInr" placeholder="5,999"></div><div class="field-grp"><label>Badge</label><input type="text" id="ebBadge" placeholder="Bestseller"></div></div><div class="field-grp"><label>Description</label><textarea id="ebDesc" placeholder="Short description…"></textarea></div><div class="field-grp"><label>Features (one per line)</label><textarea id="ebFeatures" placeholder="Feature 1&#10;Feature 2" style="min-height:80px;"></textarea></div><div class="field-grp"><label>Cover Image — cropped to 1:1 (square)</label><div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ebook','1:1','Square (1:1)')"><span class="u-icon">📚</span><p>Click or drag cover</p><small>JPG, PNG, WEBP · Cropped to square</small></div><img id="ebImgPreview" class="preview-img" alt=""></div><div class="field-grp"><label>Or paste cover URL</label><input type="url" id="ebImgUrl" placeholder="https://..." oninput="previewEbUrl(this.value)"></div><hr class="form-divider"><div class="fsec">📄 eBook PDF File</div><div class="field-grp"><label>Upload PDF</label><div class="upload-area pdf-area"><input type="file" accept="application/pdf,.pdf" id="pdfFileInput" onchange="handleEbPdf(event)"><span class="u-icon">📄</span><p>Click or drag PDF here</p><small>PDF only · max 50MB</small></div><div class="pdf-status" id="pdfStatus"><span>📄</span><div style="flex:1;min-width:0;"><div class="ps-name" id="pdfStatusName">—</div><div class="ps-size" id="pdfStatusSize">—</div></div><button class="ps-remove" onclick="removePdf()">✕</button></div><div class="up-prog" id="pdfUploadProgress"><div class="up-bar"><div class="up-fill" id="pdfBarFill"></div></div><div class="up-lbl" id="pdfUploadLabel">Uploading…</div></div></div><div class="field-grp"><label>Or paste PDF URL</label><input type="url" id="ebPdfUrl" placeholder="https://example.com/ebook.pdf" oninput="setPdfFromUrl(this.value)"></div><div class="btn-group"><button class="adm-btn gold" onclick="saveEbook()">Save eBook</button><button class="adm-btn outline" onclick="clearEbookForm()">Clear</button></div></div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="ebookCount">0</span> eBooks total</div>
       <div class="ebook-list" id="admEbookList"></div>
     </div>
 
-    <!-- ACHIEVEMENTS -->
     <div class="panel" id="panel-achievements">
       <div class="section-title">Achievements <button class="adm-btn gold sm" onclick="clearAchForm();scrollToAdd('achAdd')">+ Add New</button></div>
-      <div class="adm-form" id="achAdd">
-        <div class="form-title" id="achFormTitle">Add Achievement</div>
-        <input type="hidden" id="editAchIdx" value="-1">
-        <div class="form-row">
-          <div class="field-grp"><label>Title</label><input type="text" id="achTitle" placeholder="e.g. Top Coach Award 2025"></div>
-          <div class="field-grp"><label>Type</label>
-            <select id="achType"><option value="award">🏆 Award</option><option value="milestone">🎯 Milestone</option><option value="feature">📰 Media Feature</option><option value="certification">📜 Certification</option></select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field-grp"><label>Organisation / Source</label><input type="text" id="achOrg" placeholder="e.g. Forbes India"></div>
-          <div class="field-grp"><label>Date / Year</label><input type="text" id="achDate" placeholder="e.g. March 2025"></div>
-        </div>
-        <div class="field-grp"><label>Description</label><textarea id="achDesc" placeholder="What is this achievement about?"></textarea></div>
-        <div class="field-grp">
-          <label>Image — cropped to 4:3 (landscape)</label>
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ach','4:3','Landscape (4:3)')"><span class="u-icon">🏆</span><p>Click or drag image</p><small>JPG, PNG, WEBP · Cropped to 4:3</small></div>
-          <img id="achImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="achImgUrl" placeholder="https://..." oninput="previewAchUrl(this.value)"></div>
-        <div class="field-grp"><label>Link (optional)</label><input type="url" id="achLink" placeholder="https://article-link.com"></div>
-        <div class="btn-group"><button class="adm-btn gold" onclick="saveAchievement()">Save Achievement</button><button class="adm-btn outline" onclick="clearAchForm()">Clear</button></div>
-      </div>
+      <div class="adm-form" id="achAdd"><div class="form-title" id="achFormTitle">Add Achievement</div><input type="hidden" id="editAchIdx" value="-1"><div class="form-row"><div class="field-grp"><label>Title</label><input type="text" id="achTitle" placeholder="e.g. Top Coach Award 2025"></div><div class="field-grp"><label>Type</label><select id="achType"><option value="award">🏆 Award</option><option value="milestone">🎯 Milestone</option><option value="feature">📰 Media Feature</option><option value="certification">📜 Certification</option></select></div></div><div class="form-row"><div class="field-grp"><label>Organisation / Source</label><input type="text" id="achOrg" placeholder="e.g. Forbes India"></div><div class="field-grp"><label>Date / Year</label><input type="text" id="achDate" placeholder="e.g. March 2025"></div></div><div class="field-grp"><label>Description</label><textarea id="achDesc" placeholder="What is this achievement about?"></textarea></div><div class="field-grp"><label>Image — cropped to 4:3 (landscape)</label><div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'ach','4:3','Landscape (4:3)')"><span class="u-icon">🏆</span><p>Click or drag image</p><small>JPG, PNG, WEBP · Cropped to 4:3</small></div><img id="achImgPreview" class="preview-img" alt=""></div><div class="field-grp"><label>Or paste image URL</label><input type="url" id="achImgUrl" placeholder="https://..." oninput="previewAchUrl(this.value)"></div><div class="field-grp"><label>Link (optional)</label><input type="url" id="achLink" placeholder="https://article-link.com"></div><div class="btn-group"><button class="adm-btn gold" onclick="saveAchievement()">Save Achievement</button><button class="adm-btn outline" onclick="clearAchForm()">Clear</button></div></div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="achCount">0</span> achievements total</div>
       <div class="ach-grid" id="admAchGrid"></div>
     </div>
 
-    <!-- JOURNAL -->
     <div class="panel" id="panel-journal">
       <div class="section-title">Journal Posts <button class="adm-btn gold sm" onclick="clearJrnForm();scrollToAdd('jrnAdd')">+ Add New</button></div>
-      <div class="adm-form" id="jrnAdd">
-        <div class="form-title" id="jrnFormTitle">Add Journal Entry</div>
-        <input type="hidden" id="editJrnIdx" value="-1">
-        <div class="form-row">
-          <div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div>
-          <div class="field-grp"><label>Category</label>
-            <select id="jrnCat">
-              <option value="mindset">🧠 Mindset</option>
-              <option value="love">💞 Love</option>
-              <option value="manifestation">✨ Manifestation</option>
-              <option value="career">💼 Career</option>
-              <option value="personal">🌸 Personal</option>
-              <option value="spiritual">🕊️ Spiritual</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div>
-          <div class="field-grp"><label>Mood / Vibe</label>
-            <select id="jrnMood">
-              <option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option>
-              <option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option>
-              <option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option>
-              <option value="🌙">🌙 Calm</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row three">
-          <div class="field-grp"><label>Publication / Source Name</label><input type="text" id="jrnSource" placeholder="e.g. CEO India Magazine"></div>
-          <div class="field-grp"><label>Platform (badge colour)</label>
-            <select id="jrnPlatform">
-              <option value="default">Default (Gold)</option>
-              <option value="republic">Republic TV (Red)</option>
-              <option value="dailyhunt">DailyHunt (Orange)</option>
-              <option value="ceo">CEO India Magazine (Gold)</option>
-              <option value="success">Success India Magazine (Blue)</option>
-              <option value="india">The Indian Bulletin (Saffron)</option>
-              <option value="mindset">Mindset (Blue)</option>
-              <option value="love">Love & SP (Pink)</option>
-              <option value="manifestation">Manifestation (Purple)</option>
-              <option value="career">Career (Gold)</option>
-              <option value="personal">Personal (Green)</option>
-              <option value="spiritual">Spiritual (Lavender)</option>
-            </select>
-          </div>
-          <div class="field-grp"><label>Article Link (URL)</label><input type="url" id="jrnLink" placeholder="https://ceoindia.com/article..."></div>
-        </div>
-        <div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div>
-        <div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div>
-        <div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div>
-        <div class="field-grp">
-          <label>Cover Image — cropped to 3:2</label>
-          <div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div>
-          <img id="jrnImgPreview" class="preview-img" alt="">
-        </div>
-        <div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div>
-        <div class="btn-group">
-          <button class="adm-btn gold" onclick="saveJournal()">Save Entry</button>
-          <button class="adm-btn outline" onclick="clearJrnForm()">Clear</button>
-        </div>
-      </div>
+      <div class="adm-form" id="jrnAdd"><div class="form-title" id="jrnFormTitle">Add Journal Entry</div><input type="hidden" id="editJrnIdx" value="-1"><div class="form-row"><div class="field-grp"><label>Title</label><input type="text" id="jrnTitle" placeholder="Entry title…"></div><div class="field-grp"><label>Category</label><select id="jrnCat"><option value="mindset">🧠 Mindset</option><option value="love">💞 Love</option><option value="manifestation">✨ Manifestation</option><option value="career">💼 Career</option><option value="personal">🌸 Personal</option><option value="spiritual">🕊️ Spiritual</option></select></div></div><div class="form-row"><div class="field-grp"><label>Date</label><input type="date" id="jrnDate"></div><div class="field-grp"><label>Mood / Vibe</label><select id="jrnMood"><option value="🌟">🌟 Inspired</option><option value="🌸">🌸 Gentle</option><option value="🔥">🔥 Powerful</option><option value="💫">💫 Magical</option><option value="🌊">🌊 Reflective</option><option value="☀️">☀️ Uplifting</option><option value="🌙">🌙 Calm</option></select></div></div><div class="form-row three"><div class="field-grp"><label>Publication / Source Name</label><input type="text" id="jrnSource" placeholder="e.g. CEO India Magazine"></div><div class="field-grp"><label>Platform</label><select id="jrnPlatform"><option value="default">Default (Gold)</option><option value="republic">Republic TV (Red)</option><option value="dailyhunt">DailyHunt (Orange)</option><option value="ceo">CEO India Magazine (Gold)</option><option value="success">Success India Magazine (Blue)</option><option value="india">The Indian Bulletin (Saffron)</option></select></div><div class="field-grp"><label>Article Link (URL)</label><input type="url" id="jrnLink" placeholder="https://ceoindia.com/article..."></div></div><div class="field-grp"><label>Short Excerpt</label><textarea id="jrnExcerpt" placeholder="A short teaser…" style="min-height:70px;"></textarea></div><div class="field-grp"><label>Full Content</label><textarea id="jrnContent" placeholder="Write the full entry here…" style="min-height:140px;"></textarea></div><div class="field-grp"><label>Tags (comma separated)</label><input type="text" id="jrnTags" placeholder="manifestation, self-love, abundance"></div><div class="field-grp"><label>Cover Image — cropped to 3:2</label><div class="upload-area"><input type="file" accept="image/*" onchange="openCropForField(event,'jrn','3:2','Landscape (3:2)')"><span class="u-icon">📓</span><p>Click or drag cover image</p><small>JPG, PNG, WEBP · Cropped to 3:2</small></div><img id="jrnImgPreview" class="preview-img" alt=""></div><div class="field-grp"><label>Or paste image URL</label><input type="url" id="jrnImgUrl" placeholder="https://..." oninput="previewJrnUrl(this.value)"></div><div class="btn-group"><button class="adm-btn gold" onclick="saveJournal()">Save Entry</button><button class="adm-btn outline" onclick="clearJrnForm()">Clear</button></div></div>
       <div style="font-size:.7rem;color:var(--muted);margin-bottom:.8rem;"><span id="jrnCount">0</span> journal entries total</div>
       <div class="journal-list" id="admJrnList"></div>
     </div>
 
-    <!-- BOOKINGS -->
     <div class="panel" id="panel-bookings">
       <div class="section-title">Cal.com Bookings</div>
-      <div class="cal-setup" id="calSetup">
-        <h3>🔗 Connect Cal.com</h3>
-        <p>Enter your API key to pull bookings. Find it at <strong>Cal.com → Settings → Developer → API Keys</strong>.</p>
-        <div class="cal-api-row">
-          <div class="field-grp"><label>API Key</label><input type="password" id="calApiKey" placeholder="cal_live_xxxxxxxxxxxx" autocomplete="off"></div>
-          <div class="field-grp" style="max-width:200px;"><label>Username</label><input type="text" id="calUsername" placeholder="akshita-dayma"></div>
-          <button class="adm-btn gold" style="flex-shrink:0;align-self:flex-end;margin-bottom:1rem;" onclick="connectCal()">Connect →</button>
-        </div>
-      </div>
-      <div class="bk-summary" id="bkSummary" style="display:none;">
-        <div class="bs-card"><span class="bs-val" id="bsTotal" style="color:var(--text);">0</span><div class="bs-label">Total</div></div>
-        <div class="bs-card"><span class="bs-val" id="bsUpcoming" style="color:var(--blue);">0</span><div class="bs-label">Upcoming</div></div>
-        <div class="bs-card"><span class="bs-val" id="bsToday" style="color:var(--green);">0</span><div class="bs-label">Today</div></div>
-        <div class="bs-card"><span class="bs-val" id="bsCancelled" style="color:var(--red);">0</span><div class="bs-label">Cancelled</div></div>
-      </div>
-      <div class="bk-toolbar" id="bkToolbar" style="display:none;">
-        <button class="bk-filter active" onclick="filterBk('all',this)">All</button>
-        <button class="bk-filter" onclick="filterBk('upcoming',this)">Upcoming</button>
-        <button class="bk-filter" onclick="filterBk('past',this)">Past</button>
-        <button class="bk-filter" onclick="filterBk('cancelled',this)">Cancelled</button>
-        <button class="adm-btn blue-btn sm" style="margin-left:auto;" onclick="fetchBookings()">↻ Refresh</button>
-        <button class="adm-btn outline sm" onclick="disconnectCal()">Disconnect</button>
-      </div>
-      <div id="calError" style="display:none;" class="cal-error"></div>
-      <div id="calLoading" class="cal-loading" style="display:none;"><div class="spin"></div><div style="font-size:.75rem;margin-top:.5rem;">Fetching from Cal.com…</div></div>
-      <div id="bkWrap"></div>
+      <div class="cal-setup" id="calSetup"><h3>🔗 Connect Cal.com</h3><p>Enter your API key to pull bookings.</p><div class="cal-api-row"><div class="field-grp"><label>API Key</label><input type="password" id="calApiKey" placeholder="cal_live_xxxxxxxxxxxx"></div><div class="field-grp" style="max-width:200px;"><label>Username</label><input type="text" id="calUsername" placeholder="akshita-dayma"></div><button class="adm-btn gold" onclick="connectCal()">Connect →</button></div></div>
+      <div class="bk-summary" id="bkSummary" style="display:none;"><div class="bs-card"><span class="bs-val" id="bsTotal">0</span><div class="bs-label">Total</div></div><div class="bs-card"><span class="bs-val" id="bsUpcoming">0</span><div class="bs-label">Upcoming</div></div><div class="bs-card"><span class="bs-val" id="bsToday">0</span><div class="bs-label">Today</div></div><div class="bs-card"><span class="bs-val" id="bsCancelled">0</span><div class="bs-label">Cancelled</div></div></div>
+      <div class="bk-toolbar" id="bkToolbar" style="display:none;"><button class="bk-filter active" onclick="filterBk('all',this)">All</button><button class="bk-filter" onclick="filterBk('upcoming',this)">Upcoming</button><button class="bk-filter" onclick="filterBk('past',this)">Past</button><button class="bk-filter" onclick="filterBk('cancelled',this)">Cancelled</button><button class="adm-btn blue-btn sm" onclick="fetchBookings()">↻ Refresh</button><button class="adm-btn outline sm" onclick="disconnectCal()">Disconnect</button></div>
+      <div id="calError" style="display:none;" class="cal-error"></div><div id="calLoading" class="cal-loading" style="display:none;"><div class="spin"></div><div>Fetching bookings…</div></div><div id="bkWrap"></div>
     </div>
 
-    <!-- SETTINGS -->
     <div class="panel" id="panel-settings">
       <div class="section-title">Settings</div>
-      <div class="settings-grid">
-        <div class="setting-card">
-          <h3>Site Visibility</h3>
-          <div class="toggle-row"><span class="toggle-label">Testimonials</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Celebrities</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">eBooks</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Achievements</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Journal / Blog</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-        </div>
-        <div class="setting-card">
-          <h3>Notifications</h3>
-          <div class="toggle-row"><span class="toggle-label">Admin login alerts</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">New booking notify</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-          <div class="toggle-row"><span class="toggle-label">Contact form emails</span><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
-        </div>
-        <div class="setting-card">
-          <h3>Change Password</h3>
-          <div class="field-grp" style="margin-top:.4rem;"><label>Current Password</label><input type="password" placeholder="••••••••" id="curPwd"></div>
-          <div class="field-grp"><label>New Password</label><input type="password" placeholder="New password" id="newPwd"></div>
-          <div class="field-grp"><label>Confirm New</label><input type="password" placeholder="Confirm" id="confPwd"></div>
-          <button class="adm-btn gold" onclick="changePwd()">Update Password</button>
-        </div>
-        <div class="setting-card">
-          <h3>Data Management</h3>
-          <p style="font-size:.75rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.65;">Export or reset stored content.</p>
-          <div class="btn-group" style="flex-direction:column;gap:.6rem;">
-            <button class="adm-btn outline" onclick="exportData()">📤 Export All Data (JSON)</button>
-            <button class="adm-btn danger" onclick="confirmReset()">⚠️ Reset All Data</button>
-          </div>
-        </div>
-      </div>
+      <div class="settings-grid"><div class="setting-card"><h3>Site Visibility</h3><div class="toggle-row"><span class="toggle-label">Testimonials</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div><div class="toggle-row"><span class="toggle-label">Celebrities</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div><div class="toggle-row"><span class="toggle-label">eBooks</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div><div class="toggle-row"><span class="toggle-label">Achievements</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div><div class="toggle-row"><span class="toggle-label">Journal / Blog</span><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div><div class="setting-card"><h3>Change Password</h3><div class="field-grp"><label>Current Password</label><input type="password" placeholder="••••••••" id="curPwd"></div><div class="field-grp"><label>New Password</label><input type="password" placeholder="New password" id="newPwd"></div><div class="field-grp"><label>Confirm New</label><input type="password" placeholder="Confirm" id="confPwd"></div><button class="adm-btn gold" onclick="changePwd()">Update Password</button></div><div class="setting-card"><h3>Data Management</h3><p style="font-size:.75rem;color:var(--muted);margin-bottom:1.2rem;">Export or reset stored content.</p><div class="btn-group" style="flex-direction:column;gap:.6rem;"><button class="adm-btn outline" onclick="exportData()">📤 Export All Data (JSON)</button><button class="adm-btn danger" onclick="confirmReset()">⚠️ Reset All Data</button></div></div></div>
     </div>
-
-  </div><!-- /content -->
-</div><!-- /main -->
+  </div>
+</div>
 
 <script>
-// ── CURSOR ─────────────────────────────────────────────────────────────────
+const API="https://adg-backend-sm2p.onrender.com";
+let testimonials=[],ebooks=[],achievements=[],journal=[],celebrities=[];
+
+
+const token = localStorage.getItem("admin_token");
+
+if(!token){
+  window.location.href = "admin-login.html";
+}
+
+// ✅ helper function (IMPORTANT)
+function authFetch(url, options = {}) {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...(options.headers || {}),
+      "Authorization": "Bearer " + token
+    }
+  });
+}
+// Cursor
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
@@ -878,784 +464,229 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.le
 document.addEventListener('mouseover',e=>{if(e.target.matches('a,button,input,select,textarea,.ach-card,.journal-card,.ebook-row,.stat-card,.test-card,.crop-tab,.celeb-adm-card'))document.body.classList.add('ch');});
 document.addEventListener('mouseout',()=>document.body.classList.remove('ch'));
 
-// ── AUTH ───────────────────────────────────────────────────────────────────
-function doLogout(){sessionStorage.removeItem('adg_admin');window.location.href='admin-login.html';}
-
-// ── CLOCK ──────────────────────────────────────────────────────────────────
+function doLogout(){
+  localStorage.removeItem("admin_token");
+  window.location.href = "admin-login.html";
+}
 setInterval(()=>{document.getElementById('liveClock').textContent=new Date().toLocaleTimeString('en-IN',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(type||'');clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3400);}
 
-// ── TOAST ──────────────────────────────────────────────────────────────────
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast show '+(type||'');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3400);
-}
-
-// ── PANELS ─────────────────────────────────────────────────────────────────
-const PM={
-  dashboard:{t:'Dashboard',s:'Overview'},
-  testimonials:{t:'Testimonials',s:'Manage Screenshots'},
-  celebrities:{t:'Celebrities',s:'Manage Celebrity Photos'},
-  ebooks:{t:'eBooks',s:'Manage eBooks'},
-  achievements:{t:'Achievements',s:'Achievements & Milestones'},
-  journal:{t:'Journal',s:'Blog & Journal Posts'},
-  bookings:{t:'Cal.com Bookings',s:'Booking Management'},
-  settings:{t:'Settings',s:'System Settings'}
-};
-function showPanel(n,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+n).classList.add('active');
-  if(btn)btn.classList.add('active');
-  const m=PM[n]||{t:n,s:n};
-  document.getElementById('topTitle').textContent=m.t;
-  document.getElementById('topSub').textContent=m.s;
-  if(n==='dashboard')updateDash();
-  if(n==='bookings')initBookings();
-}
+const PM={dashboard:{t:'Dashboard',s:'Overview'},testimonials:{t:'Testimonials',s:'Manage Screenshots'},celebrities:{t:'Celebrities',s:'Manage Celebrity Photos'},ebooks:{t:'eBooks',s:'Manage eBooks'},achievements:{t:'Achievements',s:'Achievements & Milestones'},journal:{t:'Journal',s:'Blog & Journal Posts'},bookings:{t:'Cal.com Bookings',s:'Booking Management'},settings:{t:'Settings',s:'System Settings'}};
+function showPanel(n,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+n).classList.add('active');if(btn)btn.classList.add('active');const m=PM[n]||{t:n,s:n};document.getElementById('topTitle').textContent=m.t;document.getElementById('topSub').textContent=m.s;if(n==='dashboard')updateDash();if(n==='bookings')initBookings();}
 function scrollToAdd(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
-
-// ── API & DATA ──────────────────────────────────────────────────────────────
-const API="https://adg-backend-sm2p.onrender.com";
-let testimonials=[],ebooks=[],achievements=[],journal=[],celebrities=[];
 
 async function loadTestimonials(){try{const r=await fetch(API+"/testimonials");testimonials=await r.json();}catch{testimonials=[];}renderTests();}
 async function loadEbooks(){try{const r=await fetch(API+"/ebooks");ebooks=await r.json();}catch{ebooks=[];}renderEbooks();}
 async function loadAchievements(){try{const r=await fetch(API+"/achievements");achievements=await r.json();}catch{achievements=[];}renderAch();}
 async function loadJournal(){try{const r=await fetch(API+"/journal");journal=await r.json();}catch{journal=[];}renderJrn();}
 async function loadCelebrities(){try{const r=await fetch(API+"/celebrities");celebrities=await r.json();}catch{celebrities=[];}renderCelebs();}
+async function initData(){await Promise.all([loadTestimonials(),loadEbooks(),loadAchievements(),loadJournal(),loadCelebrities()]);updateDash();}
 
-async function initData(){
-  await Promise.all([loadTestimonials(),loadEbooks(),loadAchievements(),loadJournal(),loadCelebrities()]);
-  updateDash();
-}
+async function deleteFromCloudinary(public_id,resource_type='image'){if(!public_id)return;try{await authFetch(API+'/delete-file',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_id,resource_type})});}catch(e){console.warn('Cloudinary delete failed:',e);}}
+async function loadCloudImages(){const el=document.getElementById('cloudImages');if(!el)return;el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">Loading…</div>';try{const r=await fetch(API+'/get-images');const data=await r.json();if(!data.length){el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">No images in Cloudinary yet.</div>';return;}el.innerHTML=`<div class="cloud-grid">${data.map(i=>`<img src="${i.secure_url}" class="cloud-img-thumb" title="${i.public_id}">`).join('')}</div><div style="font-size:.62rem;color:var(--muted);margin-top:.5rem;">${data.length} image${data.length!==1?'s':''} stored</div>`;}catch{el.innerHTML='<div style="font-size:.75rem;color:var(--red);">Could not load — is the server running?</div>';}}
 
-// ── CLOUDINARY ─────────────────────────────────────────────────────────────
-async function deleteFromCloudinary(public_id,resource_type='image'){
-  if(!public_id)return;
-  try{await fetch(API+'/delete-file',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_id,resource_type})});}
-  catch(e){console.warn('Cloudinary delete failed:',e);}
-}
-async function loadCloudImages(){
-  const el=document.getElementById('cloudImages');if(!el)return;
-  el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">Loading…</div>';
-  try{
-    const r=await fetch(API+'/get-images');const data=await r.json();
-    if(!data.length){el.innerHTML='<div style="font-size:.75rem;color:var(--muted);">No images in Cloudinary yet.</div>';return;}
-    el.innerHTML=`<div class="cloud-grid">${data.map(i=>`<img src="${i.secure_url}" class="cloud-img-thumb" title="${i.public_id}">`).join('')}</div><div style="font-size:.62rem;color:var(--muted);margin-top:.5rem;">${data.length} image${data.length!==1?'s':''} stored</div>`;
-  }catch{el.innerHTML='<div style="font-size:.75rem;color:var(--red);">Could not load — is the server running?</div>';}
-}
-
-// ── DASHBOARD ──────────────────────────────────────────────────────────────
 function updateDash(){
   const set=(id,v)=>{const el=document.getElementById(id);if(el){el.textContent=v;if(v>0&&el.classList.contains('sb-badge'))el.classList.add('has');}};
-  set('ds-tests',testimonials.length);
-  set('ds-celebs',celebrities.length);
-  set('ds-ebooks',ebooks.length);
-  set('ds-ach',achievements.length);
-  set('testBadge',testimonials.length);
-  set('celebBadge',celebrities.length);
-  set('ebBadge',ebooks.length);
-  set('achBadge',achievements.length);
-  set('jrnBadge',journal.length);
-  set('qs-sp',testimonials.filter(t=>t.cat==='sp').length);
-  set('qs-bollywood',celebrities.filter(c=>c.cat==='bollywood').length);
-  set('qs-ebwpdf',ebooks.filter(e=>e.pdfUrl).length);
-  set('qs-achievements',achievements.filter(a=>a.type==='award').length);
-  set('qs-jrns',journal.length);
-  const acts=[
-    {c:'gold',t:`<strong>${testimonials.length}</strong> testimonials active`,d:'Live'},
-    {c:'rose',t:`<strong>${celebrities.length}</strong> celebrities showcased`,d:'Live'},
-    {c:'blue',t:`<strong>${ebooks.length}</strong> eBooks · <strong>${ebooks.filter(e=>e.pdfUrl).length}</strong> with PDF`,d:'Live'},
-    {c:'gold',t:`<strong>${achievements.length}</strong> achievements showcased`,d:'Live'},
-    {c:'purple',t:`<strong>${journal.length}</strong> journal entries published`,d:'Live'},
-    {c:'green',t:'Admin session active',d:'Now'},
-  ];
+  set('ds-tests',testimonials.length);set('ds-celebs',celebrities.length);set('ds-ebooks',ebooks.length);set('ds-ach',achievements.length);
+  set('testBadge',testimonials.length);set('celebBadge',celebrities.length);set('ebBadge',ebooks.length);set('achBadge',achievements.length);set('jrnBadge',journal.length);
+  set('qs-sp',testimonials.filter(t=>t.cat==='sp').length);set('qs-bollywood',celebrities.filter(c=>c.cat==='bollywood').length);
+  set('qs-ebwpdf',ebooks.filter(e=>e.pdfUrl).length);set('qs-achievements',achievements.filter(a=>a.type==='award').length);set('qs-jrns',journal.length);
+  const acts=[{c:'gold',t:`<strong>${testimonials.length}</strong> testimonials active`,d:'Live'},{c:'rose',t:`<strong>${celebrities.length}</strong> celebrities showcased`,d:'Live'},{c:'blue',t:`<strong>${ebooks.length}</strong> eBooks · <strong>${ebooks.filter(e=>e.pdfUrl).length}</strong> with PDF`,d:'Live'},{c:'gold',t:`<strong>${achievements.length}</strong> achievements showcased`,d:'Live'},{c:'purple',t:`<strong>${journal.length}</strong> journal entries published`,d:'Live'},{c:'green',t:'Admin session active',d:'Now'}];
   document.getElementById('activityFeed').innerHTML=acts.map((a,i)=>`<div class="activity-item" style="animation-delay:${i*.06}s"><div class="act-dot ${a.c}"></div><div class="act-text">${a.t}</div><div class="act-time">${a.d}</div></div>`).join('');
   loadCloudImages();
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// IMAGE CROP ENGINE
-// ═══════════════════════════════════════════════════════════════════
-let cropState={
-  img:null,scale:1,offsetX:0,offsetY:0,
-  aspect:9/16,aspectStr:'9:16',
-  field:'test',
-  dragging:false,lastX:0,lastY:0,
-  callback:null
-};
-
-const CROP_ASPECTS={
-  test:[{label:'9:16 Portrait',ratio:9/16},{label:'4:5',ratio:4/5},{label:'1:1 Square',ratio:1}],
-  ebook:[{label:'1:1 Square',ratio:1},{label:'3:4 Book',ratio:3/4},{label:'2:3',ratio:2/3}],
-  ach:[{label:'4:3 Landscape',ratio:4/3},{label:'16:9 Wide',ratio:16/9},{label:'1:1 Square',ratio:1}],
-  jrn:[{label:'3:2 Landscape',ratio:3/2},{label:'16:9 Wide',ratio:16/9},{label:'1:1 Square',ratio:1}],
-  celeb:[{label:'3:4 Portrait',ratio:3/4},{label:'4:5 Portrait',ratio:4/5},{label:'1:1 Square',ratio:1}],
-  hero:[{label:'4:5 Portrait',ratio:4/5},{label:'3:4',ratio:3/4},{label:'1:1',ratio:1}],
-  about:[{label:'3:4 Portrait',ratio:3/4},{label:'2:3',ratio:2/3},{label:'1:1',ratio:1}]
-};
-const CROP_TITLES={
-  test:'Crop Testimonial Screenshot',
-  ebook:'Crop eBook Cover',
-  ach:'Crop Achievement Image',
-  jrn:'Crop Journal Cover',
-  celeb:'Crop Celebrity Photo'
-};
-const CROP_DESC={
-  test:'Portrait screenshot — will appear as a tall card (9:16)',
-  ebook:'Square cover — shown in eBook cards',
-  ach:'Landscape photo — shown in achievement cards (4:3)',
-  jrn:'Landscape cover — shown in journal cards (3:2)',
-  celeb:'Portrait photo — shown in celebrity grid (3:4)'
-};
-
-function openCropForField(event,field,aspectHint,labelHint){
-  const f=event.target.files?.[0];if(!f)return;
-  const url=URL.createObjectURL(f);
-  const img=new Image();
-  img.onload=()=>{
-    cropState.field=field;
-    const aspects=CROP_ASPECTS[field]||CROP_ASPECTS.test;
-    cropState.aspect=aspects[0].ratio;
-    cropState.aspectStr=aspects[0].label;
-    cropState.img=img;
-    buildCropTabs(aspects);
-    document.getElementById('cropTitle').textContent=CROP_TITLES[field]||'Crop Image';
-    document.getElementById('cropDesc').textContent=CROP_DESC[field]||'Position and crop your image';
-    initCropCanvas();
-    document.getElementById('cropOverlay').classList.add('open');
-  };
-  img.src=url;
-  event.target.value='';
-}
-
-function buildCropTabs(aspects){
-  document.getElementById('cropTabs').innerHTML=aspects.map((a,i)=>
-    `<button class="crop-tab${i===0?' active':''}" onclick="setCropAspect(${a.ratio},this,'${a.label}')">${a.label}</button>`
-  ).join('');
-}
-
-function setCropAspect(ratio,btn,label){
-  cropState.aspect=ratio;cropState.aspectStr=label;
-  document.querySelectorAll('.crop-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  resetCropOffset();
-  drawCropCanvas();
-}
-
-function initCropCanvas(){
-  const canvas=document.getElementById('cropCanvas');
-  const img=cropState.img;
-  const maxW=Math.min(480,window.innerWidth*0.85);
-  const maxH=Math.min(window.innerHeight*0.5,480);
-  let cw=maxW,ch=img.height*(maxW/img.width);
-  if(ch>maxH){ch=maxH;cw=img.width*(maxH/img.height);}
-  canvas.width=cw;canvas.height=ch;
-  canvas.style.width=cw+'px';canvas.style.height=ch+'px';
-  cropState.scale=cw/img.width;
-  resetCropOffset();
-  drawCropCanvas();
-  updatePreview();
-  canvas.onmousedown=cropMouseDown;
-  canvas.onmousemove=cropMouseMove;
-  canvas.onmouseup=cropMouseUp;
-  canvas.ontouchstart=cropTouchStart;
-  canvas.ontouchmove=cropTouchMove;
-  canvas.ontouchend=cropMouseUp;
-  canvas.onwheel=cropWheel;
-}
-
-function resetCropOffset(){
-  const canvas=document.getElementById('cropCanvas');
-  const cw=canvas.width,ch=canvas.height;
-  const cropW=cropState.aspect>=1?cw:ch*cropState.aspect;
-  const cropH=cropState.aspect>=1?cw/cropState.aspect:ch;
-  cropState.offsetX=(cw-cropW)/2;
-  cropState.offsetY=(ch-cropH)/2;
-}
-
-function drawCropCanvas(){
-  const canvas=document.getElementById('cropCanvas');
-  const ctx=canvas.getContext('2d');
-  const img=cropState.img;
-  const cw=canvas.width,ch=canvas.height;
-  ctx.clearRect(0,0,cw,ch);
-  ctx.drawImage(img,0,0,cw,ch);
-  const cropW=Math.min(cw,cropState.aspect>=1?cw:ch*cropState.aspect);
-  const cropH=Math.min(ch,cropState.aspect>=1?cw/cropState.aspect:ch);
-  const cx=cropState.offsetX,cy=cropState.offsetY;
-  ctx.fillStyle='rgba(0,0,0,.55)';
-  ctx.fillRect(0,0,cw,cy);
-  ctx.fillRect(0,cy+cropH,cw,ch-cy-cropH);
-  ctx.fillRect(0,cy,cx,cropH);
-  ctx.fillRect(cx+cropW,cy,cw-cx-cropW,cropH);
-  ctx.strokeStyle='rgba(201,168,76,.9)';ctx.lineWidth=1.5;
-  ctx.strokeRect(cx,cy,cropW,cropH);
-  ctx.strokeStyle='rgba(201,168,76,.25)';ctx.lineWidth=.8;
-  for(let i=1;i<3;i++){
-    ctx.beginPath();ctx.moveTo(cx+cropW*i/3,cy);ctx.lineTo(cx+cropW*i/3,cy+cropH);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(cx,cy+cropH*i/3);ctx.lineTo(cx+cropW,cy+cropH*i/3);ctx.stroke();
-  }
-  const hs=8;ctx.fillStyle='var(--gold)';
-  [[cx,cy],[cx+cropW-hs,cy],[cx,cy+cropH-hs],[cx+cropW-hs,cy+cropH-hs]].forEach(([x,y])=>ctx.fillRect(x,y,hs,hs));
-  cropState.box={x:cx,y:cy,w:cropW,h:cropH};
-  updatePreview();
-}
-
-function updatePreview(){
-  const prev=document.getElementById('cropPreview');
-  const img=cropState.img;
-  if(!img)return;
-  const pw=120,ph=Math.round(120/cropState.aspect);
-  prev.width=pw;prev.height=ph;
-  prev.style.width=pw+'px';prev.style.height=ph+'px';
-  const canvas=document.getElementById('cropCanvas');
-  const box=cropState.box;if(!box)return;
-  const scaleX=img.width/canvas.width,scaleY=img.height/canvas.height;
-  const sx=box.x*scaleX,sy=box.y*scaleY,sw=box.w*scaleX,sh=box.h*scaleY;
-  const ctx=prev.getContext('2d');
-  ctx.drawImage(img,sx,sy,sw,sh,0,0,pw,ph);
-  ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=1;ctx.strokeRect(0,0,pw,ph);
-}
-
-function getCropBox(){
-  return cropState.box||{x:0,y:0,w:document.getElementById('cropCanvas').width,h:document.getElementById('cropCanvas').height};
-}
-
-function cropMouseDown(e){
-  const box=getCropBox();
-  const rect=e.target.getBoundingClientRect();
-  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
-  if(mx>=box.x&&mx<=box.x+box.w&&my>=box.y&&my<=box.y+box.h){
-    cropState.dragging=true;cropState.lastX=mx;cropState.lastY=my;
-  }
-}
-function cropMouseMove(e){
-  if(!cropState.dragging)return;
-  const rect=e.target.getBoundingClientRect();
-  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
-  const dx=mx-cropState.lastX,dy=my-cropState.lastY;
-  cropState.lastX=mx;cropState.lastY=my;
-  const canvas=document.getElementById('cropCanvas');
-  const box=getCropBox();
-  cropState.offsetX=Math.max(0,Math.min(canvas.width-box.w,cropState.offsetX+dx));
-  cropState.offsetY=Math.max(0,Math.min(canvas.height-box.h,cropState.offsetY+dy));
-  drawCropCanvas();
-}
+// Crop Engine (simplified)
+let cropState={img:null,scale:1,offsetX:0,offsetY:0,aspect:9/16,aspectStr:'9:16',field:'test',dragging:false,lastX:0,lastY:0};
+const CROP_ASPECTS={test:[{label:'9:16 Portrait',ratio:9/16},{label:'4:5',ratio:4/5},{label:'1:1 Square',ratio:1}],ebook:[{label:'1:1 Square',ratio:1},{label:'3:4 Book',ratio:3/4}],ach:[{label:'4:3 Landscape',ratio:4/3},{label:'16:9 Wide',ratio:16/9}],jrn:[{label:'3:2 Landscape',ratio:3/2},{label:'16:9 Wide',ratio:16/9}],celeb:[{label:'3:4 Portrait',ratio:3/4},{label:'4:5 Portrait',ratio:4/5}]};
+function openCropForField(event,field){const f=event.target.files?.[0];if(!f)return;const url=URL.createObjectURL(f);const img=new Image();img.onload=()=>{cropState.field=field;const aspects=CROP_ASPECTS[field]||CROP_ASPECTS.test;cropState.aspect=aspects[0].ratio;cropState.aspectStr=aspects[0].label;cropState.img=img;document.getElementById('cropTabs').innerHTML=aspects.map((a,i)=>`<button class="crop-tab${i===0?' active':''}" onclick="setCropAspect(${a.ratio},this)">${a.label}</button>`).join('');initCropCanvas();document.getElementById('cropOverlay').classList.add('open');};img.src=url;event.target.value='';}
+function setCropAspect(ratio,btn){cropState.aspect=ratio;document.querySelectorAll('.crop-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');resetCropOffset();drawCropCanvas();}
+function initCropCanvas(){const canvas=document.getElementById('cropCanvas');const img=cropState.img;const maxW=Math.min(480,window.innerWidth*0.85);const maxH=Math.min(window.innerHeight*0.5,480);let cw=maxW,ch=img.height*(maxW/img.width);if(ch>maxH){ch=maxH;cw=img.width*(maxH/img.height);}canvas.width=cw;canvas.height=ch;canvas.style.width=cw+'px';canvas.style.height=ch+'px';resetCropOffset();drawCropCanvas();updatePreview();canvas.onmousedown=cropMouseDown;canvas.onmousemove=cropMouseMove;canvas.onmouseup=cropMouseUp;canvas.onwheel=cropWheel;}
+function resetCropOffset(){const canvas=document.getElementById('cropCanvas');const cw=canvas.width,ch=canvas.height;const cropW=cropState.aspect>=1?cw:ch*cropState.aspect;const cropH=cropState.aspect>=1?cw/cropState.aspect:ch;cropState.offsetX=(cw-cropW)/2;cropState.offsetY=(ch-cropH)/2;}
+function drawCropCanvas(){const canvas=document.getElementById('cropCanvas');const ctx=canvas.getContext('2d');const img=cropState.img;const cw=canvas.width,ch=canvas.height;ctx.clearRect(0,0,cw,ch);ctx.drawImage(img,0,0,cw,ch);const cropW=Math.min(cw,cropState.aspect>=1?cw:ch*cropState.aspect);const cropH=Math.min(ch,cropState.aspect>=1?cw/cropState.aspect:ch);const cx=cropState.offsetX,cy=cropState.offsetY;ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,0,cw,cy);ctx.fillRect(0,cy+cropH,cw,ch-cy-cropH);ctx.fillRect(0,cy,cx,cropH);ctx.fillRect(cx+cropW,cy,cw-cx-cropW,cropH);ctx.strokeStyle='rgba(201,168,76,.9)';ctx.lineWidth=1.5;ctx.strokeRect(cx,cy,cropW,cropH);cropState.box={x:cx,y:cy,w:cropW,h:cropH};updatePreview();}
+function updatePreview(){const prev=document.getElementById('cropPreview');const img=cropState.img;if(!img)return;const pw=120,ph=Math.round(120/cropState.aspect);prev.width=pw;prev.height=ph;const canvas=document.getElementById('cropCanvas');const box=cropState.box;if(!box)return;const scaleX=img.width/canvas.width,scaleY=img.height/canvas.height;const sx=box.x*scaleX,sy=box.y*scaleY,sw=box.w*scaleX,sh=box.h*scaleY;const ctx=prev.getContext('2d');ctx.drawImage(img,sx,sy,sw,sh,0,0,pw,ph);ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=1;ctx.strokeRect(0,0,pw,ph);}
+function getCropBox(){return cropState.box||{x:0,y:0,w:document.getElementById('cropCanvas').width,h:document.getElementById('cropCanvas').height};}
+function cropMouseDown(e){const box=getCropBox();const rect=e.target.getBoundingClientRect();const mx=e.clientX-rect.left,my=e.clientY-rect.top;if(mx>=box.x&&mx<=box.x+box.w&&my>=box.y&&my<=box.y+box.h){cropState.dragging=true;cropState.lastX=mx;cropState.lastY=my;}}
+function cropMouseMove(e){if(!cropState.dragging)return;const rect=e.target.getBoundingClientRect();const mx=e.clientX-rect.left,my=e.clientY-rect.top;const dx=mx-cropState.lastX,dy=my-cropState.lastY;cropState.lastX=mx;cropState.lastY=my;const canvas=document.getElementById('cropCanvas');const box=getCropBox();cropState.offsetX=Math.max(0,Math.min(canvas.width-box.w,cropState.offsetX+dx));cropState.offsetY=Math.max(0,Math.min(canvas.height-box.h,cropState.offsetY+dy));drawCropCanvas();}
 function cropMouseUp(){cropState.dragging=false;}
-function cropTouchStart(e){e.preventDefault();const t=e.touches[0];const rect=e.target.getBoundingClientRect();cropMouseDown({clientX:t.clientX,clientY:t.clientY,target:{getBoundingClientRect:()=>rect}});}
-function cropTouchMove(e){e.preventDefault();const t=e.touches[0];const rect=e.target.getBoundingClientRect();cropMouseMove({clientX:t.clientX,clientY:t.clientY,target:{getBoundingClientRect:()=>rect}});}
-function cropWheel(e){
-  e.preventDefault();
-  const canvas=document.getElementById('cropCanvas');
-  const box=getCropBox();
-  const dy=e.deltaY*.5;
-  cropState.offsetY=Math.max(0,Math.min(canvas.height-box.h,cropState.offsetY+dy));
-  drawCropCanvas();
-}
-
-function applyCrop(){
-  const img=cropState.img;
-  const canvas=document.getElementById('cropCanvas');
-  const box=getCropBox();
-  const scaleX=img.width/canvas.width,scaleY=img.height/canvas.height;
-  const sx=box.x*scaleX,sy=box.y*scaleY,sw=box.w*scaleX,sh=box.h*scaleY;
-  const out=document.createElement('canvas');
-  const outW=Math.round(sw),outH=Math.round(sh);
-  out.width=outW;out.height=outH;
-  out.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,outW,outH);
-  out.toBlob(async blob=>{
-    const field=cropState.field;
-    closeCrop();
-    let uploadedUrl='',uploadedId='';
-    try{
-      const fd=new FormData();fd.append('file',blob,'crop.jpg');
-      const r=await fetch(API+'/upload-image',{method:'POST',body:fd});
-      const data=await r.json();
-      uploadedUrl=data.url;uploadedId=data.public_id||'';
-    }catch{
-      uploadedUrl=URL.createObjectURL(blob);uploadedId='';
-    }
-    if(field==='test'){tImg=uploadedUrl;tImgId=uploadedId;showPrev('testImgPreview',uploadedUrl);}
-    else if(field==='ebook'){eImg=uploadedUrl;eImgId=uploadedId;showPrev('ebImgPreview',uploadedUrl);}
-    else if(field==='ach'){aImg=uploadedUrl;aImgId=uploadedId;showPrev('achImgPreview',uploadedUrl);}
-    else if(field==='jrn'){jImg=uploadedUrl;jImgId=uploadedId;showPrev('jrnImgPreview',uploadedUrl);}
-    else if(field==='celeb'){cImg=uploadedUrl;cImgId=uploadedId;showPrev('celebImgPreview',uploadedUrl);}
-    toast('✓ Image cropped & ready','success');
-  },'image/jpeg',0.93);
-}
-
+function cropWheel(e){e.preventDefault();const canvas=document.getElementById('cropCanvas');const box=getCropBox();const dy=e.deltaY*.5;cropState.offsetY=Math.max(0,Math.min(canvas.height-box.h,cropState.offsetY+dy));drawCropCanvas();}
+function applyCrop(){const img=cropState.img;const canvas=document.getElementById('cropCanvas');const box=getCropBox();const scaleX=img.width/canvas.width,scaleY=img.height/canvas.height;const sx=box.x*scaleX,sy=box.y*scaleY,sw=box.w*scaleX,sh=box.h*scaleY;const out=document.createElement('canvas');out.width=Math.round(sw);out.height=Math.round(sh);out.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,out.width,out.height);out.toBlob(async blob=>{const field=cropState.field;closeCrop();let uploadedUrl='',uploadedId='';try{const fd=new FormData();fd.append('file',blob,'crop.jpg');const r=await authFetch(API+'/upload-image',{method:'POST',body:fd});const data=await r.json();uploadedUrl=data.url;uploadedId=data.public_id||'';}catch{uploadedUrl=URL.createObjectURL(blob);uploadedId='';}if(field==='test'){tImg=uploadedUrl;tImgId=uploadedId;showPrev('testImgPreview',uploadedUrl);}else if(field==='ebook'){eImg=uploadedUrl;eImgId=uploadedId;showPrev('ebImgPreview',uploadedUrl);}else if(field==='ach'){aImg=uploadedUrl;aImgId=uploadedId;showPrev('achImgPreview',uploadedUrl);}else if(field==='jrn'){jImg=uploadedUrl;jImgId=uploadedId;showPrev('jrnImgPreview',uploadedUrl);}else if(field==='celeb'){cImg=uploadedUrl;cImgId=uploadedId;showPrev('celebImgPreview',uploadedUrl);}toast('✓ Image cropped & ready','success');},'image/jpeg',0.93);}
 function closeCrop(){document.getElementById('cropOverlay').classList.remove('open');}
 
-// ── TESTIMONIALS ────────────────────────────────────────────────────────────
+// Testimonials
 let tImg='',tImgId='';
 function previewTestUrl(u){if(u){tImg=u;tImgId='';showPrev('testImgPreview',u);}}
-function clearTestForm(){tImg='';tImgId='';['newTestLabel','newTestUrl'].forEach(id=>document.getElementById(id).value='');hidePrev('testImgPreview');}
-async function addTestimonial(){
-  const newItem={cat:v('newTestCat'),label:v('newTestLabel')||'Client result',img:tImg||v('newTestUrl')||'',public_id:tImgId};
-  try{
-    await fetch(API+"/add-testimonial",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(newItem)});
-    clearTestForm();await loadTestimonials();updateDash();toast("✅ Testimonial saved","success");
-  }catch{toast("❌ Failed to save","error");}
-}
-async function delTest(id){
-  confirm2('Delete Screenshot','Remove this testimonial?',async()=>{
-    const item=testimonials.find(t=>t._id===id);
-    if(item?.public_id)await deleteFromCloudinary(item.public_id,'image');
-    await fetch(API+"/delete-testimonial/"+id,{method:"DELETE"});
-    await loadTestimonials();updateDash();toast('Deleted','success');
-  });
-}
-const catMap={sp:'SP',career:'Career',manifestation:'Manifest',program:'21-Day'};
-function renderTests(){
-  document.getElementById('testCount').textContent=testimonials.length;
-  document.getElementById('testBadge').textContent=testimonials.length;
-  const g=document.getElementById('admTestGrid');
-  if(!testimonials.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">📸</span><p>No testimonials yet.</p></div>`;return;}
-  g.innerHTML=testimonials.map((t,i)=>`<div class="test-card" style="animation-delay:${i*.04}s">
-    ${t.img?`<img src="${t.img}" class="test-thumb" alt="" loading="lazy">`:`<div class="test-thumb-empty"><span>📱</span><span>No image</span></div>`}
-    <div class="test-footer"><span class="tcat ${t.cat}">${catMap[t.cat]}</span><div class="test-actions"><button class="icon-btn del" onclick="delTest('${t._id}')">🗑</button></div></div>
-    <div class="test-label">${t.label||''}</div>
-    <div style="padding:0 .7rem .6rem;">
-      <select class="mini-sel" onchange="updateTestCat('${t._id}',this.value)">
-        <option value="sp" ${t.cat==='sp'?'selected':''}>💞 SP</option>
-        <option value="career" ${t.cat==='career'?'selected':''}>💼 Career</option>
-        <option value="manifestation" ${t.cat==='manifestation'?'selected':''}>✨ Manifest</option>
-        <option value="program" ${t.cat==='program'?'selected':''}>🗓️ 21-Day</option>
-      </select>
-    </div>
-  </div>`).join('');
-}
+function clearTestForm(){tImg='';tImgId='';document.getElementById('newTestLabel').value='';document.getElementById('newTestUrl').value='';hidePrev('testImgPreview');}
+async function addTestimonial(){const newItem={cat:document.getElementById('newTestCat').value,label:document.getElementById('newTestLabel').value||'Client result',img:tImg||document.getElementById('newTestUrl').value||'',public_id:tImgId};try{await authFetch(API+"/add-testimonial",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(newItem)});clearTestForm();await loadTestimonials();updateDash();toast("✅ Testimonial saved","success");}catch{toast("❌ Failed to save","error");}}
+async function delTest(id){confirm2('Delete Screenshot','Remove this testimonial?',async()=>{const item=testimonials.find(t=>t._id===id);if(item?.public_id)await deleteFromCloudinary(item.public_id,'image');await authFetch(API+"/delete-testimonial/"+id,{method:"DELETE"});await loadTestimonials();updateDash();toast('Deleted','success');});}
+const catMap={sp:'SP',career:'Career',manifestation:'Manifest',program:'21-Day',ebook:'eBook'};
+function renderTests(){document.getElementById('testCount').textContent=testimonials.length;document.getElementById('testBadge').textContent=testimonials.length;const g=document.getElementById('admTestGrid');if(!testimonials.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">📸</span><p>No testimonials yet.</p></div>`;return;}g.innerHTML=testimonials.map((t,i)=>`<div class="test-card" style="animation-delay:${i*.04}s">${t.img?`<img src="${t.img}" class="test-thumb" alt="" loading="lazy">`:`<div class="test-thumb-empty"><span>📱</span><span>No image</span></div>`}<div class="test-footer"><span class="tcat ${t.cat}">${catMap[t.cat]}</span><div class="test-actions"><button class="icon-btn del" onclick="delTest('${t._id}')">🗑</button></div></div><div class="test-label">${t.label||''}</div><div style="padding:0 .7rem .6rem;"><select class="mini-sel" onchange="updateTestCat('${t._id}',this.value)"><option value="sp" ${t.cat==='sp'?'selected':''}>💞 SP</option><option value="career" ${t.cat==='career'?'selected':''}>💼 Career</option><option value="manifestation" ${t.cat==='manifestation'?'selected':''}>✨ Manifest</option><option value="program" ${t.cat==='program'?'selected':''}>🗓️ 21-Day</option><option value="ebook" ${t.cat==='ebook'?'selected':''}>📘 eBook</option></select></div></div>`).join('');}
 function updateTestCat(id,cat){testimonials=testimonials.map(t=>t.id===id?{...t,cat}:t);}
 
-// ══════════════════════════════════════════════════════
-// CELEBRITIES
-// ══════════════════════════════════════════════════════
+// Celebrities
 let cImg='',cImgId='';
-
-const CAT_LABELS_ADM={bollywood:'Bollywood',tv:'TV & OTT',music:'Music',business:'Business',sport:'Sports',other:'Other'};
-const CAT_COLORS={
-  bollywood:'rgba(201,168,76,.18)',
-  tv:'rgba(126,200,227,.15)',
-  music:'rgba(224,201,240,.15)',
-  business:'rgba(93,204,122,.12)',
-  sport:'rgba(255,140,80,.12)',
-  other:'rgba(255,255,255,.06)'
-};
-
 function previewCelebUrl(u){if(u){cImg=u;cImgId='';showPrev('celebImgPreview',u);}}
+function clearCelebForm(){document.getElementById('editCelebIdx').value=-1;document.getElementById('celebFormTitle').textContent='Add Celebrity Photo';['celebName','celebDesc','celebYear','celebTag','celebImgUrl'].forEach(id=>document.getElementById(id).value='');hidePrev('celebImgPreview');cImg='';cImgId='';}
+async function saveCeleb(){const idx=document.getElementById('editCelebIdx').value;const item={name:document.getElementById('celebName').value,cat:document.getElementById('celebCat').value,desc:document.getElementById('celebDesc').value,year:document.getElementById('celebYear').value,tag:document.getElementById('celebTag').value,img:cImg||document.getElementById('celebImgUrl').value,imgPublicId:cImgId};if(!item.name){toast('Please enter celebrity name','error');return;}try{if(idx!=-1){await fetch(API+"/update-celebrity/"+celebrities[idx]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});toast("✅ Celebrity updated","success");}else{await authFetch(API+"/add-celebrity",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});toast("✅ Celebrity added","success");}clearCelebForm();await loadCelebrities();updateDash();}catch{toast("❌ Failed to save","error");}}
+function editCeleb(i){const c=celebrities[i];document.getElementById('editCelebIdx').value=i;document.getElementById('celebFormTitle').textContent='Edit Celebrity';document.getElementById('celebName').value=c.name;document.getElementById('celebCat').value=c.cat||'bollywood';document.getElementById('celebDesc').value=c.desc||'';document.getElementById('celebYear').value=c.year||'';document.getElementById('celebTag').value=c.tag||'';document.getElementById('celebImgUrl').value=c.img||'';if(c.img){cImg=c.img;cImgId=c.imgPublicId||'';showPrev('celebImgPreview',c.img);}scrollToAdd('celebAdd');}
+async function delCeleb(i){confirm2('Delete Celebrity','Remove this celebrity photo permanently?',async()=>{const c=celebrities[i];if(c?.imgPublicId)await deleteFromCloudinary(c.imgPublicId,'image');await fetch(API+"/delete-celebrity/"+c._id,{method:"DELETE"});await loadCelebrities();updateDash();toast('Deleted','success');});}
+function renderCelebs(){document.getElementById('celebCount').textContent=celebrities.length;document.getElementById('celebBadge').textContent=celebrities.length;const g=document.getElementById('admCelebGrid');if(!celebrities.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🌟</span><p>No celebrity photos yet.</p></div>`;return;}g.innerHTML=celebrities.map((c,i)=>`<div class="celeb-adm-card" style="animation-delay:${i*.04}s"><div class="celeb-adm-photo">${c.img?`<img src="${c.img}" alt="${c.name||''}" loading="lazy">`:''}<div class="celeb-adm-photo-empty" ${c.img?'style="display:none"':''}><span>🌟</span><span>No photo</span></div><div class="celeb-adm-overlay"><div class="celeb-adm-name">${c.name||'Unknown'}</div><div class="celeb-adm-desc">${c.desc||''}</div><span class="celeb-cat-badge">✦ ${c.cat||'Star'}</span></div></div><div class="celeb-adm-footer"><span class="celeb-year">${c.year||'—'}</span><div class="celeb-adm-actions"><button class="icon-btn edit" onclick="editCeleb(${i})">✏️</button><button class="icon-btn del" onclick="delCeleb(${i})">🗑</button></div></div></div>`).join('');}
 
-function clearCelebForm(){
-  document.getElementById('editCelebIdx').value=-1;
-  document.getElementById('celebFormTitle').textContent='Add Celebrity Photo';
-  ['celebName','celebDesc','celebYear','celebTag','celebImgUrl'].forEach(id=>document.getElementById(id).value='');
-  hidePrev('celebImgPreview');
-  cImg='';cImgId='';
-}
-
-async function saveCeleb(){
-  const idx=document.getElementById('editCelebIdx').value;
-  const item={
-    name:v('celebName'),
-    cat:v('celebCat'),
-    desc:v('celebDesc'),
-    year:v('celebYear'),
-    tag:v('celebTag'),
-    img:cImg||v('celebImgUrl'),
-    imgPublicId:cImgId
-  };
-  if(!item.name){toast('Please enter celebrity name','error');return;}
-  try{
-    if(idx!=-1){
-      await fetch(API+"/update-celebrity/"+celebrities[idx]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});
-      toast("✅ Celebrity updated","success");
-    }else{
-      await fetch(API+"/add-celebrity",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(item)});
-      toast("✅ Celebrity added","success");
-    }
-    clearCelebForm();
-    await loadCelebrities();
-    updateDash();
-  }catch{toast("❌ Failed to save","error");}
-}
-
-function editCeleb(i){
-  const c=celebrities[i];
-  document.getElementById('editCelebIdx').value=i;
-  document.getElementById('celebFormTitle').textContent='Edit Celebrity';
-  sv('celebName',c.name);
-  sv('celebCat',c.cat||'bollywood');
-  sv('celebDesc',c.desc||'');
-  sv('celebYear',c.year||'');
-  sv('celebTag',c.tag||'');
-  sv('celebImgUrl',c.img||'');
-  if(c.img){cImg=c.img;cImgId=c.imgPublicId||'';showPrev('celebImgPreview',c.img);}
-  scrollToAdd('celebAdd');
-}
-
-async function delCeleb(i){
-  confirm2('Delete Celebrity','Remove this celebrity photo permanently?',async()=>{
-    const c=celebrities[i];
-    if(c?.imgPublicId)await deleteFromCloudinary(c.imgPublicId,'image');
-    await fetch(API+"/delete-celebrity/"+c._id,{method:"DELETE"});
-    await loadCelebrities();
-    updateDash();
-    toast('Deleted','success');
-  });
-}
-
-function renderCelebs(){
-  document.getElementById('celebCount').textContent=celebrities.length;
-  document.getElementById('celebBadge').textContent=celebrities.length;
-  const g=document.getElementById('admCelebGrid');
-  if(!celebrities.length){
-    g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🌟</span><p>No celebrity photos yet.<br>Add your first one above!</p></div>`;
-    return;
-  }
-  g.innerHTML=celebrities.map((c,i)=>{
-    const catLabel=CAT_LABELS_ADM[c.cat]||c.cat||'Star';
-    const catColor=CAT_COLORS[c.cat]||CAT_COLORS.other;
-    return `<div class="celeb-adm-card" style="animation-delay:${i*.04}s">
-      <div class="celeb-adm-photo">
-        ${c.img
-          ?`<img src="${c.img}" alt="${c.name||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-          :''
-        }
-        <div class="celeb-adm-photo-empty" ${c.img?'style="display:none"':''}>
-          <span>🌟</span>
-          <span>No photo</span>
-        </div>
-        <div class="celeb-adm-overlay">
-          <div class="celeb-adm-name">${c.name||'Unknown'}</div>
-          <div class="celeb-adm-desc">${c.desc||''}</div>
-          <span class="celeb-cat-badge" style="background:${catColor}">✦ ${catLabel}</span>
-        </div>
-      </div>
-      <div class="celeb-adm-footer">
-        <span class="celeb-year">${c.year||'—'}</span>
-        <div class="celeb-adm-actions">
-          <button class="icon-btn edit" onclick="editCeleb(${i})" title="Edit">✏️</button>
-          <button class="icon-btn del" onclick="delCeleb(${i})" title="Delete">🗑</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── EBOOKS ──────────────────────────────────────────────────────────────────
+// eBooks
 let eImg='',eImgId='',ePdf='',ePdfId='',ePdfName='',ePdfSize=0;
 function previewEbUrl(u){if(u){eImg=u;eImgId='';showPrev('ebImgPreview',u);}}
-async function handleEbPdf(e){
-  const f=e.target.files[0];if(!f)return;
-  if(!f.name.endsWith('.pdf')&&f.type!=='application/pdf'){toast('Please select a PDF','error');return;}
-  if(f.size>50*1024*1024){toast('PDF too large — max 50MB','error');return;}
-  ePdfName=f.name;ePdfSize=f.size;
-  const prog=document.getElementById('pdfUploadProgress'),fill=document.getElementById('pdfBarFill'),lbl=document.getElementById('pdfUploadLabel');
-  prog.classList.add('show');fill.style.width='0%';lbl.textContent='Uploading PDF…';
-  let fp=0;const tk=setInterval(()=>{fp=Math.min(fp+Math.random()*8,85);fill.style.width=fp+'%';},200);
-  try{
-    const fd=new FormData();fd.append('file',f);
-    const r=await fetch(API+'/upload-pdf',{method:'POST',body:fd});
-    const data=await r.json();ePdf=data.url;ePdfId=data.public_id||'';
-  }catch{ePdf=URL.createObjectURL(f);ePdfId='';}
-  clearInterval(tk);fill.style.width='100%';lbl.textContent='Done ✓';setTimeout(()=>prog.classList.remove('show'),1500);
-  showPdfSt(ePdfName,ePdfSize);
+async function handleEbPdf(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  console.log('📄 Selected file:', file.name, 'Size:', (file.size / 1024 / 1024).toFixed(2) + 'MB');
+  
+  // Validate file type
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    toast('Please select a valid PDF file', 'error');
+    e.target.value = '';
+    return;
+  }
+  
+  // Check size (max 50MB)
+  if (file.size > 50 * 1024 * 1024) {
+    toast('PDF too large — max 50MB', 'error');
+    e.target.value = '';
+    return;
+  }
+  
+  // Show progress
+  const prog = document.getElementById('pdfUploadProgress');
+  const fill = document.getElementById('pdfBarFill');
+  const lbl = document.getElementById('pdfUploadLabel');
+  prog.classList.add('show');
+  fill.style.width = '0%';
+  lbl.textContent = `Uploading ${file.name}...`;
+  
+  let progressValue = 0;
+  const progressInterval = setInterval(() => {
+    if (progressValue < 90) {
+      progressValue += Math.random() * 10;
+      fill.style.width = Math.min(progressValue, 90) + '%';
+    }
+  }, 500);
+  
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('originalName', file.name);
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+    
+    const response = await authFetch(API + '/upload-pdf', {
+      method: 'POST',
+      body: formData,
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    clearInterval(progressInterval);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Upload failed');
+    }
+    
+    const data = await response.json();
+    
+    if (!data.url) {
+      throw new Error('No URL returned from server');
+    }
+    
+    // Store PDF info
+    ePdf = data.url;
+    ePdfId = data.public_id;
+    ePdfName = file.name;
+    ePdfSize = file.size;
+    
+    console.log('✅ PDF uploaded:', ePdf);
+    console.log('📁 Public ID:', ePdfId);
+    
+    fill.style.width = '100%';
+    lbl.textContent = '✓ Upload complete!';
+    
+    setTimeout(() => {
+      prog.classList.remove('show');
+    }, 1500);
+    
+    showPdfSt(ePdfName, ePdfSize);
+    toast('PDF uploaded successfully!', 'success');
+    
+  } catch (error) {
+    clearInterval(progressInterval);
+    console.error('Upload error:', error);
+    toast('Upload failed: ' + error.message, 'error');
+    prog.classList.remove('show');
+    ePdf = '';
+    ePdfId = '';
+    ePdfName = '';
+    ePdfSize = 0;
+    e.target.value = '';
+  }
 }
 function setPdfFromUrl(u){if(u){ePdf=u;ePdfId='';ePdfName=u.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}else removePdf();}
 function showPdfSt(n,s){const st=document.getElementById('pdfStatus');document.getElementById('pdfStatusName').textContent=n;document.getElementById('pdfStatusSize').textContent=s>0?fmtBytes(s):'Linked';st.classList.add('show');}
 function removePdf(){ePdf='';ePdfId='';ePdfName='';ePdfSize=0;document.getElementById('pdfStatus').classList.remove('show');document.getElementById('ebPdfUrl').value='';document.getElementById('pdfFileInput').value='';}
 function fmtBytes(b){if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
-function clearEbookForm(){
-  document.getElementById('editEbookIdx').value=-1;document.getElementById('ebFormTitle').textContent='Add eBook';
-  ['ebTitle','ebTag','ebPrice','ebPriceInr','ebOrig','ebOrigInr','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');
-  hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();
-}
-async function saveEbook(){
-  const id=document.getElementById('editEbookIdx').value;
-  const eb={
-    title:v('ebTitle'),tag:v('ebTag'),
-    price:v('ebPrice')?'$'+v('ebPrice'):'',
-    priceInr:v('ebPriceInr')?'₹'+v('ebPriceInr'):'',
-    orig:v('ebOrig')?'$'+v('ebOrig'):'',
-    origInr:v('ebOrigInr')?'₹'+v('ebOrigInr'):'',
-    desc:v('ebDesc'),features:v('ebFeatures').split('\n').filter(Boolean),
-    badge:v('ebBadge'),img:eImg||v('ebImgUrl'),imgPublicId:eImgId,
-    pdfUrl:ePdf||v('ebPdfUrl'),pdfPublicId:ePdfId
-  };
-  try{
-    if(id!=-1){await fetch(API+"/update-ebook/"+ebooks[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook updated","success");}
-    else{await fetch(API+"/add-ebook",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook added","success");}
-    clearEbookForm();await loadEbooks();updateDash();
-  }catch{toast("❌ Failed","error");}
-}
-function editEbook(i){
-  const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';
-  sv('ebTitle',eb.title);sv('ebTag',eb.tag);sv('ebPrice',(eb.price||'').replace(/[$₹,]/g,''));
-  sv('ebPriceInr',(eb.priceInr||'').replace(/[$₹,]/g,''));sv('ebOrig',(eb.orig||'').replace(/[$₹,]/g,''));
-  sv('ebOrigInr',(eb.origInr||'').replace(/[$₹,]/g,''));sv('ebDesc',eb.desc);sv('ebFeatures',(eb.features||[]).join('\n'));
-  sv('ebBadge',eb.badge||'');sv('ebImgUrl',eb.img||'');
-  if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}
-  if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';sv('ebPdfUrl',eb.pdfUrl);ePdfName=eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}
-  scrollToAdd('ebAdd');
-}
-async function delEbook(id){
-  confirm2('Delete eBook','Delete this eBook permanently?',async()=>{
-    const eb=ebooks.find(e=>e._id===id);
-    if(eb?.imgPublicId)await deleteFromCloudinary(eb.imgPublicId,'image');
-    if(eb?.pdfPublicId)await deleteFromCloudinary(eb.pdfPublicId,'raw');
-    await fetch(API+"/delete-ebook/"+id,{method:"DELETE"});
-    await loadEbooks();updateDash();toast('Deleted','success');
-  });
-}
-function renderEbooks(){
-  document.getElementById('ebookCount').textContent=ebooks.length;
-  document.getElementById('ebBadge').textContent=ebooks.length;
-  const l=document.getElementById('admEbookList');
-  if(!ebooks.length){l.innerHTML=`<div class="empty-state"><span class="ei">📚</span><p>No eBooks yet.</p></div>`;return;}
-  l.innerHTML=ebooks.map((eb,i)=>`<div class="ebook-row" style="animation-delay:${i*.05}s">
-    <div class="ebook-thumb">${eb.img?`<img src="${eb.img}" alt="">`:(eb.icon||'📖')}</div>
-    <div class="ebook-info">
-      <h4>${eb.title}</h4>
-      <p>${eb.tag||'—'} · <strong style="color:var(--gold);">${eb.price}</strong>${eb.priceInr?` <strong style="color:var(--green);">${eb.priceInr}</strong>`:''} <span style="text-decoration:line-through;opacity:.4;">${eb.orig||''}${eb.origInr?' / '+eb.origInr:''}</span></p>
-      <div class="badges">
-        ${eb.badge?`<span class="tag-pill">${eb.badge}</span>`:''}
-        <span class="tag-pill" style="background:rgba(126,200,227,.07);color:var(--blue);">${(eb.features||[]).length} features</span>
-        ${eb.pdfUrl?`<a href="${eb.pdfUrl}" target="_blank" class="pdf-badge">📄 PDF</a>`:`<span class="pdf-badge no-pdf">📄 No PDF</span>`}
-      </div>
-    </div>
-    <div class="ebook-actions">
-      <button class="adm-btn outline sm" onclick="editEbook(${i})">✏️ Edit</button>
-      <button class="adm-btn danger sm" onclick="delEbook('${eb._id}')">🗑 Delete</button>
-    </div>
-  </div>`).join('');
-}
+function clearEbookForm(){document.getElementById('editEbookIdx').value=-1;document.getElementById('ebFormTitle').textContent='Add eBook';['ebTitle','ebTag','ebPrice','ebPriceInr','ebOrig','ebOrigInr','ebDesc','ebFeatures','ebBadge','ebImgUrl','ebPdfUrl'].forEach(id=>document.getElementById(id).value='');hidePrev('ebImgPreview');eImg='';eImgId='';removePdf();}
+async function saveEbook(){const id=document.getElementById('editEbookIdx').value;const eb={title:document.getElementById('ebTitle').value,tag:document.getElementById('ebTag').value,price:document.getElementById('ebPrice').value?'$'+document.getElementById('ebPrice').value:'',priceInr:document.getElementById('ebPriceInr').value?'₹'+document.getElementById('ebPriceInr').value:'',orig:document.getElementById('ebOrig').value?'$'+document.getElementById('ebOrig').value:'',origInr:document.getElementById('ebOrigInr').value?'₹'+document.getElementById('ebOrigInr').value:'',desc:document.getElementById('ebDesc').value,features:document.getElementById('ebFeatures').value.split('\n').filter(Boolean),badge:document.getElementById('ebBadge').value,img:eImg||document.getElementById('ebImgUrl').value,imgPublicId:eImgId,pdfUrl:ePdf||document.getElementById('ebPdfUrl').value,pdfPublicId:ePdfId,pdfOriginalName:ePdfName};try{if(id!=-1){await authFetch(API+"/update-ebook/"+ebooks[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook updated","success");}else{await authFetch(API+"/add-ebook",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(eb)});toast("✅ eBook added","success");}clearEbookForm();await loadEbooks();updateDash();}catch{toast("❌ Failed","error");}}
+function editEbook(i){const eb=ebooks[i];document.getElementById('editEbookIdx').value=i;document.getElementById('ebFormTitle').textContent='Edit eBook';document.getElementById('ebTitle').value=eb.title;document.getElementById('ebTag').value=eb.tag;document.getElementById('ebPrice').value=(eb.price||'').replace(/[$₹,]/g,'');document.getElementById('ebPriceInr').value=(eb.priceInr||'').replace(/[$₹,]/g,'');document.getElementById('ebOrig').value=(eb.orig||'').replace(/[$₹,]/g,'');document.getElementById('ebOrigInr').value=(eb.origInr||'').replace(/[$₹,]/g,'');document.getElementById('ebDesc').value=eb.desc;document.getElementById('ebFeatures').value=(eb.features||[]).join('\n');document.getElementById('ebBadge').value=eb.badge||'';document.getElementById('ebImgUrl').value=eb.img||'';if(eb.img){eImg=eb.img;eImgId=eb.imgPublicId||'';showPrev('ebImgPreview',eb.img);}if(eb.pdfUrl){ePdf=eb.pdfUrl;ePdfId=eb.pdfPublicId||'';document.getElementById('ebPdfUrl').value=eb.pdfUrl;ePdfName=eb.pdfOriginalName||eb.pdfUrl.split('/').pop()||'PDF';showPdfSt(ePdfName,0);}scrollToAdd('ebAdd');}
+async function delEbook(id){confirm2('Delete eBook','Delete this eBook permanently?',async()=>{const eb=ebooks.find(e=>e._id===id);if(eb?.imgPublicId)await deleteFromCloudinary(eb.imgPublicId,'image');if(eb?.pdfPublicId)await deleteFromCloudinary(eb.pdfPublicId,'raw');await authFetch(API+"/delete-ebook/"+id,{method:"DELETE"});await loadEbooks();updateDash();toast('Deleted','success');});}
+function renderEbooks(){document.getElementById('ebookCount').textContent=ebooks.length;document.getElementById('ebBadge').textContent=ebooks.length;const l=document.getElementById('admEbookList');if(!ebooks.length){l.innerHTML=`<div class="empty-state"><span class="ei">📚</span><p>No eBooks yet.</p></div>`;return;}l.innerHTML=ebooks.map((eb,i)=>`<div class="ebook-row" style="animation-delay:${i*.05}s"><div class="ebook-thumb">${eb.img?`<img src="${eb.img}" alt="">`:'📖'}</div><div class="ebook-info"><h4>${eb.title}</h4><p>${eb.tag||'—'} · <strong style="color:var(--gold);">${eb.price}</strong>${eb.priceInr?` <strong style="color:var(--green);">${eb.priceInr}</strong>`:''} <span style="text-decoration:line-through;opacity:.4;">${eb.orig||''}${eb.origInr?' / '+eb.origInr:''}</span></p><div class="badges">${eb.badge?`<span class="tag-pill">${eb.badge}</span>`:''}<span class="tag-pill">${(eb.features||[]).length} features</span>${eb.pdfUrl?`<a href="${eb.pdfUrl}" target="_blank" class="pdf-badge" download>📄 ${(eb.pdfOriginalName||'PDF').substring(0,30)}</a>`:`<span class="pdf-badge no-pdf">📄 No PDF</span>`}</div></div><div class="ebook-actions"><button class="adm-btn outline sm" onclick="editEbook(${i})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delEbook('${eb._id}')">🗑 Delete</button></div></div>`).join('');}
 
-// ── ACHIEVEMENTS ────────────────────────────────────────────────────────────
+// Achievements
 let aImg='',aImgId='';
 function previewAchUrl(u){if(u){aImg=u;aImgId='';showPrev('achImgPreview',u);}}
-function clearAchForm(){
-  document.getElementById('editAchIdx').value=-1;document.getElementById('achFormTitle').textContent='Add Achievement';
-  ['achTitle','achOrg','achDate','achDesc','achImgUrl','achLink'].forEach(id=>document.getElementById(id).value='');
-  hidePrev('achImgPreview');aImg='';aImgId='';
-}
-async function saveAchievement(){
-  const id=document.getElementById('editAchIdx').value;
-  const ac={title:v('achTitle'),type:v('achType'),org:v('achOrg'),date:v('achDate'),desc:v('achDesc'),img:aImg||v('achImgUrl'),imgPublicId:aImgId,link:v('achLink')};
-  if(id!=-1){await fetch(API+"/update-achievement/"+achievements[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Updated","success");}
-  else{await fetch(API+"/add-achievement",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Added","success");}
-  clearAchForm();await loadAchievements();updateDash();
-}
-function editAch(i){
-  const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';
-  sv('achTitle',ac.title);sv('achType',ac.type);sv('achOrg',ac.org);sv('achDate',ac.date);sv('achDesc',ac.desc);sv('achImgUrl',ac.img||'');sv('achLink',ac.link||'');
-  if(ac.img){aImg=ac.img;aImgId=ac.imgPublicId||'';showPrev('achImgPreview',ac.img);}
-  scrollToAdd('achAdd');
-}
-async function delAch(i){
-  confirm2('Delete Achievement','Remove this?',async()=>{
-    const ac=achievements[i];
-    if(ac?.imgPublicId)await deleteFromCloudinary(ac.imgPublicId,'image');
-    await fetch(API+"/delete-achievement/"+ac._id,{method:"DELETE"});
-    await loadAchievements();updateDash();toast('Deleted','success');
-  });
-}
+function clearAchForm(){document.getElementById('editAchIdx').value=-1;document.getElementById('achFormTitle').textContent='Add Achievement';['achTitle','achOrg','achDate','achDesc','achImgUrl','achLink'].forEach(id=>document.getElementById(id).value='');hidePrev('achImgPreview');aImg='';aImgId='';}
+async function saveAchievement(){const id=document.getElementById('editAchIdx').value;const ac={title:document.getElementById('achTitle').value,type:document.getElementById('achType').value,org:document.getElementById('achOrg').value,date:document.getElementById('achDate').value,desc:document.getElementById('achDesc').value,img:aImg||document.getElementById('achImgUrl').value,imgPublicId:aImgId,link:document.getElementById('achLink').value};if(id!=-1){await fetch(API+"/update-achievement/"+achievements[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Updated","success");}else{await authFetch(API+"/add-achievement",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(ac)});toast("✅ Added","success");}clearAchForm();await loadAchievements();updateDash();}
+function editAch(i){const ac=achievements[i];document.getElementById('editAchIdx').value=i;document.getElementById('achFormTitle').textContent='Edit Achievement';document.getElementById('achTitle').value=ac.title;document.getElementById('achType').value=ac.type;document.getElementById('achOrg').value=ac.org;document.getElementById('achDate').value=ac.date;document.getElementById('achDesc').value=ac.desc;document.getElementById('achImgUrl').value=ac.img||'';document.getElementById('achLink').value=ac.link||'';if(ac.img){aImg=ac.img;aImgId=ac.imgPublicId||'';showPrev('achImgPreview',ac.img);}scrollToAdd('achAdd');}
+async function delAch(i){confirm2('Delete Achievement','Remove this?',async()=>{const ac=achievements[i];if(ac?.imgPublicId)await deleteFromCloudinary(ac.imgPublicId,'image');await fetch(API+"/delete-achievement/"+ac._id,{method:"DELETE"});await loadAchievements();updateDash();toast('Deleted','success');});}
 const achTypeLabel={award:'Award',milestone:'Milestone',feature:'Media Feature',certification:'Certification'};
-function renderAch(){
-  document.getElementById('achCount').textContent=achievements.length;
-  document.getElementById('achBadge').textContent=achievements.length;
-  const g=document.getElementById('admAchGrid');
-  if(!achievements.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🏆</span><p>No achievements yet.</p></div>`;return;}
-  g.innerHTML=achievements.map((ac,i)=>`<div class="ach-card" style="animation-delay:${i*.05}s">
-    <div class="ach-img-wrap">${ac.img?`<img src="${ac.img}" alt="">`:'🏆'}</div>
-    <div class="ach-body"><div class="ach-title">${ac.title}</div><div class="ach-meta">${ac.org||''}${ac.date?' · '+ac.date:''}</div><div class="ach-desc">${ac.desc||''}</div></div>
-    <div class="ach-footer">
-      <span class="ach-type ${ac.type}">${achTypeLabel[ac.type]||ac.type}</span>
-      <div style="display:flex;gap:.3rem;">
-        ${ac.link?`<a href="${ac.link}" target="_blank" class="icon-btn">🔗</a>`:''}
-        <button class="icon-btn edit" onclick="editAch(${i})">✏️</button>
-        <button class="icon-btn del" onclick="delAch(${i})">🗑</button>
-      </div>
-    </div>
-  </div>`).join('');
-}
+function renderAch(){document.getElementById('achCount').textContent=achievements.length;document.getElementById('achBadge').textContent=achievements.length;const g=document.getElementById('admAchGrid');if(!achievements.length){g.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><span class="ei">🏆</span><p>No achievements yet.</p></div>`;return;}g.innerHTML=achievements.map((ac,i)=>`<div class="ach-card" style="animation-delay:${i*.05}s"><div class="ach-img-wrap">${ac.img?`<img src="${ac.img}" alt="">`:'🏆'}</div><div class="ach-body"><div class="ach-title">${ac.title}</div><div class="ach-meta">${ac.org||''}${ac.date?' · '+ac.date:''}</div><div class="ach-desc">${ac.desc||''}</div></div><div class="ach-footer"><span class="ach-type ${ac.type}">${achTypeLabel[ac.type]||ac.type}</span><div style="display:flex;gap:.3rem;">${ac.link?`<a href="${ac.link}" target="_blank" class="icon-btn">🔗</a>`:''}<button class="icon-btn edit" onclick="editAch(${i})">✏️</button><button class="icon-btn del" onclick="delAch(${i})">🗑</button></div></div></div>`).join('');}
 
-// ── JOURNAL ─────────────────────────────────────────────────────────────────
+// Journal
 let jImg='',jImgId='';
 function previewJrnUrl(u){if(u){jImg=u;jImgId='';showPrev('jrnImgPreview',u);}}
-function clearJrnForm(){
-  document.getElementById('editJrnIdx').value=-1;
-  document.getElementById('jrnFormTitle').textContent='Add Journal Entry';
-  ['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl','jrnSource','jrnLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const dateEl=document.getElementById('jrnDate');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
-  const platEl=document.getElementById('jrnPlatform');if(platEl)platEl.value='default';
-  hidePrev('jrnImgPreview');jImg='';jImgId='';
-}
-async function saveJournal(){
-  const id=document.getElementById('editJrnIdx').value;
-  const jr={
-    title:v('jrnTitle'),cat:v('jrnCat'),date:v('jrnDate'),mood:v('jrnMood'),
-    excerpt:v('jrnExcerpt'),content:v('jrnContent'),
-    tags:v('jrnTags').split(',').map(t=>t.trim()).filter(Boolean),
-    img:jImg||v('jrnImgUrl'),imgPublicId:jImgId,
-    source:v('jrnSource'),platform:v('jrnPlatform'),link:v('jrnLink')
-  };
-  try{
-    if(id!=-1){await fetch(API+"/update-journal/"+journal[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Updated","success");}
-    else{await fetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Added","success");}
-    clearJrnForm();await loadJournal();updateDash();
-  }catch{toast("❌ Failed","error");}
-}
-function editJrn(i){
-  const jr=journal[i];
-  document.getElementById('editJrnIdx').value=i;
-  document.getElementById('jrnFormTitle').textContent='Edit Entry';
-  sv('jrnTitle',jr.title);sv('jrnCat',jr.cat);sv('jrnDate',jr.date);sv('jrnMood',jr.mood);
-  sv('jrnExcerpt',jr.excerpt||'');sv('jrnContent',jr.content||'');sv('jrnTags',(jr.tags||[]).join(', '));
-  sv('jrnImgUrl',jr.img||'');sv('jrnSource',jr.source||'');sv('jrnPlatform',jr.platform||'default');sv('jrnLink',jr.link||'');
-  if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}
-  scrollToAdd('jrnAdd');
-}
-async function delJrn(i){
-  confirm2('Delete Entry','Remove this journal entry?',async()=>{
-    const jr=journal[i];
-    if(jr?.imgPublicId)await deleteFromCloudinary(jr.imgPublicId,'image');
-    await fetch(API+"/delete-journal/"+jr._id,{method:"DELETE"});
-    await loadJournal();updateDash();toast('Deleted','success');
-  });
-}
+function clearJrnForm(){document.getElementById('editJrnIdx').value=-1;document.getElementById('jrnFormTitle').textContent='Add Journal Entry';['jrnTitle','jrnExcerpt','jrnContent','jrnTags','jrnImgUrl','jrnSource','jrnLink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});const dateEl=document.getElementById('jrnDate');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];document.getElementById('jrnPlatform').value='default';hidePrev('jrnImgPreview');jImg='';jImgId='';}
+async function saveJournal(){const id=document.getElementById('editJrnIdx').value;const jr={title:document.getElementById('jrnTitle').value,cat:document.getElementById('jrnCat').value,date:document.getElementById('jrnDate').value,mood:document.getElementById('jrnMood').value,excerpt:document.getElementById('jrnExcerpt').value,content:document.getElementById('jrnContent').value,tags:document.getElementById('jrnTags').value.split(',').map(t=>t.trim()).filter(Boolean),img:jImg||document.getElementById('jrnImgUrl').value,imgPublicId:jImgId,source:document.getElementById('jrnSource').value,platform:document.getElementById('jrnPlatform').value,link:document.getElementById('jrnLink').value};try{if(id!=-1){await fetch(API+"/update-journal/"+journal[id]._id,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Updated","success");}else{await authFetch(API+"/add-journal",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(jr)});toast("✅ Added","success");}clearJrnForm();await loadJournal();updateDash();}catch{toast("❌ Failed","error");}}
+function editJrn(i){const jr=journal[i];document.getElementById('editJrnIdx').value=i;document.getElementById('jrnFormTitle').textContent='Edit Entry';document.getElementById('jrnTitle').value=jr.title;document.getElementById('jrnCat').value=jr.cat;document.getElementById('jrnDate').value=jr.date;document.getElementById('jrnMood').value=jr.mood;document.getElementById('jrnExcerpt').value=jr.excerpt||'';document.getElementById('jrnContent').value=jr.content||'';document.getElementById('jrnTags').value=(jr.tags||[]).join(', ');document.getElementById('jrnImgUrl').value=jr.img||'';document.getElementById('jrnSource').value=jr.source||'';document.getElementById('jrnPlatform').value=jr.platform||'default';document.getElementById('jrnLink').value=jr.link||'';if(jr.img){jImg=jr.img;jImgId=jr.imgPublicId||'';showPrev('jrnImgPreview',jr.img);}scrollToAdd('jrnAdd');}
+async function delJrn(i){confirm2('Delete Entry','Remove this journal entry?',async()=>{const jr=journal[i];if(jr?.imgPublicId)await deleteFromCloudinary(jr.imgPublicId,'image');await fetch(API+"/delete-journal/"+jr._id,{method:"DELETE"});await loadJournal();updateDash();toast('Deleted','success');});}
 const jCatLabel={mindset:'🧠 Mindset',love:'💞 Love',manifestation:'✨ Manifestation',career:'💼 Career',personal:'🌸 Personal',spiritual:'🕊️ Spiritual'};
-function renderJrn(){
-  document.getElementById('jrnCount').textContent=journal.length;
-  document.getElementById('jrnBadge').textContent=journal.length;
-  const l=document.getElementById('admJrnList');
-  if(!journal.length){l.innerHTML=`<div class="empty-state"><span class="ei">📓</span><p>No journal entries yet.</p></div>`;return;}
-  const sorted=[...journal].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  l.innerHTML=sorted.map(jr=>{
-    const oi=journal.findIndex(j=>j._id===jr._id);
-    return `<div class="journal-card" style="animation-delay:${oi*.04}s">
-      <div class="jc-header">
-        <div><div class="jc-title">${jr.mood||''} ${jr.title}</div><div class="jc-meta">${jCatLabel[jr.cat]||jr.cat}</div></div>
-        <div class="jc-date">${new Date(jr.date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
-      </div>
-      <div class="jc-body">${jr.excerpt||(jr.content?jr.content.slice(0,200)+'…':'No content yet.')}</div>
-      <div class="jc-footer">
-        <div class="jc-tags">${(jr.tags||[]).map(t=>`<span class="jc-tag">${t}</span>`).join('')}</div>
-        <div class="jc-actions">
-          <button class="adm-btn outline sm" onclick="editJrn(${oi})">✏️ Edit</button>
-          <button class="adm-btn danger sm" onclick="delJrn(${oi})">🗑</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
+function renderJrn(){document.getElementById('jrnCount').textContent=journal.length;document.getElementById('jrnBadge').textContent=journal.length;const l=document.getElementById('admJrnList');if(!journal.length){l.innerHTML=`<div class="empty-state"><span class="ei">📓</span><p>No journal entries yet.</p></div>`;return;}const sorted=[...journal].sort((a,b)=>new Date(b.date)-new Date(a.date));l.innerHTML=sorted.map(jr=>{const oi=journal.findIndex(j=>j._id===jr._id);return `<div class="journal-card" style="animation-delay:${oi*.04}s"><div class="jc-header"><div><div class="jc-title">${jr.mood||''} ${jr.title}</div><div class="jc-meta">${jCatLabel[jr.cat]||jr.cat}</div></div><div class="jc-date">${new Date(jr.date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div></div><div class="jc-body">${jr.excerpt||(jr.content?jr.content.slice(0,200)+'…':'No content yet.')}</div><div class="jc-footer"><div class="jc-tags">${(jr.tags||[]).map(t=>`<span class="jc-tag">${t}</span>`).join('')}</div><div class="jc-actions"><button class="adm-btn outline sm" onclick="editJrn(${oi})">✏️ Edit</button><button class="adm-btn danger sm" onclick="delJrn(${oi})">🗑</button></div></div></div>`;}).join('');}
 
-// ── CAL.COM ─────────────────────────────────────────────────────────────────
+// Cal.com
 let allBk=[],bkFilter='all';
 function initBookings(){const connected=localStorage.getItem('cal_connected');if(connected){document.getElementById('calSetup').style.display='none';fetchBookings();}}
-async function connectCal(silent=false){
-  const key=document.getElementById('calApiKey').value.trim();
-  if(!key){toast('Please enter your Cal.com API key','error');return;}
-  localStorage.setItem('cal_connected','true');
-  localStorage.setItem('cal_user',document.getElementById('calUsername').value.trim());
-  if(!silent)toast('Connecting…','info');
-  await fetchBookings();
-}
-function disconnectCal(){
-  confirm2('Disconnect Cal.com','This removes your Cal.com connection.',()=>{
-    localStorage.removeItem('cal_connected');localStorage.removeItem('cal_user');allBk=[];
-    document.getElementById('calSetup').style.display='block';
-    document.getElementById('bkSummary').style.display='none';
-    document.getElementById('bkToolbar').style.display='none';
-    document.getElementById('bkWrap').innerHTML='';
-    toast('Disconnected','success');
-  });
-}
-async function fetchBookings(){
-  const connected=localStorage.getItem('cal_connected');if(!connected)return;
-  document.getElementById('calError').style.display='none';
-  document.getElementById('calLoading').style.display='block';
-  document.getElementById('bkWrap').innerHTML='';
-  try{
-    const username=localStorage.getItem('cal_user');
-    if(!username){toast("Username missing. Reconnect Cal.com","error");return;}
-    const r=await fetch(`${API}/cal/bookings?username=${username}`);
-    if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}
-    const data=await r.json();allBk=data?.data?.bookings||[];
-    document.getElementById('calSetup').style.display='none';
-    document.getElementById('bkSummary').style.display='grid';
-    document.getElementById('bkToolbar').style.display='flex';
-    updateBkSummary();renderBk(bkFilter);
-    toast(`✓ Loaded ${allBk.length} bookings`,'success');
-  }catch(e){
-    document.getElementById('calError').style.display='block';
-    document.getElementById('calError').innerHTML=`<strong>⚠ Failed:</strong> ${e.message}`;
-    toast('Cal.com connection failed','error');
-  }finally{document.getElementById('calLoading').style.display='none';}
-}
-function updateBkSummary(){
-  const now=new Date(),today=now.toDateString();
-  document.getElementById('bsTotal').textContent=allBk.length;
-  document.getElementById('bsUpcoming').textContent=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED').length;
-  document.getElementById('bsToday').textContent=allBk.filter(b=>new Date(b.startTime).toDateString()===today).length;
-  document.getElementById('bsCancelled').textContent=allBk.filter(b=>b.status==='CANCELLED').length;
-}
+async function connectCal(silent=false){const key=document.getElementById('calApiKey').value.trim();if(!key){toast('Please enter your Cal.com API key','error');return;}localStorage.setItem('cal_connected','true');localStorage.setItem('cal_user',document.getElementById('calUsername').value.trim());if(!silent)toast('Connecting…','info');await fetchBookings();}
+function disconnectCal(){confirm2('Disconnect Cal.com','This removes your Cal.com connection.',()=>{localStorage.removeItem('cal_connected');localStorage.removeItem('cal_user');allBk=[];document.getElementById('calSetup').style.display='block';document.getElementById('bkSummary').style.display='none';document.getElementById('bkToolbar').style.display='none';document.getElementById('bkWrap').innerHTML='';toast('Disconnected','success');});}
+async function fetchBookings(){const connected=localStorage.getItem('cal_connected');if(!connected)return;document.getElementById('calError').style.display='none';document.getElementById('calLoading').style.display='block';document.getElementById('bkWrap').innerHTML='';try{const username=localStorage.getItem('cal_user');if(!username){toast("Username missing. Reconnect Cal.com","error");return;}const r=await fetch(`${API}/cal/bookings?username=${username}`);if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||`Error ${r.status}`);}const data=await r.json();allBk=data?.data?.bookings||[];document.getElementById('calSetup').style.display='none';document.getElementById('bkSummary').style.display='grid';document.getElementById('bkToolbar').style.display='flex';updateBkSummary();renderBk(bkFilter);toast(`✓ Loaded ${allBk.length} bookings`,'success');}catch(e){document.getElementById('calError').style.display='block';document.getElementById('calError').innerHTML=`<strong>⚠ Failed:</strong> ${e.message}`;toast('Cal.com connection failed','error');}finally{document.getElementById('calLoading').style.display='none';}}
+function updateBkSummary(){const now=new Date(),today=now.toDateString();document.getElementById('bsTotal').textContent=allBk.length;document.getElementById('bsUpcoming').textContent=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED').length;document.getElementById('bsToday').textContent=allBk.filter(b=>new Date(b.startTime).toDateString()===today).length;document.getElementById('bsCancelled').textContent=allBk.filter(b=>b.status==='CANCELLED').length;}
 function filterBk(f,btn){bkFilter=f;document.querySelectorAll('.bk-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderBk(f);}
-function renderBk(filter){
-  const now=new Date();
-  let list=allBk;
-  if(filter==='upcoming')list=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED');
-  else if(filter==='past')list=allBk.filter(b=>new Date(b.startTime)<=now&&b.status!=='CANCELLED');
-  else if(filter==='cancelled')list=allBk.filter(b=>b.status==='CANCELLED');
-  const w=document.getElementById('bkWrap');
-  if(!list.length){w.innerHTML=`<div class="cal-empty"><span class="ce-icon">📅</span><p>No bookings${filter!=='all'?' for this filter':''}.</p></div>`;return;}
-  const sorted=[...list].sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
-  w.innerHTML=`<div style="overflow-x:auto;"><table class="bk-table"><thead><tr><th>Client</th><th>Event</th><th>Date & Time</th><th>Duration</th><th>Status</th><th>Email</th></tr></thead><tbody>${sorted.map(b=>{
-    const dt=new Date(b.startTime),end=b.endTime?new Date(b.endTime):null,dur=end?Math.round((end-dt)/60000):null,isPast=dt<now;
-    const sr=(b.status||'').toLowerCase();
-    const label=sr==='cancelled'?'Cancelled':sr==='accepted'||sr==='confirmed'?isPast?'Completed':'Confirmed':isPast?'Completed':'Upcoming';
-    const cls=sr==='cancelled'?'cancelled':isPast?'confirmed':sr==='accepted'||sr==='confirmed'?'upcoming':'pending';
-    const att=b.attendees?.[0];
-    return `<tr><td><strong>${esc(att?.name||b.title||'—')}</strong></td><td style="color:var(--muted);">${esc(b.eventType?.title||b.title||'Session')}</td><td>${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})} <span style="color:var(--muted);">${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</span></td><td style="color:var(--muted);">${dur?dur+' min':'—'}</td><td><span class="bk-status ${cls}">${label}</span></td><td style="color:var(--muted);font-size:.72rem;">${esc(att?.email||'—')}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
-}
+function renderBk(filter){const now=new Date();let list=allBk;if(filter==='upcoming')list=allBk.filter(b=>new Date(b.startTime)>now&&b.status!=='CANCELLED');else if(filter==='past')list=allBk.filter(b=>new Date(b.startTime)<=now&&b.status!=='CANCELLED');else if(filter==='cancelled')list=allBk.filter(b=>b.status==='CANCELLED');const w=document.getElementById('bkWrap');if(!list.length){w.innerHTML=`<div class="cal-empty"><span class="ce-icon">📅</span><p>No bookings${filter!=='all'?' for this filter':''}.</p></div>`;return;}const sorted=[...list].sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));w.innerHTML=`<div style="overflow-x:auto;"><table class="bk-table"><thead><tr><th>Client</th><th>Event</th><th>Date & Time</th><th>Duration</th><th>Status</th><th>Email</th></tr></thead><tbody>${sorted.map(b=>{const dt=new Date(b.startTime),end=b.endTime?new Date(b.endTime):null,dur=end?Math.round((end-dt)/60000):null,isPast=dt<now;const sr=(b.status||'').toLowerCase();const label=sr==='cancelled'?'Cancelled':sr==='accepted'||sr==='confirmed'?isPast?'Completed':'Confirmed':isPast?'Completed':'Upcoming';const cls=sr==='cancelled'?'cancelled':isPast?'confirmed':sr==='accepted'||sr==='confirmed'?'upcoming':'pending';const att=b.attendees?.[0];return `<tr><td><strong>${esc(att?.name||b.title||'—')}</strong></td><td style="color:var(--muted);">${esc(b.eventType?.title||b.title||'Session')}</td><td>${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})} <span style="color:var(--muted);">${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</span></td><td style="color:var(--muted);">${dur?dur+' min':'—'}</td><td><span class="bk-status ${cls}">${label}</span></td><td style="color:var(--muted);font-size:.72rem;">${esc(att?.email||'—')}</td></tr>`;}).join('')}</tbody></table></div>`;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// ── SETTINGS ─────────────────────────────────────────────────────────────────
-function changePwd(){
-  const c=v('curPwd'),n=v('newPwd'),cf=v('confPwd');
-  if(c!=='manifestation2026'){toast('Current password incorrect','error');return;}
-  if(n.length<8){toast('Min 8 characters','error');return;}
-  if(n!==cf){toast('Passwords do not match','error');return;}
-  toast('✓ Password updated','success');['curPwd','newPwd','confPwd'].forEach(id=>sv(id,''));
-}
-function exportData(){
-  const d={testimonials,celebrities,ebooks,achievements,journal,exportedAt:new Date().toISOString()};
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='adg-export.json';a.click();
-  toast('✓ Data exported','success');
-}
-function confirmReset(){
-  confirm2('Reset All Data','This will delete ALL content. Cannot be undone.',()=>{
-    testimonials=[];celebrities=[];ebooks=[];achievements=[];journal=[];
-    renderTests();renderCelebs();renderEbooks();renderAch();renderJrn();updateDash();
-    toast('Data reset','success');
-  });
-}
+// Settings
+function changePwd(){const c=document.getElementById('curPwd').value,n=document.getElementById('newPwd').value,cf=document.getElementById('confPwd').value;if(c!=='manifestation2026'){toast('Current password incorrect','error');return;}if(n.length<8){toast('Min 8 characters','error');return;}if(n!==cf){toast('Passwords do not match','error');return;}toast('✓ Password updated','success');document.getElementById('curPwd').value='';document.getElementById('newPwd').value='';document.getElementById('confPwd').value='';}
+function exportData(){const d={testimonials,celebrities,ebooks,achievements,journal,exportedAt:new Date().toISOString()};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='adg-export.json';a.click();toast('✓ Data exported','success');}
+function confirmReset(){confirm2('Reset All Data','This will delete ALL content. Cannot be undone.',()=>{testimonials=[];celebrities=[];ebooks=[];achievements=[];journal=[];renderTests();renderCelebs();renderEbooks();renderAch();renderJrn();updateDash();toast('Data reset','success');});}
 
-// ── CONFIRM ──────────────────────────────────────────────────────────────────
+// Confirm
 let _cb=null;
 function confirm2(title,msg,cb){_cb=cb;document.getElementById('confirmTitle').textContent=title;document.getElementById('confirmMsg').textContent=msg;document.getElementById('confirmOverlay').classList.add('open');}
 function confirmYes(){if(_cb)_cb();document.getElementById('confirmOverlay').classList.remove('open');_cb=null;}
 function confirmNo(){document.getElementById('confirmOverlay').classList.remove('open');_cb=null;}
 document.getElementById('confirmYesBtn').onclick=confirmYes;
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
-function v(id){return document.getElementById(id)?.value||'';}
-function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
-function showPrev(id,src){const el=document.getElementById(id);if(el){el.src=src;el.style.display='block';el.style.animation='fadeUp .4s ease-out';}}
+// Helpers
+function showPrev(id,src){const el=document.getElementById(id);if(el){el.src=src;el.style.display='block';}}
 function hidePrev(id){const el=document.getElementById(id);if(el)el.style.display='none';}
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
 document.getElementById('jrnDate').value=new Date().toISOString().split('T')[0];
 initData();
 </script>

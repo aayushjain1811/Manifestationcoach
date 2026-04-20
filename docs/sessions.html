@@ -54,6 +54,118 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;}
 .btn-o{background:transparent;color:var(--text);border:1px solid var(--border);}
 .btn-o:hover{border-color:var(--gold);color:var(--gold-light);}
 
+/* PAGE LOADER */
+#page-loader{
+  position:fixed;inset:0;z-index:99999;
+  background:var(--dark);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+#page-loader.hidden{opacity:0;visibility:hidden;}
+.loader-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;font-weight:600;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--gold-light);
+  animation:pulseGold 2s ease-in-out infinite;
+}
+@keyframes pulseGold{0%,100%{opacity:.5;}50%{opacity:1;}}
+.loader-orb-wrap{position:relative;width:60px;height:60px;}
+.loader-orb{
+  width:60px;height:60px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.15);
+  border-top:2px solid var(--gold);
+  animation:spin 1.1s linear infinite;
+}
+.loader-orb-inner{
+  position:absolute;inset:8px;border-radius:50%;
+  border:1px solid rgba(201,168,76,.1);
+  border-bottom:1px solid var(--gold-dark);
+  animation:spin 1.7s linear infinite reverse;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-dots{display:flex;gap:7px;}
+.loader-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.25;animation:ldDot 1.3s ease-in-out infinite;}
+.loader-dot:nth-child(2){animation-delay:.18s;}
+.loader-dot:nth-child(3){animation-delay:.36s;}
+@keyframes ldDot{0%,100%{opacity:.25;transform:scale(1);}50%{opacity:1;transform:scale(1.35);}}
+.loader-text{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+
+/* MODAL */
+#modal-overlay{
+  position:fixed;inset:0;z-index:50000;
+  background:rgba(7,10,26,.85);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  padding:1.5rem;
+  opacity:0;visibility:hidden;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+#modal-overlay.open{opacity:1;visibility:visible;}
+.modal-box{
+  background:linear-gradient(160deg,rgba(21,14,53,.97),rgba(12,16,48,.98));
+  border:1px solid var(--gold-border);
+  border-radius:4px;
+  padding:2.2rem 2rem;
+  width:100%;max-width:440px;
+  position:relative;
+  transform:translateY(18px) scale(.97);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(201,168,76,.08);
+}
+#modal-overlay.open .modal-box{transform:translateY(0) scale(1);}
+.modal-gem{font-size:2rem;display:block;text-align:center;margin-bottom:.7rem;}
+.modal-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;
+  color:#fff;text-align:center;margin-bottom:.35rem;line-height:1.2;
+}
+.modal-sub{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:1.6rem;line-height:1.7;font-weight:300;}
+.modal-field{margin-bottom:1rem;}
+.modal-label{
+  display:block;font-size:.67rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.45rem;
+}
+.modal-input{
+  width:100%;padding:.75rem 1rem;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:2px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;
+  outline:none;transition:border-color .3s,background .3s;
+  -webkit-appearance:none;
+}
+.modal-input:focus{border-color:rgba(201,168,76,.55);background:rgba(201,168,76,.04);}
+.modal-input::placeholder{color:var(--muted);opacity:.7;}
+.modal-input.error{border-color:rgba(255,80,80,.5);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.modal-err{font-size:.72rem;color:#ff7070;margin-top:.3rem;display:none;}
+.modal-err.show{display:block;}
+.modal-actions{display:flex;gap:.75rem;margin-top:1.4rem;}
+.modal-cancel{
+  flex:1;padding:.8rem;background:transparent;border:1px solid var(--border);
+  border-radius:2px;color:var(--muted);font-family:'DM Sans',sans-serif;
+  font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  transition:all .3s;
+}
+.modal-cancel:hover{border-color:var(--gold);color:var(--gold);}
+.modal-confirm{
+  flex:2;padding:.8rem;
+  background:linear-gradient(135deg,var(--gold-dark),var(--gold));
+  border:none;border-radius:2px;color:var(--dark);
+  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.modal-confirm:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.35);}
+.modal-confirm:active{transform:scale(.97);}
+.modal-divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:1.2rem 0;
+}
+.modal-note{
+  font-size:.68rem;color:rgba(142,136,171,.5);
+  text-align:center;letter-spacing:.05em;
+}
+
 /* STEPS */
 .steps{display:flex;align-items:center;justify-content:center;margin-bottom:2.5rem;gap:.3rem;}
 .sci{display:flex;align-items:center;}
@@ -105,7 +217,6 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;}
 .tier-duration{font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
 .tier-price-row{display:flex;align-items:baseline;gap:.5rem;margin:.5rem 0;}
 .tier-price-inr{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#fff;}
-.tier-price-usd{font-size:.78rem;color:var(--muted);}
 .tier-focus{font-size:.73rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;display:block;}
 .tier-card.diamond-tier .tier-focus{color:var(--diamond);}
 .tier-card.platinum-tier .tier-focus{color:var(--platinum);}
@@ -156,7 +267,6 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;}
 .cal-loading p{font-size:.85rem;color:var(--muted);}
 .ld-dots{display:flex;gap:6px;}.ld-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.3;animation:ldDot 1.2s ease-in-out infinite;}
 .ld-dot:nth-child(2){animation-delay:.2s;}.ld-dot:nth-child(3){animation-delay:.4s;}
-@keyframes ldDot{0%,100%{opacity:.3;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
 .bknav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:1rem;flex-wrap:wrap;}
 .bkback{background:none;border:1px solid var(--border);color:var(--muted);padding:.7rem 1.5rem;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;}
 .bkback:hover{border-color:var(--gold);color:var(--gold);}
@@ -172,10 +282,54 @@ footer{background:var(--dark);border-top:1px solid var(--border);padding:2.5rem 
 footer p{font-size:.73rem;color:var(--muted);}
 footer span{color:var(--gold);}
 @media(max-width:900px){.cat-grid{grid-template-columns:repeat(2,1fr);}.tier-grid{grid-template-columns:1fr;}.ph-title{font-size:2.2rem;}}
-@media(max-width:600px){.cat-grid{grid-template-columns:1fr;}.steps .slabel{display:none;}.bknav{flex-direction:column;align-items:stretch;}.bkback{text-align:center;}}
+@media(max-width:600px){.cat-grid{grid-template-columns:1fr;}.steps .slabel{display:none;}.bknav{flex-direction:column;align-items:stretch;}.bkback{text-align:center;}.modal-box{padding:1.6rem 1.3rem;}.modal-actions{flex-direction:column;}.modal-confirm{flex:none;}.modal-cancel{flex:none;}}
 </style>
 </head>
 <body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-logo">Akshita Dayma Goel</div>
+  <div class="loader-orb-wrap">
+    <div class="loader-orb"></div>
+    <div class="loader-orb-inner"></div>
+  </div>
+  <div class="loader-dots">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+  <div class="loader-text">Preparing your journey…</div>
+</div>
+
+<!-- MODAL (email + name) -->
+<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <span class="modal-gem">✦</span>
+    <h3 class="modal-title" id="modal-title">Confirm Your Details</h3>
+    <p class="modal-sub">Your booking confirmation will be shown after payment (no email sent).</p>
+
+    <div class="modal-field">
+      <label class="modal-label" for="modal-email">Email Address <span style="color:#ff7070;">*</span></label>
+      <input class="modal-input" type="email" id="modal-email" placeholder="you@example.com" autocomplete="email">
+      <div class="modal-err" id="modal-email-err">Please enter a valid email address.</div>
+    </div>
+
+    <div class="modal-field">
+      <label class="modal-label" for="modal-name">Your Name <span style="color:var(--muted);font-size:.6rem;">(optional)</span></label>
+      <input class="modal-input" type="text" id="modal-name" placeholder="Your full name" autocomplete="name">
+    </div>
+    
+
+    <div class="modal-divider"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modal-confirm-btn" onclick="confirmModal()">Continue to Payment →</button>
+    </div>
+    <div class="modal-note" style="margin-top:.9rem;">🔒 Secured by Razorpay · No refunds</div>
+  </div>
+</div>
+
 <div id="cur"></div><div id="cur-ring"></div>
 <div class="bg-grad"></div><canvas id="sc"></canvas>
 
@@ -220,33 +374,25 @@ footer span{color:var(--gold);}
     </div>
 
     <div class="spanel" id="sp3">
-  <div class="bk-breadcrumb" id="breadcrumb3"></div>
-
-  <!-- PAY GATE (shows before payment) -->
-  <div id="payGate"></div>
-
-  <!-- CAL SECTION (shows after payment) -->
-  <div id="calSection" style="display:none;">
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;">
-      ✅ Payment confirmed — now pick your date & time below.
-    </p>
-    <div class="cal-wrap" id="calWrap">
-      <div class="cal-loading" id="calLoading">
-        <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
-        <p>Loading scheduler…</p>
+      <div class="bk-breadcrumb" id="breadcrumb3"></div>
+      <div id="payGate"></div>
+      <div id="calSection" style="display:none;">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.2rem;font-weight:300;">
+          ✅ Payment confirmed — now pick your date &amp; time below.
+        </p>
+        <div class="cal-wrap" id="calWrap">
+          <div class="cal-loading" id="calLoading">
+            <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+            <p>Loading scheduler…</p>
+          </div>
+          <iframe id="calFrame" src="" style="min-height:650px;border:none;display:none;" title="Book session"></iframe>
+        </div>
+        <div class="bknav">
+          <button class="bkback" onclick="goStep(2)">← Back</button>
+          <a id="calOpenLink" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn btn-o" style="text-decoration:none;font-size:.72rem;">Open in new tab ↗</a>
+        </div>
       </div>
-      <iframe id="calFrame" src="" style="min-height:650px;border:none;display:none;" title="Book session"></iframe>
     </div>
-    <div class="bknav">
-      <button class="bkback" onclick="goStep(2)">← Back</button>
-      <a id="calOpenLink" href="https://cal.com/manifestuniversecrets" target="_blank" class="btn btn-o" style="text-decoration:none;font-size:.72rem;">Open in new tab ↗</a>
-    </div>
-  </div>
-
-  <div class="bknav" style="margin-top:1rem;">
-    <button class="bkback" onclick="goStep(2)">← Back</button>
-  </div>
-</div>
   </div>
 </section>
 
@@ -257,393 +403,436 @@ footer span{color:var(--gold);}
 
 <script>
 const API_BASE = "https://adg-backend-sm2p.onrender.com";
-const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax"; // ← your key ID here
-
+const RAZORPAY_KEY = "rzp_live_Sd69lWcd4u50ax";
 const CAL_USER = 'manifestuniversecrets';
 const CAL_URLS = {
-  'specific-person': {
-    gold: `https://cal.com/${CAL_USER}/sp-gold`,
-    diamond: `https://cal.com/${CAL_USER}/sp-diamond`,
-    platinum: `https://cal.com/${CAL_USER}/sp-platinum`
-  },
-  'career': {
-    gold: `https://cal.com/${CAL_USER}/career-gold`,
-    diamond: `https://cal.com/${CAL_USER}/career-diamond`,
-    platinum: `https://cal.com/${CAL_USER}/career-platinum`
-  },
-  'manifestation': {
-    gold: `https://cal.com/${CAL_USER}/manifestation-gold`,
-    diamond: `https://cal.com/${CAL_USER}/manifestation-diamond`,
-    platinum: `https://cal.com/${CAL_USER}/manifestation-platinum`
-  }
+  'specific-person': { gold:`https://cal.com/${CAL_USER}/sp-gold`, diamond:`https://cal.com/${CAL_USER}/sp-diamond`, platinum:`https://cal.com/${CAL_USER}/sp-platinum` },
+  'career': { gold:`https://cal.com/${CAL_USER}/career-gold`, diamond:`https://cal.com/${CAL_USER}/career-diamond`, platinum:`https://cal.com/${CAL_USER}/career-platinum` },
+  'manifestation': { gold:`https://cal.com/${CAL_USER}/manifestation-gold`, diamond:`https://cal.com/${CAL_USER}/manifestation-diamond`, platinum:`https://cal.com/${CAL_USER}/manifestation-platinum` }
 };
-
-const CAL_PARAMS = '?theme=dark&brandColor=c9a84c';
+const CAL_PARAMS = '?theme=dark&brandColor=c9a84c&hideCancel=true';
 
 const TIER_DATA = {
   'specific-person': [
-    { tier: 'gold', gem: '🥇', name: 'Gold', duration: '30 Minutes', inr: '₹21,000', usd: '$250', amount: 21000, focus: 'Break No Contact', includes: ['Energetic & emotional analysis', 'No-contact energy reset', 'Subconscious calming', 'Identity shift', 'Visualization + affirmations'], perfect: ['Break silence', 'Reduce anxiety', 'Feel in control', 'See initial movement'], popular: 'Starter' },
-    { tier: 'diamond', gem: '💎', name: 'Diamond', duration: '45 Minutes', inr: '₹27,000', usd: '$320', amount: 27000, focus: 'Consistent Communication', includes: ['Everything in Gold', 'Subconscious rewiring', 'SP scripting technique', 'Mirror work', 'Communication stabilisation'], perfect: ['Break no contact AND maintain consistent communication', 'Stop hot & cold behaviour', 'Feel chosen', 'Build connection'], popular: 'Most Popular' },
-    { tier: 'platinum', gem: '👑', name: 'Platinum', duration: '60 Minutes', inr: '₹35,000', usd: '$386', amount: 35000, focus: 'Commitment & Long-Term Union', includes: ['Everything in Diamond', 'Deep subconscious rewiring', 'Marriage scripting', 'Energy healing', 'Advanced visualization'], perfect: ['Bring person back AND secure commitment', 'Manifest proposal/marriage', 'Feel loved & chosen', 'Stable long-term relationship'], popular: 'Premium' }
+    { tier:'gold', gem:'🥇', name:'Gold', duration:'30 Minutes', inr:'₹21,000', usd:'$250', amountInr:21000, amountUsd:250, focus:'Break No Contact', includes:['Energetic & emotional analysis','No-contact energy reset','Subconscious calming','Identity shift','Visualization + affirmations'], perfect:['Break silence','Reduce anxiety','Feel in control','See initial movement'], popular:'Starter' },
+    { tier:'diamond', gem:'💎', name:'Diamond', duration:'45 Minutes', inr:'₹27,000', usd:'$320', amountInr:27000, amountUsd:320, focus:'Consistent Communication', includes:['Everything in Gold','Subconscious rewiring','SP scripting technique','Mirror work','Communication stabilisation'], perfect:['Break no contact AND maintain consistent communication','Stop hot & cold behaviour','Feel chosen','Build connection'], popular:'Most Popular' },
+    { tier:'platinum', gem:'👑', name:'Platinum', duration:'60 Minutes', inr:'₹35,000', usd:'$386', amountInr:35000, amountUsd:386, focus:'Commitment & Long-Term Union', includes:['Everything in Diamond','Deep subconscious rewiring','Marriage scripting','Energy healing','Advanced visualization'], perfect:['Bring person back AND secure commitment','Manifest proposal/marriage','Feel loved & chosen','Stable long-term relationship'], popular:'Premium' }
   ],
   'career': [
-    { tier: 'gold', gem: '🥇', name: 'Gold', duration: '30 Minutes', inr: '₹21,000', usd: '$250', amount: 21000, focus: 'Dream Job / Job Switch', includes: ['Career & energy analysis', 'Belief reset', 'Job attraction scripting', 'Confidence activation', 'Visualization + affirmations'], perfect: ['Manifest dream job', 'Switch role/company', 'Receive interview calls', 'Feel confident'], popular: 'Starter' },
-    { tier: 'diamond', gem: '💎', name: 'Diamond', duration: '45 Minutes', inr: '₹27,000', usd: '$320', amount: 27000, focus: 'Promotion, Growth & Money Flow', includes: ['Everything in Gold', 'Money block removal', 'Money magnetism activation', 'Identity shift to leadership', 'Financial flow stabilisation'], perfect: ['Get promoted', 'Increase income', 'Smoother money flow', 'Higher authority & growth'], popular: 'Most Popular' },
-    { tier: 'platinum', gem: '👑', name: 'Platinum', duration: '60 Minutes', inr: '₹35,000', usd: '$386', amount: 35000, focus: 'Richest Timeline & Massive Abundance', includes: ['Everything in Diamond', 'Wealth identity rewiring', 'Millionaire frequency activation', 'Timeline shift', 'Expansion energy work'], perfect: ['Activate richest timeline', 'Massive success & abundance', 'High-income identity', 'Rapid growth & expansion'], popular: 'Premium' }
+    { tier:'gold', gem:'🥇', name:'Gold', duration:'30 Minutes', inr:'₹21,000', usd:'$250', amountInr:21000, amountUsd:250, focus:'Dream Job / Job Switch', includes:['Career & energy analysis','Belief reset','Job attraction scripting','Confidence activation','Visualization + affirmations'], perfect:['Manifest dream job','Switch role/company','Receive interview calls','Feel confident'], popular:'Starter' },
+    { tier:'diamond', gem:'💎', name:'Diamond', duration:'45 Minutes', inr:'₹27,000', usd:'$320', amountInr:27000, amountUsd:320, focus:'Promotion, Growth & Money Flow', includes:['Everything in Gold','Money block removal','Money magnetism activation','Identity shift to leadership','Financial flow stabilisation'], perfect:['Get promoted','Increase income','Smoother money flow','Higher authority & growth'], popular:'Most Popular' },
+    { tier:'platinum', gem:'👑', name:'Platinum', duration:'60 Minutes', inr:'₹35,000', usd:'$386', amountInr:35000, amountUsd:386, focus:'Richest Timeline & Massive Abundance', includes:['Everything in Diamond','Wealth identity rewiring','Millionaire frequency activation','Timeline shift','Expansion energy work'], perfect:['Activate richest timeline','Massive success & abundance','High-income identity','Rapid growth & expansion'], popular:'Premium' }
   ],
   'manifestation': [
-    { tier: 'gold', gem: '🥇', name: 'Gold', duration: '30 Minutes', inr: '₹21,000', usd: '$250', amount: 21000, focus: 'Specific Goal / Quick Shift', includes: ['Energetic & emotional analysis', 'Belief reset', 'Goal-specific scripting', 'Identity shift', 'Simple visualization'], perfect: ['Manifest one specific goal', 'Clarity & stability', 'Quick movement', 'Stop overthinking'], popular: 'Starter' },
-    { tier: 'diamond', gem: '💎', name: 'Diamond', duration: '45 Minutes', inr: '₹27,000', usd: '$320', amount: 27000, focus: 'Multiple Areas / Stability & Growth', includes: ['Everything in Gold', 'Deep emotional & mental blocks', 'Emotional regulation', 'Confidence activation', 'Multi-goal alignment'], perfect: ['Improve multiple areas', 'Emotionally balanced', 'Consistent results', 'Steady growth'], popular: 'Most Popular' },
-    { tier: 'platinum', gem: '👑', name: 'Platinum', duration: '60 Minutes', inr: '₹35,000', usd: '$386', amount: 35000, focus: 'Complete Life Transformation', includes: ['Everything in Diamond', 'Identity + life patterns rewiring', 'Highest timeline activation', 'Abundance energy alignment', 'Full life alignment'], perfect: ['Transform entire life', 'Highest self', 'Manifest multiple desires', 'Peace, clarity, success, abundance'], popular: 'Premium' }
+    { tier:'gold', gem:'🥇', name:'Gold', duration:'30 Minutes', inr:'₹21,000', usd:'$250', amountInr:21000, amountUsd:250, focus:'Specific Goal / Quick Shift', includes:['Energetic & emotional analysis','Belief reset','Goal-specific scripting','Identity shift','Simple visualization'], perfect:['Manifest one specific goal','Clarity & stability','Quick movement','Stop overthinking'], popular:'Starter' },
+    { tier:'diamond', gem:'💎', name:'Diamond', duration:'45 Minutes', inr:'₹27,000', usd:'$320', amountInr:27000, amountUsd:320, focus:'Multiple Areas / Stability & Growth', includes:['Everything in Gold','Deep emotional & mental blocks','Emotional regulation','Confidence activation','Multi-goal alignment'], perfect:['Improve multiple areas','Emotionally balanced','Consistent results','Steady growth'], popular:'Most Popular' },
+    { tier:'platinum', gem:'👑', name:'Platinum', duration:'60 Minutes', inr:'₹35,000', usd:'$386', amountInr:35000, amountUsd:386, focus:'Complete Life Transformation', includes:['Everything in Diamond','Identity + life patterns rewiring','Highest timeline activation','Abundance energy alignment','Full life alignment'], perfect:['Transform entire life','Highest self','Manifest multiple desires','Peace, clarity, success, abundance'], popular:'Premium' }
   ]
 };
 
-let bCat = { name: '', slug: '' };
-let bTier = { name: '', price: '', slug: '', amount: 0, usd: '' };
+let bCat = { name:'', slug:'' };
+let bTier = { name:'', price:'', slug:'', amountInr:0, amountUsd:0 };
 let paymentDone = false;
 let currentCalUrl = '';
 let sessionCustomerEmail = '', sessionCustomerName = '';
-
-// Detect user country
 let userCountry = 'IN';
-fetch('https://ipapi.co/json/')
-  .then(r => r.json())
-  .then(d => { userCountry = d.country_code || 'IN'; })
-  .catch(() => {});
+let isIndianClient = true;
+let modalResolve = null;
 
-function isIndian() { return userCountry === 'IN'; }
-const PRICE_MAP = {
-  gold: { inr: "₹21,000", usd: "$250" },
-  diamond: { inr: "₹27,000", usd: "$320" },
-  platinum: { inr: "₹35,000", usd: "$386" }
-};
+/* PAGE LOADER */
+function hideLoader() {
+  const loader = document.getElementById('page-loader');
+  loader.classList.add('hidden');
+  setTimeout(() => { loader.style.display = 'none'; }, 650);
+}
 
-// Cursor
+async function initPage() {
+  await detectUserCountry();
+  setTimeout(hideLoader, 900);
+}
+
+/* COUNTRY DETECTION */
+async function detectUserCountry() {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    if (response.ok) { const d = await response.json(); userCountry = d.country_code || 'IN'; }
+    else {
+      const r2 = await fetch('https://cf-geoip.herokuapp.com/');
+      if (r2.ok) { const d2 = await r2.json(); userCountry = d2.country_code || 'IN'; }
+    }
+  } catch(e) { userCountry = 'IN'; }
+  isIndianClient = userCountry === 'IN';
+}
+function isIndian() { return isIndianClient; }
+
+/* MODAL */
+function openModal() {
+  return new Promise((resolve) => {
+    modalResolve = resolve;
+    document.getElementById('modal-email').value = sessionCustomerEmail || '';
+    document.getElementById('modal-name').value = sessionCustomerName || '';
+    document.getElementById('modal-email-err').classList.remove('show');
+    document.getElementById('modal-email').classList.remove('error');
+    document.getElementById('modal-overlay').classList.add('open');
+    setTimeout(() => document.getElementById('modal-email').focus(), 350);
+  });
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (modalResolve) { modalResolve(null); modalResolve = null; }
+}
+function confirmModal() {
+  const emailEl = document.getElementById('modal-email');
+  const nameEl = document.getElementById('modal-name');
+  const errEl = document.getElementById('modal-email-err');
+  const email = emailEl.value.trim();
+  const name = nameEl.value.trim();
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    emailEl.classList.add('error');
+    errEl.classList.add('show');
+    emailEl.focus();
+    setTimeout(() => emailEl.classList.remove('error'), 500);
+    return;
+  }
+  errEl.classList.remove('show');
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (modalResolve) { modalResolve({ email, name }); modalResolve = null; }
+}
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+document.getElementById('modal-email').addEventListener('keydown', e => { if (e.key === 'Enter') confirmModal(); });
+document.getElementById('modal-name').addEventListener('keydown', e => { if (e.key === 'Enter') confirmModal(); });
+
+/* CURSOR */
 const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
-(function a() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(a); })();
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function a(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(a); })();
 document.querySelectorAll('a,button,.cat-card,.tier-card').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
 });
 
-// Stars
-const scEl = document.getElementById('sc'), ctx = scEl.getContext('2d');
-let stars = [], t = 0;
-function rsz() { scEl.width = innerWidth; scEl.height = innerHeight; }
-function iStars() { stars = []; for (let i = 0; i < 120; i++) stars.push({ x: Math.random() * scEl.width, y: Math.random() * scEl.height, r: Math.random() * 1.1 + .15, sp: Math.random() * .002 + .0005, ph: Math.random() * Math.PI * 2 }); }
-function drw() { ctx.clearRect(0, 0, scEl.width, scEl.height); t += .01; stars.forEach(s => { const a = .2 + .4 * Math.sin(t * s.sp * 100 + s.ph); ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + a + ')'; ctx.fill(); }); requestAnimationFrame(drw); }
-window.addEventListener('resize', () => { rsz(); iStars(); }); rsz(); iStars(); drw();
+/* STARS */
+const scEl=document.getElementById('sc'), ctx=scEl.getContext('2d');
+let stars=[],t=0;
+function rsz(){ scEl.width=innerWidth; scEl.height=innerHeight; }
+function iStars(){ stars=[]; for(let i=0;i<120;i++) stars.push({x:Math.random()*scEl.width,y:Math.random()*scEl.height,r:Math.random()*1.1+.15,sp:Math.random()*.002+.0005,ph:Math.random()*Math.PI*2}); }
+function drw(){ ctx.clearRect(0,0,scEl.width,scEl.height); t+=.01; stars.forEach(s=>{ const a=.2+.4*Math.sin(t*s.sp*100+s.ph); ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,'+a+')'; ctx.fill(); }); requestAnimationFrame(drw); }
+window.addEventListener('resize',()=>{ rsz(); iStars(); }); rsz(); iStars(); drw();
 
-// Reveal
-const ro = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: .1 });
-document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+/* REVEAL */
+const ro=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); }); },{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
 
-function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
 
-function pickCat(el, name, slug) {
-  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('sel'));
+function pickCat(el,name,slug){
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
-  bCat = { name, slug };
-  bTier = { name: '', price: '', slug: '', amount: 0 };
-  paymentDone = false;
-  setTimeout(() => goStep(2), 220);
+  bCat={name,slug};
+  bTier={name:'',price:'',slug:'',amountInr:0,amountUsd:0};
+  paymentDone=false;
+  setTimeout(()=>goStep(2),220);
 }
 
-function pickTier(el, tierSlug, tierName, price, amount, usd) {
-  document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('sel'));
+function pickTier(el,tierSlug,tierName,priceInr,amountInr,amountUsd){
+  document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
-  bTier = { name: tierName, price, slug: tierSlug, amount, usd };
-  paymentDone = false;
-  showToast('✦ ' + tierName + ' selected — proceed to payment');
-  setTimeout(() => goStep(3), 480);
+  bTier={name:tierName, price:isIndian()?priceInr:`$${amountUsd}`, slug:tierSlug, amountInr, amountUsd};
+  paymentDone=false;
+  showToast('✦ '+tierName+' selected — proceed to payment');
+  setTimeout(()=>goStep(3),480);
 }
 
-function renderTiers(catSlug) {
-  const tiers = TIER_DATA[catSlug] || [];
-  document.getElementById('tierSection').innerHTML = `
+function renderTiers(catSlug){
+  const tiers=TIER_DATA[catSlug]||[];
+  document.getElementById('tierSection').innerHTML=`
     <div class="tier-grid">
-      ${tiers.map(t => `
-        <div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}',${t.amount},'${t.usd}')">
+      ${tiers.map(t=>`
+        <div class="tier-card ${t.tier}-tier" onclick="pickTier(this,'${t.tier}','${t.name}','${t.inr}',${t.amountInr},${t.amountUsd})">
           <div class="tier-popular">${t.popular}</div>
           <div class="tier-header">
             <span class="tier-gem">${t.gem}</span>
             <span class="tier-name">${t.name}</span>
             <span class="tier-duration">⏱ ${t.duration}</span>
-            <div class="tier-price-row">
-  <span class="tier-price-inr">
-    ${isIndian() ? t.inr : t.usd}
-  </span>
-</div>
+            <div class="tier-price-row"><span class="tier-price-inr">${isIndian()?t.inr:t.usd}</span></div>
             <span class="tier-focus">Focus: ${t.focus}</span>
           </div>
           <span class="tier-includes">What's Included</span>
-          <ul class="tier-features">${t.includes.map(i => `<li>${i}</li>`).join('')}</ul>
+          <ul class="tier-features">${t.includes.map(i=>`<li>${i}</li>`).join('')}</ul>
           <div class="tier-perfect">
             <span class="tier-perfect-title">Perfect if you want to</span>
-            <ul>${t.perfect.map(p => `<li>${p}</li>`).join('')}</ul>
+            <ul>${t.perfect.map(p=>`<li>${p}</li>`).join('')}</ul>
           </div>
-          <div class="tier-select-hint">Tap to select & proceed to payment →</div>
-        </div>
-      `).join('')}
+          <div class="tier-select-hint">Tap to select &amp; proceed to payment →</div>
+        </div>`).join('')}
     </div>
     <div class="bk-warning">
       <strong>⚠️ Important:</strong> This is a guided transformation session. Everything shared must be practiced consistently for results.<br>
       I guide, align, and activate — <em style="color:var(--gold-light);">but your consistency creates the outcome 💫</em>
     </div>`;
-  document.querySelectorAll('.tier-card').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  document.querySelectorAll('.tier-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
   });
 }
 
-function buildBC(cid) {
-  const el = document.getElementById(cid); if (!el) return;
-  let h = '';
-  if (bCat.name) h += `<div class="bk-chip"><span>Category</span>${bCat.name}</div>`;
-  if (bTier.name) { h += '<div class="bk-arrow">›</div>'; h += `<div class="bk-chip"><span>Session</span>${bTier.name} · ${bTier.price}</div>`; }
-  el.innerHTML = h;
+function buildBC(cid){
+  const el=document.getElementById(cid); if(!el) return;
+  let h='';
+  if(bCat.name) h+=`<div class="bk-chip"><span>Category</span>${bCat.name}</div>`;
+  if(bTier.name){ h+='<div class="bk-arrow">›</div>'; h+=`<div class="bk-chip"><span>Session</span>${bTier.name} · ${bTier.price}</div>`; }
+  el.innerHTML=h;
 }
 
-// ── RAZORPAY PAYMENT ──────────────────────────────────────────────
-async function startPayment() {
-  // Collect email first
-  const email = prompt('📧 Enter your email to receive booking confirmation:');
-  if (!email || !email.includes('@')) {
-    showToast('Please enter a valid email to continue.');
-    return;
-  }
-  const name = prompt('👤 Your name (optional):') || '';
-  sessionCustomerEmail = email;
-  sessionCustomerName = name;
+async function startPayment(){
+  const result = await openModal();
+  if (!result) { showToast('Payment cancelled.'); return; }
 
-  const btn = document.getElementById('payBtn');
+  sessionCustomerEmail = result.email;
+  sessionCustomerName = result.name;
+
+  const btn=document.getElementById('payBtn');
   btn.classList.add('loading');
-  btn.textContent = '⏳ Opening payment…';
-
-  // Wake up Render server
-  await fetch(`${API_BASE}/ebooks`).catch(() => {});
+  btn.textContent='⏳ Opening payment…';
 
   try {
-    const res = await fetch(`${API_BASE}/razorpay/create-session-order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: bTier.amount,
-        currency: 'INR',
-        category: bCat.name,
-        tier: bTier.slug,
-        tierName: bTier.name
-      })
+    const isInternational=!isIndian();
+    const amount=isInternational?bTier.amountUsd:bTier.amountInr;
+    const currency=isInternational?"USD":"INR";
+
+    const res=await fetch(`${API_BASE}/razorpay/create-session-order`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ amount, currency, category:bCat.name, tier:bTier.slug, tierName:bTier.name, customerCountry:userCountry })
     });
-    const order = await res.json();
-    if (!order.orderId) throw new Error(order.error || 'Could not create order');
-const options = {
-  key: RAZORPAY_KEY,
-  amount: order.amount,
-  currency: order.currency,
-  name: 'Akshita Dayma Goel',
-  description: `${bCat.name} — ${bTier.name} Session (${bTier.price})`,
-  image: 'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
-  order_id: order.orderId,
+    const order=await res.json();
+    if(!order.orderId) throw new Error(order.error||'Could not create order');
 
-  handler: async function (response) {
-    const calUrl = (CAL_URLS[bCat.slug] || {})[bTier.slug] || `https://cal.com/${CAL_USER}`;
+    const calUrl=(CAL_URLS[bCat.slug]||{})[bTier.slug]||`https://cal.com/${CAL_USER}`;
+    const displayAmountStr=isIndian()?bTier.price:`$${bTier.amountUsd}`;
 
-    const verify = await fetch(`${API_BASE}/razorpay/verify-session`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...response,
-        calUrl,
-        customerEmail: sessionCustomerEmail,
-        customerName: sessionCustomerName,
-        programName: `${bCat.name} — ${bTier.name} Session`,
-        amount: isIndian() ? bTier.price : bTier.usd
-      })
-    });
-
-    const result = await verify.json();
-
-    if (result.success) {
-      paymentDone = true;
-      currentCalUrl = calUrl;
-      showPaymentSuccess(response.razorpay_payment_id, calUrl);
-    } else {
-      showToast('⚠️ Payment verification failed.');
-      resetPayBtn();
-    }
-  },
-
-  prefill: {
-    name: sessionCustomerName,
-    email: sessionCustomerEmail
-  },
-
-  theme: { color: '#c9a84c' },
-
-  modal: {
-    ondismiss: function () {
-      showToast('Payment cancelled.');
-      resetPayBtn();
-    }
-  },
-
-  // 🔥 THIS IS THE MAIN FEATURE
-  config: {
-    display: {
-     blocks: {
-  banks: {
-          name: "Payment Options",
-          instruments: isIndian()
-            ? [
-                { method: "upi" },
-                { method: "card" },
-                { method: "netbanking" },
-                { method: "wallet" }
-              ]
-            : [
-                { method: "card" } // 🌍 ONLY CARD FOR INTERNATIONAL
-              ]
+    const options={
+      key:RAZORPAY_KEY, amount:order.amount, currency:order.currency,
+      name:'Akshita Dayma Goel',
+      description:`${bCat.name} — ${bTier.name} Session`,
+      image:'https://aayushjain1811.github.io/Manifestationcoach/assets/logo.png',
+      order_id:order.orderId,
+      handler:async function(response){
+        const verify=await fetch(`${API_BASE}/razorpay/verify-session`,{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ 
+            ...response, 
+            calUrl, 
+            customerEmail:sessionCustomerEmail, 
+            customerName:sessionCustomerName, 
+            programName:`${bCat.name} — ${bTier.name} Session`, 
+            amount:displayAmountStr,
+            sendEmail: false  // ← NO EMAIL SENT
+          })
+        });
+        const result2=await verify.json();
+        if(result2.success){ 
+          paymentDone=true; 
+          currentCalUrl=calUrl; 
+          showPaymentSuccess(response.razorpay_payment_id,calUrl); 
+        } else { 
+          showToast('⚠️ Payment verification failed.'); 
+          resetPayBtn(); 
         }
       },
-      sequence: ["block.banks"],
-      preferences: {
-        show_default_blocks: false
-      }
-    }
-  }
-};
+      prefill:{ name:sessionCustomerName, email:sessionCustomerEmail, contact:'' },
+      theme:{ color:'#c9a84c' },
+      modal:{ ondismiss:function(){ showToast('Payment cancelled.'); resetPayBtn(); } }
+    };
 
-    const rzp = new Razorpay(options);
-    rzp.on('payment.failed', function (response) {
-      showToast('Payment failed: ' + response.error.description);
-      resetPayBtn();
-    });
+    if(!isIndian()){
+      options.config={ display:{ blocks:{ banks:{ name:"Payment Options", instruments:[{method:"card"}] } }, sequence:["block.banks"], preferences:{ show_default_blocks:false } } };
+    }
+
+    const rzp=new Razorpay(options);
+    rzp.on('payment.failed',function(r){ showToast('Payment failed: '+r.error.description); resetPayBtn(); });
     rzp.open();
 
-  } catch (e) {
-    showToast('Error: ' + e.message);
-    resetPayBtn();
-  }
+  } catch(e) { showToast('Error: '+e.message); resetPayBtn(); }
 }
 
-function resetPayBtn() {
-  const btn = document.getElementById('payBtn');
-  if (btn) { btn.classList.remove('loading'); btn.textContent = '🔒 Pay & Book Session'; }
+function resetPayBtn(){
+  const btn=document.getElementById('payBtn');
+  if(btn){ btn.classList.remove('loading'); btn.textContent='🔒 Pay & Book Session'; }
 }
 
-function showPaymentSuccess(paymentId, calUrl) {
-  const gate = document.getElementById('payGate');
-  const displayPrice = isIndian() ? bTier.price : bTier.usd;
-  gate.innerHTML = `
+function showPaymentSuccess(paymentId,calUrl){
+  const gate=document.getElementById('payGate');
+  const displayPrice=isIndian()?bTier.price:`$${bTier.amountUsd}`;
+  gate.innerHTML=`
     <div class="pay-success">
       <h3>✅ Payment Successful!</h3>
       <p>Your payment of <strong style="color:#5dcc7a;">${displayPrice}</strong> is confirmed.<br>
-      Confirmation sent to <strong style="color:#5dcc7a;">${sessionCustomerEmail}</strong><br>
-      Now complete your booking by selecting your preferred date & time below.</p>
-      <div class="pid">Payment ID: ${paymentId}</div>
+      Payment ID: <strong>${paymentId}</strong><br>
+      Now complete your booking by selecting your preferred date &amp; time below.</p>
     </div>`;
-  // Show Cal.com embed
   loadCalAfterPayment(calUrl);
 }
 
-function loadCalAfterPayment(url) {
+function loadCalAfterPayment(url){
   const frame = document.getElementById('calFrame');
   const loading = document.getElementById('calLoading');
   const link = document.getElementById('calOpenLink');
   const calSection = document.getElementById('calSection');
   calSection.style.display = 'block';
-  const fullUrl = url + CAL_PARAMS;
+
+  const fullUrl = url + '?theme=dark&brandColor=c9a84c&embed=true';
   frame.src = fullUrl;
+  frame.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-popups');
+
   if (link) link.href = url;
   loading.style.display = 'flex';
   frame.style.display = 'none';
-  frame.onload = function () { loading.style.display = 'none'; frame.style.display = 'block'; };
+
+  frame.onload = function() {
+    loading.style.display = 'none';
+    frame.style.display = 'block';
+  };
+
+  function calMessageHandler(e) {
+    if (!e.data || typeof e.data !== 'object') return;
+    const type = e.data.type || e.data.action || '';
+    if (
+      type === 'CAL:bookingSuccessful' ||
+      type === 'bookingSuccessful' ||
+      type === 'CAL:booking-confirmed' ||
+      (e.data.data && e.data.data.confirmed)
+    ) {
+      window.removeEventListener('message', calMessageHandler);
+      showSessionThankYou();
+    }
+  }
+
+  window.removeEventListener('message', window._calHandler);
+  window._calHandler = calMessageHandler;
+  window.addEventListener('message', calMessageHandler);
+
+  clearTimeout(window._calFallback);
+  window._calFallback = setTimeout(() => {
+    if (frame.style.display === 'block') {
+      window.removeEventListener('message', window._calHandler);
+      showSessionThankYou();
+    }
+  }, 180000);
 }
 
-function goStep(n) {
-  [1, 2, 3].forEach(i => {
-    document.getElementById('sp' + i).classList.remove('active');
-    const s = document.getElementById('sc' + i), sl = document.getElementById('sl' + i);
-    s.classList.remove('active', 'done'); sl.classList.remove('active');
-    if (i < n) { s.classList.add('done'); s.textContent = '✓'; }
-    else if (i === n) { s.classList.add('active'); s.textContent = i; sl.classList.add('active'); }
-    else s.textContent = i;
-    if (i < 3) document.getElementById('sln' + i).classList.toggle('done', i < n);
-  });
-  document.getElementById('sp' + n).classList.add('active');
-  if (n === 2) { document.getElementById('catLabel').textContent = bCat.name; buildBC('breadcrumb2'); renderTiers(bCat.slug); }
-  if (n === 3) { buildBC('breadcrumb3'); renderPayGate(); }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-async function renderPayGate() {
-  const gate = document.getElementById('payGate');
+function showSessionThankYou() {
   const calSection = document.getElementById('calSection');
-  paymentDone = false;
+  const gate = document.getElementById('payGate');
   calSection.style.display = 'none';
 
-  const displayPrice = isIndian() ? bTier.price : bTier.usd;
-  const secondaryPrice = isIndian()
-    ? `<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ${bTier.usd} USD</div>`
-    : `<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ${bTier.price} INR</div>`;
-
   gate.innerHTML = `
-    <div class="pay-gate">
-      <h3>🔒 Confirm & Pay to Book</h3>
-      <p>Your slot will be confirmed after payment.<br>
-      Once paid, you'll be redirected to select your preferred date & time.</p>
-      <div class="pay-gate-details">
-        <div class="pgd-item">
-          <span class="pgd-label">Category</span>
-          <span class="pgd-val">${bCat.name}</span>
-        </div>
-        <div class="pgd-item">
-          <span class="pgd-label">Session</span>
-          <span class="pgd-val">${bTier.name}</span>
-        </div>
-        <div class="pgd-item">
-          <span class="pgd-label">Amount</span>
-          <span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">${displayPrice}</span>
-          ${secondaryPrice}
-        </div>
+    <div style="
+      background: linear-gradient(160deg, rgba(93,204,122,.08), rgba(93,204,122,.03));
+      border: 1px solid rgba(93,204,122,.3);
+      border-radius: 6px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    ">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+      <h3 style="
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.8rem;
+        color: #5dcc7a;
+        font-weight: 400;
+        margin-bottom: .6rem;
+      ">Session Booked!</h3>
+      <p style="font-size: .88rem; color: var(--muted); line-height: 1.85; margin-bottom: 1.4rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+        Your <strong style="color: var(--gold-light);">${bCat.name} — ${bTier.name} Session</strong> is confirmed. ✨<br>
+        Akshita will connect with you at your chosen time.<br><br>
+        <span style="font-size: .78rem; color: rgba(142,136,171,.6);">
+          A calendar invite has been sent to your email.<br>
+          Please check your inbox (or spam folder).
+        </span>
+      </p>
+      <div style="
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .6rem 1.4rem;
+        background: rgba(201,168,76,.12);
+        border: 1px solid rgba(201,168,76,.3);
+        border-radius: 3px;
+        font-size: .72rem;
+        color: var(--gold-light);
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        margin-bottom: 1.8rem;
+      ">
+        ✦ &nbsp; No cancellation or rescheduling permitted
       </div>
-      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:2px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.75;text-align:left;">
-        🌍 <strong style="color:var(--gold-light);">International clients:</strong>
-        Your card will be charged in INR equivalent. Your bank automatically converts at the live exchange rate.
-      </div>
-
-      <!-- NO REFUND POLICY -->
-      <div style="background:rgba(255,100,100,.04);border:1px solid rgba(255,100,100,.2);border-radius:2px;padding:.9rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.8;text-align:left;">
-        <strong style="color:#ff8080;">⚠️ No Refund Policy:</strong> All payments are final and non-refundable.
-        By proceeding, you agree that this is a commitment to your transformation journey.
-        Sessions are non-transferable. Please ensure you are ready to fully commit before purchasing.
-      </div>
-      ${!isIndian() ? `
-  <div style="background:rgba(126,200,227,.08);
-              border:1px solid rgba(126,200,227,.3);
-              padding:.8rem;
-              margin-bottom:1rem;
-              font-size:.75rem;
-              color:#b8e6f5;">
-    🌍 International Payments: Only card payments are supported.
-  </div>
-` : ''}
-      <button class="pay-btn" id="payBtn" onclick="startPayment()">
-        🔒 Pay ${displayPrice} & Book Session
-      </button>
-      <div class="pay-note">
-  ${
-    isIndian()
-      ? "UPI · Cards · Net Banking · Wallets available"
-      : "International cards only (Visa / Mastercard / Amex)"
-  }
-</div>
+      <br>
+      <a href="index.html" style="
+        display: inline-block;
+        padding: .8rem 2rem;
+        background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+        color: var(--dark);
+        border-radius: 2px;
+        text-decoration: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: .78rem;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      ">← Back to Home</a>
     </div>`;
 }
 
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('sp'+i).classList.remove('active');
+    const s=document.getElementById('sc'+i),sl=document.getElementById('sl'+i);
+    s.classList.remove('active','done'); sl.classList.remove('active');
+    if(i<n){ s.classList.add('done'); s.textContent='✓'; }
+    else if(i===n){ s.classList.add('active'); s.textContent=i; sl.classList.add('active'); }
+    else s.textContent=i;
+    if(i<3) document.getElementById('sln'+i).classList.toggle('done',i<n);
+  });
+  document.getElementById('sp'+n).classList.add('active');
+  if(n===2){ document.getElementById('catLabel').textContent=bCat.name; buildBC('breadcrumb2'); renderTiers(bCat.slug); }
+  if(n===3){ buildBC('breadcrumb3'); renderPayGate(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function renderPayGate(){
+  const gate=document.getElementById('payGate');
+  const calSection=document.getElementById('calSection');
+  paymentDone=false;
+  calSection.style.display='none';
+  const displayPrice=isIndian()?bTier.price:`$${bTier.amountUsd}`;
+  const secondaryPrice=isIndian()
+    ?`<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ $${bTier.amountUsd} USD</div>`
+    :`<div style="font-size:.75rem;color:rgba(142,136,171,.5);margin-top:.2rem;">≈ ${bTier.price}</div>`;
+  gate.innerHTML=`
+    <div class="pay-gate">
+      <h3>🔒 Confirm &amp; Pay to Book</h3>
+      <p>Your slot will be confirmed after payment.<br>Once paid, you'll be redirected to select your preferred date &amp; time.</p>
+      <div class="pay-gate-details">
+        <div class="pgd-item"><span class="pgd-label">Category</span><span class="pgd-val">${bCat.name}</span></div>
+        <div class="pgd-item"><span class="pgd-label">Session</span><span class="pgd-val">${bTier.name}</span></div>
+        <div class="pgd-item"><span class="pgd-label">Amount</span><span class="pgd-val" style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.4rem;">${displayPrice}</span>${secondaryPrice}</div>
+      </div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:2px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.75;text-align:left;">
+        🌍 <strong style="color:var(--gold-light);">International clients:</strong> Your card will be charged in ${isIndian()?'INR':'USD'}. Your bank automatically converts if needed.
+      </div>
+      <div style="background:rgba(255,100,100,.04);border:1px solid rgba(255,100,100,.2);border-radius:2px;padding:.9rem 1.2rem;margin-bottom:1.2rem;font-size:.74rem;color:var(--muted);line-height:1.8;text-align:left;">
+        <strong style="color:#ff8080;">⚠️ No Refund Policy:</strong> All payments are final and non-refundable. By proceeding, you agree that this is a commitment to your transformation journey. Sessions are non-transferable. Please ensure you are ready to fully commit before purchasing.
+      </div>
+      ${!isIndian()?`<div style="background:rgba(126,200,227,.08);border:1px solid rgba(126,200,227,.3);padding:.8rem;margin-bottom:1rem;font-size:.75rem;color:#b8e6f5;">🌍 International Payments: Only card payments are supported.</div>`:''}
+      <button class="pay-btn" id="payBtn" onclick="startPayment()">🔒 Pay ${displayPrice} &amp; Book Session</button>
+      <div class="pay-note">${isIndian()?"UPI · Cards · Net Banking · Wallets available":"International cards only (Visa / Mastercard / Amex)"}</div>
+    </div>`;
+}
+
+/* BOOT */
+initPage();
 </script>
 </body>
 </html>

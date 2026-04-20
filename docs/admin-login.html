@@ -227,7 +227,7 @@ canvas#sc{position:fixed;inset:0;z-index:1;pointer-events:none;}
 </div>
 
 <script>
-// Cursor
+// Cursor (keep your existing cursor code)
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
@@ -237,7 +237,7 @@ document.querySelectorAll('input,button,a,.corner-mark').forEach(el=>{
   el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
 });
 
-// Stars
+// Stars (keep your existing stars code)
 const scEl=document.getElementById('sc'),ctx=scEl.getContext('2d');
 let stars=[],t=0;
 function rsz(){scEl.width=innerWidth;scEl.height=innerHeight;}
@@ -246,10 +246,9 @@ function drw(){ctx.clearRect(0,0,scEl.width,scEl.height);t+=.01;stars.forEach(s=
 window.addEventListener('resize',()=>{rsz();iStars();});rsz();iStars();drw();
 
 // Auth
-const ADMIN_USER='akshita';
-const ADMIN_PASS='manifestation2026';
 let attempts=0;
 const maxAttempts=5;
+const API_BASE = "https://adg-backend-sm2p.onrender.com";
 
 function togglePwd(){
   const inp=document.getElementById('password');
@@ -264,56 +263,87 @@ function flashRed(){
   setTimeout(()=>f.classList.remove('on'),300);
 }
 
-function tryLogin(){
-  const u=document.getElementById('username').value.trim();
-  const p=document.getElementById('password').value;
-  const btn=document.getElementById('submitBtn');
-  const err=document.getElementById('errMsg');
-  const att=document.getElementById('attemptsMsg');
+async function tryLogin(){
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  const btn = document.getElementById('submitBtn');
+  const err = document.getElementById('errMsg');
+  const att = document.getElementById('attemptsMsg');
 
-  if(!u||!p){
-    err.textContent='Please fill in all fields.';
+  if(!u || !p){
+    err.textContent = 'Please fill in all fields.';
     err.classList.add('show');
     flashRed();
     return;
   }
 
-  // Loading state
   btn.classList.add('loading');
   err.classList.remove('show');
 
-  setTimeout(()=>{
+  try {
+    const res = await fetch(`${API_BASE}/admin/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username: u,
+        password: p
+      })
+    });
+
+    const data = await res.json();
+
     btn.classList.remove('loading');
-    if(u===ADMIN_USER&&p===ADMIN_PASS){
-      // Success — store session and redirect
-      sessionStorage.setItem('adg_admin','1');
-      sessionStorage.setItem('adg_ts',Date.now());
+
+    if(res.ok && data.token){
+      // ✅ Save JWT token to localStorage
+      localStorage.setItem("admin_token", data.token);
+      
+      // Success animation
       btn.textContent='✓ Redirecting…';
       btn.style.background='linear-gradient(135deg,#2d6a2d,#3d8b3d)';
       btn.style.color='#fff';
-      setTimeout(()=>window.location.href='admin-dashboard.html',700);
-    }else{
+      
+      setTimeout(()=>{
+        window.location.href='admin-dashboard.html';
+      },700);
+      
+    } else {
       attempts++;
       flashRed();
-      if(attempts>=maxAttempts){
-        err.textContent='Too many failed attempts. Please wait before trying again.';
-        btn.disabled=true;
-        btn.style.opacity='.4';
-        setTimeout(()=>{btn.disabled=false;btn.style.opacity='1';attempts=0;att.classList.remove('show');},30000);
-      }else{
-        const rem=maxAttempts-attempts;
-        err.textContent='Incorrect credentials. Please try again.';
-        att.textContent=rem+' attempt'+(rem>1?'s':'')+' remaining';
+      
+      if(attempts >= maxAttempts){
+        err.textContent = 'Too many failed attempts. Please wait 30 seconds.';
+        btn.disabled = true;
+        btn.style.opacity = '.4';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          attempts = 0;
+          att.classList.remove('show');
+        }, 30000);
+      } else {
+        const rem = maxAttempts - attempts;
+        err.textContent = data.error || 'Incorrect credentials.';
+        att.textContent = rem + ' attempt' + (rem>1?'s':'') + ' remaining';
         att.classList.add('show');
       }
       err.classList.add('show');
-      document.getElementById('password').value='';
+      document.getElementById('password').value = '';
       document.getElementById('password').focus();
     }
-  },900);
+    
+  } catch (e) {
+    btn.classList.remove('loading');
+    console.error('Login error:', e);
+    err.textContent = "Server error. Please try again.";
+    err.classList.add('show');
+    flashRed();
+  }
 }
 
-// Hidden hint (clicking the bottom-right corner mark)
+// Hidden hint
 let hintClicks=0;
 function revealHint(){
   hintClicks++;
@@ -323,9 +353,16 @@ function revealHint(){
   }
 }
 
-// Check if already logged in
-if(sessionStorage.getItem('adg_admin')==='1'){
-  window.location.href='admin-dashboard.html';
+// Check if already logged in (using localStorage)
+const existingToken = localStorage.getItem("admin_token");
+if(existingToken){
+  // Optional: Verify token with backend
+  fetch(`${API_BASE}/admin/verify`, {
+    headers: { 'Authorization': `Bearer ${existingToken}` }
+  }).then(res => {
+    if(res.ok) window.location.href = 'admin-dashboard.html';
+    else localStorage.removeItem("admin_token");
+  }).catch(() => localStorage.removeItem("admin_token"));
 }
 </script>
 </body>

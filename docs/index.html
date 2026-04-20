@@ -254,9 +254,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .mb{margin-top:2rem;padding:1.3rem 2rem;background:var(--glass);border:1px solid var(--border);border-radius:2px;text-align:center;}
 .mb p{font-size:.82rem;color:var(--muted);line-height:1.9;}
 
-/* ══════════════════════════════════════
-   ── CELEBRITIES SECTION (NEW) ──
-   ══════════════════════════════════════ */
+/* ── CELEBRITIES SECTION — FIXED FOR ALL SCREENS ── */
 #celebrities{
   padding:5.5rem 5%;
   position:relative;
@@ -268,164 +266,285 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
   pointer-events:none;
 }
 
-/* masonry-inspired asymmetric grid */
-.celeb-grid{
-  max-width:1200px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1.2rem;
+/* ── Grid: Auto-fit responsive grid ── */
+.celeb-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
 }
-/* featured (bigger) cells */
-.celeb-grid .celeb-card:nth-child(1){grid-column:span 2;grid-row:span 2;}
-.celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
 
-.celeb-card{
-  position:relative;
-  border-radius:6px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  background:linear-gradient(160deg,var(--dark2),var(--purple));
-  cursor:pointer;
-  transition:all .45s cubic-bezier(.16,1,.3,1);
-  display:flex;
-  flex-direction:column;
+/* ── Card: consistent sizing ── */
+.celeb-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, var(--dark2), var(--purple));
+  cursor: pointer;
+  transition: all .45s cubic-bezier(.16,1,.3,1);
+  display: flex;
+  flex-direction: column;
 }
-.celeb-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(7,10,26,.95) 0%,rgba(7,10,26,.45) 45%,transparent 70%);
-  z-index:2;transition:opacity .4s;
+
+/* Remove special featured/wide classes for laptop - make all cards same size */
+.celeb-card.celeb-featured,
+.celeb-card.celeb-wide {
+  grid-column: span 1;
+  grid-row: span 1;
 }
-.celeb-card:hover{
+
+.celeb-card::before {
+  content:''; 
+  position:absolute; 
+  inset:0;
+  background:linear-gradient(to top,rgba(7,10,26,.95) 0%,rgba(7,10,26,.4) 45%,transparent 70%);
+  z-index:2; 
+  transition:opacity .4s; 
+  pointer-events:none;
+}
+
+.celeb-card:hover {
   border-color:rgba(201,168,76,.55);
-  transform:translateY(-6px) scale(1.015);
+  transform:translateY(-6px);
   box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.18),0 0 40px rgba(201,168,76,.08);
 }
-.celeb-card:hover::before{background:linear-gradient(to top,rgba(7,10,26,.98) 0%,rgba(7,10,26,.55) 45%,transparent 75%);}
 
-/* photo */
-.celeb-photo-wrap{
-  width:100%;
-  /* standard cells: 3:4, featured spans keep proportion via aspect-ratio on inner */
-  aspect-ratio:3/4;
-  position:relative;
-  overflow:hidden;
-  flex-shrink:0;
+.celeb-card:hover::before {
+  background:linear-gradient(to top,rgba(7,10,26,.98) 0%,rgba(7,10,26,.55) 45%,transparent 75%);
 }
-.celeb-card:nth-child(1) .celeb-photo-wrap,
-.celeb-card:nth-child(5) .celeb-photo-wrap{
-  aspect-ratio:16/10;
-}
-.celeb-photo-wrap img{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  object-position:center top;
-  display:block;
-  transition:transform .7s cubic-bezier(.16,1,.3,1);
-}
-.celeb-card:hover .celeb-photo-wrap img{transform:scale(1.07);}
-.celeb-photo-empty{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:.5rem;
-}
-.celeb-photo-empty .ce-icon{font-size:3rem;}
-.celeb-photo-empty .ce-hint{font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-transform:uppercase;}
 
-/* animated shimmer border on hover */
-.celeb-card::after{
+/* ── Photo wrap: 3:4 aspect ratio ── */
+.celeb-photo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(160deg, var(--dark2), var(--purple));
+}
+
+.celeb-photo-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform .7s cubic-bezier(.16,1,.3,1);
+}
+
+.celeb-card:hover .celeb-photo-wrap img { 
+  transform: scale(1.07); 
+}
+
+.celeb-photo-empty {
+  width:100%; 
+  height:100%;
+  display:flex; 
+  align-items:center; 
+  justify-content:center;
+  flex-direction:column; 
+  gap:.5rem;
+  background: linear-gradient(160deg, var(--dark2), var(--purple));
+}
+
+.celeb-photo-empty .ce-icon { 
+  font-size:3rem; 
+  opacity: 0.5;
+}
+
+.celeb-photo-empty .ce-hint { 
+  font-size:.6rem; 
+  color:rgba(201,168,76,.35); 
+  letter-spacing:.1em; 
+  text-transform:uppercase; 
+}
+
+/* ── Shimmer effect ── */
+.celeb-card::after {
   content:'';
-  position:absolute;inset:0;
-  border-radius:6px;
+  position:absolute;
+  inset:0;
+  border-radius:8px;
   background:conic-gradient(from var(--celeb-angle,0deg),transparent 70%,rgba(201,168,76,.6) 80%,transparent 90%);
-  opacity:0;z-index:1;
+  opacity:0;
+  z-index:1;
   transition:opacity .4s;
   pointer-events:none;
 }
-.celeb-card:hover::after{opacity:1;animation:celShimmer 2.5s linear infinite;}
-@keyframes celShimmer{to{--celeb-angle:360deg;}}
-/* CSS custom property animation support fallback */
-@property --celeb-angle{syntax:'<angle>';inherits:false;initial-value:0deg;}
 
-/* overlay content */
-.celeb-info{
-  position:absolute;bottom:0;left:0;right:0;
-  z-index:3;padding:1.2rem 1.4rem 1.3rem;
-}
-.celeb-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.2rem;color:#fff;font-weight:500;
-  margin-bottom:.2rem;line-height:1.2;
-}
-.celeb-card:nth-child(1) .celeb-name,
-.celeb-card:nth-child(5) .celeb-name{font-size:1.55rem;}
-.celeb-desc{font-size:.72rem;color:var(--muted);margin-bottom:.65rem;line-height:1.5;}
-.celeb-tag{
-  display:inline-flex;align-items:center;gap:.3rem;
-  font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;
-  padding:.22rem .7rem;
-  background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.35);
-  border-radius:2px;color:var(--gold);font-weight:600;
+.celeb-card:hover::after {
+  opacity:1;
+  animation:celShimmer 2.5s linear infinite;
 }
 
-/* view overlay */
-.celeb-view-btn{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(.8);
-  z-index:4;
-  background:rgba(7,10,26,.9);
-  border:1px solid rgba(201,168,76,.6);
-  border-radius:50%;
-  width:52px;height:52px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-  color:var(--gold);
-  opacity:0;
-  transition:all .35s cubic-bezier(.16,1,.3,1);
-  pointer-events:none;
-}
-.celeb-card:hover .celeb-view-btn{opacity:1;transform:translate(-50%,-50%) scale(1);}
-
-/* top accent line */
-.celeb-card .celeb-accent{
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  z-index:3;opacity:0;transition:opacity .4s;
-}
-.celeb-card:hover .celeb-accent{opacity:1;}
-
-/* celeb-filters removed */
-
-/* count badge */
-.celeb-count-badge{
-  display:inline-flex;align-items:center;gap:.5rem;
-  padding:.35rem 1rem;
-  background:rgba(201,168,76,.1);border:1px solid var(--gold-border);
-  border-radius:20px;font-size:.68rem;color:var(--gold);
-  margin-bottom:1.5rem;
-  letter-spacing:.1em;text-transform:uppercase;
+@keyframes celShimmer {
+  to { --celeb-angle: 360deg; }
 }
 
-/* lightbox extra */
-.celeb-lb-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;color:var(--gold-light);
-  text-align:center;margin-top:.5rem;
+@property --celeb-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
-.celeb-lb-desc{font-size:.75rem;color:var(--muted);text-align:center;}
 
-@media(max-width:1100px){
-  .celeb-grid{grid-template-columns:repeat(2,1fr);}
-  .celeb-grid .celeb-card:nth-child(1){grid-column:span 2;grid-row:span 1;}
-  .celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
-  .celeb-card:nth-child(1) .celeb-photo-wrap,
-  .celeb-card:nth-child(5) .celeb-photo-wrap{aspect-ratio:16/9;}
+/* ── Text overlay ── */
+.celeb-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 1.2rem 1.2rem 1.3rem;
+  background: linear-gradient(to top, rgba(7,10,26,.9) 0%, rgba(7,10,26,.5) 50%, transparent 100%);
 }
-@media(max-width:600px){
-  .celeb-grid{grid-template-columns:1fr 1fr;}
-  .celeb-grid .celeb-card:nth-child(1){grid-column:span 2;}
-  .celeb-grid .celeb-card:nth-child(5){grid-column:span 2;}
+
+.celeb-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: .2rem;
+  line-height: 1.2;
+}
+
+.celeb-desc {
+  font-size: .7rem;
+  color: var(--muted);
+  margin-bottom: .5rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.celeb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .55rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  padding: .2rem .65rem;
+  background: rgba(201,168,76,.2);
+  border: 1px solid rgba(201,168,76,.35);
+  border-radius: 2px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── View button ── */
+.celeb-view-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(.8);
+  z-index: 4;
+  background: rgba(7,10,26,.9);
+  border: 1px solid rgba(201,168,76,.6);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--gold);
+  opacity: 0;
+  transition: all .35s cubic-bezier(.16,1,.3,1);
+  pointer-events: none;
+}
+
+.celeb-card:hover .celeb-view-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ── Accent line ── */
+.celeb-card .celeb-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity .4s;
+}
+
+.celeb-card:hover .celeb-accent {
+  opacity: 1;
+}
+
+/* ── Responsive breakpoints ── */
+@media (max-width: 1200px) {
+  .celeb-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .celeb-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  
+  .celeb-name {
+    font-size: 1rem;
+  }
+  
+  .celeb-desc {
+    font-size: .65rem;
+  }
+  
+  .celeb-info {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .celeb-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .celeb-info {
+    padding: 0.8rem;
+  }
+  
+  .celeb-name {
+    font-size: 0.9rem;
+  }
+  
+  .celeb-desc {
+    font-size: 0.6rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .celeb-tag {
+    font-size: 0.5rem;
+    padding: 0.15rem 0.5rem;
+  }
+  
+  .celeb-view-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .celeb-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 /* ── JOURNAL ── */
@@ -491,6 +610,7 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacin
 .test-cat-tag.career{background:rgba(201,168,76,.9);color:var(--dark);}
 .test-cat-tag.manifestation{background:rgba(126,200,227,.88);color:var(--dark);}
 .test-cat-tag.program{background:rgba(224,201,240,.88);color:var(--dark);}
+.test-cat-tag.ebook{background:rgba(126,200,227,.88);color:var(--dark);}
 .test-img-wrap{width:100%;aspect-ratio:9/16;overflow:hidden;position:relative;background:linear-gradient(160deg,#0c1020,#150e35);}
 .test-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .55s ease;}
 .test-card:hover .test-img-wrap img{transform:scale(1.04);}
@@ -1061,56 +1181,41 @@ const DEFAULT_ACHIEVEMENTS=[
 ];
 let achievementsData=DEFAULT_ACHIEVEMENTS;
 
-function renderAchievements(){
-  const grid=document.getElementById('achievementsGrid');if(!grid)return;
-  grid.innerHTML=achievementsData.map((a,i)=>{
-    const title=a.title||'';
-    const org=a.org||a.desc||'';
-    const year=a.date||a.year||'';
-    const icon=a.icon||(a.type==='award'?'🏆':a.type==='milestone'?'🎯':a.type==='feature'?'📰':'📜');
-    const img=a.img||'';
-    return `
-    <div class="awc rv d${(i%4)+1}">
+function renderAchievements() {
+  const grid = document.getElementById('achievementsGrid');
+  if (!grid) return;
+  
+  const data = achievementsData; // ← FIX: Use achievementsData instead of undefined 'data'
+  
+  if (!data.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);">No achievements yet.</div>`;
+    return;
+  }
+  
+  grid.innerHTML = data.map((ach, i) => `
+    <div class="awc rv d${(i % 4) + 1}">
       <div class="aw-photo-area">
-        ${img?`<img src="${img}" alt="${title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''  }
-        <div class="aw-photo-empty" ${img?'style="display:none"':''}>
-          <span style="font-size:2.8rem;">${icon}</span>
-          <span style="font-size:.6rem;color:rgba(201,168,76,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;">Photo</span>
-        </div>
+        ${ach.img ? `<img src="${ach.img}" alt="${ach.title}" loading="lazy" onerror="this.parentElement.innerHTML=this.parentElement.innerHTML='<div class=aw-photo-empty><span class=awi>🏆</span><span>No image</span></div>'">` : `<div class="aw-photo-empty"><span class="awi">🏆</span><span>No image</span></div>`}
         <div class="aw-photo-overlay"></div>
-        ${year?`<div class="aw-year-badge">${year}</div>`:''}
+        ${ach.year ? `<span class="aw-year-badge">${ach.year}</span>` : ''}
       </div>
       <div class="aw-body">
-        <span class="awi">${icon}</span>
-        <h3>${title}</h3>
-        ${org?`<div class="aw-org">${org}</div>`:''}
-        <div class="aw-ribbon">Recognised</div>
+        <span class="awi">${ach.icon || '🏆'}</span>
+        <h3>${ach.title || 'Achievement'}</h3>
+        <div class="aw-org">${ach.org || ach.desc || ''}</div>
+        <div class="aw-ribbon">${ach.type === 'award' ? 'Award' : (ach.type === 'milestone' ? 'Milestone' : 'Recognition')}</div>
       </div>
-    </div>`;
-  }).join('');
-  document.querySelectorAll('.awc').forEach(el=>ro.observe(el));
+    </div>
+  `).join('');
+  
+  document.querySelectorAll('.awc').forEach(el => ro.observe(el));
 }
 async function fetchAchievements(){
   try{const res=await fetch(`${API_BASE}/achievements`);if(res.ok)achievementsData=await res.json();}catch(e){}
   renderAchievements();
 }
 
-/* ════════════════════════════════════════
-   ── CELEBRITIES (NEW) ──
-   ════════════════════════════════════════ */
 
-/*
-  Default celebrity data — replace with your real photos & details.
-  When backend /celebrities endpoint exists, live data will override this.
-
-  Fields:
-    name    : Celebrity's name
-    desc    : Short description / context (e.g. "Bollywood Actress")
-    cat     : 'bollywood' | 'tv' | 'music' | 'business' | 'sport'
-    img     : path to photo (e.g. "images/celeb-ameesha.jpg")
-    tag     : optional override tag label (defaults to category label)
-    year    : optional year of the meeting
-*/
 const CAT_LABELS={bollywood:'Bollywood',tv:'TV & OTT',music:'Music',business:'Business',sport:'Sports'};
 
 const DEFAULT_CELEBS=[
@@ -1131,21 +1236,27 @@ function getFilteredCelebs(){
   return celebsData;
 }
 
-function renderCelebs(){
-  const grid=document.getElementById('celebGrid');if(!grid)return;
-  const data=getFilteredCelebs();
-  if(!data.length){
-    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted);font-size:.88rem;">No photos in this category yet.</div>`;
+function renderCelebs() {
+  const grid = document.getElementById('celebGrid');
+  if (!grid) return;
+  const data = getFilteredCelebs();
+  
+  if (!data.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted);font-size:.88rem;">No celebrity photos yet. Add via admin panel.</div>`;
     return;
   }
-  grid.innerHTML=data.map((c,i)=>{
-    const catLabel=c.tag||CAT_LABELS[c.cat]||'Star';
-    const yearBadge=c.year?`<span style="position:absolute;top:10px;right:10px;z-index:5;background:rgba(201,168,76,.9);color:#070a1a;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.22rem .6rem;border-radius:2px;">${c.year}</span>`:'';
-    const photoContent=c.img
-      ?`<img src="${c.img}" alt="${c.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="celeb-photo-empty" style="display:none"><div class="ce-icon">🌟</div><div class="ce-hint">photo</div></div>`
-      :`<div class="celeb-photo-empty"><div class="ce-icon">🌟</div><div class="ce-hint">Add photo via admin</div></div>`;
+  
+  grid.innerHTML = data.map((c, i) => {
+    const catLabel = c.tag || CAT_LABELS[c.cat] || 'Star';
+    const yearBadge = c.year ? `<span style="position:absolute;top:10px;right:10px;z-index:5;background:rgba(201,168,76,.9);color:#070a1a;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.22rem .6rem;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.2);">${c.year}</span>` : '';
+    
+    const photoContent = c.img && c.img !== ''
+      ? `<img src="${c.img}" alt="${c.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="celeb-photo-empty" style="display:none"><div class="ce-icon">🌟</div><div class="ce-hint">photo</div></div>`
+      : `<div class="celeb-photo-empty"><div class="ce-icon">🌟</div><div class="ce-hint">Add photo</div></div>`;
+
+    // Remove featured/wide classes for consistent grid
     return `
-    <div class="celeb-card rv d${(i%4)+1}" onclick="openCelebLB(${i})">
+    <div class="celeb-card rv d${(i % 4) + 1}" onclick="openCelebLB(${i})">
       <div class="celeb-accent"></div>
       <div class="celeb-photo-wrap">
         ${photoContent}
@@ -1153,18 +1264,17 @@ function renderCelebs(){
       </div>
       <div class="celeb-view-btn">👁</div>
       <div class="celeb-info">
-        <div class="celeb-name">${c.name}</div>
-        <div class="celeb-desc">${c.desc||''}</div>
+        <div class="celeb-name">${c.name || 'Celebrity'}</div>
+        <div class="celeb-desc">${c.desc || ''}</div>
         <span class="celeb-tag">✦ ${catLabel}</span>
       </div>
     </div>`;
   }).join('');
-  /* re-observe for reveal animations */
-  grid.querySelectorAll('.rv').forEach(el=>ro.observe(el));
-  /* re-bind cursor hover */
-  grid.querySelectorAll('.celeb-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  
+  grid.querySelectorAll('.rv').forEach(el => ro.observe(el));
+  grid.querySelectorAll('.celeb-card').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
   });
 }
 
@@ -1250,7 +1360,7 @@ async function fetchJournal(){
 
 /* ── TESTIMONIALS ── */
 const catLabels={sp:'SP',career:'Career',manifestation:'Manifestation',program:'21-Day',ebook:'eBook'};
-const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program',ebook:'career'};
+const catTagClass={sp:'sp',career:'career',manifestation:'manifestation',program:'program',ebook:'ebook'};
 let currentFilter='all',testimonials=[];
 function filterTests(cat,btn){currentFilter=cat;document.querySelectorAll('.test-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTestimonials();}
 function renderTestimonials(){
